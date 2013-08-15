@@ -5,8 +5,8 @@ var express = require("express"),
 if(process.env.HEROKU) {
     config = {
         "port": process.env.PORT,
-        "apiKey": process.env.OTCS_API_KEY,
-        "apiSecret": process.env.OTCS_API_SECRET
+        "apiKey": process.env.OT_API_KEY,
+        "apiSecret": process.env.OT_API_SECRET
     };
 } else {
     try {
