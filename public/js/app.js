@@ -1,0 +1,1 @@
+angular.module('opentok-hangout', ['opentok']);
