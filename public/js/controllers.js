@@ -14,6 +14,10 @@ function RoomCtrl($scope) {
         return stream.name === "screen";
     };
     
+    $scope.notMine = function(stream) {
+        return stream.connection.connectionId != $scope.session.connection.connectionId;
+    };
+    
     $scope.shareScreen = function() {
         if (!$scope.sharingMyScreen) {
             $scope.sharingMyScreen = true;

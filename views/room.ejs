@@ -18,7 +18,7 @@
             </layout>
             <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}}"></publisher>
         </session>
-        <div id="shareInfo" class="streams-{{streams.length > 0}}" ng-cloak>
+        <div id="shareInfo" class="streams-{{(streams | filter:notMine).length > 0}}" ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
