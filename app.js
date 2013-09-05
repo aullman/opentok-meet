@@ -66,5 +66,7 @@ if(process.env.HEROKU) {
         console.log("Listening on " + config.port);
     });
 } else {
-    https.createServer({key: fs.readFileSync('./server.key', 'utf8'), cert: fs.readFileSync('./server.crt', 'utf8')}, app).listen(config.port);
+    https.createServer({key: fs.readFileSync('./server.key', 'utf8'), cert: fs.readFileSync('./server.crt', 'utf8')}, app).listen(config.port, function() {
+        console.log("Listening on " + config.port);
+    });
 }

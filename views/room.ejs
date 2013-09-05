@@ -3,24 +3,27 @@
 <html ng-app="opentok-hangout">
     <head>
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    </head>
-    <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
-        <session apiKey="<%=apiKey%>" sessionId="<%=sessionId%>" token="<%=token%>" publisher="publisher" streams="streams" session="session">
-            <layout id="screens">
-                <subscriber ng-repeat="stream in streams | filter:{name:'screen'} | filter:notMine" stream="stream" session="session" props="{nameDisplayMode: 'off'}"></subscriber>
-            </layout>
-            <layout id="faces">
-                <subscriber ng-repeat="stream in streams | filter:{name:'face'} | filter:notMine" stream="stream" session="session" props="{nameDisplayMode: 'off'}"></subscriber>
-            </layout>
-            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face'}"></publisher>
-        </session>
-        <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
-        <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
-        <!-- <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script> -->
         <script src="/js/lib/TB.js" type="text/javascript" charset="utf-8"></script>
         
         <script src="https://code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
+        <session apiKey="<%=apiKey%>" sessionId="<%=sessionId%>" token="<%=token%>" publisher="publisher" streams="streams" session="session">
+            <layout id="screens" fixedRatio="true">
+                <subscriber ng-repeat="stream in streams | filter:{name:'screen'} | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}"></subscriber>
+            </layout>
+            <layout id="faces">
+                <subscriber ng-repeat="stream in streams | filter:{name:'face'} | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}"></subscriber>
+            </layout>
+            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}}"></publisher>
+        </session>
+        <div id="shareInfo" class="streams-{{streams.length > 0}}" ng-cloak>
+            <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
+        </div>
+        <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
+        <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
+        <!-- <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script> -->
         <script src="/js/lib/layoutContainer.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/TB_Angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>

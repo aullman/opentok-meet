@@ -22,14 +22,14 @@ layout > subscriber {
     display: inline-block;
     border: 1px solid #fff;
     
-    -webkit-transition-property: width, height, left, top;
+/*    -webkit-transition-property: width, height, left, top;
     -webkit-transition-duration: 0.5s;
     -webkit-transition-timing-function: ease-out;
     -moz-transition-property: width, height, left, top;
     -moz-transition-duration: 0.5s;
     transition-property: width, height, left, top;
     transition-duration: 0.5s;
-    transition-timing-function: ease-out;
+    transition-timing-function: ease-out;*/
 }
 .screenshare-false layout#screens {
     display: none;
@@ -63,4 +63,14 @@ session ~ input.screen-btn {
 body.sharing-my-screen-true session.session-connected ~ input#hidescreen,
     body.sharing-my-screen-false session.session-connected ~ input#showscreen {
     display: block;
+}
+
+#shareInfo {
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+}
+
+#shareInfo.streams-true {
+    display: none;
 }

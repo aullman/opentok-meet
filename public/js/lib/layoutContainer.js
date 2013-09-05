@@ -59,7 +59,7 @@
         }
     };
     
-    var layout = function layout(container) {
+    var layout = function layout(container, opts) {
         if (OT.$.css(container, "display") === "none") {
             return;
         }
@@ -96,15 +96,21 @@
             };
         };
         
-        // Try all video ratios between 4x3 (landscape) and 2x3 (portrait)
-        // Just a brute force approach to figuring out the best ratio
-        var incr = 75/2000,
-            max = 3/2,
-            testRatio,
-            i;
-        for (i=3/4; i <= max; i=OT.$.roundFloat(i+incr, 5)) {
-            testRatio = tryVidRatio(i);
-            if (!vidRatio || testRatio.minDiff < vidRatio.minDiff) vidRatio = testRatio;
+        if (!opts.fixedRatio) {
+            // Try all video ratios between minRatio (landscape) and maxRatio (portrait)
+            // Just a brute force approach to figuring out the best ratio
+            var incr = opts.minRatio < opts.maxRatio ? (opts.maxRatio - opts.minRatio) / 20.0 : 0,
+                testRatio,
+                i;
+            for (i=opts.minRatio; i <= opts.maxRatio; i=OT.$.roundFloat(i+incr, 5)) {
+                testRatio = tryVidRatio(i);
+                if (!vidRatio || testRatio.minDiff < vidRatio.minDiff) vidRatio = testRatio;
+            }
+        } else {
+            // Use the ratio of the first video element we find
+            var video = container.querySelector("video");
+            if (video) vidRatio = tryVidRatio(video.videoHeight/video.videoWidth);
+            else vidRatio = tryVidRatio(3/4);   // Use the default video ratio
         }
 
         if ((vidRatio.targetRows/vidRatio.targetCols) * vidRatio.ratio > availableRatio) {
@@ -153,7 +159,8 @@
      if (!TB) {
          throw new Error("You must include the OpenTok for WebRTC JS API before the layout-container library");
      }
-     TB.initLayoutContainer = function(container) {
+     TB.initLayoutContainer = function(container, opts) {
+         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 3/4, fixedRatio: false});
         container = typeof(container) == "string" ? OT.$(container) : container;
         
         OT.onLoad(function() {
@@ -163,11 +170,11 @@
             // OT.$.observeStyleChanges(container, ['width', 'height'], function() {
             //     layout(container);
             // });
-            layout(container);
+            layout(container, opts);
         });
         
         return {
-            layout: layout.bind(null, container)
-        }
+            layout: layout.bind(null, container, opts)
+        };
     };
 })();

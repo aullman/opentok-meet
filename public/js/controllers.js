@@ -3,10 +3,11 @@ function RoomCtrl($scope) {
     $scope.streams;
     $scope.session;
     $scope.sharingMyScreen = false;
+    $scope.shareURL = window.location.href;
     var screenPublisher;
     
     $scope.facesFilter = function(stream) {
-        return stream.name !== "screen" && stream.connection.connectionId !== $scope.session.connection.connectionId;
+        return stream.name !== "screen";
     };
     
     $scope.screensFilter = function(stream) {
@@ -52,4 +53,12 @@ function RoomCtrl($scope) {
             screenPublisher = null;
         }
     };
+    
+    $scope.$watch(function() {
+        return $scope.streams ? $scope.streams.filter($scope.screensFilter).length : 0;
+    }, function() {
+        setTimeout(function() {
+            $scope.$broadcast("layout");
+        }, 50);
+    });
 }

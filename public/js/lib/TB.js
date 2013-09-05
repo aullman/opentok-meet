@@ -2994,7 +2994,7 @@ if (OT.$.canDefineProperty) {
         },
 
         aspectRatio: {
-            get: function() { return (this.domElement.videoWidth + 0.0) / this.domElement.videoWidth; }
+            get: function() { return (this.domElement.videoWidth + 0.0) / this.domElement.videoHeight; }
         }
     });
 }

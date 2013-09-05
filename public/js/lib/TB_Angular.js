@@ -83,11 +83,13 @@ angular.module('opentok', [])
     return {
         restrict: 'E',
         link: function(scope, element, attrs) {
-            var container = TB.initLayoutContainer(element[0]);
+            if (attrs.hasOwnProperty("fixedratio")) attrs.fixedRatio = attrs.fixedratio === "true";
+            var container = TB.initLayoutContainer(element[0], attrs);
             scope.$watch(function() {
                 return element.children().length;
             }, container.layout);
-            $window.addEventListener("resize", function() {
+            $window.addEventListener("resize", container.layout);
+            scope.$on("layout", function() {
                 container.layout();
             });
         }
