@@ -38,13 +38,16 @@
         return observer;
     };
     
-    var positionElement = function positionElement(elem, x, y, width, height) {
+    var positionElement = function positionElement(elem, x, y, width, height, animate) {
         var targetPosition = {
             left: x + "px",
             top: y + "px",
             width: width + "px",
             height: height + "px"
         };
+        if (animate && $) {
+            $(elem).animate(targetPosition, animate.duration || 200, animate.easing || "swing", animate.complete);
+        }
         OT.$.css(elem, targetPosition);
         
         var sub = elem.querySelector(".OT_root");
@@ -152,7 +155,7 @@
                             parseInt(OT.$.css(elem, "marginTop"), 10) - 
                             parseInt(OT.$.css(elem, "marginBottom"), 10);
 
-            positionElement(elem, x, y, actualWidth, actualHeight);
+            positionElement(elem, x, y, actualWidth, actualHeight, opts.animate);
         }
      };
      
@@ -160,7 +163,7 @@
          throw new Error("You must include the OpenTok for WebRTC JS API before the layout-container library");
      }
      TB.initLayoutContainer = function(container, opts) {
-         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 3/4, fixedRatio: false});
+         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 3/4, fixedRatio: false, animate: false});
         container = typeof(container) == "string" ? OT.$(container) : container;
         
         OT.onLoad(function() {
