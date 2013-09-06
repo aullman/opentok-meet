@@ -1,6 +1,12 @@
 body {
     background-color: #000;
+    font-family: 'Ropa Sans', sans-serif;
 }
+
+body a {
+    color: #fff;
+}
+
 publisher {
     width: 100px;
     height: 100px;
@@ -69,8 +75,19 @@ body.sharing-my-screen-true session.session-connected ~ input#hidescreen,
     font-size: 18px;
     color: #fff;
     text-align: center;
+    width: 50%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #999;
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -25%;
+    margin-top: -5%;
+    min-width: 250px;
+    display: none;
 }
 
-#shareInfo.streams-true {
-    display: none;
+session.session-connected ~ #shareInfo.streams-false {
+    display: block;
 }
