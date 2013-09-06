@@ -46,6 +46,7 @@
             height: height + "px"
         };
         if (animate && $) {
+            $(elem).stop();
             $(elem).animate(targetPosition, animate.duration || 200, animate.easing || "swing", animate.complete);
         }
         OT.$.css(elem, targetPosition);
