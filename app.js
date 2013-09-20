@@ -29,11 +29,15 @@ app.configure(function(){
   app.set('view engine', 'ejs');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(app.router);
   app.use(express["static"](__dirname + '/public'));
+  app.use(app.router);
 });
 
 var ot = new opentok.OpenTokSDK(config.apiKey, config.apiSecret);
+
+app.get('/rooms', function(req, res) {
+    res.send(rooms);
+});
 
 app.get('/:room', function(req, res) {
     var room = req.params.room,
