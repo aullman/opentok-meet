@@ -42,7 +42,12 @@ app.get('/rooms', function(req, res) {
 app.get('/:room', function(req, res) {
     var room = req.params.room,
         goToRoom = function(sessionId) {            
-            if (!rooms[room]) rooms[room] = sessionId;
+            if (!rooms[room]) {
+                rooms[room] = sessionId;
+            } else {
+                // Someone else beat us to it, we should connect to the same session
+                sessionId = rooms[room];
+            }
             res.render('room', {
                 room: room,
                 apiKey: config.apiKey,
