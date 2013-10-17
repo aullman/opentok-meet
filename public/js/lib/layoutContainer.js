@@ -48,8 +48,9 @@
         if (animate && $) {
             $(elem).stop();
             $(elem).animate(targetPosition, animate.duration || 200, animate.easing || "swing", animate.complete);
+        } else {
+            OT.$.css(elem, targetPosition);
         }
-        OT.$.css(elem, targetPosition);
         
         var sub = elem.querySelector(".OT_root");
         if (sub) {
