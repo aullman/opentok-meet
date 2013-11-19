@@ -5,7 +5,7 @@
         <title>Opentok Hangout</title>
         <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="https://swww.tokbox.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://swww.tokbox.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
         
         <script src="https://code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript" charset="utf-8"></script>
@@ -18,13 +18,15 @@
             <layout id="faces" animate="true">
                 <subscriber ng-repeat="stream in streams | filter:{name:'face'} | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}"></subscriber>
             </layout>
-            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}}"></publisher>
+            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720'}"></publisher>
         </session>
         <div id="shareInfo" class="streams-{{(streams | filter:notMine).length > 0}}" ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
-        <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
-        <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
+        <div id="bottomBar">
+            <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
+            <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
+        </div>
         <!-- <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script> -->
         <script src="/js/lib/layoutContainer.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/TB_Angular.js" type="text/javascript" charset="utf-8"></script>

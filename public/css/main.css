@@ -8,12 +8,13 @@ body a {
 }
 
 publisher {
-    width: 100px;
+    width: 178px;
     height: 100px;
     display: block;
     position: absolute !important;
-    bottom: 0px;
-    right: 0px;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 5px;
 }
 session {
     display: block;
@@ -58,17 +59,42 @@ layout > subscriber {
     position: absolute;
 }
 
-session ~ input.screen-btn {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    right: 100px;
-    width: 100px;
+#bottomBar {
+  transition: opacity 200ms ease;
+  opacity: 0;
+  width: 99%;
+  bottom: 20px;
+  height: 50px;
+  position: absolute;
+  text-align: center;
 }
 
-body.sharing-my-screen-true session.session-connected ~ input#hidescreen,
-    body.sharing-my-screen-false session.session-connected ~ input#showscreen {
-    display: block;
+body:hover #bottomBar {
+  opacity: 1;
+}
+
+session ~ #bottomBar input.screen-btn {
+    display: none;
+    width: 200px;
+    height: 100%;
+    border: none;
+    border-radius: 5px;
+    background-color: #999;
+    color: #fff;
+    font-size: 20px;
+}
+
+#bottomBar input#showscreen {
+  background-color: #659950;
+}
+
+#bottomBar input#hidescreen {
+  background-color: #CC3331;
+}
+
+body.sharing-my-screen-true session.session-connected ~ #bottomBar input#hidescreen,
+    body.sharing-my-screen-false session.session-connected ~ #bottomBar input#showscreen {
+    display: inline-block;
 }
 
 #shareInfo {

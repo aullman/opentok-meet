@@ -165,7 +165,7 @@
          throw new Error("You must include the OpenTok for WebRTC JS API before the layout-container library");
      }
      TB.initLayoutContainer = function(container, opts) {
-         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 3/4, fixedRatio: false, animate: false});
+         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 9/16, fixedRatio: false, animate: false});
         container = typeof(container) == "string" ? OT.$(container) : container;
         
         OT.onLoad(function() {
