@@ -15,6 +15,7 @@ publisher {
     bottom: 20px;
     right: 20px;
     border-radius: 5px;
+    z-index: 99;
 }
 session {
     display: block;

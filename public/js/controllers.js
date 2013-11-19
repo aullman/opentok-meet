@@ -43,6 +43,10 @@ function RoomCtrl($scope) {
                 width: screen.width,
                 height: screen.height,
                 aspectRatio: screen.width / screen.height
+            }, function (err) {
+              if (err) {
+                $scope.$apply($scope.sharingMyScreen = false);
+              }
             });
 
             $scope.session.publish(screenPublisher);
