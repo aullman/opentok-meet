@@ -28,7 +28,6 @@ session {
 layout > subscriber {
     background-color: #000;
     display: inline-block;
-    border: 1px solid #fff;
     
 /*    -webkit-transition-property: width, height, left, top;
     -webkit-transition-duration: 0.5s;

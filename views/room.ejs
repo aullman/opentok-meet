@@ -3,17 +3,17 @@
 <html ng-app="opentok-hangout">
     <head>
         <title>Opentok Hangout</title>
-        <link href='http://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="https://swww.tokbox.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://swww.tokbox.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
         
-        <script src="https://code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
         <session apiKey="<%=apiKey%>" sessionId="<%=sessionId%>" token="<%=token%>" publisher="publisher" streams="streams" session="session">
-            <layout props="{animate:true,bigFixedRatio:true,bigClass:'OT_big_true'}" opts="{bigClass:'OT_big_true'}">
-                <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}" ng-class="OT_big_{{stream.name=='screen'}}"></subscriber>
+            <layout props="{animate:true,bigFixedRatio:true}">
+                <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}" ng-class="{OT_big: stream.name == 'screen'}"></subscriber>
             </layout>
             <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720'}"></publisher>
         </session>

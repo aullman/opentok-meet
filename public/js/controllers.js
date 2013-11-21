@@ -18,7 +18,7 @@ function RoomCtrl($scope) {
         if (!$scope.sharingMyScreen) {
             $scope.sharingMyScreen = true;
             
-            $("layout").append("<div id='myScreen' class='OT_big_true'></div>");
+            $("layout").append("<div id='myScreen' class='OT_big'></div>");
             
             screenPublisher = TB.initPublisher(1127, 'myScreen', {
                 publishAudio: false,
@@ -59,6 +59,7 @@ function RoomCtrl($scope) {
             
             $scope.session.unpublish(screenPublisher);
             screenPublisher = null;
+            $scope.$broadcast("layout");
         }
     };
     
@@ -70,12 +71,12 @@ function RoomCtrl($scope) {
     //     }, 50);
     // });
     
-    $("layout>*.OT_big_true").live("dblclick", function () {
-        $(this).removeClass("OT_big_true");
+    $("layout>*.OT_big").live("dblclick", function () {
+        $(this).removeClass("OT_big");
         $scope.$broadcast("layout");
     });
-    $("layout>*:not(.OT_big_true)").live("dblclick", function () {
-        $(this).addClass("OT_big_true");
+    $("layout>*:not(.OT_big)").live("dblclick", function () {
+        $(this).addClass("OT_big");
         $scope.$broadcast("layout");
     });
 }

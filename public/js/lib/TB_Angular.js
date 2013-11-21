@@ -108,8 +108,14 @@ angular.module('opentok', [])
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             scope.publisher = TB.initPublisher(attrs.apikey, 'publisher', props);
-            scope.publisher.on("accessAllowed", function(event) {
-                $(element).addClass("allowed");
+            scope.publisher.on({
+                accessAllowed: function(event) {
+                    $(element).addClass("allowed");
+                },
+                loaded: function () {
+                    // Tell any layout containers around us to layout again (now that we know our ratio)
+                    scope.$emit("layout");
+                }
             });
             scope.$on("$destroy", function () {
                 scope.publisher.destroy();
@@ -133,6 +139,10 @@ angular.module('opentok', [])
             props.height = props.height ? props.height : $(element).height();
             $(element).attr("id", stream.streamId);
             var subscriber = session.subscribe(stream, stream.streamId, props);
+            subscriber.on("loaded", function () {
+                // Tell any layout containers around us to layout again (now that we know our ratio)
+                scope.$emit("layout");
+            });
             scope.$on("$destroy", function () {
                 subscriber.destroy();
             });

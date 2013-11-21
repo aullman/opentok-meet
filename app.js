@@ -35,6 +35,15 @@ app.configure(function(){
 
 var ot = new opentok.OpenTokSDK(config.apiKey, config.apiSecret);
 
+app.get('*', function(req,res,next) {
+    if (req.headers.host.indexOf('localhost') > -1) next();
+    else if(req.headers['x-forwarded-proto'] != 'https') {
+        res.redirect('https://opentok-hangout.herokuapp.com'+req.url);
+    } else {
+        next();
+    }
+});
+
 app.get('/rooms', function(req, res) {
     res.send(rooms);
 });
@@ -68,14 +77,6 @@ app.get('/:room', function(req, res) {
 });
 
 var generator = moniker.generator([moniker.noun]);
-
-app.get('*', function(req,res,next) {
-    if(req.headers['x-forwarded-proto'] != 'https') {
-        res.redirect('https://opentok-hangout.herokuapp.com'+req.url);
-    } else {
-        next();
-    }
-});
 
 app.get('/', function(req, res) {
     var room = generator.choose();
