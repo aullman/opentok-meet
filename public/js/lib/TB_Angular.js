@@ -79,12 +79,12 @@ angular.module('opentok', [])
         }
     };
 })
-.directive('layout', function($window) {
+.directive('layout', function($window, $parse) {
     return {
         restrict: 'E',
         link: function(scope, element, attrs) {
-            if (attrs.hasOwnProperty("fixedratio")) attrs.fixedRatio = attrs.fixedratio === "true";
-            var container = TB.initLayoutContainer(element[0], attrs);
+            var props = $parse(attrs.props)();
+            var container = TB.initLayoutContainer(element[0], props);
             scope.$watch(function() {
                 return element.children().length;
             }, container.layout);
@@ -105,8 +105,8 @@ angular.module('opentok', [])
         link: function(scope, element, attrs){
             $(element).attr("id", "publisher");
             var props = scope.props() || {};
-            props.width = $(element).width();
-            props.height = $(element).height();
+            props.width = props.width ? props.width : $(element).width();
+            props.height = props.height ? props.height : $(element).height();
             scope.publisher = TB.initPublisher(attrs.apikey, 'publisher', props);
             scope.publisher.on("accessAllowed", function(event) {
                 $(element).addClass("allowed");
@@ -129,8 +129,8 @@ angular.module('opentok', [])
             var stream = scope.stream();
             var session = scope.session();
             var props = scope.props() || {};
-            props.width = $(element).width();
-            props.height = $(element).height();
+            props.width = props.width ? props.width : $(element).width();
+            props.height = props.height ? props.height : $(element).height();
             $(element).attr("id", stream.streamId);
             var subscriber = session.subscribe(stream, stream.streamId, props);
             scope.$on("$destroy", function () {

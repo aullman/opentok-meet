@@ -7,37 +7,6 @@
 **/
 
 (function() {
-    var observeChildChange = function observeChildChange(element, onChange) {
-        observer = new MutationObserver(function(mutations) {
-            var removedNodes = [];
-            var addedNodes = [];
-
-            mutations.forEach(function(mutation) {
-                if (mutation.addedNodes.length) {
-                    addedNodes = addedNodes.concat(Array.prototype.slice.call(mutation.addedNodes));                        
-                }
-                if (mutation.removedNodes.length) {
-                    removedNodes = removedNodes.concat(Array.prototype.slice.call(mutation.removedNodes));
-                }
-            });
-
-            if (addedNodes.length || removedNodes.length) {
-                OT.$.callAsync(function() {
-                    onChange(addedNodes, removedNodes);
-                });
-            }
-        });
-
-        observer.observe(element, {
-            attributes:false,
-            childList:true,
-            characterData:false,
-            subtree:false
-        });
-
-        return observer;
-    };
-    
     var positionElement = function positionElement(elem, x, y, width, height, animate) {
         var targetPosition = {
             left: x + "px",
@@ -64,20 +33,11 @@
         }
     };
     
-    var layout = function layout(container, opts) {
-        if (OT.$.css(container, "display") === "none") {
-            return;
-        }
-        var count = container.children.length,
-            Height = parseInt(OT.$.height(container), 10)  - 
-                        parseInt(OT.$.css(container, "borderTop"), 10) - 
-                        parseInt(OT.$.css(container, "borderBottom"), 10),
-            Width = parseInt(OT.$.width(container), 10) -
-                        parseInt(OT.$.css(container, "borderLeft"), 10) -
-                        parseInt(OT.$.css(container, "borderRight"), 10),
+    var arrange = function arrange(children, Width, Height, offsetLeft, offsetTop, fixedRatio, minRatio, maxRatio, animate) {
+        var count = children.length,
             availableRatio = Height / Width,
             vidRatio;
-        
+    
         var tryVidRatio = function tryVidRatio(vidRatio) {
             var minDiff,
                 targetCols,
@@ -100,20 +60,20 @@
                 ratio: vidRatio
             };
         };
-        
-        if (!opts.fixedRatio) {
+    
+        if (!fixedRatio) {
             // Try all video ratios between minRatio (landscape) and maxRatio (portrait)
             // Just a brute force approach to figuring out the best ratio
-            var incr = opts.minRatio < opts.maxRatio ? (opts.maxRatio - opts.minRatio) / 20.0 : 0,
+            var incr = minRatio < maxRatio ? (maxRatio - minRatio) / 20.0 : 0,
                 testRatio,
                 i;
-            for (i=opts.minRatio; i <= opts.maxRatio; i=OT.$.roundFloat(i+incr, 5)) {
+            for (i=minRatio; i <= maxRatio; i=OT.$.roundFloat(i+incr, 5)) {
                 testRatio = tryVidRatio(i);
                 if (!vidRatio || testRatio.minDiff < vidRatio.minDiff) vidRatio = testRatio;
             }
         } else {
             // Use the ratio of the first video element we find
-            var video = container.querySelector("video");
+            var video = children[0].querySelector("video");
             if (video) vidRatio = tryVidRatio(video.videoHeight/video.videoWidth);
             else vidRatio = tryVidRatio(3/4);   // Use the default video ratio
         }
@@ -135,8 +95,8 @@
         // Loop through each stream in the container and place it inside
         var x = 0,
             y = 0;
-        for (i=0; i < container.children.length; i++) {
-            var elem = container.children[i];
+        for (i=0; i < children.length; i++) {
+            var elem = children[i];
             if (i % vidRatio.targetCols == 0) {
                 // We are the first element of the row
                 x = firstColMarginLeft;
@@ -150,36 +110,84 @@
             var actualWidth = targetWidth - parseInt(OT.$.css(elem, "paddingLeft"), 10) -
                             parseInt(OT.$.css(elem, "paddingRight"), 10) -
                             parseInt(OT.$.css(elem, "marginLeft"), 10) - 
-                            parseInt(OT.$.css(elem, "marginRight"), 10);
+                            parseInt(OT.$.css(elem, "marginRight"), 10) -
+                            parseInt(OT.$.css(elem, "borderLeft"), 10) -
+                            parseInt(OT.$.css(elem, "borderRight"), 10);
 
              var actualHeight = targetHeight - parseInt(OT.$.css(elem, "paddingTop"), 10) -
                             parseInt(OT.$.css(elem, "paddingBottom"), 10) -
                             parseInt(OT.$.css(elem, "marginTop"), 10) - 
-                            parseInt(OT.$.css(elem, "marginBottom"), 10);
+                            parseInt(OT.$.css(elem, "marginBottom"), 10) -
+                            parseInt(OT.$.css(elem, "borderTop"), 10) - 
+                            parseInt(OT.$.css(elem, "borderBottom"), 10);
 
-            positionElement(elem, x, y, actualWidth, actualHeight, opts.animate);
+            positionElement(elem, x+offsetLeft, y+offsetTop, actualWidth, actualHeight, animate);
         }
+    };
+    
+    var layout = function layout(container, opts, fixedRatio) {
+        if (OT.$.css(container, "display") === "none") {
+            return;
+        }
+        var id = container.getAttribute("id");
+        if (!id) {
+            id = "OT_" + TB.$.uuid();
+            container.setAttribute("id", id);
+        }
+        
+        var Height = parseInt(OT.$.height(container), 10)  - 
+                    parseInt(OT.$.css(container, "borderTop"), 10) - 
+                    parseInt(OT.$.css(container, "borderBottom"), 10),
+            Width = parseInt(OT.$.width(container), 10) -
+                    parseInt(OT.$.css(container, "borderLeft"), 10) -
+                    parseInt(OT.$.css(container, "borderRight"), 10),
+            availableRatio = Height/Width,
+            offsetLeft = 0,
+            offsetTop = 0;
+        
+        var bigOnes = container.querySelectorAll("#" + id + ">." + opts.bigClass),
+            smallOnes = container.querySelectorAll("#" + id + ">*:not(." + opts.bigClass + ")");
+        
+        if (bigOnes.length > 0 && smallOnes.length > 0) {
+            var bigVideo = bigOnes[0].querySelector("video"),
+                bigRatio = bigVideo.videoHeight / bigVideo.videoWidth,
+                bigWidth, bigHeight;
+            
+            if (availableRatio > bigRatio) {
+                // We are tall, going to take up the whole width and arrange small guys at the bottom
+                bigWidth = Width;
+                bigHeight = Math.min(Math.floor(Height * opts.bigPercentage), Width * bigRatio);
+                offsetTop = bigHeight;
+            } else {
+                // We are wide, going to take up the whole height and arrange the small guys on the right
+                bigHeight = Height;
+                bigWidth = Math.min(Width * opts.bigPercentage, Math.floor(bigHeight / bigRatio));
+                offsetLeft = bigWidth;
+            }
+            arrange(bigOnes, bigWidth, bigHeight, 0, 0, opts.bigFixedRatio, opts.bigMinRatio, opts.bigMaxRatio, opts.animate);
+        } else if (bigOnes.length > 0 && smallOnes.length === 0) {
+            // We only have one bigOne just center it
+            arrange(bigOnes, Width, Height, 0, 0, opts.bigFixedRatio, opts.bigMinRatio, opts.bigMaxRatio, opts.animate);
+        }
+        
+        // Arrange the small guys
+        // 
+        arrange(smallOnes, Width - offsetLeft, Height - offsetTop, offsetLeft, offsetTop, opts.fixedRatio, opts.minRatio, opts.maxRatio, opts.animate);
      };
      
      if (!TB) {
          throw new Error("You must include the OpenTok for WebRTC JS API before the layout-container library");
      }
      TB.initLayoutContainer = function(container, opts) {
-         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 9/16, fixedRatio: false, animate: false});
-        container = typeof(container) == "string" ? OT.$(container) : container;
+         opts = OT.$.defaults(opts || {}, {maxRatio: 3/2, minRatio: 9/16, fixedRatio: false, animate: false, bigClass: "OT_big", bigPercentage: 0.8, bigFixedRatio: false, bigMaxRatio: 3/2, bigMinRatio: 9/16});
+         container = typeof(container) == "string" ? OT.$(container) : container;
         
-        OT.onLoad(function() {
-            // observeChildChange(container, function() {
-            //     layout(container);
-            // });
-            // OT.$.observeStyleChanges(container, ['width', 'height'], function() {
-            //     layout(container);
-            // });
-            layout(container, opts);
-        });
+         OT.onLoad(function() {
+             layout(container, opts);
+         });
         
-        return {
-            layout: layout.bind(null, container, opts)
-        };
-    };
+         return {
+             layout: layout.bind(null, container, opts)
+         };
+     };
 })();

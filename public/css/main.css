@@ -39,25 +39,10 @@ layout > subscriber {
     transition-duration: 0.5s;
     transition-timing-function: ease-out;*/
 }
-.screenshare-false layout#screens {
-    display: none;
-}
-.screenshare-false layout#faces {
+layout {
     display: block;
     width: 100%;
     height: 100%;
-}
-.screenshare-true layout#screens {
-    display: block;
-    width: 100%;
-    height: calc(100% - 100px);
-}
-.screenshare-true layout#faces {
-    display: block;
-    width: 100%;
-    height: 100px;
-    bottom: 0;
-    position: absolute;
 }
 
 #bottomBar {

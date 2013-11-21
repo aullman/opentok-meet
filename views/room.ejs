@@ -12,11 +12,8 @@
     </head>
     <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
         <session apiKey="<%=apiKey%>" sessionId="<%=sessionId%>" token="<%=token%>" publisher="publisher" streams="streams" session="session">
-            <layout id="screens" fixedRatio="true" animate="true">
-                <subscriber ng-repeat="stream in streams | filter:{name:'screen'} | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}"></subscriber>
-            </layout>
-            <layout id="faces" animate="true">
-                <subscriber ng-repeat="stream in streams | filter:{name:'face'} | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}"></subscriber>
+            <layout props="{animate:true,bigFixedRatio:true,bigClass:'OT_big_true'}" opts="{bigClass:'OT_big_true'}">
+                <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}" ng-class="OT_big_{{stream.name=='screen'}}"></subscriber>
             </layout>
             <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720'}"></publisher>
         </session>
