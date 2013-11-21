@@ -111,6 +111,9 @@ angular.module('opentok', [])
             scope.publisher.on("accessAllowed", function(event) {
                 $(element).addClass("allowed");
             });
+            scope.$on("$destroy", function () {
+                scope.publisher.destroy();
+            });
         }
     };
 })
@@ -130,6 +133,9 @@ angular.module('opentok', [])
             props.height = $(element).height();
             $(element).attr("id", stream.streamId);
             var subscriber = session.subscribe(stream, stream.streamId, props);
+            scope.$on("$destroy", function () {
+                subscriber.destroy();
+            });
         }
     };
 });
