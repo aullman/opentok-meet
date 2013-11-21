@@ -33,6 +33,21 @@
         }
     };
     
+    var getCSSNumber = function (elem, prop) {
+        var cssStr = OT.$.css(elem, prop);
+        return cssStr ? parseInt(cssStr, 10) : 0;
+    };
+    
+    var getHeight = function (elem) {
+        var heightStr = OT.$.height(elem);
+        return heightStr ? parseInt(heightStr, 10) : 0;
+    };
+    
+    var getWidth = function (elem) {
+        var widthStr = OT.$.width(elem);
+        return widthStr ? parseInt(widthStr, 10) : 0;
+    };
+    
     var arrange = function arrange(children, Width, Height, offsetLeft, offsetTop, fixedRatio, minRatio, maxRatio, animate) {
         var count = children.length,
             availableRatio = Height / Width,
@@ -107,19 +122,19 @@
             }
 
             OT.$.css(elem, "position", "absolute");
-            var actualWidth = targetWidth - parseInt(OT.$.css(elem, "paddingLeft"), 10) -
-                            parseInt(OT.$.css(elem, "paddingRight"), 10) -
-                            parseInt(OT.$.css(elem, "marginLeft"), 10) - 
-                            parseInt(OT.$.css(elem, "marginRight"), 10) -
-                            parseInt(OT.$.css(elem, "borderLeft"), 10) -
-                            parseInt(OT.$.css(elem, "borderRight"), 10);
+            var actualWidth = targetWidth - getCSSNumber(elem, "paddingLeft") -
+                            getCSSNumber(elem, "paddingRight") -
+                            getCSSNumber(elem, "marginLeft") - 
+                            getCSSNumber(elem, "marginRight") -
+                            getCSSNumber(elem, "borderLeft") -
+                            getCSSNumber(elem, "borderRight");
 
-             var actualHeight = targetHeight - parseInt(OT.$.css(elem, "paddingTop"), 10) -
-                            parseInt(OT.$.css(elem, "paddingBottom"), 10) -
-                            parseInt(OT.$.css(elem, "marginTop"), 10) - 
-                            parseInt(OT.$.css(elem, "marginBottom"), 10) -
-                            parseInt(OT.$.css(elem, "borderTop"), 10) - 
-                            parseInt(OT.$.css(elem, "borderBottom"), 10);
+             var actualHeight = targetHeight - getCSSNumber(elem, "paddingTop") -
+                            getCSSNumber(elem, "paddingBottom") -
+                            getCSSNumber(elem, "marginTop") - 
+                            getCSSNumber(elem, "marginBottom") -
+                            getCSSNumber(elem, "borderTop") - 
+                            getCSSNumber(elem, "borderBottom");
 
             positionElement(elem, x+offsetLeft, y+offsetTop, actualWidth, actualHeight, animate);
         }
@@ -135,12 +150,12 @@
             container.setAttribute("id", id);
         }
         
-        var Height = parseInt(OT.$.height(container), 10)  - 
-                    parseInt(OT.$.css(container, "borderTop"), 10) - 
-                    parseInt(OT.$.css(container, "borderBottom"), 10),
-            Width = parseInt(OT.$.width(container), 10) -
-                    parseInt(OT.$.css(container, "borderLeft"), 10) -
-                    parseInt(OT.$.css(container, "borderRight"), 10),
+        var Height = getHeight(container) - 
+                    getCSSNumber(container, "borderTop") - 
+                    getCSSNumber(container, "borderBottom"),
+            Width = getWidth(container) -
+                    getCSSNumber(container, "borderLeft") -
+                    getCSSNumber(container, "borderRight"),
             availableRatio = Height/Width,
             offsetLeft = 0,
             offsetTop = 0;
