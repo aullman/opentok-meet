@@ -39,10 +39,8 @@ function RoomCtrl($scope) {
                 width: screen.width,
                 height: screen.height,
                 aspectRatio: screen.width / screen.height
-            }, function (err) {
-              if (err) {
+            }).on("publishError", function (err) {
                 $scope.$apply($scope.sharingMyScreen = false);
-              }
             });
 
             $scope.session.publish(screenPublisher);
@@ -62,14 +60,6 @@ function RoomCtrl($scope) {
             $scope.$broadcast("layout");
         }
     };
-    
-    // $scope.$watch(function() {
-    //     return $scope.streams ? $scope.streams.filter($scope.screensFilter).length : 0;
-    // }, function() {
-    //     setTimeout(function() {
-    //         $scope.$broadcast("layout");
-    //     }, 50);
-    // });
     
     $("layout>*.OT_big").live("dblclick", function () {
         $(this).removeClass("OT_big");

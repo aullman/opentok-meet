@@ -164,9 +164,10 @@
             smallOnes = container.querySelectorAll("#" + id + ">*:not(." + opts.bigClass + ")");
         
         if (bigOnes.length > 0 && smallOnes.length > 0) {
-            var bigVideo = bigOnes[0].querySelector("video"),
-                bigRatio = bigVideo.videoHeight / bigVideo.videoWidth,
-                bigWidth, bigHeight;
+            var bigVideo = bigOnes[0].querySelector("video");
+            if (bigVideo) bigRatio = bigVideo.videoHeight / bigVideo.videoWidth;
+            else bigRatio = 3 / 4;
+            var bigWidth, bigHeight;
             
             if (availableRatio > bigRatio) {
                 // We are tall, going to take up the whole width and arrange small guys at the bottom

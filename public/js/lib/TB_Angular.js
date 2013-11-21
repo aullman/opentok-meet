@@ -127,14 +127,14 @@ angular.module('opentok', [])
     return {
         restrict: 'E',
         scope: {
-            stream: '&',
-            session: "&",
+            stream: '=',
+            session: "=",
             props: '&'
         },
         link: function(scope, element, attrs){
-            var stream = scope.stream();
-            var session = scope.session();
-            var props = scope.props() || {};
+            var stream = scope.stream,
+                session = scope.session,
+                props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             $(element).attr("id", stream.streamId);
