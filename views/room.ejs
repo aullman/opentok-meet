@@ -15,7 +15,7 @@
             <layout props="{animate:true,bigFixedRatio:true}">
                 <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}" ng-class="{OT_big: stream.name == 'screen'}"></subscriber>
             </layout>
-            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720'}"></publisher>
+            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, constraints: { video: { mandatory: {}, optional: [{minWidth: 1280}, {minHeight: 720}]}}}"></publisher>
         </session>
         <div id="shareInfo" class="streams-{{(streams | filter:notMine).length > 0}}" ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
