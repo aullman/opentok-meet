@@ -40,7 +40,7 @@ app.get('/rooms', function(req, res) {
 });
 
 app.get('/:room', function(req, res) {
-    var room = req.params.room,
+    var room = req.param('room'),
         goToRoom = function(sessionId) {            
             if (!rooms[room]) {
                 rooms[room] = sessionId;
@@ -57,7 +57,11 @@ app.get('/:room', function(req, res) {
         };
 
     if (!rooms[room]) {
-        ot.createSession('', {}, goToRoom);
+        var props = {'p2p.preference': 'enabled'};
+        if (["false", "disabled", "0"].indexOf(req.param('p2p')) >= 0) {
+            props['p2p.preference'] = 'disabled';
+        }
+        ot.createSession('', props, goToRoom);
     } else {
         goToRoom(rooms[room]);
     }
@@ -65,9 +69,17 @@ app.get('/:room', function(req, res) {
 
 var generator = moniker.generator([moniker.noun]);
 
+app.get('*', function(req,res,next) {
+    if(req.headers['x-forwarded-proto'] != 'https') {
+        res.redirect('https://opentok-hangout.herokuapp.com'+req.url);
+    } else {
+        next();
+    }
+});
+
 app.get('/', function(req, res) {
     var room = generator.choose();
-    res.redirect('/' + room);
+    res.redirect('/'  + room + (req.param('p2p') ? ("?p2p=" + req.param('p2p')) : ""));
 });
 
 if(process.env.HEROKU) {
