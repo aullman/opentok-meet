@@ -34,7 +34,9 @@ function RoomCtrl($scope) {
                     audio: false
                 },
                 name: "screen",
-                nameDisplayMode: "off",
+                style: {
+                    nameDisplayMode: "off"
+                },
                 mirror: false,
                 width: screen.width,
                 height: screen.height,
