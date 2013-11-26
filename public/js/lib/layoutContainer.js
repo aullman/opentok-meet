@@ -54,24 +54,47 @@
             vidRatio;
     
         var tryVidRatio = function tryVidRatio(vidRatio) {
-            var minDiff,
+            var maxArea,
                 targetCols,
-                targetRows;
+                targetRows,
+                targetHeight,
+                targetWidth,
+                tWidth,
+                tHeight;
+            
+            // Iterate through every possible combination of rows and columns
+            // and see which one has the least amount of whitespace
             for (var i=1; i <= count; i++) {
                 var cols = i;
                 var rows = Math.ceil(count / cols);
-                var ratio = rows/cols * vidRatio;
-                var ratio_diff = Math.abs(availableRatio - ratio);
-                if (minDiff == undefined || (ratio_diff < minDiff)) {
-                    minDiff = ratio_diff;
+                
+                if ((rows/cols) * vidRatio > availableRatio) {
+                    // Our widgets are taking up the whole height
+                    tHeight = Math.floor( Height/rows );
+                    tWidth = Math.floor( tHeight/vidRatio );
+                } else {
+                    // Our widgets are taking up the whole width
+                    tWidth = Math.floor( Width/cols );
+                    tHeight = Math.floor( tWidth*vidRatio );
+                }
+                
+                var area = (tWidth*tHeight) * count;
+                
+                // If this width and height takes up the most space then we're going with that
+                if (maxArea == undefined || (area > maxArea)) {
+                    maxArea = area;
+                    targetHeight = tHeight;
+                    targetWidth = tWidth;
                     targetCols = cols;
                     targetRows = rows;
                 }
             };
             return {
-                minDiff: minDiff,
+                maxArea: maxArea,
                 targetCols: targetCols,
                 targetRows: targetRows,
+                targetHeight: targetHeight,
+                targetWidth: targetWidth,
                 ratio: vidRatio
             };
         };
@@ -84,7 +107,7 @@
                 i;
             for (i=minRatio; i <= maxRatio; i=OT.$.roundFloat(i+incr, 5)) {
                 testRatio = tryVidRatio(i);
-                if (!vidRatio || testRatio.minDiff < vidRatio.minDiff) vidRatio = testRatio;
+                if (!vidRatio || testRatio.maxArea > vidRatio.maxArea) vidRatio = testRatio;
             }
         } else {
             // Use the ratio of the first video element we find
@@ -93,19 +116,11 @@
             else vidRatio = tryVidRatio(3/4);   // Use the default video ratio
         }
 
-        if ((vidRatio.targetRows/vidRatio.targetCols) * vidRatio.ratio > availableRatio) {
-            targetHeight = Math.floor( Height/vidRatio.targetRows );
-            targetWidth = Math.floor( targetHeight/vidRatio.ratio );
-        } else {
-            targetWidth = Math.floor( Width/vidRatio.targetCols );
-            targetHeight = Math.floor( targetWidth*vidRatio.ratio );
-        }
-
         var spacesInLastRow = (vidRatio.targetRows * vidRatio.targetCols) - count,
-            lastRowMargin = (spacesInLastRow * targetWidth / 2),
+            lastRowMargin = (spacesInLastRow * vidRatio.targetWidth / 2),
             lastRowIndex = (vidRatio.targetRows - 1) * vidRatio.targetCols,
-            firstRowMarginTop = ((Height - (vidRatio.targetRows * targetHeight)) / 2),
-            firstColMarginLeft = ((Width - (vidRatio.targetCols * targetWidth)) / 2);
+            firstRowMarginTop = ((Height - (vidRatio.targetRows * vidRatio.targetHeight)) / 2),
+            firstColMarginLeft = ((Width - (vidRatio.targetCols * vidRatio.targetWidth)) / 2);
 
         // Loop through each stream in the container and place it inside
         var x = 0,
@@ -116,20 +131,20 @@
                 // We are the first element of the row
                 x = firstColMarginLeft;
                 if (i == lastRowIndex) x += lastRowMargin;
-                y += i == 0 ? firstRowMarginTop : targetHeight;
+                y += i == 0 ? firstRowMarginTop : vidRatio.targetHeight;
             } else {
-                x += targetWidth;
+                x += vidRatio.targetWidth;
             }
 
             OT.$.css(elem, "position", "absolute");
-            var actualWidth = targetWidth - getCSSNumber(elem, "paddingLeft") -
+            var actualWidth = vidRatio.targetWidth - getCSSNumber(elem, "paddingLeft") -
                             getCSSNumber(elem, "paddingRight") -
                             getCSSNumber(elem, "marginLeft") - 
                             getCSSNumber(elem, "marginRight") -
                             getCSSNumber(elem, "borderLeft") -
                             getCSSNumber(elem, "borderRight");
 
-             var actualHeight = targetHeight - getCSSNumber(elem, "paddingTop") -
+             var actualHeight = vidRatio.targetHeight - getCSSNumber(elem, "paddingTop") -
                             getCSSNumber(elem, "paddingBottom") -
                             getCSSNumber(elem, "marginTop") - 
                             getCSSNumber(elem, "marginBottom") -
