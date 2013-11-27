@@ -103,18 +103,13 @@ angular.module('opentok', [])
             publisher: '='
         },
         link: function(scope, element, attrs){
-            $(element).attr("id", "publisher");
             var props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
-            scope.publisher = TB.initPublisher(attrs.apikey, 'publisher', props);
+            scope.publisher = TB.initPublisher(attrs.apikey, element[0], props);
             scope.publisher.on({
                 accessAllowed: function(event) {
                     $(element).addClass("allowed");
-                },
-                loaded: function () {
-                    // Tell any layout containers around us to layout again (now that we know our ratio)
-                    scope.$emit("layout");
                 }
             });
             scope.$on("$destroy", function () {
@@ -137,12 +132,10 @@ angular.module('opentok', [])
                 props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
-            $(element).attr("id", stream.streamId);
-            var subscriber = session.subscribe(stream, stream.streamId, props);
-            subscriber.on("loaded", function () {
-                // Tell any layout containers around us to layout again (now that we know our ratio)
-                scope.$emit("layout");
-            });
+            var oldChildren = $(element).children();
+            var subscriber = session.subscribe(stream, element[0], props);
+            // Make transcluding work manually by putting the children back in there
+            $(element).append(oldChildren);
             scope.$on("$destroy", function () {
                 subscriber.destroy();
             });
