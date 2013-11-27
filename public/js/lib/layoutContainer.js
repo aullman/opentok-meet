@@ -14,23 +14,30 @@
             width: width + "px",
             height: height + "px"
         };
+        
+        var fixAspectRatio = function () {
+            var sub = elem.querySelector(".OT_root");
+            if (sub) {
+                // If this is the parent of a subscriber or publisher then we need
+                // to force the mutation observer on the publisher or subscriber to
+                // trigger to get it to fix it's layout
+                var oldWidth = sub.style.width;
+                sub.style.width = width + "px";
+                // sub.style.height = height + "px";
+                sub.style.width = oldWidth || "";
+            }
+        };
+        
         if (animate && $) {
             $(elem).stop();
-            $(elem).animate(targetPosition, animate.duration || 200, animate.easing || "swing", animate.complete);
+            $(elem).animate(targetPosition, animate.duration || 200, animate.easing || "swing", function () {
+                fixAspectRatio();
+                if (animate.complete) animate.complete.call(this);
+            });
         } else {
             OT.$.css(elem, targetPosition);
         }
-        
-        var sub = elem.querySelector(".OT_root");
-        if (sub) {
-            // If this is the parent of a subscriber or publisher then we need
-            // to force the mutation observer on the publisher or subscriber to
-            // trigger to get it to fix it's layout
-            var oldWidth = sub.style.width;
-            sub.style.width = width + "px";
-            // sub.style.height = height + "px";
-            sub.style.width = oldWidth || "";
-        }
+        fixAspectRatio();
     };
     
     var getCSSNumber = function (elem, prop) {
