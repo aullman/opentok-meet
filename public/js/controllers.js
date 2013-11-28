@@ -10,10 +10,6 @@ function RoomCtrl($scope) {
         return stream.connection.connectionId != $scope.session.connection.connectionId;
     };
     
-    $scope.isBig = function (stream) {
-        return stream.name === 'screen';
-    };
-    
     $scope.shareScreen = function() {
         if (!$scope.sharingMyScreen) {
             $scope.sharingMyScreen = true;
@@ -63,12 +59,21 @@ function RoomCtrl($scope) {
         }
     };
     
-    $("layout>*.OT_big").live("dblclick", function () {
-        $(this).removeClass("OT_big");
-        $scope.$broadcast("layout");
-    });
-    $("layout>*:not(.OT_big)").live("dblclick", function () {
-        $(this).addClass("OT_big");
-        $scope.$broadcast("layout");
+    // It's a bit weird to handle changes in size at this level. Really this should be
+    // in the Subscriber Directive but I'm trying not to pollute the generic 
+    // Subscriber Directive
+    $scope.$on("changeSize", function (event) {
+        if (event.targetScope.stream.oth_large === undefined) {
+            // If we're a screen we default to large otherwise we default to small
+            event.targetScope.stream.oth_large = event.targetScope.stream.name !== "screen";
+        } else {
+            event.targetScope.stream.oth_large = !event.targetScope.stream.oth_large;
+        }
+        setTimeout(function () {
+            event.targetScope.$emit("layout");
+        }, 10);
+        setTimeout(function () {
+            event.targetScope.$emit("layout");
+        }, 5000);
     });
 }

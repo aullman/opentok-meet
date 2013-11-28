@@ -25,7 +25,7 @@ session {
     left: 0;
     right: 0;
 }
-layout > subscriber {
+layout subscriber {
     background-color: #000;
     display: inline-block;
     
@@ -42,6 +42,29 @@ layout {
     display: block;
     width: 100%;
     height: 100%;
+}
+
+layout input.resize-btn {
+    transition: opacity 500ms ease-in;
+    transition: top 500ms ease-in;
+    opacity: 0;
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    top: -38px;
+    right: 38px;
+    border: none;
+    background: url('../images/enlarge_38x38.png') no-repeat;
+    z-index: 99;
+}
+
+layout > subscriber.OT_big input.resize-btn {
+    background: url('../images/shrink_38x38.png') no-repeat;
+}
+
+layout > subscriber:hover input.resize-btn {
+    top: 0;
+    opacity: 1;
 }
 
 #bottomBar {
