@@ -41,6 +41,7 @@ layout input.resize-btn {
     opacity: 0;
     width: 38px;
     height: 38px;
+    cursor: pointer;
     position: absolute;
     top: -38px;
     right: 38px;
