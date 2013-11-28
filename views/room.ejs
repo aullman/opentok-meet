@@ -7,19 +7,48 @@
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="https://swww.tokbox.com/webrtc/v2.0/js/TB.js" type="text/javascript" charset="utf-8"></script>
         
-        <script src="//code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
-        <session apiKey="<%=apiKey%>" sessionId="<%=sessionId%>" token="<%=token%>" publisher="publisher" streams="streams" session="session">
+        
+        <session apiKey="<%=apiKey%>" 
+            sessionId="<%=sessionId%>" 
+            token="<%=token%>" 
+            publisher="publisher" 
+            streams="streams" 
+            session="session">
+            
             <layout props="{animate:true,bigFixedRatio:true}">
-                <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{style: {nameDisplayMode: 'off'}}" ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" ng-dblclick="$emit('changeSize')">
-                    <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
+                <subscriber ng-repeat="stream in streams | filter:notMine" 
+                    stream="stream" 
+                    session="session" 
+                    props="{style: {nameDisplayMode: 'off'}}" 
+                    ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
+                    ng-dblclick="$emit('changeSize')">
+                        <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
                 </subscriber>
+                <publisher ng-if="sharingMyScreen"
+                    publisher="screenPublisher"
+                    session="session"
+                    props='screenPublisherProps'
+                    ng-class="{OT_big: screenBig}" 
+                    ng-dblclick="$emit('changeScreenSize');">
+                    <input type="button" class="resize-btn" ng-click="$emit('changeScreenSize');"/>
+                </publisher>
             </layout>
-            <publisher apiKey="<%=apiKey%>" publisher="publisher" props="{name:'face', style: {nameDisplayMode: 'off'}, constraints: { video: { mandatory: {}, optional: [{minWidth: 1280}, {minHeight: 720}]}}}"></publisher>
+            
+            <publisher id="facePublisher" 
+                apiKey="<%=apiKey%>" 
+                publisher="publisher" 
+                props="{name:'face', style: {nameDisplayMode: 'off'}, constraints: { video: { mandatory: {}, optional: [{minWidth: 1280}, {minHeight: 720}]}}}">
+            </publisher>
+            
         </session>
-        <div id="shareInfo" class="streams-{{(streams | filter:notMine).length > 0}}" ng-cloak>
+        
+        <div id="shareInfo" 
+            class="streams-{{(streams | filter:notMine).length > 0}}" 
+            ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <div id="bottomBar">

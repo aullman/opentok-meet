@@ -7,7 +7,7 @@ body a {
     color: #fff;
 }
 
-publisher {
+publisher#facePublisher {
     width: 178px;
     height: 100px;
     display: block;
@@ -28,15 +28,6 @@ session {
 layout subscriber {
     background-color: #000;
     display: inline-block;
-    
-/*    -webkit-transition-property: width, height, left, top;
-    -webkit-transition-duration: 0.5s;
-    -webkit-transition-timing-function: ease-out;
-    -moz-transition-property: width, height, left, top;
-    -moz-transition-duration: 0.5s;
-    transition-property: width, height, left, top;
-    transition-duration: 0.5s;
-    transition-timing-function: ease-out;*/
 }
 layout {
     display: block;
@@ -58,11 +49,11 @@ layout input.resize-btn {
     z-index: 99;
 }
 
-layout > subscriber.OT_big input.resize-btn {
+layout > .OT_big input.resize-btn {
     background: url('../images/shrink_38x38.png') no-repeat;
 }
 
-layout > subscriber:hover input.resize-btn {
+layout > :hover input.resize-btn {
     top: 0;
     opacity: 1;
 }

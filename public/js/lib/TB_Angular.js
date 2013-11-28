@@ -100,21 +100,30 @@ angular.module('opentok', [])
         restrict: 'E',
         scope: {
             props: '&',
-            publisher: '='
+            publisher: '=',
+            session: '='
         },
         link: function(scope, element, attrs){
             var props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
+            var oldChildren = $(element).children();
             scope.publisher = TB.initPublisher(attrs.apikey, element[0], props);
+            // Make transcluding work manually by putting the children back in there
+            $(element).append(oldChildren);
             scope.publisher.on({
                 accessAllowed: function(event) {
                     $(element).addClass("allowed");
+                },
+                loaded: function (event){
+                    scope.$emit("layout");
                 }
             });
             scope.$on("$destroy", function () {
-                scope.publisher.destroy();
+                if (scope.session) scope.session.unpublish(scope.publisher);
+                else scope.publisher.destroy();
             });
+            if (scope.session) scope.session.publish(scope.publisher);
         }
     };
 })
@@ -134,6 +143,9 @@ angular.module('opentok', [])
             props.height = props.height ? props.height : $(element).height();
             var oldChildren = $(element).children();
             var subscriber = session.subscribe(stream, element[0], props);
+            subscriber.on("loaded", function () {
+                scope.$emit("layout");
+            });
             // Make transcluding work manually by putting the children back in there
             $(element).append(oldChildren);
             scope.$on("$destroy", function () {
