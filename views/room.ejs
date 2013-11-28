@@ -12,39 +12,40 @@
     </head>
     <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
         
-        <session apiKey="<%=apiKey%>" 
+        <tb-session apiKey="<%=apiKey%>" 
             sessionId="<%=sessionId%>" 
             token="<%=token%>" 
             publisher="publisher" 
             streams="streams" 
             session="session">
             
-            <layout props="{animate:true,bigFixedRatio:true}">
-                <subscriber ng-repeat="stream in streams | filter:notMine" 
+            <tb-layout props="{animate:true,bigFixedRatio:true}">
+                <tb-subscriber ng-repeat="stream in streams | filter:notMine" 
                     stream="stream" 
                     session="session" 
                     props="{style: {nameDisplayMode: 'off'}}" 
                     ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
                     ng-dblclick="$emit('changeSize')">
                         <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
-                </subscriber>
-                <publisher ng-if="sharingMyScreen"
+                </tb-subscriber>
+                <tb-publisher ng-if="sharingMyScreen"
                     publisher="screenPublisher"
                     session="session"
                     props='screenPublisherProps'
                     ng-class="{OT_big: screenBig}" 
                     ng-dblclick="$emit('changeScreenSize');">
                     <input type="button" class="resize-btn" ng-click="$emit('changeScreenSize');"/>
-                </publisher>
-            </layout>
+                </tb-publisher>
+            </tb-layout>
             
-            <publisher id="facePublisher" 
+            <tb-publisher id="facePublisher" 
                 apiKey="<%=apiKey%>" 
-                publisher="publisher" 
+                publisher="publisher"
+                draggable="true"
                 props="{name:'face', style: {nameDisplayMode: 'off'}, constraints: { video: { mandatory: {}, optional: [{minWidth: 1280}, {minHeight: 720}]}}}">
-            </publisher>
+            </tb-publisher>
             
-        </session>
+        </tb-session>
         
         <div id="shareInfo" 
             class="streams-{{(streams | filter:notMine).length > 0}}" 

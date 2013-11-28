@@ -7,17 +7,18 @@ body a {
     color: #fff;
 }
 
-publisher#facePublisher {
+tb-publisher#facePublisher {
     width: 178px;
     height: 100px;
     display: block;
     position: absolute !important;
-    bottom: 20px;
-    right: 20px;
+    cursor: move;
+    top: calc(100% - 120px);
+    left: calc(100% - 198px);
     border-radius: 5px;
     z-index: 99;
 }
-session {
+tb-session {
     display: block;
     position: absolute;
     top: 0;
@@ -25,17 +26,17 @@ session {
     left: 0;
     right: 0;
 }
-layout subscriber {
+tb-layout tb-subscriber {
     background-color: #000;
     display: inline-block;
 }
-layout {
+tb-layout {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-layout input.resize-btn {
+tb-layout input.resize-btn {
     transition: opacity 500ms ease-in;
     transition: top 500ms ease-in;
     opacity: 0;
@@ -50,11 +51,11 @@ layout input.resize-btn {
     z-index: 99;
 }
 
-layout > .OT_big input.resize-btn {
+tb-layout > .OT_big input.resize-btn {
     background: url('../images/shrink_38x38.png') no-repeat;
 }
 
-layout > :hover input.resize-btn {
+tb-layout > :hover input.resize-btn {
     top: 0;
     opacity: 1;
 }
@@ -73,7 +74,7 @@ body:hover #bottomBar {
   opacity: 1;
 }
 
-session ~ #bottomBar input.screen-btn {
+tb-session ~ #bottomBar input.screen-btn {
     display: none;
     width: 200px;
     height: 100%;
@@ -92,8 +93,8 @@ session ~ #bottomBar input.screen-btn {
   background-color: #CC3331;
 }
 
-body.sharing-my-screen-true session.session-connected ~ #bottomBar input#hidescreen,
-    body.sharing-my-screen-false session.session-connected ~ #bottomBar input#showscreen {
+body.sharing-my-screen-true tb-session.session-connected ~ #bottomBar input#hidescreen,
+    body.sharing-my-screen-false tb-session.session-connected ~ #bottomBar input#showscreen {
     display: inline-block;
 }
 
@@ -114,6 +115,6 @@ body.sharing-my-screen-true session.session-connected ~ #bottomBar input#hidescr
     display: none;
 }
 
-session.session-connected ~ #shareInfo.streams-false {
+tb-session.session-connected ~ #shareInfo.streams-false {
     display: block;
 }
