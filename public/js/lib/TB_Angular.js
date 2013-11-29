@@ -8,7 +8,10 @@
 if (!window.TB) throw new Error("You must include the TB library before the TB_Angular library");
 
 angular.module('opentok', [])
-.directive('tbSession', function() {
+.factory("TB", function () {
+    return TB;
+})
+.directive('tbSession', function(TB) {
     return {
         restrict: 'E',
         scope: {
@@ -79,7 +82,7 @@ angular.module('opentok', [])
         }
     };
 })
-.directive('tbLayout', function($window, $parse) {
+.directive('tbLayout', function($window, $parse, TB) {
     return {
         restrict: 'E',
         link: function(scope, element, attrs) {
