@@ -10,7 +10,7 @@
         <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
-    <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}} screenshare-{{(streams | filter:screensFilter).length > 0}}">
+    <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}}">
         
         <tb-session apiKey="<%=apiKey%>" 
             sessionId="<%=sessionId%>" 
