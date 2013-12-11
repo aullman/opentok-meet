@@ -13,11 +13,19 @@ tb-publisher#facePublisher {
     display: block;
     position: absolute !important;
     cursor: move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
     top: calc(100% - 120px);
     left: calc(100% - 198px);
     border-radius: 5px;
     z-index: 99;
 }
+
+tb-publisher#facePublisher:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
+
 tb-session {
     display: block;
     position: absolute;
