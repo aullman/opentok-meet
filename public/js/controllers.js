@@ -15,7 +15,11 @@ function RoomCtrl($scope) {
                 mandatory: {
                     chromeMediaSource: "screen",
                     maxWidth: screen.width,
-                    maxHeight: screen.height
+                    minWidth: screen.width,
+                    maxHeight: screen.height,
+                    minHeight: screen.height,
+                    maxFrameRate: 7,
+                    minFrameRate: 7
                 },
                 optional: []
             },
