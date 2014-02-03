@@ -63,6 +63,9 @@ var getRoom = function(room, p2p, goToRoom) {
 app.get('/:room.json', function (req, res) {
   var room = req.param('room');
   var goToRoom = function(sessionId) {
+    res.set({
+      "Access-Control-Allow-Origin": "*"
+    });
     res.send({
       room: room,
       sessionId: sessionId,
