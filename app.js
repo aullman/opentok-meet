@@ -48,6 +48,32 @@ app.get('/rooms', function(req, res) {
     res.send(rooms);
 });
 
+var getRoom = function(room, p2p, goToRoom) {
+  if (!rooms[room]) {
+      var props = {'p2p.preference': 'disabled'};
+      if (["true", "enabled", "1"].indexOf(p2p) >= 0) {
+          props['p2p.preference'] = 'enabled';
+      }
+      ot.createSession('', props, goToRoom);
+  } else {
+      goToRoom(rooms[room]);
+  }
+};
+
+app.get('/:room.json', function (req, res) {
+  var room = req.param('room');
+  var goToRoom = function(sessionId) {
+    res.send({
+      room: room,
+      sessionId: sessionId,
+      apiKey: config.apiKey,
+      token: ot.generateToken({sessionId: rooms[room],role: "publisher"})
+    });
+  };
+  
+  getRoom(room, req.param('p2p'), goToRoom);
+});
+
 app.get('/:room', function(req, res) {
     var room = req.param('room'),
         goToRoom = function(sessionId) {            
@@ -65,15 +91,7 @@ app.get('/:room', function(req, res) {
             });
         };
 
-    if (!rooms[room]) {
-        var props = {'p2p.preference': 'disabled'};
-        if (["true", "enabled", "1"].indexOf(req.param('p2p')) >= 0) {
-            props['p2p.preference'] = 'enabled';
-        }
-        ot.createSession('', props, goToRoom);
-    } else {
-        goToRoom(rooms[room]);
-    }
+    getRoom(room, req.param('p2p'), goToRoom);
 });
 
 var generator = moniker.generator([moniker.noun]);
