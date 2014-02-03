@@ -29,7 +29,7 @@ app.configure(function(){
   app.set('view engine', 'ejs');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express["static"](__dirname + '/public'));
+  app.use(express.static(__dirname + '/public'));
   app.use(app.router);
 });
 
@@ -66,9 +66,9 @@ app.get('/:room', function(req, res) {
         };
 
     if (!rooms[room]) {
-        var props = {'p2p.preference': 'enabled'};
-        if (["false", "disabled", "0"].indexOf(req.param('p2p')) >= 0) {
-            props['p2p.preference'] = 'disabled';
+        var props = {'p2p.preference': 'disabled'};
+        if (["true", "enabled", "1"].indexOf(req.param('p2p')) >= 0) {
+            props['p2p.preference'] = 'enabled';
         }
         ot.createSession('', props, goToRoom);
     } else {
