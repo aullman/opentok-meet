@@ -7,7 +7,10 @@
     "express": "3.1.x",
     "ejs": ">= 0.0.1",
     "opentok": ">= 0.0.1",
-    "moniker": "0.1.2"
+    "moniker": "0.1.2",
+    "bower": "~1.2.8",
+    "gulp": "~3.5.5",
+    "gulp-bower": "0.0.3"
   },
   "engines": {
     "node": "0.10.x",
@@ -15,10 +18,5 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js"
-  },
-  "devDependencies": {
-    "bower": "~1.2.8",
-    "gulp": "~3.5.5",
-    "gulp-bower": "0.0.3"
   }
 }
