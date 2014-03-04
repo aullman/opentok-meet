@@ -7,7 +7,7 @@ body a {
     color: #fff;
 }
 
-tb-publisher#facePublisher {
+ot-publisher#facePublisher {
     width: 178px;
     height: 100px;
     display: block;
@@ -21,12 +21,12 @@ tb-publisher#facePublisher {
     z-index: 99;
 }
 
-tb-publisher#facePublisher:active {
+ot-publisher#facePublisher:active {
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
 }
 
-tb-session {
+ot-session {
     display: block;
     position: absolute;
     top: 0;
@@ -34,17 +34,17 @@ tb-session {
     left: 0;
     right: 0;
 }
-tb-layout tb-subscriber {
+ot-layout ot-subscriber {
     background-color: #000;
     display: inline-block;
 }
-tb-layout {
+ot-layout {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-tb-layout input.resize-btn {
+ot-layout input.resize-btn {
     transition: opacity 500ms ease-in;
     transition: top 500ms ease-in;
     opacity: 0;
@@ -59,11 +59,11 @@ tb-layout input.resize-btn {
     z-index: 99;
 }
 
-tb-layout > .OT_big input.resize-btn {
+ot-layout > .OT_big input.resize-btn {
     background: url('../images/shrink_38x38.png') no-repeat;
 }
 
-tb-layout > :hover input.resize-btn {
+ot-layout > :hover input.resize-btn {
     top: 0;
     opacity: 1;
 }
@@ -82,7 +82,7 @@ body:hover #bottomBar {
   opacity: 1;
 }
 
-tb-session ~ #bottomBar input.screen-btn {
+ot-session ~ #bottomBar input.screen-btn {
     display: none;
     width: 200px;
     height: 100%;
@@ -101,8 +101,8 @@ tb-session ~ #bottomBar input.screen-btn {
   background-color: #CC3331;
 }
 
-body.sharing-my-screen-true tb-session.session-connected ~ #bottomBar input#hidescreen,
-    body.sharing-my-screen-false tb-session.session-connected ~ #bottomBar input#showscreen {
+body.sharing-my-screen-true ot-session.session-connected ~ #bottomBar input#hidescreen,
+    body.sharing-my-screen-false ot-session.session-connected ~ #bottomBar input#showscreen {
     display: inline-block;
 }
 
@@ -123,6 +123,6 @@ body.sharing-my-screen-true tb-session.session-connected ~ #bottomBar input#hide
     display: none;
 }
 
-tb-session.session-connected ~ #shareInfo.streams-false {
+ot-session.session-connected ~ #shareInfo.streams-false {
     display: block;
 }

@@ -13,40 +13,40 @@
     </head>
     <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}}">
         
-        <tb-session apiKey="<%=apiKey%>" 
+        <ot-session apiKey="<%=apiKey%>" 
             sessionId="<%=sessionId%>" 
             token="<%=token%>" 
             publisher="publisher" 
             streams="streams" 
             session="session">
             
-            <tb-layout props="{animate:true,bigFixedRatio:true}">
-                <tb-subscriber ng-repeat="stream in streams | filter:notMine" 
+            <ot-layout props="{animate:true,bigFixedRatio:true}">
+                <ot-subscriber ng-repeat="stream in streams | filter:notMine" 
                     stream="stream" 
                     session="session" 
                     props="{style: {nameDisplayMode: 'off'}}" 
                     ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
                     ng-dblclick="$emit('changeSize')">
                         <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
-                </tb-subscriber>
-                <tb-publisher ng-if="sharingMyScreen"
+                </ot-subscriber>
+                <ot-publisher ng-if="sharingMyScreen"
                     publisher="screenPublisher"
                     session="session"
                     props='screenPublisherProps'
                     ng-class="{OT_big: screenBig}" 
                     ng-dblclick="$emit('changeScreenSize');">
                     <input type="button" class="resize-btn" ng-click="$emit('changeScreenSize');"/>
-                </tb-publisher>
-            </tb-layout>
+                </ot-publisher>
+            </ot-layout>
             
-            <tb-publisher id="facePublisher" 
+            <ot-publisher id="facePublisher" 
                 apiKey="<%=apiKey%>" 
                 publisher="publisher"
                 draggable="true"
                 props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720', frameRate: 30}">
-            </tb-publisher>
+            </ot-publisher>
             
-        </tb-session>
+        </ot-session>
         
         <div id="shareInfo" 
             class="streams-{{(streams | filter:notMine).length > 0}}" 
@@ -58,7 +58,7 @@
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
         </div>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/TB_Angular.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
     </body>
