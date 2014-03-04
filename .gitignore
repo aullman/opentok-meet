@@ -13,6 +13,9 @@ results
 
 node_modules
 npm-debug.log
+bower_components
+
+public/js/lib/*
 
 config.json
 

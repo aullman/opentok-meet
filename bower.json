@@ -1,0 +1,26 @@
+{
+  "name": "opentok-hangout",
+  "version": "0.0.1",
+  "homepage": "https://github.com/aullman/opentok-hangout",
+  "authors": [
+    "Adam Ullman <adam@tokbox.com>"
+  ],
+  "description": "Video chat and screen sharing using OpenTok",
+  "main": "app.js",
+  "keywords": [
+    "opentok",
+    "webrtc",
+    "screenshare"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "opentok-layout-js": "~0.0.6"
+  }
+}
