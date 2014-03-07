@@ -40,10 +40,11 @@
             </ot-layout>
             
             <ot-publisher id="facePublisher" 
+                ng-if="publishing"
                 apiKey="<%=apiKey%>" 
                 publisher="publisher"
                 draggable="true"
-                props="{name:'face', style: {nameDisplayMode: 'off'}, resolution: '1280x720', frameRate: 30}">
+                props="facePublisherProps">
             </ot-publisher>
             
         </ot-session>
@@ -56,6 +57,17 @@
         <div id="bottomBar">
             <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" />
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
+            
+            <!-- Publish UI -->
+            <span id="publishUI">
+                <input type="button" name="publish" value="Publish" id="publishBtn" ng-click="publish()" class="publish-btn" ng-if="!publishing" />
+                <span id="publishHDCheck">
+                    <label for="publishHD" ng-if="!publishing">HD</label>
+                    <input type="checkbox" name="publishHD" ng-model="publishHD" id="publishHD" ng-if="!publishing" ng-change="publishHDChange()">
+                </span>
+            </span>
+                
+            <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
         </div>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>

@@ -82,7 +82,7 @@ body:hover #bottomBar {
   opacity: 1;
 }
 
-ot-session ~ #bottomBar input.screen-btn {
+ot-session ~ #bottomBar input[type='button'] {
     width: 200px;
     height: 100%;
     border: none;
@@ -92,11 +92,25 @@ ot-session ~ #bottomBar input.screen-btn {
     font-size: 20px;
 }
 
-#bottomBar input#showscreen {
+#bottomBar #publishHDCheck {
+    color: #fff;
+    position: relative;
+    left: -185px;
+    vertical-align: middle;
+}
+
+#bottomBar #publishHDCheck input {
+    position: absolute;
+    top: -2px;
+}
+
+#bottomBar input#showscreen,
+     #bottomBar input#publishBtn {
   background-color: #659950;
 }
 
-#bottomBar input#hidescreen {
+#bottomBar input#hidescreen,
+     #bottomBar input#unpublishBtn {
   background-color: #CC3331;
 }
 

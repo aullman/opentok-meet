@@ -3,6 +3,8 @@ function RoomCtrl($scope) {
     $scope.streams;
     $scope.session;
     $scope.sharingMyScreen = false;
+    $scope.publishing = true;
+    $scope.publishHD = true;
     $scope.screenBig = true;
     $scope.shareURL = window.location.href;
     $scope.screenPublisher;
@@ -31,6 +33,22 @@ function RoomCtrl($scope) {
         aspectRatio: screen.width / screen.height
     };
     
+    var facePublisherPropsHD = {
+        name:'face',
+        style: {
+            nameDisplayMode: 'off'
+        },
+        resolution: '1280x720',
+        frameRate: 30
+    },
+    facePublisherPropsSD = {
+        name:'face',
+        style: {
+            nameDisplayMode: 'off'
+        }
+    };
+    $scope.facePublisherProps = facePublisherPropsHD;
+    
     $scope.notMine = function(stream) {
         return stream.connection.connectionId != $scope.session.connection.connectionId;
     };
@@ -44,6 +62,23 @@ function RoomCtrl($scope) {
     $scope.hideScreen = function() {
         if ($scope.sharingMyScreen) {
             $scope.sharingMyScreen = false;
+        }
+    };
+    
+    $scope.publishHDChange = function () {
+        $scope.publishHD = !$scope.publishHD;
+    };
+    
+    $scope.publish = function () {
+        if (!$scope.publishing) {
+            $scope.facePublisherProps = $scope.publishHD ? facePublisherPropsHD : facePublisherPropsSD;
+            $scope.publishing = true;
+        }
+    };
+    
+    $scope.unpublish = function () {
+        if ($scope.publishing) {
+            $scope.publishing = false;
         }
     };
     
