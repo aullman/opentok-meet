@@ -83,7 +83,6 @@ body:hover #bottomBar {
 }
 
 ot-session ~ #bottomBar input.screen-btn {
-    display: none;
     width: 200px;
     height: 100%;
     border: none;
@@ -99,11 +98,6 @@ ot-session ~ #bottomBar input.screen-btn {
 
 #bottomBar input#hidescreen {
   background-color: #CC3331;
-}
-
-body.sharing-my-screen-true ot-session.session-connected ~ #bottomBar input#hidescreen,
-    body.sharing-my-screen-false ot-session.session-connected ~ #bottomBar input#showscreen {
-    display: inline-block;
 }
 
 #shareInfo {

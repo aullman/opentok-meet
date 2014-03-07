@@ -11,7 +11,7 @@
         <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
-    <body ng-controller="RoomCtrl" class="sharing-my-screen-{{sharingMyScreen}}">
+    <body ng-controller="RoomCtrl">
         
         <ot-session apiKey="<%=apiKey%>" 
             sessionId="<%=sessionId%>" 
@@ -54,8 +54,8 @@
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <div id="bottomBar">
-            <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" />
-            <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" />
+            <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" />
+            <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
         </div>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
