@@ -44,6 +44,7 @@
                 apiKey="<%=apiKey%>" 
                 publisher="publisher"
                 draggable="true"
+                session="session"
                 props="facePublisherProps">
             </ot-publisher>
             
@@ -70,7 +71,7 @@
             <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
         </div>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
     </body>
