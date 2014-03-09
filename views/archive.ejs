@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Archive <%=name%></title>
+        <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/css/archive.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    </head>
+    <body>
+        <h1><%= name %></h1>
+        <% if (url) { %>
+        <video src="<%=url%>" controls autoplay></video>
+        <% } else { %>
+        <div class="status">This archive isn't ready yet <a href="javascript:window.location.reload()">Refresh</a></div>
+        <% } %>
+    </body>
+</html>

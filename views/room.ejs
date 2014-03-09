@@ -59,20 +59,31 @@
             <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" />
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
             
-            <!-- Publish UI -->
+            <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
+                ng-if="!archiving"
+                ng-click="startArchiving()">
+            <input type="button" name="archive" value="Stop Archive" id="stopArchiveBtn"
+                ng-if="archiving"
+                ng-click="stopArchiving()">
+
             <span id="publishUI">
                 <input type="button" name="publish" value="Publish" id="publishBtn" ng-click="publish()" class="publish-btn" ng-if="!publishing" />
                 <span id="publishHDCheck">
                     <label for="publishHD" ng-if="!publishing">HD</label>
                     <input type="checkbox" name="publishHD" ng-model="publishHD" id="publishHD" ng-if="!publishing" ng-change="publishHDChange()">
                 </span>
-            </span>
-                
+            </span>                
             <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
         </div>
+        <div id="archiveStatus" ng-if="archiveId">
+            Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}">here</a>
+        </div>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/opentok-angular/opentok-angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            opentokHangout.value('room', '<%=room%>');
+        </script>
     </body>
 </html>

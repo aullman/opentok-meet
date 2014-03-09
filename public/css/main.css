@@ -83,6 +83,7 @@ body:hover #bottomBar {
 }
 
 ot-session ~ #bottomBar input[type='button'] {
+    cursor: pointer;
     width: 200px;
     height: 100%;
     border: none;
@@ -105,12 +106,14 @@ ot-session ~ #bottomBar input[type='button'] {
 }
 
 #bottomBar input#showscreen,
-     #bottomBar input#publishBtn {
+     #bottomBar input#publishBtn,
+     #bottomBar input#startArchiveBtn {
   background-color: #659950;
 }
 
 #bottomBar input#hidescreen,
-     #bottomBar input#unpublishBtn {
+     #bottomBar input#unpublishBtn,
+     #bottomBar input#stopArchiveBtn {
   background-color: #CC3331;
 }
 
@@ -133,4 +136,23 @@ ot-session ~ #bottomBar input[type='button'] {
 
 ot-session.session-connected ~ #shareInfo.streams-false {
     display: block;
+}
+
+#archiveStatus {
+    transition: opacity 200ms ease;
+    opacity: 0;
+    background-color: #999;
+    width: 400px;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    left: calc(50% - 200px);
+    bottom: 80px;
+    padding: 10px 0 10px 0;
+    color: #fff;
+}
+
+body:hover #archiveStatus {
+  opacity: 1;
 }

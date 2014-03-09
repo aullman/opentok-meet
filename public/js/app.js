@@ -1,4 +1,4 @@
-angular.module('opentok-hangout', ['opentok'])
+var opentokHangout = angular.module('opentok-hangout', ['opentok'])
 .directive('draggable', function ($document) {
     return function(scope, element, attrs){
         var mouseMoveHandler = function mouseMoveHandler(event) {
@@ -40,5 +40,5 @@ angular.module('opentok-hangout', ['opentok'])
             $document.on("mouseup", mouseUpHandler);
             $($document[0].body).on("mouseleave", mouseUpHandler);
         });
-    }
+    };
 });

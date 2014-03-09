@@ -1,0 +1,21 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Ropa Sans', sans-serif;
+    text-align: center;
+}
+
+body a {
+    color: #fff;
+}
+
+video {
+    width: 640px;
+    height: 480px;
+}
+
+div.status {
+    color: #fff;
+    margin-top: 50px;
+    font-size: 20px;
+}

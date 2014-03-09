@@ -1,4 +1,4 @@
-function RoomCtrl($scope) {
+function RoomCtrl($scope, $http, room) {
     $scope.publisher;
     $scope.streams;
     $scope.session;
@@ -6,6 +6,8 @@ function RoomCtrl($scope) {
     $scope.publishing = true;
     $scope.publishHD = true;
     $scope.screenBig = true;
+    $scope.archiveId = null;
+    $scope.archiving = false;
     $scope.shareURL = window.location.href;
     $scope.screenPublisher;
     $scope.screenPublisherProps = {
@@ -82,6 +84,38 @@ function RoomCtrl($scope) {
         }
     };
     
+    $scope.startArchiving = function () {
+        $scope.archiving = true;
+        $http.post('/' + room + '/startArchive').success(function(response) {
+            if (response.error) {
+                $scope.archiving = false;
+                console.error("Failed to start archive", response.error);
+            } else {
+                $scope.archiveId = response.archiveId;
+            }
+        }).error(function (data) {
+            console.error("Failed to start archiving", data);
+            $scope.archiving = false;
+        });
+    };
+    
+    $scope.stopArchiving = function () {
+        $scope.archiving = false;
+        $http.post('/' + room + '/stopArchive', {
+            archiveId: $scope.archiveId
+        }).success(function(response) {
+            if (response.error) {
+                console.error("Failed to stop archiving", response.error);
+                $scope.archiving = true;
+            } else {
+                $scope.archiveId = response.archiveId;
+            }
+        }).error(function (data) {
+            console.error("Failed to stop archiving", data);
+            $scope.archiving = true;
+        });
+    };
+    
     // It's a bit weird to handle changes in size at this level. Really this should be
     // in the Subscriber Directive but I'm trying not to pollute the generic 
     // Subscriber Directive
@@ -102,5 +136,15 @@ function RoomCtrl($scope) {
         setTimeout(function () {
             event.targetScope.$emit("layout");
         }, 10);
+    });
+    
+    $scope.$on("sessionConnected", function (event) {
+        $scope.session.on("archiveStarted archiveStopped", function (event) {
+            // event.id is the archiveId
+            $scope.$apply(function () {
+                $scope.archiveId = event.id;
+                $scope.archiving = (event.type === 'archiveStarted');
+            });
+        });
     });
 }

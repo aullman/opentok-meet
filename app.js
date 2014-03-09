@@ -48,6 +48,19 @@ app.get('/rooms', function(req, res) {
     res.send(rooms);
 });
 
+app.get('/archive/:archiveId', function (req, res) {
+    ot.getArchive(req.param('archiveId'), function (err, archive) {
+        if (err) {
+            res.send(404, err.message);
+        } else {
+            res.render('archive', {
+                name: archive.name,
+                url: archive.url
+            });
+        }
+    });
+});
+
 var getRoom = function(room, p2p, goToRoom) {
   if (!rooms[room]) {
       var props = {'p2p.preference': 'disabled'};
@@ -56,13 +69,13 @@ var getRoom = function(room, p2p, goToRoom) {
       }
       ot.createSession('', props, goToRoom);
   } else {
-      goToRoom(rooms[room]);
+      goToRoom(null, rooms[room]);
   }
 };
 
 app.get('/:room.json', function (req, res) {
   var room = req.param('room');
-  var goToRoom = function(sessionId) {
+  var goToRoom = function(err, sessionId) {
     res.set({
       "Access-Control-Allow-Origin": "*"
     });
@@ -79,7 +92,7 @@ app.get('/:room.json', function (req, res) {
 
 app.get('/:room', function(req, res) {
     var room = req.param('room'),
-        goToRoom = function(sessionId) {            
+        goToRoom = function(err, sessionId) {            
             if (!rooms[room]) {
                 rooms[room] = sessionId;
             } else {
@@ -95,6 +108,41 @@ app.get('/:room', function(req, res) {
         };
 
     getRoom(room, req.param('p2p'), goToRoom);
+});
+
+app.post('/:room/startArchive', function (req, res) {
+    var room = req.param('room');
+        sessionId = rooms[room];
+    
+    ot.startArchive(sessionId, {
+        name: room
+    }, function (err, archive) {
+        if (err) {
+            res.send({
+                error: err
+            });
+        } else {
+            res.send({
+                archiveId: archive.id
+            });
+        }
+    });
+});
+
+app.post('/:room/stopArchive', function (req, res) {
+    var archiveId = req.param('archiveId');
+    
+    ot.stopArchive(archiveId, function (err, archive) {
+        if (err) {
+            res.send({
+                error: err
+            });
+        } else {
+            res.send({
+                archiveId: archive.id
+            });
+        }
+    });
 });
 
 var generator = moniker.generator([moniker.noun]);
