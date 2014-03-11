@@ -127,14 +127,14 @@ function RoomCtrl($scope, $http, room) {
             event.targetScope.stream.oth_large = !event.targetScope.stream.oth_large;
         }
         setTimeout(function () {
-            event.targetScope.$emit("layout");
+            event.targetScope.$emit("otLayout");
         }, 10);
     });
     
     $scope.$on("changeScreenSize", function (event) {
         $scope.screenBig = !$scope.screenBig;
         setTimeout(function () {
-            event.targetScope.$emit("layout");
+            event.targetScope.$emit("otLayout");
         }, 10);
     });
     
