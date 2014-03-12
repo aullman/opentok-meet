@@ -156,3 +156,10 @@ ot-session.session-connected ~ #shareInfo.streams-false {
 body:hover #archiveStatus {
   opacity: 1;
 }
+
+#bottomBar #footer {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    font-size: 12px;
+}

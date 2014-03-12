@@ -74,6 +74,10 @@
                 </span>
             </span>                
             <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
+            <div id="footer">
+                <a href="https://github.com/aullman/opentok-hangout" target="_blank">View Source</a>|
+                <a href="https://github.com/aullman/opentok-hangout/issues" target="_blank">Report Issue</a>
+            </div>
         </div>
         <div id="archiveStatus" ng-if="archiveId">
             Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}" target="_blank">here</a>
