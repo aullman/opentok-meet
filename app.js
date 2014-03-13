@@ -36,8 +36,8 @@ app.configure(function(){
 var ot = new opentok.OpenTokSDK(config.apiKey, config.apiSecret);
 
 app.get('*', function(req,res,next) {
-    if(req.protocol !== 'https') {
-        res.redirect('https://' + req.host + req.url);
+    if(req.protocol !== 'https' && req.headers['x-forwarded-proto'] !== 'https') {
+        res.redirect('https://' + req.host +req.url);
     } else {
         next();
     }
