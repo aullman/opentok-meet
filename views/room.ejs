@@ -76,7 +76,7 @@
             <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
             <div id="footer">
                 <a href="https://github.com/aullman/opentok-hangout" target="_blank">View Source</a>|
-                <a href="https://github.com/aullman/opentok-hangout/issues" target="_blank">Report Issue</a>
+                <a href="https://github.com/aullman/opentok-hangout/issues/new" target="_blank">Report Issue</a>
             </div>
         </div>
         <div id="archiveStatus" ng-if="archiveId">
@@ -88,6 +88,19 @@
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" charset="utf-8">
             opentokHangout.value('room', '<%=room%>');
+        </script>
+        <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-49010461-2']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
         </script>
     </body>
 </html>
