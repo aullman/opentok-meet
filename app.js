@@ -36,7 +36,9 @@ app.configure(function(){
 var ot = new opentok.OpenTokSDK(config.apiKey, config.apiSecret);
 
 app.get('*', function(req,res,next) {
-    if(req.protocol !== 'https' && req.headers['x-forwarded-proto'] !== 'https') {
+    if (req.host === 'hangout.tokbox.com') {
+        res.redirect('https://meet.tokbox.com' + req.url);
+    } else if(req.protocol !== 'https' && req.headers['x-forwarded-proto'] !== 'https') {
         res.redirect('https://' + req.host +req.url);
     } else {
         next();
