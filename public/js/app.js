@@ -1,4 +1,4 @@
-var opentokHangout = angular.module('opentok-hangout', ['opentok'])
+var opentokMeet = angular.module('opentok-meet', ['opentok'])
 .directive('draggable', function ($document) {
     return function(scope, element, attrs){
         var mouseMoveHandler = function mouseMoveHandler(event) {

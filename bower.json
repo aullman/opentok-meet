@@ -1,7 +1,7 @@
 {
-  "name": "opentok-hangout",
+  "name": "opentok-meet",
   "version": "0.0.1",
-  "homepage": "https://github.com/aullman/opentok-hangout",
+  "homepage": "https://github.com/aullman/opentok-meet",
   "authors": [
     "Adam Ullman <adam@tokbox.com>"
   ],

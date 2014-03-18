@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
     "http://www.w3.org/TR/html4/strict.dtd">
-<html ng-app="opentok-hangout">
+<html ng-app="opentok-meet">
     <head>
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
         <title>Opentok Hangout</title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="https://swww.tokbox.com/webrtc/v2.2/js/TB.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
         
         <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
@@ -75,8 +75,8 @@
             </span>                
             <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" />
             <div id="footer">
-                <a href="https://github.com/aullman/opentok-hangout" target="_blank">View Source</a>|
-                <a href="https://github.com/aullman/opentok-hangout/issues/new" target="_blank">Report Issue</a>
+                <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
+                <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
             </div>
         </div>
         <div id="archiveStatus" ng-if="archiveId">
@@ -87,7 +87,7 @@
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" charset="utf-8">
-            opentokHangout.value('room', '<%=room%>');
+            opentokMeet.value('room', '<%=room%>');
         </script>
         <script type="text/javascript">
 
