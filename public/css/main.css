@@ -15,8 +15,8 @@ ot-publisher#facePublisher {
     cursor: move;
     cursor: -webkit-grab;
     cursor: -moz-grab;
-    top: calc(100% - 120px);
-    left: calc(100% - 198px);
+    top: 10px;
+    left: 10px;
     border-radius: 5px;
     z-index: 99;
 }
@@ -115,6 +115,21 @@ ot-session ~ #bottomBar input[type='button'] {
      #bottomBar input#unpublishBtn,
      #bottomBar input#stopArchiveBtn {
   background-color: #CC3331;
+}
+
+@media screen and (max-width: 650px) {
+  ot-session ~ #bottomBar input[type='button'] {
+    width: 110px;
+    font-size: 15px;
+  }
+  
+  #bottomBar #publishHDCheck {
+      left: -110px;
+  }
+  
+  #bottomBar #publishBtn {
+      text-align: right;
+  }
 }
 
 #shareInfo {
