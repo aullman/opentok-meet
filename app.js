@@ -22,6 +22,15 @@ if(process.env.HEROKU) {
     }
 }
 
+if (process.env.REDISTOGO_URL) {
+    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    var redis = require("redis").createClient(rtg.port, rtg.hostname);
+    redis.auth(rtg.auth.split(":")[1]);
+} else {
+    var redis = require("redis").createClient();
+}
+
+
 app.use(express.logger());
 
 app.configure(function(){
@@ -46,7 +55,9 @@ app.get('*', function(req,res,next) {
 });
 
 app.get('/rooms', function(req, res) {
-    res.send(rooms);
+    redis.hkeys("rooms", function (err, rooms) {
+        res.send(rooms);
+    });
 });
 
 app.get('/archive/:archiveId', function (req, res) {
@@ -63,49 +74,69 @@ app.get('/archive/:archiveId', function (req, res) {
 });
 
 var getRoom = function(room, p2p, goToRoom) {
-  if (!rooms[room]) {
-      var props = {'p2p.preference': 'disabled'};
-      if (["true", "enabled", "1"].indexOf(p2p) >= 0) {
-          props['p2p.preference'] = 'enabled';
-      }
-      ot.createSession('', props, goToRoom);
-  } else {
-      goToRoom(null, rooms[room]);
-  }
+    console.log("getRoom: " + room);
+    redis.hget("rooms", room, function (err, sessionId) {
+        if (!sessionId) {
+            var props = {'p2p.preference': 'disabled'};
+            if (["true", "enabled", "1"].indexOf(p2p) >= 0) {
+                props['p2p.preference'] = 'enabled';
+            }
+            ot.createSession('', props, function (err, sessionId) {
+                if (err) {
+                    goToRoom(err);
+                } else {
+                    redis.hset("rooms", room, sessionId, function (err) {
+                        if (err) {
+                            console.error("Failed to set room", err);
+                            goToRoom(err);
+                        } else {
+                            goToRoom(null, sessionId);
+                        }
+                    });
+                }
+            });
+        } else {
+            goToRoom(null, sessionId);
+        }
+    });
 };
 
 app.get('/:room.json', function (req, res) {
   var room = req.param('room');
   var goToRoom = function(err, sessionId) {
-    res.set({
-      "Access-Control-Allow-Origin": "*"
-    });
-    res.send({
-      room: room,
-      sessionId: sessionId,
-      apiKey: config.apiKey,
-      token: ot.generateToken({sessionId: rooms[room],role: "publisher"})
-    });
+      if (err) {
+          res.send(err);
+      } else {
+          res.set({
+              "Access-Control-Allow-Origin": "*"
+          });
+          res.send({
+              room: room,
+              sessionId: sessionId,
+              apiKey: config.apiKey,
+              token: ot.generateToken({
+                  sessionId: sessionId,
+                  role: "publisher"
+              })
+          });
+      }
   };
-  
   getRoom(room, req.param('p2p'), goToRoom);
 });
 
 app.get('/:room', function(req, res) {
     var room = req.param('room'),
-        goToRoom = function(err, sessionId) {            
-            if (!rooms[room]) {
-                rooms[room] = sessionId;
+        goToRoom = function(err, sessionId) {
+            if (err) {
+                res.send(err);
             } else {
-                // Someone else beat us to it, we should connect to the same session
-                sessionId = rooms[room];
+                res.render('room', {
+                    room: room,
+                    apiKey: config.apiKey,
+                    sessionId: sessionId,
+                    token: ot.generateToken({sessionId: sessionId,role: "publisher"})
+                });
             }
-            res.render('room', {
-                room: room,
-                apiKey: config.apiKey,
-                sessionId: rooms[room],
-                token: ot.generateToken({sessionId: rooms[room],role: "publisher"})
-            });
         };
 
     getRoom(room, req.param('p2p'), goToRoom);

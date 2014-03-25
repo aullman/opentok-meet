@@ -10,7 +10,9 @@
     "moniker": "0.1.2",
     "bower": "~1.2.8",
     "gulp": "~3.5.5",
-    "gulp-bower": "0.0.3"
+    "gulp-bower": "0.0.3",
+    "redis": "~0.10.1",
+    "hiredis": "~0.1.16"
   },
   "engines": {
     "node": "0.10.x",
