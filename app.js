@@ -142,6 +142,12 @@ app.get('/:room', function(req, res) {
     getRoom(room, goToRoom);
 });
 
+app.get('/:room/archives', function (req, res) {
+    redis.smembers("archive_" + req.param('room'), function (err, members) {
+        res.send(members);
+    });
+});
+
 app.post('/:room/startArchive', function (req, res) {
     var room = req.param('room');
     
@@ -159,6 +165,7 @@ app.post('/:room/startArchive', function (req, res) {
                     error: err
                 });
             } else {
+                redis.sadd("archive_" + room, archive.id);
                 res.send({
                     archiveId: archive.id
                 });
