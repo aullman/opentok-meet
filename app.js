@@ -144,20 +144,26 @@ app.get('/:room', function(req, res) {
 
 app.post('/:room/startArchive', function (req, res) {
     var room = req.param('room');
-        sessionId = rooms[room];
     
-    ot.startArchive(sessionId, {
-        name: room
-    }, function (err, archive) {
+    getRoom(room, function(err, sessionId) {
         if (err) {
             res.send({
                 error: err
             });
-        } else {
-            res.send({
-                archiveId: archive.id
-            });
         }
+        ot.startArchive(sessionId, {
+            name: room
+        }, function (err, archive) {
+            if (err) {
+                res.send({
+                    error: err
+                });
+            } else {
+                res.send({
+                    archiveId: archive.id
+                });
+            }
+        });
     });
 });
 
