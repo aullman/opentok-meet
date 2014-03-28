@@ -6,10 +6,8 @@
         <title>OpenTok Meet</title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
-        
-        <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -69,6 +67,7 @@
         <div id="archiveStatus" ng-if="archiveId">
             Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}" target="_blank">here</a>
         </div>
+        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
