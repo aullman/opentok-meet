@@ -22,6 +22,6 @@
   ],
   "dependencies": {
     "opentok-layout-js": "~0.0.7",
-    "opentok-angular": "~0.0.1"
+    "opentok-angular": "~0.1.0"
   }
 }

@@ -12,14 +12,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl">
-        
-        <ot-session apiKey="<%=apiKey%>" 
-            sessionId="<%=sessionId%>" 
-            token="<%=token%>" 
-            publisher="publisher" 
-            streams="streams" 
-            session="session">
-            
+        <div id='session' ng-class="{'session-connected': connected}">
             <ot-layout props="{animate:true,bigFixedRatio:true}">
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine" 
                     stream="stream" 
@@ -30,8 +23,6 @@
                         <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
                 </ot-subscriber>
                 <ot-publisher ng-if="sharingMyScreen"
-                    publisher="screenPublisher"
-                    session="session"
                     props='screenPublisherProps'
                     ng-class="{OT_big: screenBig}" 
                     ng-dblclick="$emit('changeScreenSize');">
@@ -41,15 +32,11 @@
             
             <ot-publisher id="facePublisher" 
                 ng-if="publishing"
-                apiKey="<%=apiKey%>" 
-                publisher="publisher"
+                apiKey="<%=apiKey%>"
                 draggable="true"
-                session="session"
                 props="facePublisherProps">
             </ot-publisher>
-            
-        </ot-session>
-        
+        </div>
         <div id="shareInfo" 
             class="streams-{{(streams | filter:notMine).length > 0}}" 
             ng-cloak>
@@ -88,6 +75,12 @@
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value('room', '<%=room%>');
+            
+            OpenTokAngular.value({
+                apiKey: '<%=apiKey%>',
+                sessionId: '<%=sessionId%>',
+                token: '<%=token%>'
+            });
         </script>
         <script type="text/javascript">
 

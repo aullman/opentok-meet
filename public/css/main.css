@@ -26,7 +26,7 @@ ot-publisher#facePublisher:active {
   cursor: -moz-grabbing;
 }
 
-ot-session {
+#session {
     display: block;
     position: absolute;
     top: 0;
@@ -82,7 +82,7 @@ body:hover #bottomBar {
   opacity: 1;
 }
 
-ot-session ~ #bottomBar input[type='button'] {
+#bottomBar input[type='button'] {
     cursor: pointer;
     width: 200px;
     height: 100%;
@@ -118,7 +118,7 @@ ot-session ~ #bottomBar input[type='button'] {
 }
 
 @media screen and (max-width: 650px) {
-  ot-session ~ #bottomBar input[type='button'] {
+  #bottomBar input[type='button'] {
     width: 110px;
     font-size: 15px;
   }
@@ -149,7 +149,7 @@ ot-session ~ #bottomBar input[type='button'] {
     display: none;
 }
 
-ot-session.session-connected ~ #shareInfo.streams-false {
+#session.session-connected ~ #shareInfo.streams-false {
     display: block;
 }
 

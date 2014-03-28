@@ -1,7 +1,6 @@
-function RoomCtrl($scope, $http, room) {
-    $scope.publisher;
-    $scope.streams;
-    $scope.session;
+function RoomCtrl($scope, $http, room, OTSession) {
+    $scope.streams = OTSession.streams;
+    $scope.session = OTSession.session;
     $scope.sharingMyScreen = false;
     $scope.publishing = true;
     $scope.publishHD = true;
@@ -9,7 +8,7 @@ function RoomCtrl($scope, $http, room) {
     $scope.archiveId = null;
     $scope.archiving = false;
     $scope.shareURL = window.location.href;
-    $scope.screenPublisher;
+    $scope.connected = false;
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
@@ -138,13 +137,15 @@ function RoomCtrl($scope, $http, room) {
         }, 10);
     });
     
-    $scope.$on("sessionConnected", function (event) {
-        $scope.session.on("archiveStarted archiveStopped", function (event) {
-            // event.id is the archiveId
-            $scope.$apply(function () {
-                $scope.archiveId = event.id;
-                $scope.archiving = (event.type === 'archiveStarted');
-            });
+    $scope.session.on('sessionConnected sessionDisconnected', function (event) {
+        $scope.$apply(function () {
+            $scope.connected = (event.type === 'sessionConnected');
         });
+    }).on('archiveStarted archiveStopped', function (event) {
+          // event.id is the archiveId
+          $scope.$apply(function () {
+              $scope.archiveId = event.id;
+              $scope.archiving = (event.type === 'archiveStarted');
+          });
     });
 }
