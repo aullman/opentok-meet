@@ -9,6 +9,7 @@ function RoomCtrl($scope, $http, room, OTSession) {
     $scope.archiving = false;
     $scope.shareURL = window.location.href;
     $scope.connected = false;
+    $scope.screenShareFailed = false;
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
@@ -56,6 +57,7 @@ function RoomCtrl($scope, $http, room, OTSession) {
     
     $scope.shareScreen = function() {
         if (!$scope.sharingMyScreen) {
+            $scope.screenShareFailed = false;
             $scope.sharingMyScreen = true;
         }
     };
@@ -135,6 +137,15 @@ function RoomCtrl($scope, $http, room, OTSession) {
         setTimeout(function () {
             event.targetScope.$emit("otLayout");
         }, 10);
+    });
+    
+    $scope.$on("otPublisherError", function (event, error, publisher) {
+        if (publisher.id === 'screenPublisher') {
+            $scope.$apply(function () {
+                $scope.screenShareFailed = true;
+                $scope.hideScreen();
+            });
+        }
     });
     
     $scope.session.on('sessionConnected sessionDisconnected', function (event) {

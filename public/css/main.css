@@ -153,22 +153,26 @@ body:hover #bottomBar {
     display: block;
 }
 
-#archiveStatus {
-    transition: opacity 200ms ease;
-    opacity: 0;
+.statusMessage {
     background-color: #999;
-    width: 400px;
+    max-width: 465px;
     border-radius: 5px;
     text-align: center;
     vertical-align: middle;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+#statusMessages {
+    transition: opacity 200ms ease;
+    opacity: 0;
     position: absolute;
     left: calc(50% - 200px);
     bottom: 80px;
-    padding: 10px 0 10px 0;
-    color: #fff;
 }
 
-body:hover #archiveStatus {
+body:hover #statusMessages {
   opacity: 1;
 }
 

@@ -8,6 +8,11 @@
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -20,7 +25,8 @@
                     ng-dblclick="$emit('changeSize')">
                         <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
                 </ot-subscriber>
-                <ot-publisher ng-if="sharingMyScreen"
+                <ot-publisher id="screenPublisher"
+                    ng-if="sharingMyScreen"
                     props='screenPublisherProps'
                     ng-class="{OT_big: screenBig}" 
                     ng-dblclick="$emit('changeScreenSize');">
@@ -64,14 +70,12 @@
                 <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
             </div>
         </div>
-        <div id="archiveStatus" ng-if="archiveId">
-            Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}" target="_blank">here</a>
+        <div id="statusMessages">
+            <div id="archiveStatus" class="statusMessage" ng-if="archiveId">
+                Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}">here</a>
+            </div>
+            <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed: Make sure you have enabled Screen Capture support by visiting chrome://flags/#enable-usermedia-screen-capture and then quitting and restarting your browser.</div>
         </div>
-        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value('room', '<%=room%>');
             

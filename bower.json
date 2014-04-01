@@ -21,6 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "opentok-angular": "~0.1.0"
+    "opentok-angular": "~0.1.1"
   }
 }
