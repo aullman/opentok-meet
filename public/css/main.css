@@ -19,6 +19,7 @@ ot-publisher#facePublisher {
     left: 10px;
     border-radius: 5px;
     z-index: 99;
+    transition: width 200ms, height 200ms ease;
 }
 
 ot-publisher#facePublisher:active {
@@ -91,6 +92,8 @@ body:hover #bottomBar {
     background-color: #999;
     color: #fff;
     font-size: 20px;
+    
+    transition: width 200ms, height 200ms ease;
 }
 
 #bottomBar #publishHDCheck {
@@ -135,6 +138,11 @@ body:hover #bottomBar {
   
   #bottomBar #publishBtn {
       text-align: right;
+  }
+  
+  #facePublisher {
+      width: 89px !important;
+      height: 50px !important;
   }
 }
 
