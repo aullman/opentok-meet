@@ -51,7 +51,7 @@
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
             
             <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
-                ng-if="!archiving"
+                ng-if="!archiving && !p2p"
                 ng-click="startArchiving()">
             <input type="button" name="archive" value="Stop Archive" id="stopArchiveBtn"
                 ng-if="archiving"
@@ -80,7 +80,10 @@
             </div>
         </div>
         <script type="text/javascript" charset="utf-8">
-            opentokMeet.value('room', '<%=room%>');
+            opentokMeet.value({
+                room: '<%=room%>',
+                p2p: <%=p2p%>
+            });
             
             OpenTokAngular.value({
                 apiKey: '<%=apiKey%>',

@@ -1,4 +1,4 @@
-function RoomCtrl($scope, $http, room, OTSession) {
+function RoomCtrl($scope, $http, room, OTSession, p2p) {
     $scope.streams = OTSession.streams;
     $scope.session = OTSession.session;
     $scope.sharingMyScreen = false;
@@ -11,6 +11,7 @@ function RoomCtrl($scope, $http, room, OTSession) {
     $scope.shareURL = window.location.href;
     $scope.connected = false;
     $scope.screenShareFailed = false;
+    $scope.p2p = p2p;
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},

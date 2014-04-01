@@ -73,12 +73,16 @@ app.get('/archive/:archiveId', function (req, res) {
     });
 });
 
+var isP2P = function (room) {
+    return room.toLowerCase().indexOf('p2p') >= 0;
+};
+
 var getRoom = function(room, goToRoom) {
     console.log("getRoom: " + room);
     redis.hget("rooms", room, function (err, sessionId) {
         if (!sessionId) {
             var props = {'p2p.preference': 'disabled'};
-            if (room.toLowerCase().indexOf('p2p') >= 0) {
+            if (isP2P(room)) {
                 props['p2p.preference'] = 'enabled';
             }
             ot.createSession('', props, function (err, sessionId) {
@@ -134,6 +138,7 @@ app.get('/:room', function(req, res) {
                     room: room,
                     apiKey: config.apiKey,
                     sessionId: sessionId,
+                    p2p: isP2P(room),
                     token: ot.generateToken({sessionId: sessionId,role: "publisher"})
                 });
             }
