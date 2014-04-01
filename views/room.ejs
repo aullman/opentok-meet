@@ -47,7 +47,7 @@
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <div id="bottomBar">
-            <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" />
+            <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" ng-disabled="!screenShareSupported"/>
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
             
             <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
@@ -75,6 +75,9 @@
                 Archiving: When archive is ready it will be available <a href="/archive/{{archiveId}}">here</a>
             </div>
             <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed: Make sure you have enabled Screen Capture support by visiting chrome://flags/#enable-usermedia-screen-capture and then quitting and restarting your browser.</div>
+            <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
+                Screen Sharing currently requires Google Chrome.
+            </div>
         </div>
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value('room', '<%=room%>');

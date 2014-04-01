@@ -7,6 +7,7 @@ function RoomCtrl($scope, $http, room, OTSession) {
     $scope.screenBig = true;
     $scope.archiveId = null;
     $scope.archiving = false;
+    $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
     $scope.shareURL = window.location.href;
     $scope.connected = false;
     $scope.screenShareFailed = false;

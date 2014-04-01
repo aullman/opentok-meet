@@ -117,6 +117,12 @@ body:hover #bottomBar {
   background-color: #CC3331;
 }
 
+#bottomBar input#showscreen:disabled {
+    background-color: #999;
+    color: #ccc;
+    cursor: auto;
+}
+
 @media screen and (max-width: 650px) {
   #bottomBar input[type='button'] {
     width: 110px;
@@ -162,6 +168,7 @@ body:hover #bottomBar {
     padding: 10px 0 10px 0;
     color: #fff;
     margin-bottom: 5px;
+    padding: 10px;
 }
 
 #statusMessages {
@@ -181,4 +188,13 @@ body:hover #statusMessages {
     bottom: -15px;
     left: 0;
     font-size: 12px;
+}
+
+#screenShareUnsupported {
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+#bottomBar:hover ~ #statusMessages > #screenShareUnsupported {
+    opacity: 1;
 }
