@@ -72,7 +72,8 @@ ot-layout > :hover input.resize-btn {
 #bottomBar {
   transition: opacity 200ms ease;
   opacity: 0;
-  width: 99%;
+  width: 100%;
+  left: 0;
   bottom: 20px;
   height: 50px;
   position: absolute;
@@ -126,6 +127,22 @@ body:hover #bottomBar {
     cursor: auto;
 }
 
+#shareInfo {
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    width: 550px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #999;
+    top: 35%;
+    position: absolute;
+    left: 50%;
+    margin-left: -285px;
+    display: none;
+    transition: width 200ms, height 200ms ease;
+}
+
 @media screen and (max-width: 650px) {
   #bottomBar input[type='button'] {
     width: 110px;
@@ -144,23 +161,12 @@ body:hover #bottomBar {
       width: 89px !important;
       height: 50px !important;
   }
-}
-
-#shareInfo {
-    font-size: 18px;
-    color: #fff;
-    text-align: center;
-    width: 50%;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #999;
-    top: 50%;
-    position: absolute;
-    left: 50%;
-    margin-left: -25%;
-    margin-top: -5%;
-    min-width: 250px;
-    display: none;
+  
+  #shareInfo {
+      width: 250px;
+      left: 50%;
+      margin-left: -135px;
+  }
 }
 
 #session.session-connected ~ #shareInfo.streams-false {
