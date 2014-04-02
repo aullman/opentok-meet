@@ -80,7 +80,7 @@ ot-layout > :hover input.resize-btn {
   text-align: center;
 }
 
-body:hover #bottomBar {
+body.mouse-move #bottomBar {
   opacity: 1;
 }
 
@@ -193,7 +193,7 @@ body:hover #bottomBar {
     bottom: 80px;
 }
 
-body:hover #statusMessages {
+body.mouse-move #statusMessages {
   opacity: 1;
 }
 

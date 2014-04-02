@@ -14,7 +14,7 @@
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
     </head>
-    <body ng-controller="RoomCtrl">
+    <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
             <ot-layout props="{animate:true,bigFixedRatio:true}">
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine" 

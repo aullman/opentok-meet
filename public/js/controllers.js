@@ -1,4 +1,4 @@
-function RoomCtrl($scope, $http, room, OTSession, p2p) {
+function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
     $scope.streams = OTSession.streams;
     $scope.session = OTSession.session;
     $scope.sharingMyScreen = false;
@@ -11,6 +11,7 @@ function RoomCtrl($scope, $http, room, OTSession, p2p) {
     $scope.shareURL = window.location.href;
     $scope.connected = false;
     $scope.screenShareFailed = false;
+    $scope.mouseMove = false;
     $scope.p2p = p2p;
     $scope.screenPublisherProps = {
         name: "screen",
@@ -160,5 +161,22 @@ function RoomCtrl($scope, $http, room, OTSession, p2p) {
               $scope.archiveId = event.id;
               $scope.archiving = (event.type === 'archiveStarted');
           });
+    });
+
+    var mouseMoveTimeout;
+    $window.addEventListener("mousemove", function (event) {
+        if (!$scope.mouseMove) {
+            $scope.$apply(function () {
+                $scope.mouseMove = true;
+            });
+        }
+        if (mouseMoveTimeout) {
+            clearTimeout(mouseMoveTimeout);
+        }
+        mouseMoveTimeout = setTimeout(function () {
+            $scope.$apply(function () {
+                $scope.mouseMove = false;
+            });
+        }, 5000);
     });
 }
