@@ -1,6 +1,5 @@
-function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
+function RoomCtrl($scope, $http, $window, OTSession, room, p2p, apiKey, sessionId, token, baseURL) {
     $scope.streams = OTSession.streams;
-    $scope.session = OTSession.session;
     $scope.sharingMyScreen = false;
     $scope.publishing = true;
     $scope.publishHD = true;
@@ -8,10 +7,12 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
     $scope.archiveId = null;
     $scope.archiving = false;
     $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
-    $scope.shareURL = window.location.href;
+    $scope.shareURL = baseURL === '/' ? window.location.href : baseURL + room;
     $scope.connected = false;
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
+    $scope.hungup = false;
+    $scope.room = room;
     $scope.p2p = p2p;
     $scope.screenPublisherProps = {
         name: "screen",
@@ -88,9 +89,23 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
         }
     };
     
+    $scope.hangup = function () {
+        if ($scope.session) {
+            $scope.hungup = true;
+            $scope.session.disconnect();
+        }
+    };
+    
+    $scope.connect = function () {
+        if ($scope.session) {
+            $scope.hungup = false;
+            $scope.session.connect(apiKey, token);
+        }
+    };
+    
     $scope.startArchiving = function () {
         $scope.archiving = true;
-        $http.post('/' + room + '/startArchive').success(function(response) {
+        $http.post(baseURL + room + '/startArchive').success(function(response) {
             if (response.error) {
                 $scope.archiving = false;
                 console.error("Failed to start archive", response.error);
@@ -105,7 +120,7 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
     
     $scope.stopArchiving = function () {
         $scope.archiving = false;
-        $http.post('/' + room + '/stopArchive', {
+        $http.post(baseURL + room + '/stopArchive', {
             archiveId: $scope.archiveId
         }).success(function(response) {
             if (response.error) {
@@ -151,20 +166,28 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
         }
     });
     
-    $scope.session.on('sessionConnected sessionDisconnected', function (event) {
-        $scope.$apply(function () {
-            $scope.connected = (event.type === 'sessionConnected');
+    OTSession.init(apiKey, sessionId, token, function (err, session) {
+        $scope.session = session;
+        var connectDisconnect = function (connected) {
+            $scope.$apply(function () {
+                $scope.connected = connected;
+                if (!connected) $scope.publishing = false;
+            });
+        };
+        if (session.connected) connectDisconnect(true);
+        $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
+        $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
+        $scope.session.on('archiveStarted archiveStopped', function (event) {
+              // event.id is the archiveId
+              $scope.$apply(function () {
+                  $scope.archiveId = event.id;
+                  $scope.archiving = (event.type === 'archiveStarted');
+              });
         });
-    }).on('archiveStarted archiveStopped', function (event) {
-          // event.id is the archiveId
-          $scope.$apply(function () {
-              $scope.archiveId = event.id;
-              $scope.archiving = (event.type === 'archiveStarted');
-          });
     });
-
+    
     var mouseMoveTimeout;
-    $window.addEventListener("mousemove", function (event) {
+    var mouseMoved = function (event) {
         if (!$scope.mouseMove) {
             $scope.$apply(function () {
                 $scope.mouseMove = true;
@@ -178,5 +201,7 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p) {
                 $scope.mouseMove = false;
             });
         }, 5000);
-    });
+    };
+    $window.addEventListener("mousemove", mouseMoved);
+    $window.addEventListener("touchstart", mouseMoved);
 }

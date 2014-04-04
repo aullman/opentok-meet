@@ -19,7 +19,6 @@
             <ot-layout props="{animate:true,bigFixedRatio:true}">
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine" 
                     stream="stream" 
-                    session="session" 
                     props="{style: {nameDisplayMode: 'off'}}" 
                     ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
                     ng-dblclick="$emit('changeSize')">
@@ -82,13 +81,11 @@
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value({
                 room: '<%=room%>',
-                p2p: <%=p2p%>
-            });
-            
-            OpenTokAngular.value({
+                p2p: <%=p2p%>,
                 apiKey: '<%=apiKey%>',
                 sessionId: '<%=sessionId%>',
-                token: '<%=token%>'
+                token: '<%=token%>',
+                baseURL: '/'
             });
         </script>
         <script type="text/javascript">

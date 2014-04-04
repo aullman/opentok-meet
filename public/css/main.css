@@ -93,6 +93,7 @@ body.mouse-move #bottomBar {
     background-color: #999;
     color: #fff;
     font-size: 20px;
+    -webkit-appearance: none;
     
     transition: width 200ms, height 200ms ease;
 }
@@ -111,13 +112,15 @@ body.mouse-move #bottomBar {
 
 #bottomBar input#showscreen,
      #bottomBar input#publishBtn,
-     #bottomBar input#startArchiveBtn {
+     #bottomBar input#startArchiveBtn,
+     #bottomBar input#connectBtn {
   background-color: #659950;
 }
 
 #bottomBar input#hidescreen,
      #bottomBar input#unpublishBtn,
-     #bottomBar input#stopArchiveBtn {
+     #bottomBar input#stopArchiveBtn,
+     #bottomBar input#hangupBtn {
   background-color: #CC3331;
 }
 

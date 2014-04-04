@@ -22,3 +22,5 @@ config.json
 server.key
 server.crt
 server.csr
+
+dump.rdb
