@@ -35,6 +35,15 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
     // Add the ios platform
     exec('cd opentok-meet-cordova;cordova platform add ios', function (err) {
       // Prepare for ios
+      if (!err) {
+        // If there's no error then you haven't already installed the platform
+        console.log('If you want to hide the status bar you may need to add the following to OpenTokMeet-Info.plist');
+        console.log('<key>UIStatusBarHidden</key>\n' +
+                  '<true/>\n' +
+                  '<key>UIViewControllerBasedStatusBarAppearance</key>\n' +
+                  '<false/>\n'
+        );
+      }
       exec('cd opentok-meet-cordova;cordova prepare ios', function (err) {
         if (err) cb(err);
         else {
