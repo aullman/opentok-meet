@@ -1,4 +1,4 @@
-function RoomCtrl($scope, $http, $window, OTSession, room, p2p, apiKey, sessionId, token, baseURL) {
+function RoomCtrl($scope, $http, $window, $document, OTSession, room, p2p, apiKey, sessionId, token, baseURL) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
     $scope.publishing = true;
@@ -7,7 +7,7 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p, apiKey, sessionI
     $scope.archiveId = null;
     $scope.archiving = false;
     $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
-    $scope.shareURL = baseURL === '/' ? window.location.href : baseURL + room;
+    $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + room;
     $scope.connected = false;
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
@@ -204,4 +204,7 @@ function RoomCtrl($scope, $http, $window, OTSession, room, p2p, apiKey, sessionI
     };
     $window.addEventListener("mousemove", mouseMoved);
     $window.addEventListener("touchstart", mouseMoved);
+    $document.context.body.addEventListener("orientationchange", function () {
+      $scope.$emit("otLayout");
+    });
 }
