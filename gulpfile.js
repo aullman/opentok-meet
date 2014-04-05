@@ -28,7 +28,7 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
     .pipe(gulp.dest('opentok-meet-cordova/www/css'));
   
   // Copy over the images
-  gulp.src('./public/images/*.png')
+  gulp.src('./public/images/*.*')
     .pipe(gulp.dest('opentok-meet-cordova/www/images'));
 
   var prepare = function () {

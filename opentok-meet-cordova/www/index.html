@@ -15,19 +15,11 @@
         <script src="opentok.js" type="text/javascript" charset="utf-8"></script>
         
         <script src="js/lib/common-js-helpers/build/js/common-js-helpers.min.js" type="text/javascript" charset="utf-8"></script>
-        <script type="text/javascript" charset="utf-8">
-        var OT = {
-            $:{},
-            onLoad: function (fn) {
-                document.addEventListener('deviceReady', fn);
-            }
-        };
-        OT.$ = window.OTHelpers;
-        </script>
         <script src="js/lib/opentok-layout-js/opentok-layout.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/controllers.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mobile.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -52,6 +44,7 @@
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
+        <img id="loader" src="images/ajax-loader.gif" ng-if="!connected" />
         <div id="bottomBar">
             <!-- <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
                 ng-if="!archiving && !p2p"
@@ -78,11 +71,6 @@
         </div>
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value({
-                room: 'demo',
-                p2p: false,
-                apiKey: '1974561',
-                sessionId: '1_MX4xOTc0NTYxfn5GcmkgTWFyIDI4IDIzOjEwOjU5IFBEVCAyMDE0fjAuOTM2NDI1NH4',
-                token: 'T1==cGFydG5lcl9pZD0xOTc0NTYxJnNpZz1iOTkzZmNjYTQ3Y2FlOTFjYTEyZDRmOWNhNjA2ZjlkMzgyMjVhZmNkOnNlc3Npb25faWQ9MV9NWDR4T1RjME5UWXhmbjVHY21rZ1RXRnlJREk0SURJek9qRXdPalU1SUZCRVZDQXlNREUwZmpBdU9UTTJOREkxTkg0JmNyZWF0ZV90aW1lPTEzOTY2MTYzMjUmbm9uY2U9NTQxOTk3JnJvbGU9cHVibGlzaGVyJnNlc3Npb25JZD0xX01YNHhPVGMwTlRZeGZuNUdjbWtnVFdGeUlESTRJREl6T2pFd09qVTVJRkJFVkNBeU1ERTBmakF1T1RNMk5ESTFOSDQ=',
                 baseURL: 'https://meet.tokbox.com/'
             });
         </script>

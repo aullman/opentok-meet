@@ -118,6 +118,7 @@ app.get('/:room.json', function (req, res) {
               room: room,
               sessionId: sessionId,
               apiKey: config.apiKey,
+              p2p: isP2P(room),
               token: ot.generateToken({
                   sessionId: sessionId,
                   role: "publisher"
@@ -130,21 +131,19 @@ app.get('/:room.json', function (req, res) {
 
 app.get('/:room', function(req, res) {
     var room = req.param('room'),
-        goToRoom = function(err, sessionId) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.render('room', {
-                    room: room,
-                    apiKey: config.apiKey,
-                    sessionId: sessionId,
-                    p2p: isP2P(room),
-                    token: ot.generateToken({sessionId: sessionId,role: "publisher"})
-                });
-            }
-        };
-
-    getRoom(room, goToRoom);
+        ua = req.headers['user-agent'];
+    // If we're on iOS forward them to the iOS App
+    if (/like Mac OS X/.test(ua)) {
+        var iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
+        if (iOS) {
+            res.render('roomiOS', {
+                room: room
+            });
+        }
+    }
+    res.render('room', {
+        room: room
+    });
 });
 
 app.get('/:room/archives', function (req, res) {

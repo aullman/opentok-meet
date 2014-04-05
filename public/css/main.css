@@ -146,6 +146,16 @@ body.mouse-move #bottomBar {
     transition: width 200ms, height 200ms ease;
 }
 
+img#loader {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -16px;
+    margin-top: -16px;
+}
+
 @media screen and (max-width: 650px) {
   #bottomBar input[type='button'] {
     width: 110px;

@@ -12,7 +12,9 @@
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/directives.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -35,11 +37,11 @@
             
             <ot-publisher id="facePublisher" 
                 ng-if="publishing"
-                apiKey="<%=apiKey%>"
                 draggable="true"
                 props="facePublisherProps">
             </ot-publisher>
         </div>
+        <img id="loader" src="/images/ajax-loader.gif" ng-if="!connected" />
         <div id="shareInfo" 
             class="streams-{{(streams | filter:notMine).length > 0}}" 
             ng-cloak>
@@ -81,10 +83,6 @@
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value({
                 room: '<%=room%>',
-                p2p: <%=p2p%>,
-                apiKey: '<%=apiKey%>',
-                sessionId: '<%=sessionId%>',
-                token: '<%=token%>',
                 baseURL: '/'
             });
         </script>

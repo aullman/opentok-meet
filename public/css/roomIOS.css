@@ -1,0 +1,22 @@
+body {
+    background-color: #000;
+    font-family: 'Ropa Sans', sans-serif;
+    color: #fff;
+}
+
+body a {
+    color: #fff;
+}
+
+.message {
+    font-size: 18px;
+    text-align: center;
+    width: 550px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #999;
+    top: 35%;
+    position: absolute;
+    left: 50%;
+    margin-left: -285px;
+}

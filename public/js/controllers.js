@@ -1,19 +1,15 @@
-function RoomCtrl($scope, $http, $window, $document, OTSession, room, p2p, apiKey, sessionId, token, baseURL) {
+function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, baseURL) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
-    $scope.publishing = true;
+    $scope.publishing = false;
     $scope.publishHD = true;
     $scope.screenBig = true;
     $scope.archiveId = null;
     $scope.archiving = false;
     $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
-    $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + room;
     $scope.connected = false;
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
-    $scope.hungup = false;
-    $scope.room = room;
-    $scope.p2p = p2p;
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
@@ -89,20 +85,6 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, room, p2p, apiKe
         }
     };
     
-    $scope.hangup = function () {
-        if ($scope.session) {
-            $scope.hungup = true;
-            $scope.session.disconnect();
-        }
-    };
-    
-    $scope.connect = function () {
-        if ($scope.session) {
-            $scope.hungup = false;
-            $scope.session.connect(apiKey, token);
-        }
-    };
-    
     $scope.startArchiving = function () {
         $scope.archiving = true;
         $http.post(baseURL + room + '/startArchive').success(function(response) {
@@ -166,24 +148,35 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, room, p2p, apiKe
         }
     });
     
-    OTSession.init(apiKey, sessionId, token, function (err, session) {
-        $scope.session = session;
-        var connectDisconnect = function (connected) {
-            $scope.$apply(function () {
-                $scope.connected = connected;
-                if (!connected) $scope.publishing = false;
-            });
-        };
-        if (session.connected) connectDisconnect(true);
-        $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
-        $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
-        $scope.session.on('archiveStarted archiveStopped', function (event) {
-              // event.id is the archiveId
+    // Fetch the room info
+    RoomService().then(function (roomData) {
+        if ($scope.session) {
+            $scope.session.disconnect();
+        }
+        $scope.p2p = roomData.p2p;
+        $scope.room = roomData.room;
+        $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
+
+        OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err, session) {
+            $scope.session = session;
+            var connectDisconnect = function (connected) {
               $scope.$apply(function () {
-                  $scope.archiveId = event.id;
-                  $scope.archiving = (event.type === 'archiveStarted');
+                  $scope.connected = connected;
+                  if (!connected) $scope.publishing = false;
               });
+            };
+            if (session.connected) connectDisconnect(true);
+            $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
+            $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
+            $scope.session.on('archiveStarted archiveStopped', function (event) {
+            // event.id is the archiveId
+            $scope.$apply(function () {
+                $scope.archiveId = event.id;
+                $scope.archiving = (event.type === 'archiveStarted');
+            });
+            });
         });
+        $scope.publishing = true;
     });
     
     var mouseMoveTimeout;
