@@ -1,8 +1,10 @@
-var otmConfig = {},
+var otmConfig = {
+    room: ''
+},
     deferredRoom;
 
 var loadRoom = function () {
-    otmConfig.$http.get(otmConfig.baseURL + (otmConfig.room ? otmConfig.room : 'demo') + '.json')
+    otmConfig.$http.get(otmConfig.baseURL + otmConfig.room)
       .success(function (roomData) {
         deferredRoom.resolve(roomData);
     });
@@ -32,7 +34,6 @@ opentokMeet.factory("RoomService", ['$q', '$http', 'baseURL', function ($q, $htt
         otmConfig.$http = $http;
         setTimeout(function () {
             if (!otmConfig.room) {
-                otmConfig.room = 'demo';
                 loadRoom();
             }
         }, 1000);

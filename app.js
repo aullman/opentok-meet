@@ -105,44 +105,47 @@ var getRoom = function(room, goToRoom) {
     });
 };
 
-app.get('/:room.json', function (req, res) {
-  var room = req.param('room');
-  var goToRoom = function(err, sessionId) {
-      if (err) {
-          res.send(err);
-      } else {
-          res.set({
-              "Access-Control-Allow-Origin": "*"
-          });
-          res.send({
-              room: room,
-              sessionId: sessionId,
-              apiKey: config.apiKey,
-              p2p: isP2P(room),
-              token: ot.generateToken({
-                  sessionId: sessionId,
-                  role: "publisher"
-              })
-          });
-      }
-  };
-  getRoom(room, goToRoom);
-});
-
 app.get('/:room', function(req, res) {
-    var room = req.param('room'),
-        ua = req.headers['user-agent'];
-    // If we're on iOS forward them to the iOS App
-    if (/like Mac OS X/.test(ua)) {
-        var iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
-        if (iOS) {
-            res.render('roomiOS', {
+    res.format({
+        json: function () {
+            var room = req.param('room');
+            var goToRoom = function(err, sessionId) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.set({
+                        "Access-Control-Allow-Origin": "*"
+                    });
+                    res.send({
+                        room: room,
+                        sessionId: sessionId,
+                        apiKey: config.apiKey,
+                        p2p: isP2P(room),
+                        token: ot.generateToken({
+                            sessionId: sessionId,
+                            role: "publisher"
+                        })
+                    });
+                }
+            };
+            getRoom(room, goToRoom);
+        },
+        html: function () {
+            var room = req.param('room'),
+                ua = req.headers['user-agent'];
+            // If we're on iOS forward them to the iOS App
+            if (/like Mac OS X/.test(ua)) {
+                var iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
+                if (iOS) {
+                    res.render('roomiOS', {
+                        room: room
+                    });
+                }
+            }
+            res.render('room', {
                 room: room
             });
         }
-    }
-    res.render('room', {
-        room: room
     });
 });
 
