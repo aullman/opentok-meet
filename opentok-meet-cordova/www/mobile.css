@@ -1,0 +1,8 @@
+body {
+  padding-top: 10px;
+}
+
+div#session {
+  top: 20px;
+  bottom: -20px;
+}

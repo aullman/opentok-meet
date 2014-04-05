@@ -51,24 +51,37 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
     });
   };
   
-  // Install the opentok cordova plugin if it's not already there
+  var cordovaPlugins = {
+    'com.tokbox.cordova.opentok': 'https://github.com/phonegap-build/StatusBarPlugin.git',
+    'com.phonegap.plugin.statusbar': 'https://github.com/phonegap-build/StatusBarPlugin.git'
+  };
+  // Install the cordova plugins if they're not already there
   var output = exec('cd opentok-meet-cordova;cordova plugin list', function (err, stdout, stderr) {
     if (err) {
       cb(err);
       return;
-    }    
-    if (stdout.indexOf('com.tokbox.cordova.opentok') < 0) {
-      console.log('Installing cordova plugin from https://github.com/aullman/cordova-plugin-opentok/');
-      exec('cd opentok-meet-cordova;cordova plugin add https://github.com/aullman/cordova-plugin-opentok/', function (err, stdout, stderr) {
-        console.log(stdout);
-        if (err) cb(err);
-        else {
-          prepare();
-        }
-      });
-    } else {
-      prepare();
     }
+    var plugins = Object.keys(cordovaPlugins);
+    var getNextPlugin = function() {
+      var key = plugins.pop();
+      if (!key) {
+        prepare();
+        return;
+      }
+      if (stdout.indexOf(key) < 0) {
+        console.log('Installing cordova plugin from: ' + cordovaPlugins[key]);
+        exec('cd opentok-meet-cordova;cordova plugin add ' + cordovaPlugins[key], function (err, stdout, stderr) {
+          console.log(stdout);
+          if (err) cb(err);
+          else {
+            getNextPlugin();
+          }
+        });
+      } else {
+        getNextPlugin();
+      }
+    };
+    getNextPlugin();
   });
 });
 

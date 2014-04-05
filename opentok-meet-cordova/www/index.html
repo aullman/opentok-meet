@@ -6,6 +6,7 @@
         <title>OpenTok Meet</title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="mobile.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
         <!--<script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>-->
@@ -59,12 +60,12 @@
                 ng-if="archiving"
                 ng-click="stopArchiving()"> -->
 
-            <span id="publishUI">
+            <!-- <span id="publishUI">
                 <input type="button" name="publish" value="Publish" id="publishBtn" ng-click="publish()" class="publish-btn" ng-if="!publishing" />
-            </span>
+            </span> -->
             <!-- <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" /> -->
-            <input type="button" name="hangup" value="Hangup" id="hangupBtn" ng-click="hangup()" ng-if="connected"/>
-            <input type="button" name="connect" value="Connect" id="connectBtn" ng-click="connect()" ng-if="!connected && hungup"/>
+            <!-- <input type="button" name="hangup" value="Hangup" id="hangupBtn" ng-click="hangup()" ng-if="connected"/>
+            <input type="button" name="connect" value="Connect" id="connectBtn" ng-click="connect()" ng-if="!connected && hungup"/> -->
             <!-- <div id="footer">
                 <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
                 <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
