@@ -38,7 +38,13 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
       exec('cd opentok-meet-cordova;cordova prepare ios', function (err) {
         if (err) cb(err);
         else {
-          exec('open opentok-meet-cordova/platforms/ios/HelloCordova.xcodeproj');
+          // Copy over icons
+          gulp.src('./opentok-meet-cordova/src/icons/ios7/*.png')
+            .pipe(gulp.dest('opentok-meet-cordova/platforms/ios/OpenTokMeet/Resources/icons'));
+          // Copy over splash screens
+          gulp.src('./opentok-meet-cordova/src/splash/*.png')
+            .pipe(gulp.dest('opentok-meet-cordova/platforms/ios/OpenTokMeet/Resources/splash'));
+          exec('open opentok-meet-cordova/platforms/ios/OpenTokMeet.xcodeproj');
           cb();
         }
       });
