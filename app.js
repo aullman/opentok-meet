@@ -201,6 +201,9 @@ var generator = moniker.generator([moniker.noun]);
 
 app.get('/', function(req, res) {
     var room = generator.choose();
+    res.set({
+        "Access-Control-Allow-Origin": "*"
+    });
     res.redirect('/'  + room + (req.param('p2p') ? ("?p2p=" + req.param('p2p')) : ""));
 });
 
