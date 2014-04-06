@@ -1,0 +1,23 @@
+ul#shareMenu {
+    margin: 0;
+    padding: 0;
+}
+
+ul#shareMenu li {
+    display: inline-block;
+    width: 100px;
+    background-color: #ccc;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    color: #000;
+}
+
+ul#shareMenu li img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -5px;
+    margin-left: -8px;
+    margin-right: 5px;
+}

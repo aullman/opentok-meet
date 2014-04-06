@@ -42,7 +42,12 @@
         <div id="shareInfo" 
             class="streams-{{(streams | filter:notMine).length > 0}}" 
             ng-cloak>
-            <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
+            <p>Waiting for someone to join: <a href="#" copy="{{shareURL}}">{{shareURL}}</a></p>
+            <ul id="shareMenu">
+                <a href="#" copy="{{shareURL}}"><li class="copy"><img src="images/clipboard.png" />Copy</li></a>
+                <!-- <a href="sms:?body={{shareURL}}"><li class="sms"><img src="images/chatbubble.png" />SMS</li></a> -->
+                <a href="mailto:?subject=Let's Meet&body={{shareURL}}"><li class="email"><img src="images/email.png" />EMail</li></a>
+            </ul>
         </div>
         <img id="loader" src="images/ajax-loader.gif" ng-if="!connected" />
         <div id="bottomBar">

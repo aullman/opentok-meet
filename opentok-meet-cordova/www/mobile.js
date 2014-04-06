@@ -40,3 +40,13 @@ opentokMeet.factory("RoomService", ['$q', '$http', 'baseURL', function ($q, $htt
         return deferredRoom.promise;
     };
 }]);
+
+opentokMeet.directive('copy', function ($document) {
+    return function(scope, element, attrs){
+        element.on("click", function (event) {
+            event.preventDefault();
+
+            cordova.plugins.clipboard.copy(attrs.copy);
+        });
+    };
+});
