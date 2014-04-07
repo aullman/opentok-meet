@@ -10,6 +10,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.connected = false;
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
+    $scope.showWhiteboard = false;
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
@@ -147,6 +148,13 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
             });
         }
     });
+    
+    $scope.toggleWhiteboard = function () {
+        $scope.showWhiteboard = !$scope.showWhiteboard;
+        setTimeout(function () {
+            $scope.$emit("otLayout");
+        }, 10);
+    };
     
     // Fetch the room info
     RoomService().then(function (roomData) {

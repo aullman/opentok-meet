@@ -69,6 +69,11 @@ ot-layout > :hover input.resize-btn {
     opacity: 1;
 }
 
+ot-whiteboard {
+    display: block;
+    background-color: #fff;
+}
+
 #bottomBar {
   transition: opacity 200ms ease;
   opacity: 0;
@@ -113,14 +118,16 @@ body.mouse-move #bottomBar {
 #bottomBar input#showscreen,
      #bottomBar input#publishBtn,
      #bottomBar input#startArchiveBtn,
-     #bottomBar input#connectBtn {
+     #bottomBar input#connectBtn,
+     #bottomBar input#showWhiteboardBtn {
   background-color: #659950;
 }
 
 #bottomBar input#hidescreen,
      #bottomBar input#unpublishBtn,
      #bottomBar input#stopArchiveBtn,
-     #bottomBar input#hangupBtn {
+     #bottomBar input#hangupBtn,
+     #bottomBar input#hideWhiteboardBtn {
   background-color: #CC3331;
 }
 
