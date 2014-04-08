@@ -165,7 +165,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
                   if (!connected) $scope.publishing = false;
               });
             };
-            if (session.connected) connectDisconnect(true);
+            if (session.is('connected')) connectDisconnect(true);
             $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
             $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
             $scope.session.on('archiveStarted archiveStopped', function (event) {
