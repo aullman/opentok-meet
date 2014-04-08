@@ -1,1 +1,1 @@
-var opentokMeet = angular.module('opentok-meet', ['opentok']);
+var opentokMeet = angular.module('opentok-meet', ['opentok', 'opentok-whiteboard']);

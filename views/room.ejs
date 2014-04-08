@@ -11,6 +11,8 @@
         <script src="//static.opentok.com/webrtc/v2.2-plugin-beta/js/opentok.min.js"></script>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-whiteboard/opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/js/lib/opentok-whiteboard/opentok-whiteboard.css" type="text/css" media="screen" charset="utf-8">
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/directives.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
@@ -33,6 +35,14 @@
                     ng-dblclick="$emit('changeScreenSize');">
                     <input type="button" class="resize-btn" ng-click="$emit('changeScreenSize');"/>
                 </ot-publisher>
+                <ot-whiteboard ng-show="showWhiteboard"
+                    ng-if="connected"
+                    width="1280"
+                    height="960"
+                    color="black"
+                    lineWidth="5"
+                    class="OT_big">
+                </ot-whiteboard>
             </ot-layout>
             
             <ot-publisher id="facePublisher" 
@@ -50,6 +60,9 @@
         <div id="bottomBar">
             <input type="button" name="screenshare" value="Share Screen" id="showscreen" ng-click="shareScreen()" class="screen-btn" ng-if="!sharingMyScreen" ng-disabled="!screenShareSupported"/>
             <input type="button" name="screenshare" value="Hide Screen" id="hidescreen" ng-click="hideScreen()" class="screen-btn" ng-if="sharingMyScreen" />
+            
+            <input type="button" name="whiteboard" value="Show Whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" class="whiteboard-btn" ng-if="!showWhiteboard"/>
+            <input type="button" name="whiteboard" value="Hide Whiteboard" id="hideWhiteboardBtn" ng-click="toggleWhiteboard()" class="whiteboard-btn" ng-if="showWhiteboard" />
             
             <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
                 ng-if="!archiving && !p2p"

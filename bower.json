@@ -21,6 +21,7 @@
     "tests"
   ],
   "dependencies": {
-    "opentok-angular": "~0.2.0"
+    "opentok-angular": "~0.2.0",
+    "opentok-whiteboard": "~0.0.6"
   }
 }

@@ -69,6 +69,11 @@ ot-layout > :hover input.resize-btn {
     opacity: 1;
 }
 
+ot-whiteboard {
+    display: block;
+    background-color: #fff;
+}
+
 #bottomBar {
   transition: opacity 200ms ease;
   opacity: 0;
@@ -86,13 +91,13 @@ body.mouse-move #bottomBar {
 
 #bottomBar input[type='button'] {
     cursor: pointer;
-    width: 200px;
+    width: 150px;
     height: 100%;
     border: none;
     border-radius: 5px;
     background-color: #999;
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     -webkit-appearance: none;
     
     transition: width 200ms, height 200ms ease;
@@ -113,14 +118,16 @@ body.mouse-move #bottomBar {
 #bottomBar input#showscreen,
      #bottomBar input#publishBtn,
      #bottomBar input#startArchiveBtn,
-     #bottomBar input#connectBtn {
+     #bottomBar input#connectBtn,
+     #bottomBar input#showWhiteboardBtn {
   background-color: #659950;
 }
 
 #bottomBar input#hidescreen,
      #bottomBar input#unpublishBtn,
      #bottomBar input#stopArchiveBtn,
-     #bottomBar input#hangupBtn {
+     #bottomBar input#hangupBtn,
+     #bottomBar input#hideWhiteboardBtn {
   background-color: #CC3331;
 }
 
@@ -157,9 +164,13 @@ img#loader {
 }
 
 @media screen and (max-width: 650px) {
+  #bottomBar {
+    height: 30px;
+  }
+  
   #bottomBar input[type='button'] {
-    width: 110px;
-    font-size: 15px;
+    width: 92px;
+    font-size: 9px;
   }
   
   #bottomBar #publishHDCheck {
