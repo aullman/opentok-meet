@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="opentok-meet-whiteboard">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title><%=room%>: Whiteboard</title>
+        <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-whiteboard/opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/js/lib/opentok-whiteboard/opentok-whiteboard.css" type="text/css" media="screen" charset="utf-8">
+        <script type="text/javascript" charset="utf-8">
+            var opentokMeet = angular.module('opentok-meet-whiteboard', ['opentok', 'opentok-whiteboard']).value({
+                room: '<%=room%>',
+                baseURL: '/'
+            }).controller('WhiteboardCtrl', ['$scope', 'RoomService', 'OTSession', function ($scope, RoomService, OTSession) {
+                $scope.connected = false;
+                // A bit cheeky: Forcing checkSystemRequirements to pass so that this works on mobile
+                TB.checkSystemRequirements = function () {
+                    return true;
+                };
+                
+                RoomService().then(function (roomData) {
+                    OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err) {
+                        if (!err) {
+                            $scope.$apply(function () {
+                                $scope.connected = true;
+                            });
+                        }
+                    });
+                });
+            }]);
+        </script>
+        <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css" media="screen">
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        
+            ot-whiteboard {
+                display: block;
+                width: 100%;
+                height: 100%;
+                background-color: #ccc;
+                position: absolute;
+                left: 0;
+                right: 0;
+            }
+        </style>
+    </head>
+    <body ng-controller="WhiteboardCtrl">
+        <ot-whiteboard width="1280" height="960" ng-if="connected"></ot-whiteboard>
+    </body>
+</html>

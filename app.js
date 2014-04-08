@@ -149,6 +149,12 @@ app.get('/:room', function(req, res) {
     });
 });
 
+app.get('/:room/whiteboard', function (req, res) {
+    res.render('whiteboard', {
+        room: req.param('room')
+    });
+});
+
 app.get('/:room/archives', function (req, res) {
     redis.smembers("archive_" + req.param('room'), function (err, members) {
         res.send(members);
