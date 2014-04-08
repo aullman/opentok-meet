@@ -91,13 +91,13 @@ body.mouse-move #bottomBar {
 
 #bottomBar input[type='button'] {
     cursor: pointer;
-    width: 200px;
+    width: 150px;
     height: 100%;
     border: none;
     border-radius: 5px;
     background-color: #999;
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     -webkit-appearance: none;
     
     transition: width 200ms, height 200ms ease;
@@ -164,9 +164,13 @@ img#loader {
 }
 
 @media screen and (max-width: 650px) {
+  #bottomBar {
+    height: 30px;
+  }
+  
   #bottomBar input[type='button'] {
-    width: 110px;
-    font-size: 15px;
+    width: 92px;
+    font-size: 9px;
   }
   
   #bottomBar #publishHDCheck {
