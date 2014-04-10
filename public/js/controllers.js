@@ -88,7 +88,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     
     $scope.startArchiving = function () {
         $scope.archiving = true;
-        $http.post(baseURL + room + '/startArchive').success(function(response) {
+        $http.post(baseURL + $scope.room + '/startArchive').success(function(response) {
             if (response.error) {
                 $scope.archiving = false;
                 console.error("Failed to start archive", response.error);
@@ -103,7 +103,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     
     $scope.stopArchiving = function () {
         $scope.archiving = false;
-        $http.post(baseURL + room + '/stopArchive', {
+        $http.post(baseURL + $scope.room + '/stopArchive', {
             archiveId: $scope.archiveId
         }).success(function(response) {
             if (response.error) {

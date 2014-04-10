@@ -65,7 +65,7 @@
             <input type="button" name="whiteboard" value="Hide Whiteboard" id="hideWhiteboardBtn" ng-click="toggleWhiteboard()" class="whiteboard-btn" ng-if="showWhiteboard" />
             
             <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
-                ng-if="!archiving && !p2p"
+                ng-if="!archiving && !p2p && connected"
                 ng-click="startArchiving()">
             <input type="button" name="archive" value="Stop Archive" id="stopArchiveBtn"
                 ng-if="archiving"
