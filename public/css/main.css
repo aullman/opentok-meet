@@ -106,7 +106,7 @@ body.mouse-move #bottomBar {
 #bottomBar #publishHDCheck {
     color: #fff;
     position: relative;
-    left: -185px;
+    left: -145px;
     vertical-align: middle;
 }
 
@@ -174,7 +174,8 @@ img#loader {
   }
   
   #bottomBar #publishHDCheck {
-      left: -110px;
+      left: -85px;
+      font-size: 9px;
   }
   
   #bottomBar #publishBtn {
