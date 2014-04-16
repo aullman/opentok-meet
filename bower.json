@@ -22,6 +22,7 @@
   ],
   "dependencies": {
     "opentok-angular": "~0.2.0",
-    "opentok-whiteboard": "~0.1.1"
+    "opentok-whiteboard": "~0.1.1",
+    "ionicons": "~1.4.1"
   }
 }

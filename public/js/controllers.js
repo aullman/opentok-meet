@@ -56,37 +56,25 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         return stream.connection.connectionId != $scope.session.connection.connectionId;
     };
     
-    $scope.shareScreen = function() {
+    $scope.toggleShareScreen = function() {
         if (!$scope.sharingMyScreen) {
             $scope.screenShareFailed = false;
-            $scope.sharingMyScreen = true;
         }
-    };
-    
-    $scope.hideScreen = function() {
-        if ($scope.sharingMyScreen) {
-            $scope.sharingMyScreen = false;
-        }
+        $scope.sharingMyScreen = !$scope.sharingMyScreen;
     };
     
     $scope.publishHDChange = function () {
         $scope.publishHD = !$scope.publishHD;
     };
     
-    $scope.publish = function () {
+    $scope.togglePublish = function () {
         if (!$scope.publishing) {
             $scope.facePublisherProps = $scope.publishHD ? facePublisherPropsHD : facePublisherPropsSD;
-            $scope.publishing = true;
         }
+        $scope.publishing = !$scope.publishing;
     };
     
-    $scope.unpublish = function () {
-        if ($scope.publishing) {
-            $scope.publishing = false;
-        }
-    };
-    
-    $scope.startArchiving = function () {
+    var startArchiving = function () {
         $scope.archiving = true;
         $http.post(baseURL + $scope.room + '/startArchive').success(function(response) {
             if (response.error) {
@@ -101,7 +89,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         });
     };
     
-    $scope.stopArchiving = function () {
+    var stopArchiving = function () {
         $scope.archiving = false;
         $http.post(baseURL + $scope.room + '/stopArchive', {
             archiveId: $scope.archiveId
@@ -116,6 +104,11 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
             console.error("Failed to stop archiving", data);
             $scope.archiving = true;
         });
+    };
+    
+    $scope.toggleArchiving = function () {
+        if($scope.archiving) stopArchiving();
+        else startArchiving();
     };
     
     // It's a bit weird to handle changes in size at this level. Really this should be
@@ -144,7 +137,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         if (publisher.id === 'screenPublisher') {
             $scope.$apply(function () {
                 $scope.screenShareFailed = true;
-                $scope.hideScreen();
+                $scope.toggleShareScreen();
             });
         }
     });

@@ -45,7 +45,7 @@ ot-layout {
     height: 100%;
 }
 
-ot-layout input.resize-btn {
+ot-layout button.resize-btn {
     transition: opacity 500ms ease-in;
     transition: top 500ms ease-in;
     opacity: 0;
@@ -60,11 +60,11 @@ ot-layout input.resize-btn {
     z-index: 99;
 }
 
-ot-layout > .OT_big input.resize-btn {
+ot-layout > .OT_big button.resize-btn {
     background: url('../images/shrink_38x38.png') no-repeat;
 }
 
-ot-layout > :hover input.resize-btn {
+ot-layout > :hover button.resize-btn {
     top: 0;
     opacity: 1;
 }
@@ -89,15 +89,19 @@ body.mouse-move #bottomBar {
   opacity: 1;
 }
 
-#bottomBar input[type='button'] {
+button.icon-left:before {
+    padding-right: 8px;
+    padding-left: 0;
+}
+
+#bottomBar button {
     cursor: pointer;
     width: 150px;
     height: 100%;
     border: none;
     border-radius: 5px;
-    background-color: #999;
     color: #fff;
-    font-size: 15px;
+    font-size: 18px;
     -webkit-appearance: none;
     
     transition: width 200ms, height 200ms ease;
@@ -110,28 +114,20 @@ body.mouse-move #bottomBar {
     vertical-align: middle;
 }
 
-#bottomBar #publishHDCheck input {
+#bottomBar #publishHDCheck input[type="checkbox"] {
     position: absolute;
     top: -2px;
 }
 
-#bottomBar input#showscreen,
-     #bottomBar input#publishBtn,
-     #bottomBar input#startArchiveBtn,
-     #bottomBar input#connectBtn,
-     #bottomBar input#showWhiteboardBtn {
-  background-color: #659950;
+button.green {
+    background-color: #659950;
 }
 
-#bottomBar input#hidescreen,
-     #bottomBar input#unpublishBtn,
-     #bottomBar input#stopArchiveBtn,
-     #bottomBar input#hangupBtn,
-     #bottomBar input#hideWhiteboardBtn {
+button.red {
   background-color: #CC3331;
 }
 
-#bottomBar input#showscreen:disabled {
+#bottomBar button#showscreen:disabled {
     background-color: #999;
     color: #ccc;
     cursor: auto;
@@ -163,12 +159,17 @@ img#loader {
     margin-top: -16px;
 }
 
+
+#bottomBar #publishBtn.green {
+    text-align: right;
+}
+
 @media screen and (max-width: 650px) {
   #bottomBar {
     height: 30px;
   }
   
-  #bottomBar input[type='button'] {
+  #bottomBar button {
     width: 92px;
     font-size: 9px;
   }
@@ -176,10 +177,6 @@ img#loader {
   #bottomBar #publishHDCheck {
       left: -85px;
       font-size: 9px;
-  }
-  
-  #bottomBar #publishBtn {
-      text-align: right;
   }
   
   #facePublisher {
