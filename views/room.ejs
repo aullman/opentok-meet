@@ -62,7 +62,9 @@
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <div id="bottomBar">
-            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported">Screenshare</button>
+            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported" ng-if="!isAndroid">Screenshare</button>
+            
+            <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" ng-if="isAndroid">Leave</button>
 
             <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit">Whiteboard</button>
             

@@ -6,11 +6,13 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.screenBig = true;
     $scope.archiveId = null;
     $scope.archiving = false;
-    $scope.screenShareSupported = !!navigator.webkitGetUserMedia && !/Android/g.test(navigator.userAgent);
+    $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
+    $scope.isAndroid = /Android/g.test(navigator.userAgent);
     $scope.connected = false;
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
     $scope.showWhiteboard = false;
+    
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
@@ -150,7 +152,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     };
     
     // Fetch the room info
-    RoomService().then(function (roomData) {
+    RoomService.getRoom().then(function (roomData) {
         if ($scope.session) {
             $scope.session.disconnect();
         }
@@ -179,6 +181,14 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         });
         $scope.publishing = true;
     });
+    
+    $scope.changeRoom = function () {
+        if ($scope.session) {
+            $scope.session.disconnect();
+            $scope.session = null;
+        }
+        RoomService.changeRoom();
+    };
     
     var mouseMoveTimeout;
     var mouseMoved = function (event) {
