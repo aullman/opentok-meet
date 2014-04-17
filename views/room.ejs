@@ -57,7 +57,7 @@
         </div>
         <img id="loader" src="/images/loader.gif" ng-if="!connected" />
         <div id="shareInfo" 
-            class="streams-{{(streams | filter:notMine).length > 0}}" 
+            ng-if="connected && !streams.length"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>

@@ -6,24 +6,14 @@ red: #C04B4B
 white: #DCD9CD
  */
 
-body {
-    background-color: #262422;
-    font-family: 'Ropa Sans', sans-serif;
-    color: #DCD9CD;
-    margin-top: 20%;
-}
-
-body a {
-    color: #DCD9CD;
-}
-
-form {
+form#joinRoom {
     text-align: center;
     padding: 0;
     margin: 0;
     width: 100%;
 }
-input[type='text'] {
+
+form#joinRoom input[type='text'] {
     font-family: 'Ropa Sans', sans-serif;
     width: 200px;
     height: 40px;
@@ -37,12 +27,12 @@ input[type='text'] {
 }
 
 @media screen and (max-width: 650px) {
-    input[type='text'] {
+    form#joinRoom input[type='text'] {
         width: 140px;
     }
 }
 
-input[type='submit'] {
+form#joinRoom input[type='submit'] {
     font-family: 'Ropa Sans', sans-serif;
     width: 100px;
     height: 40px;
@@ -56,13 +46,10 @@ input[type='submit'] {
     -webkit-appearance: none;
 }
 
-div.banner * {
-    display: inline-block;
-}
-
 img.logo {
     width: 70px;
     margin: auto;
     display: block;
     margin-bottom: 30px;
+    margin-top: 20%;
 }

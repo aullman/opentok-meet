@@ -80,6 +80,7 @@ var isP2P = function (room) {
 var getRoom = function(room, goToRoom) {
     console.log("getRoom: " + room);
     redis.hget("rooms", room, function (err, sessionId) {
+      debugger;
         if (!sessionId) {
             var props = {'p2p.preference': 'disabled'};
             if (isP2P(room)) {
@@ -108,8 +109,10 @@ var getRoom = function(room, goToRoom) {
 app.get('/:room', function(req, res) {
     res.format({
         json: function () {
+          debugger;
             var room = req.param('room');
             var goToRoom = function(err, sessionId) {
+              debugger;
                 if (err) {
                     res.send(err);
                 } else {

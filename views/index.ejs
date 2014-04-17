@@ -8,12 +8,13 @@
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <title>OpenTok Meet</title>
         <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="/css/index.css" type="text/css" media="screen" title="no title" charset="utf-8">
         
     </head>
     <body ng-controller="MainCtrl">
-        <img src="/images/opentok-meet-logo.png" alt="Logo" class="logo">
-        <form ng-submit="joinRoom()">
+        <img src="images/opentok-meet-logo.png" alt="Logo" class="logo">
+        <form id="joinRoom" ng-submit="joinRoom()">
             <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
             <input type="submit" name="joinRoom" value="Join" id="joinRoomBtn">
         </form>

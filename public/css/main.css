@@ -114,15 +114,14 @@ button.icon-left:before {
 
 #bottomBar button {
     cursor: pointer;
-    width: 150px;
-    height: 100%;
     border: none;
     border-radius: 5px;
     color: #DCD9CD;
     font-size: 22px;
     -webkit-appearance: none;
     font-family: 'Ropa Sans', sans-serif;
-    
+    width: 150px;
+    height: 100%;
     transition: width 200ms, height 200ms ease;
 }
 
@@ -164,7 +163,6 @@ button.red {
     position: absolute;
     left: 50%;
     margin-left: -285px;
-    display: none;
     transition: width 200ms, height 200ms ease;
 }
 
@@ -234,10 +232,6 @@ img#loader {
       width: 340px;
       left: calc(50% - 180px);
   }
-}
-
-#session.session-connected ~ #shareInfo.streams-false {
-    display: block;
 }
 
 body.mouse-move #statusMessages {

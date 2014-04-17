@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
 <div id='session' ng-class="{'session-connected': connected}">
     <ot-layout props="{animate:false,bigFixedRatio:true}">
         <ot-subscriber ng-repeat="stream in streams" 
@@ -17,34 +16,19 @@
     </ot-publisher>
 </div>
 <div id="shareInfo" 
-    class="streams-{{(streams | filter:notMine).length > 0}}" 
+    ng-if="connected && !streams.length"
     ng-cloak>
     <p>Waiting for someone to join: <a href="#" copy="{{shareURL}}">{{shareURL}}</a></p>
-    <ul id="shareMenu">
-        <a href="#" copy="{{shareURL}}"><li class="copy"><img src="images/clipboard.png" />Copy</li></a>
-        <!-- <a href="sms:?body={{shareURL}}"><li class="sms"><img src="images/chatbubble.png" />SMS</li></a> -->
-        <a href="mailto:?subject=Let's Meet&body={{shareURL}}"><li class="email"><img src="images/email.png" />EMail</li></a>
-    </ul>
+    <button class="icon-left ion-clipboard" copy="{{shareURL}}">Copy</button>
+    <button class="icon-left ion-email" ng-click="sendEmail()">Email</button>
+    
 </div>
-<img id="loader" src="images/loader.gif" />
+<img id="loader" src="images/loader.gif" ng-if="!connected" />
 <div id="bottomBar">
-    <!-- <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
-        ng-if="!archiving && !p2p"
-        ng-click="startArchiving()">
-    <input type="button" name="archive" value="Stop Archive" id="stopArchiveBtn"
-        ng-if="archiving"
-        ng-click="stopArchiving()"> -->
-
+    <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red">Leave</button>
     <!-- <span id="publishUI">
-        <input type="button" name="publish" value="Publish" id="publishBtn" ng-click="publish()" class="publish-btn" ng-if="!publishing" />
+        <button name="publish" id="publishBtn" ng-click="togglePublish()" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion-ios7-videocam">WebCam</button>
     </span> -->
-    <!-- <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" /> -->
-    <!-- <input type="button" name="hangup" value="Hangup" id="hangupBtn" ng-click="hangup()" ng-if="connected"/>
-    <input type="button" name="connect" value="Connect" id="connectBtn" ng-click="connect()" ng-if="!connected && hungup"/> -->
-    <!-- <div id="footer">
-        <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
-        <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
-    </div> -->
 </div>
 <div id="statusMessages">
     <!-- <div id="archiveStatus" class="statusMessage" ng-if="archiveId">

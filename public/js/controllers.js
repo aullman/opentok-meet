@@ -168,7 +168,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
                   if (!connected) $scope.publishing = false;
               });
             };
-            if (session.is('connected')) connectDisconnect(true);
+            if ((session.is && session.is('connected')) || session.connected) connectDisconnect(true);
             $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
             $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
             $scope.session.on('archiveStarted archiveStopped', function (event) {
@@ -188,6 +188,10 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
             $scope.session = null;
         }
         RoomService.changeRoom();
+    };
+    
+    $scope.sendEmail = function () {
+      $window.location.href = "mailto:?subject=Let's Meet&body=" + $scope.shareURL;
     };
     
     var mouseMoveTimeout;
@@ -210,5 +214,12 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $window.addEventListener("touchstart", mouseMoved);
     $document.context.body.addEventListener("orientationchange", function () {
       $scope.$emit("otLayout");
+    });
+    
+    $scope.$on('$destroy', function () {
+      if ($scope.session) {
+        $scope.session.disconnect();
+        $scope.session = null;
+      }
     });
 }

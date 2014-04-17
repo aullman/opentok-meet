@@ -63,7 +63,7 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
         if (err) cb(err);
         else {
           // Copy over icons
-          gulp.src('./opentok-meet-cordova/src/icons/ios7/*.png')
+          gulp.src('./opentok-meet-cordova/src/icon/ios7/*.png')
             .pipe(gulp.dest('opentok-meet-cordova/platforms/ios/OpenTokMeet/Resources/icons'));
           // Copy over splash screens
           gulp.src('./opentok-meet-cordova/src/splash/*.png')
@@ -76,7 +76,7 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
   };
   
   var cordovaPlugins = {
-    'com.tokbox.cordova.opentok': 'https://github.com/phonegap-build/StatusBarPlugin.git',
+    'com.tokbox.cordova.opentok': 'https://github.com/songz/cordova-plugin-opentok.git',
     'com.phonegap.plugin.statusbar': 'https://github.com/phonegap-build/StatusBarPlugin.git',
     'com.verso.cordova.clipboard': 'https://github.com/VersoSolutions/CordovaClipboard'
   };
