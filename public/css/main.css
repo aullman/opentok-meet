@@ -1,11 +1,25 @@
+/* Color theme
+black: #262422
+grey: #565853
+green: #4D9154
+red: #C04B4B
+white: #DCD9CD
+ */
+
 body {
-    background-color: #000;
+    background-color: #262422;
     font-family: 'Ropa Sans', sans-serif;
 }
 
 body a {
-    color: #fff;
+    color: #DCD9CD;
+    font-family: 'Ropa Sans', sans-serif;
 }
+
+body input {
+    font-family: 'Ropa Sans', sans-serif;
+}
+
 
 ot-publisher#facePublisher {
     width: 178px;
@@ -36,7 +50,7 @@ ot-publisher#facePublisher:active {
     right: 0;
 }
 ot-layout ot-subscriber {
-    background-color: #000;
+    background-color: #262422;
     display: inline-block;
 }
 ot-layout {
@@ -71,7 +85,7 @@ ot-layout > :hover button.resize-btn {
 
 ot-whiteboard {
     display: block;
-    background-color: #fff;
+    background-color: #DCD9CD;
 }
 
 #bottomBar {
@@ -90,6 +104,7 @@ body.mouse-move #bottomBar {
 }
 
 button.icon-left:before {
+    font-family: "Ionicons";
     padding-right: 8px;
     padding-left: 0;
 }
@@ -100,15 +115,16 @@ button.icon-left:before {
     height: 100%;
     border: none;
     border-radius: 5px;
-    color: #fff;
-    font-size: 18px;
+    color: #DCD9CD;
+    font-size: 22px;
     -webkit-appearance: none;
+    font-family: 'Ropa Sans', sans-serif;
     
     transition: width 200ms, height 200ms ease;
 }
 
 #bottomBar #publishHDCheck {
-    color: #fff;
+    color: #DCD9CD;
     position: relative;
     left: -145px;
     vertical-align: middle;
@@ -120,27 +136,27 @@ button.icon-left:before {
 }
 
 button.green {
-    background-color: #659950;
+    background-color: #4D9154;
 }
 
 button.red {
-  background-color: #CC3331;
+  background-color: #C04B4B;
 }
 
 #bottomBar button#showscreen:disabled {
-    background-color: #999;
+    background-color: #565853;
     color: #ccc;
     cursor: auto;
 }
 
 #shareInfo {
     font-size: 18px;
-    color: #fff;
+    color: #DCD9CD;
     text-align: center;
     width: 550px;
     padding: 10px;
     border-radius: 5px;
-    background-color: #999;
+    background-color: #565853;
     top: 35%;
     position: absolute;
     left: 50%;
@@ -164,6 +180,27 @@ img#loader {
     text-align: right;
 }
 
+.statusMessage {
+    background-color: #565853;
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px 0 10px 0;
+    color: #DCD9CD;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+#statusMessages {
+    transition: opacity 200ms ease;
+    opacity: 0;
+    position: absolute;
+    width: 465px;
+    left: calc(50% - 242.5px);
+    bottom: 80px;
+}
+
 @media screen and (max-width: 650px) {
   #bottomBar {
     height: 30px;
@@ -171,7 +208,7 @@ img#loader {
   
   #bottomBar button {
     width: 92px;
-    font-size: 9px;
+    font-size: 12px;
   }
   
   #bottomBar #publishHDCheck {
@@ -189,30 +226,15 @@ img#loader {
       left: 50%;
       margin-left: -135px;
   }
+  
+  #statusMessages {
+      width: 340px;
+      left: calc(50% - 180px);
+  }
 }
 
 #session.session-connected ~ #shareInfo.streams-false {
     display: block;
-}
-
-.statusMessage {
-    background-color: #999;
-    max-width: 465px;
-    border-radius: 5px;
-    text-align: center;
-    vertical-align: middle;
-    padding: 10px 0 10px 0;
-    color: #fff;
-    margin-bottom: 5px;
-    padding: 10px;
-}
-
-#statusMessages {
-    transition: opacity 200ms ease;
-    opacity: 0;
-    position: absolute;
-    left: calc(50% - 200px);
-    bottom: 80px;
 }
 
 body.mouse-move #statusMessages {

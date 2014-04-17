@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
+        <link rel="icon" sizes="128x128" href="icon.png">
+        <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+        <title>OpenTok Meet</title>
+        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/css/index.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        
+    </head>
+    <body ng-controller="MainCtrl">
+        <img src="/images/opentok-meet-logo.png" alt="Logo" class="logo">
+        <form ng-submit="joinRoom()">
+            <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
+            <input type="submit" name="joinRoom" value="Join" id="joinRoomBtn">
+        </form>
+        <script type="text/javascript" charset="utf-8">
+        function MainCtrl($scope, $window) {
+            $scope.room;
+            $scope.joinRoom = function () {
+                $window.location.href = $window.location.href + encodeURIComponent($scope.room);
+            }
+        };
+        
+        </script>
+    </body>
+</html>

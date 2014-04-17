@@ -1,0 +1,67 @@
+/* Color theme
+black: #262422
+grey: #565853
+green: #4D9154
+red: #C04B4B
+white: #DCD9CD
+ */
+
+body {
+    background-color: #262422;
+    font-family: 'Ropa Sans', sans-serif;
+    color: #DCD9CD;
+    margin-top: 20%;
+}
+
+body a {
+    color: #DCD9CD;
+}
+
+form {
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+}
+input[type='text'] {
+    font-family: 'Ropa Sans', sans-serif;
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+    padding: 0 0 0 10px;
+    margin: 0;
+    border-radius: 5px;
+    background-color: #262422;
+    border: 1px solid #DCD9CD;
+    color: #DCD9CD;
+}
+
+@media screen and (max-width: 650px) {
+    input[type='text'] {
+        width: 140px;
+    }
+}
+
+input[type='submit'] {
+    font-family: 'Ropa Sans', sans-serif;
+    width: 100px;
+    height: 40px;
+    background-color: #4D9154;
+    border: none;
+    color: #DCD9CD;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    -webkit-appearance: none;
+}
+
+div.banner * {
+    display: inline-block;
+}
+
+img.logo {
+    width: 70px;
+    margin: auto;
+    display: block;
+    margin-bottom: 30px;
+}
