@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "opentok-angular": "https://github.com/aullman/opentok-angular.git#cordova",
-    "common-js-helpers": "https://github.com/opentok/common-js-helpers.git"
+    "common-js-helpers": "https://github.com/opentok/common-js-helpers.git",
+    "angular-route": "~1.2.16"
   }
 }

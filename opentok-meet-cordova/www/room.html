@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<div id='session' ng-class="{'session-connected': connected}">
+    <ot-layout props="{animate:false,bigFixedRatio:true}">
+        <ot-subscriber ng-repeat="stream in streams" 
+            stream="stream" 
+            session="session" 
+            props="{style: {nameDisplayMode: 'off'}}" 
+            ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
+            ng-dblclick="$emit('changeSize')">
+                <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
+        </ot-subscriber>
+    </ot-layout>
+    
+    <ot-publisher id="facePublisher" 
+        ng-if="publishing"
+        draggable="true">
+    </ot-publisher>
+</div>
+<div id="shareInfo" 
+    class="streams-{{(streams | filter:notMine).length > 0}}" 
+    ng-cloak>
+    <p>Waiting for someone to join: <a href="#" copy="{{shareURL}}">{{shareURL}}</a></p>
+    <ul id="shareMenu">
+        <a href="#" copy="{{shareURL}}"><li class="copy"><img src="images/clipboard.png" />Copy</li></a>
+        <!-- <a href="sms:?body={{shareURL}}"><li class="sms"><img src="images/chatbubble.png" />SMS</li></a> -->
+        <a href="mailto:?subject=Let's Meet&body={{shareURL}}"><li class="email"><img src="images/email.png" />EMail</li></a>
+    </ul>
+</div>
+<img id="loader" src="images/loader.gif" />
+<div id="bottomBar">
+    <!-- <input type="button" name="archive" value="Start Archive" id="startArchiveBtn"
+        ng-if="!archiving && !p2p"
+        ng-click="startArchiving()">
+    <input type="button" name="archive" value="Stop Archive" id="stopArchiveBtn"
+        ng-if="archiving"
+        ng-click="stopArchiving()"> -->
+
+    <!-- <span id="publishUI">
+        <input type="button" name="publish" value="Publish" id="publishBtn" ng-click="publish()" class="publish-btn" ng-if="!publishing" />
+    </span> -->
+    <!-- <input type="button" name="unpublish" value="Unpublish" id="unpublishBtn" ng-click="unpublish()" class="unpublish-btn" ng-if="publishing" /> -->
+    <!-- <input type="button" name="hangup" value="Hangup" id="hangupBtn" ng-click="hangup()" ng-if="connected"/>
+    <input type="button" name="connect" value="Connect" id="connectBtn" ng-click="connect()" ng-if="!connected && hungup"/> -->
+    <!-- <div id="footer">
+        <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
+        <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
+    </div> -->
+</div>
+<div id="statusMessages">
+    <!-- <div id="archiveStatus" class="statusMessage" ng-if="archiveId">
+        Archiving: When archive is ready it will be available <a href="{{shareURL}}/{{room}}/archive/{{archiveId}}">here</a>
+    </div> -->
+</div>
