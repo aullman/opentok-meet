@@ -19,8 +19,9 @@ body a {
 
 form {
     text-align: center;
-    padding: 10px;
-    margin: auto;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 input[type='text'] {
     font-family: 'Ropa Sans', sans-serif;
@@ -51,7 +52,7 @@ input[type='submit'] {
     border-radius: 5px;
     margin: 0;
     padding: 0;
-    font-size: 15px;
+    font-size: 20px;
     -webkit-appearance: none;
 }
 
