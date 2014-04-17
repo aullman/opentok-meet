@@ -15,8 +15,8 @@ opentokMeet.directive('draggable', function ($document) {
         };
         
         var mouseUpHandler = function mouseUpHandler(event) {
-            $document.unbind('mousemove', mouseMoveHandler);
-            $document.unbind('mouseup', mouseUpHandler);
+            $document.unbind('mousemove touchmove', mouseMoveHandler);
+            $document.unbind('mouseup touchend', mouseUpHandler);
         };
         
         var position = element.css("position"),
