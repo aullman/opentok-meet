@@ -30,14 +30,14 @@
                     props="{style: {nameDisplayMode: 'off'}}" 
                     ng-class="{OT_big: (stream.oth_large == undefined && stream.name == 'screen') || stream.oth_large}" 
                     ng-dblclick="$emit('changeSize')">
-                        <input type="button" class="resize-btn" ng-click="$emit('changeSize');"/>
+                        <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');"></button>
                 </ot-subscriber>
                 <ot-publisher id="screenPublisher"
                     ng-if="sharingMyScreen"
                     props='screenPublisherProps'
                     ng-class="{OT_big: screenBig}" 
                     ng-dblclick="$emit('changeScreenSize');">
-                    <input type="button" class="resize-btn" ng-click="$emit('changeScreenSize');"/>
+                    <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeScreenSize');"></button>
                 </ot-publisher>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
