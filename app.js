@@ -77,65 +77,101 @@ var isP2P = function (room) {
     return room.toLowerCase().indexOf('p2p') >= 0;
 };
 
-var getRoom = function(room, goToRoom) {
-    console.log("getRoom: " + room);
+var getRoom = function(room, apiKey, secret, goToRoom) {
+    console.log("getRoom: " + room + " " + apiKey + " " + secret);
+    goToRoom = arguments[arguments.length-1];
+    // Lookup the mapping of rooms to sessionIds
     redis.hget("rooms", room, function (err, sessionId) {
-      debugger;
         if (!sessionId) {
             var props = {'p2p.preference': 'disabled'};
             if (isP2P(room)) {
                 props['p2p.preference'] = 'enabled';
             }
-            ot.createSession('', props, function (err, sessionId) {
+            var otSDK = ot;
+            // If there's a custom apiKey and secret use that
+            if (apiKey && secret) {
+              otSDK = new opentok.OpenTokSDK(apiKey, secret);
+            }
+            // Create the session
+            otSDK.createSession('', props, function (err, sessionId) {
                 if (err) {
                     goToRoom(err);
                 } else {
+                    // Store the room to sessionId mapping
                     redis.hset("rooms", room, sessionId, function (err) {
                         if (err) {
                             console.error("Failed to set room", err);
                             goToRoom(err);
                         } else {
-                            goToRoom(null, sessionId);
+                            if (apiKey && secret) {
+                                // If there's a custom apiKey and secret store that
+                                redis.hset("apiKeys", room, JSON.stringify({apiKey: apiKey, secret: secret}),
+                                    function (err) {
+                                        if (err) {
+                                            console.error("Failed to set apiKey", err);
+                                            goToRoom(err);
+                                        } else {
+                                            goToRoom(null, sessionId, apiKey, secret);
+                                        }
+                                    });
+                            } else {
+                                goToRoom(null, sessionId);
+                            }
                         }
                     });
                 }
             });
         } else {
-            goToRoom(null, sessionId);
+            // Lookup if there's a custom apiKey for this room
+            redis.hget("apiKeys", room, function (err, apiKeySecret) {
+                if (err || !apiKeySecret) {
+                    goToRoom(null, sessionId);
+                } else {
+                    apiKeySecret = JSON.parse(apiKeySecret);
+                    goToRoom(null, sessionId, apiKeySecret.apiKey, apiKeySecret.secret);
+                }
+            });
         }
     });
 };
 
+// To set a custom APIKey and Secret for a particular room you can make a CURL request with
+// apiKey and secret params. eg. 
+// curl -k https://localhost:5000/customKey -d "apiKey=APIKEY&secret=SECRET" -X "GET"
+// This room has to not already exist though.
 app.get('/:room', function(req, res) {
+    var room = req.param('room'),
+      apiKey = req.param('apiKey'),
+      secret = req.param('secret');
     res.format({
         json: function () {
-          debugger;
-            var room = req.param('room');
-            var goToRoom = function(err, sessionId) {
-              debugger;
+            var goToRoom = function(err, sessionId, apiKey, secret) {
                 if (err) {
                     res.send(err);
                 } else {
                     res.set({
                         "Access-Control-Allow-Origin": "*"
                     });
+                    var otSDK = ot;
+                    if (apiKey && secret) {
+                        otSDK = new opentok.OpenTokSDK(apiKey, secret);
+                    }
                     res.send({
                         room: room,
                         sessionId: sessionId,
-                        apiKey: config.apiKey,
+                        apiKey: (apiKey && secret) ? apiKey : config.apiKey,
                         p2p: isP2P(room),
-                        token: ot.generateToken({
+                        token: otSDK.generateToken({
                             sessionId: sessionId,
                             role: "publisher"
                         })
                     });
                 }
             };
-            getRoom(room, goToRoom);
+            getRoom(room, apiKey, secret, goToRoom);
         },
         html: function () {
-            var room = req.param('room'),
-                ua = req.headers['user-agent'];
+            var ua = req.headers['user-agent'];
             // If we're on iOS forward them to the iOS App
             if (/like Mac OS X/.test(ua)) {
                 var iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
@@ -167,13 +203,17 @@ app.get('/:room/archives', function (req, res) {
 app.post('/:room/startArchive', function (req, res) {
     var room = req.param('room');
     
-    getRoom(room, function(err, sessionId) {
+    getRoom(room, function(err, sessionId, apiKey, secret) {
         if (err) {
             res.send({
                 error: err
             });
         }
-        ot.startArchive(sessionId, {
+        var otSDK = ot;
+        if (apiKey && secret) {
+          otSDK = new opentok.OpenTokSDK(apiKey, secret);
+        }
+        otSDK.startArchive(sessionId, {
             name: room
         }, function (err, archive) {
             if (err) {
@@ -191,16 +231,32 @@ app.post('/:room/startArchive', function (req, res) {
 });
 
 app.post('/:room/stopArchive', function (req, res) {
-    var archiveId = req.param('archiveId');
+    var archiveId = req.param('archiveId'),
+        room = req.param('room');
     
-    ot.stopArchive(archiveId, function (err, archive) {
+    // Lookup if there's a custom apiKey for this room
+    redis.hget("apiKeys", room, function (err, apiKeySecret) {
         if (err) {
             res.send({
                 error: err
             });
         } else {
-            res.send({
-                archiveId: archive.id
+            var otSDK = ot;
+            if (apiKeySecret) {
+                apiKeySecret = JSON.parse(apiKeySecret);
+                otSDK = new opentok.OpenTokSDK(apiKeySecret.apiKey, apiKeySecret.secret);
+            }
+            
+            ot.stopArchive(archiveId, function (err, archive) {
+                if (err) {
+                    res.send({
+                        error: err
+                    });
+                } else {
+                    res.send({
+                        archiveId: archive.id
+                    });
+                }
             });
         }
     });
