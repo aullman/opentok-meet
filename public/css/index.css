@@ -6,8 +6,21 @@ red: #C04B4B
 white: #DCD9CD
  */
 
-form#joinRoom {
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
     text-align: center;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+form#joinRoom {
     padding: 0;
     margin: 0;
     width: 100%;
@@ -47,9 +60,7 @@ form#joinRoom input[type='submit'] {
 }
 
 img.logo {
-    width: 70px;
-    margin: auto;
-    display: block;
+    width: 120px;
+    height: 90px;
     margin-bottom: 30px;
-    margin-top: 20%;
 }
