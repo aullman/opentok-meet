@@ -60,6 +60,8 @@ app.get('/rooms', function(req, res) {
     });
 });
 
+// Keeping this around for legacy URLs. The new URL format for
+// archives is /:room/archive/:archiveId though
 app.get('/archive/:archiveId', function (req, res) {
     ot.getArchive(req.param('archiveId'), function (err, archive) {
         if (err) {
@@ -68,6 +70,31 @@ app.get('/archive/:archiveId', function (req, res) {
             res.render('archive', {
                 name: archive.name,
                 url: archive.url
+            });
+        }
+    });
+});
+
+app.get('/:room/archive/:archiveId', function (req, res) {
+    var room = req.param('room');
+    redis.hget("apiKeys", room, function (err, apiKeySecret) {
+        if (err) {
+            res.send(404, err.message);
+        } else {
+            var otSDK = ot;
+            if (apiKeySecret) {
+                apiKeySecret = JSON.parse(apiKeySecret);
+                otSDK = new opentok.OpenTokSDK(apiKeySecret.apiKey, apiKeySecret.secret);
+            }
+            otSDK.getArchive(req.param('archiveId'), function (err, archive) {
+                if (err) {
+                    res.send(404, err.message);
+                } else {
+                    res.render('archive', {
+                        name: archive.name,
+                        url: archive.url
+                    });
+                }
             });
         }
     });
@@ -247,7 +274,7 @@ app.post('/:room/stopArchive', function (req, res) {
                 otSDK = new opentok.OpenTokSDK(apiKeySecret.apiKey, apiKeySecret.secret);
             }
             
-            ot.stopArchive(archiveId, function (err, archive) {
+            otSDK.stopArchive(archiveId, function (err, archive) {
                 if (err) {
                     res.send({
                         error: err

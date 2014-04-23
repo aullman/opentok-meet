@@ -86,7 +86,7 @@
         </div>
         <div id="statusMessages">
             <div id="archiveStatus" class="statusMessage" ng-if="archiveId">
-                Recording: When recording is ready it will be available <a href="/archive/{{archiveId}}" target="_blank">here</a>
+                Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
             </div>
             <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed: Make sure you have enabled Screen Capture support by visiting chrome://flags/#enable-usermedia-screen-capture and then quitting and restarting your browser.</div>
             <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
