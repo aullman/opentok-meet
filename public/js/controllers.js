@@ -1,3 +1,6 @@
+// Need to keep a global mapping of sessions so that they can be disconnected
+var globalSession;
+
 function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, baseURL) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
@@ -161,7 +164,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
 
         OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err, session) {
-            $scope.session = session;
+            globalSession = $scope.session = session;
             var connectDisconnect = function (connected) {
               $scope.$apply(function () {
                   $scope.connected = connected;
@@ -183,10 +186,6 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     });
     
     $scope.changeRoom = function () {
-        if ($scope.session) {
-            $scope.session.disconnect();
-            $scope.session = null;
-        }
         RoomService.changeRoom();
     };
     
@@ -217,9 +216,8 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     });
     
     $scope.$on('$destroy', function () {
-      if ($scope.session) {
-        $scope.session.disconnect();
-        $scope.session = null;
+      if (globalSession) {
+        globalSession.disconnect();
       }
     });
 }
