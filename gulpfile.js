@@ -78,7 +78,8 @@ gulp.task('cordova', ['cordova-bower'], function (cb) {
   var cordovaPlugins = {
     'com.tokbox.cordova.opentok': 'https://github.com/songz/cordova-plugin-opentok.git',
     'com.phonegap.plugin.statusbar': 'https://github.com/phonegap-build/StatusBarPlugin.git',
-    'com.verso.cordova.clipboard': 'https://github.com/VersoSolutions/CordovaClipboard'
+    'com.verso.cordova.clipboard': 'https://github.com/VersoSolutions/CordovaClipboard',
+    'org.apache.cordova.splashscreen': 'org.apache.cordova.splashscreen'
   };
   // Install the cordova plugins if they're not already there
   var output = exec('cd opentok-meet-cordova;cordova plugin list', function (err, stdout, stderr) {

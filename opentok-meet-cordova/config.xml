@@ -18,6 +18,11 @@
         <false/>
     </gap:config-file>
     
+    <feature name="SplashScreen">
+      <param name="ios-package" value="CDVSplashScreen"/>
+      <param name="onload" value="true" />
+    </feature>
+    
     <content src="index.html" />
     <access origin="*" />
 </widget>
