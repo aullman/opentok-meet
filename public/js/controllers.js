@@ -1,6 +1,3 @@
-// Need to keep a global mapping of sessions so that they can be disconnected
-var globalSession;
-
 function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, baseURL) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
@@ -15,6 +12,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
     $scope.showWhiteboard = false;
+    $scope.leaving = false;
     
     $scope.screenPublisherProps = {
         name: "screen",
@@ -164,7 +162,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
 
         OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err, session) {
-            globalSession = $scope.session = session;
+            $scope.session = session;
             var connectDisconnect = function (connected) {
               $scope.$apply(function () {
                   $scope.connected = connected;
@@ -186,7 +184,15 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     });
     
     $scope.changeRoom = function () {
-        RoomService.changeRoom();
+        if (!$scope.leaving) {
+            $scope.leaving = true;
+            $scope.session.disconnect();
+            $scope.session.on('sessionDisconnected', function () {
+                $scope.$apply(function () {
+                    RoomService.changeRoom();
+                });
+            });
+        }
     };
     
     $scope.sendEmail = function () {
@@ -216,8 +222,10 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     });
     
     $scope.$on('$destroy', function () {
-      if (globalSession) {
-        globalSession.disconnect();
+      if ($scope.session && $scope.connected) {
+          $scope.session.disconnect();
+          $scope.connected = false;
       }
+      $scope.session = null;
     });
 }

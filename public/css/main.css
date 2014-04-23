@@ -145,7 +145,7 @@ button.red {
   background-color: #C04B4B;
 }
 
-#bottomBar button#showscreen:disabled {
+button:disabled {
     background-color: #565853;
     color: #ccc;
     cursor: auto;

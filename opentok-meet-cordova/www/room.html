@@ -25,7 +25,7 @@
 </div>
 <img id="loader" src="images/loader.gif" ng-if="!connected" />
 <div id="bottomBar">
-    <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red">Leave</button>
+    <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" ng-disabled="leaving">Leave</button>
     <!-- <span id="publishUI">
         <button name="publish" id="publishBtn" ng-click="togglePublish()" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion-ios7-videocam">WebCam</button>
     </span> -->
