@@ -49,11 +49,13 @@
                 </ot-whiteboard>
             </ot-layout>
             
-            <ot-publisher id="facePublisher" 
+            <div id="facePublisher"
                 ng-if="publishing"
-                draggable="true"
-                props="facePublisherProps">
-            </ot-publisher>
+                draggable="true">
+                <ot-publisher id="facePublisher" 
+                    props="facePublisherProps">
+                </ot-publisher>
+            </div>
         </div>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
         <div id="shareInfo" 

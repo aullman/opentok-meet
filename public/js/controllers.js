@@ -41,6 +41,8 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     
     var facePublisherPropsHD = {
         name:'face',
+        width: '100%',
+        height: '100%',
         style: {
             nameDisplayMode: 'off'
         },
@@ -49,6 +51,8 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     },
     facePublisherPropsSD = {
         name:'face',
+        width: '100%',
+        height: '100%',
         style: {
             nameDisplayMode: 'off'
         }
