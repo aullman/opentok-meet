@@ -23,7 +23,7 @@
     <button class="icon-left ion-email" ng-click="sendEmail()">Email</button>
     
 </div>
-<img id="loader" src="images/loader.gif" ng-if="!connected" />
+<i id="loader" ng-if="!connected" class="ion-loading-c"></i>
 <div id="bottomBar">
     <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" ng-disabled="leaving">Leave</button>
     <!-- <span id="publishUI">
