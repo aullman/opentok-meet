@@ -22,7 +22,7 @@
                     return true;
                 };
                 
-                RoomService().then(function (roomData) {
+                RoomService.getRoom().then(function (roomData) {
                     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err) {
                         if (!err) {
                             $scope.$apply(function () {
