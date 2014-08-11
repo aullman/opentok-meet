@@ -19,6 +19,6 @@
     "npm": "1.2.x"
   },
   "scripts": {
-    "postinstall": "./node_modules/gulp/bin/gulp.js"
+    "postinstall": "bower cache clean && bower install"
   }
 }
