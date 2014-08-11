@@ -81,25 +81,24 @@
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
         <div id="bottomBar">
-            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported" ng-if="!isAndroid">Screenshare</button>
-            
-            <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" ng-if="isAndroid">Leave</button>
+            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported" ng-if="!isAndroid" title="Share Screen"></button>
 
-            <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit">Whiteboard</button>
+            <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
             
-            <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text">Editor</button>
+            <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
             
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"
-                ng-click="toggleArchiving()">Record</button>
+                ng-click="toggleArchiving()" title="Record"></button>
 
             <span id="publishUI">
-                <button name="publish" id="publishBtn" ng-click="togglePublish()" ng-class="{green: !publishing, red: publishing, 'ion-ios7-videocam': publishing}" class="publish-btn icon-left ion">WebCam</button>
+                <button name="publish" id="publishBtn" ng-click="togglePublish()" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam"></button>
                 <span id="publishHDCheck">
                     <label for="publishHD" ng-if="!publishing">HD</label>
                     <input type="checkbox" name="publishHD" ng-model="publishHD" id="publishHD" ng-if="!publishing" ng-change="publishHDChange()">
                 </span>
             </span>
+            <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave"></button>
             <!-- <div id="footer">
                 <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
                 <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>

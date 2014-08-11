@@ -113,7 +113,6 @@ ot-editor .CodeMirror {
   width: 100%;
   left: 0;
   bottom: 20px;
-  height: 50px;
   position: absolute;
   text-align: center;
 }
@@ -132,19 +131,20 @@ button.icon-left:before {
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    color: #DCD9CD;
+    color: #DCD9B5;
     font-size: 22px;
     -webkit-appearance: none;
     font-family: 'Ropa Sans', sans-serif;
-    width: 150px;
-    height: 100%;
     transition: width 200ms, height 200ms ease;
+    padding-left: 14px;
+    padding-top: 5px;
 }
 
 #bottomBar #publishHDCheck {
     color: #DCD9CD;
     position: relative;
-    left: -145px;
+    left: -50px;
+    top: -4px;
     vertical-align: middle;
 }
 
@@ -197,7 +197,8 @@ button:disabled {
 
 
 #bottomBar #publishBtn.green {
-    text-align: right;
+    text-align: left;
+    width: 85px;
 }
 
 .statusMessage {
@@ -221,21 +222,7 @@ button:disabled {
     bottom: 80px;
 }
 
-@media screen and (max-width: 650px) {
-  #bottomBar {
-    height: 30px;
-  }
-  
-  #bottomBar button {
-    width: 92px;
-    font-size: 12px;
-  }
-  
-  #bottomBar #publishHDCheck {
-      left: -85px;
-      font-size: 9px;
-  }
-  
+@media screen and (max-width: 650px) {  
   #facePublisher {
       width: 89px;
       height: 50px;
