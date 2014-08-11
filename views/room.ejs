@@ -14,8 +14,18 @@
         <script src="//static.opentok.com/webrtc/v2.2-plugin-beta/js/opentok.js"></script>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <!-- OpenTok Whiteboard -->
         <script src="/js/lib/opentok-whiteboard/opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
         <link rel="stylesheet" href="/js/lib/opentok-whiteboard/opentok-whiteboard.css" type="text/css" media="screen" charset="utf-8">
+        <!-- OpenTok Editor -->
+        <script src="/js/lib/CodeMirror/lib/codemirror.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/js/lib/CodeMirror/lib/codemirror.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <script src="/js/lib/CodeMirror/mode/javascript/javascript.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/CodeMirror/mode/markdown/markdown.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/ot/dist/ot-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-editor/opentok-editor.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        
         <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">        
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/directives.js" type="text/javascript" charset="utf-8"></script>
@@ -47,6 +57,13 @@
                     lineWidth="5"
                     class="OT_big">
                 </ot-whiteboard>
+                <ot-editor ng-show="showEditor"
+                    ng-if="connected"
+                    mode="javascript"
+                    value="// Write code here"
+                    modes="[{name: 'Javascript', value: 'javascript'}, {name: 'Markdown', value: 'markdown'}]"
+                    class="OT_big">
+                </ot-editor>
             </ot-layout>
             
             <div id="facePublisher"
@@ -69,6 +86,8 @@
             <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" ng-if="isAndroid">Leave</button>
 
             <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit">Whiteboard</button>
+            
+            <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text">Editor</button>
             
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"

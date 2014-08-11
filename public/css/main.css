@@ -30,7 +30,7 @@ body input {
     cursor: -webkit-grab;
     cursor: -moz-grab;
     top: 10px;
-    left: 10px;
+    right: 10px;
     border-radius: 5px;
     z-index: 99;
     transition: width 200ms, height 200ms ease;
@@ -95,6 +95,15 @@ ot-layout > :hover button.resize-btn {
 
 ot-whiteboard {
     display: block;
+    background-color: #DCD9CD;
+}
+
+ot-editor {
+    display: block;
+    background-color: #DCD9CD;
+}
+
+ot-editor .CodeMirror {
     background-color: #DCD9CD;
 }
 

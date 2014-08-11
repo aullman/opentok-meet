@@ -12,6 +12,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.screenShareFailed = false;
     $scope.mouseMove = false;
     $scope.showWhiteboard = false;
+    $scope.showEditor = false;
     $scope.leaving = false;
     
     $scope.screenPublisherProps = {
@@ -154,6 +155,14 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         setTimeout(function () {
             $scope.$emit("otLayout");
         }, 10);
+    };
+    
+    $scope.toggleEditor = function () {
+      $scope.showEditor = !$scope.showEditor;
+      setTimeout(function () {
+          $scope.$emit("otLayout");
+          $scope.$broadcast("otEditorRefresh");
+      }, 10);
     };
     
     // Fetch the room info
