@@ -1,6 +1,6 @@
 var express = require("express"),
     fs = require("fs"),
-    opentok = require("opentok"),
+    OpenTok = require("opentok"),
     moniker = require("moniker"),
     https = require("https"),
     app = express(),
@@ -42,7 +42,7 @@ app.configure(function(){
   app.use(app.router);
 });
 
-var ot = new opentok.OpenTokSDK(config.apiKey, config.apiSecret);
+var ot = new OpenTok(config.apiKey, config.apiSecret);
 
 app.get('*', function(req,res,next) {
     if (req.host === 'hangout.tokbox.com') {
@@ -84,7 +84,7 @@ app.get('/:room/archive/:archiveId', function (req, res) {
             var otSDK = ot;
             if (apiKeySecret) {
                 apiKeySecret = JSON.parse(apiKeySecret);
-                otSDK = new opentok.OpenTokSDK(apiKeySecret.apiKey, apiKeySecret.secret);
+                otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
             }
             otSDK.getArchive(req.param('archiveId'), function (err, archive) {
                 if (err) {
@@ -110,17 +110,18 @@ var getRoom = function(room, apiKey, secret, goToRoom) {
     // Lookup the mapping of rooms to sessionIds
     redis.hget("rooms", room, function (err, sessionId) {
         if (!sessionId) {
-            var props = {'p2p.preference': 'disabled'};
+            var props = {mediaMode: 'routed'};
             if (isP2P(room)) {
-                props['p2p.preference'] = 'enabled';
+                props.mediaMode = 'relayed';
             }
             var otSDK = ot;
             // If there's a custom apiKey and secret use that
             if (apiKey && secret) {
-              otSDK = new opentok.OpenTokSDK(apiKey, secret);
+              otSDK = new OpenTok(apiKey, secret);
             }
             // Create the session
-            otSDK.createSession('', props, function (err, sessionId) {
+            otSDK.createSession(props, function (err, session) {
+                var sessionId = session.sessionId;
                 if (err) {
                     goToRoom(err);
                 } else {
@@ -181,15 +182,14 @@ app.get('/:room', function(req, res) {
                     });
                     var otSDK = ot;
                     if (apiKey && secret) {
-                        otSDK = new opentok.OpenTokSDK(apiKey, secret);
+                        otSDK = new OpenTok(apiKey, secret);
                     }
                     res.send({
                         room: room,
                         sessionId: sessionId,
                         apiKey: (apiKey && secret) ? apiKey : config.apiKey,
                         p2p: isP2P(room),
-                        token: otSDK.generateToken({
-                            sessionId: sessionId,
+                        token: otSDK.generateToken(sessionId, {
                             role: "publisher"
                         })
                     });
@@ -238,7 +238,7 @@ app.post('/:room/startArchive', function (req, res) {
         }
         var otSDK = ot;
         if (apiKey && secret) {
-          otSDK = new opentok.OpenTokSDK(apiKey, secret);
+          otSDK = new OpenTok(apiKey, secret);
         }
         otSDK.startArchive(sessionId, {
             name: room
@@ -271,7 +271,7 @@ app.post('/:room/stopArchive', function (req, res) {
             var otSDK = ot;
             if (apiKeySecret) {
                 apiKeySecret = JSON.parse(apiKeySecret);
-                otSDK = new opentok.OpenTokSDK(apiKeySecret.apiKey, apiKeySecret.secret);
+                otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
             }
             
             otSDK.stopArchive(archiveId, function (err, archive) {
