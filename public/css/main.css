@@ -127,6 +127,35 @@ button.icon-left:before {
     padding-left: 0;
 }
 
+#bottomBar .unread-indicator {
+    display: inline-block;
+}
+
+@-webkit-keyframes whitePulse {
+    from { -webkit-box-shadow: 0 0 9px #333; -moz-box-shadow: 0 0 9px #333; box-shadow: 0 0 9px #333; }
+    50% { -webkit-box-shadow: 0 0 18px #DCD9B5; -moz-box-shadow: 0 0 18px #DCD9B5; box-shadow: 0 0 18px #DCD9B5;}
+    to { -webkit-box-shadow: 0 0 9px #333; -moz-box-shadow: 0 0 9px #333; box-shadow: 0 0 9px #333; }
+}
+
+#bottomBar .unread-indicator span.indicator {
+    display: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #C04B4B;
+    border: 1px solid #DCD9B5;
+    margin-left: -5px;
+    margin-top: -38px;
+    position: relative;
+    -webkit-animation-name: whitePulse;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+}
+
+#bottomBar .unread-indicator.unread span.indicator {
+    display: block;
+}
+
 #bottomBar button {
     cursor: pointer;
     border: none;
@@ -158,7 +187,11 @@ button.green {
 }
 
 button.red {
-  background-color: #C04B4B;
+    background-color: #C04B4B;
+}
+
+button.unread {
+    
 }
 
 button:disabled {

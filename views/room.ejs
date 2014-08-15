@@ -82,9 +82,15 @@
         <div id="bottomBar">
             <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported" ng-if="!isAndroid" title="Share Screen"></button>
 
-            <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
+            <span class="unread-indicator" ng-class="{unread: whiteboardUnread}">
+                <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
+                <span class="indicator"></span>
+            </span>
             
-            <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
+            <span class="unread-indicator" ng-class="{unread: editorUnread}">
+                <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
+                <span class="indicator"></span>
+            </span>
             
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"

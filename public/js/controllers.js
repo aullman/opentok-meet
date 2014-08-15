@@ -13,6 +13,8 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.mouseMove = false;
     $scope.showWhiteboard = false;
     $scope.showEditor = false;
+    $scope.whiteboardUnread = false;
+    $scope.editorUnread = false;
     $scope.leaving = false;
     
     $scope.screenPublisherProps = {
@@ -152,6 +154,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     
     $scope.toggleWhiteboard = function () {
         $scope.showWhiteboard = !$scope.showWhiteboard;
+        $scope.whiteboardUnread = false;
         setTimeout(function () {
             $scope.$emit("otLayout");
         }, 10);
@@ -159,6 +162,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     
     $scope.toggleEditor = function () {
       $scope.showEditor = !$scope.showEditor;
+      $scope.editorUnread = false;
       setTimeout(function () {
           $scope.$emit("otLayout");
           $scope.$broadcast("otEditorRefresh");
@@ -186,12 +190,32 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
             $scope.session.on('sessionConnected', connectDisconnect.bind($scope.session, true));
             $scope.session.on('sessionDisconnected', connectDisconnect.bind($scope.session, false));
             $scope.session.on('archiveStarted archiveStopped', function (event) {
-            // event.id is the archiveId
-            $scope.$apply(function () {
-                $scope.archiveId = event.id;
-                $scope.archiving = (event.type === 'archiveStarted');
+              // event.id is the archiveId
+              $scope.$apply(function () {
+                  $scope.archiveId = event.id;
+                  $scope.archiving = (event.type === 'archiveStarted');
+              });
             });
-            });
+            var whiteboardUpdated = function () {
+              if (!$scope.showWhiteboard && !$scope.whiteboardUnread) {
+                // Someone did something to the whiteboard while we weren't looking
+                $scope.$apply(function () {
+                  $scope.whiteboardUnread = true;
+                  $scope.mouseMove = true;  // Show the bottom bar
+                });
+              }
+            };
+            var editorUpdated = function () {
+              if (!$scope.showEditor && !$scope.editorUnread) {
+                // Someone did something to the editor while we weren't looking
+                $scope.$apply(function () {
+                  $scope.editorUnread = true;
+                  $scope.mouseMove = true;  // Show the bottom bar
+                });
+              }
+            };
+            $scope.$on('otEditorUpdate', editorUpdated);
+            $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
         });
         $scope.publishing = true;
     });
