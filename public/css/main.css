@@ -101,6 +101,7 @@ ot-whiteboard {
 ot-editor {
     display: block;
     background-color: #DCD9CD;
+    overflow: scroll;
 }
 
 ot-editor .CodeMirror {
@@ -115,6 +116,7 @@ ot-editor .CodeMirror {
   bottom: 20px;
   position: absolute;
   text-align: center;
+  z-index: 98;
 }
 
 body.mouse-move #bottomBar {
@@ -213,6 +215,7 @@ button:disabled {
     left: 50%;
     margin-left: -285px;
     transition: width 200ms, height 200ms ease;
+    z-index: 98;
 }
 
 #loader {
@@ -253,6 +256,7 @@ button:disabled {
     width: 465px;
     left: calc(50% - 242.5px);
     bottom: 80px;
+    z-index: 98;
 }
 
 @media screen and (max-width: 650px) {  
