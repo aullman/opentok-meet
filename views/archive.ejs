@@ -8,8 +8,11 @@
     </head>
     <body>
         <h1><%= name %></h1>
-        <% if (url) { %>
+        <% if (url && status === 'available') { %>
         <video src="<%=url%>" controls autoplay></video>
+        <div class="status">This archive will only stick around for 3 days. If you want to keep it you should <a href="<%=url%>">download it</a>.</div>
+        <% } else if (status === 'expired') { %>
+        <div class="status">This archive has expired</div>
         <% } else { %>
         <div class="status">This archive isn't ready yet <a href="javascript:window.location.reload()">Refresh</a></div>
         <% } %>

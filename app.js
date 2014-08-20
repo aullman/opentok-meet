@@ -92,7 +92,8 @@ app.get('/:room/archive/:archiveId', function (req, res) {
                 } else {
                     res.render('archive', {
                         name: archive.name,
-                        url: archive.url
+                        url: archive.url,
+                        status: archive.status
                     });
                 }
             });
