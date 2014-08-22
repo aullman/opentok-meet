@@ -38,8 +38,8 @@ opentokMeet.directive('draggable', function ($document) {
                 startY = pageY - y;
                 break;
             case "absolute":
-                startX = pageX - parseInt(element.css("left"), 10);
-                startY = pageY - parseInt(element.css("top"), 10);
+                startX = pageX - element.context.offsetLeft;
+                startY = pageY - element.context.offsetTop;
                 break;
             }
             $document.on("mousemove touchmove", mouseMoveHandler);
