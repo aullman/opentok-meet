@@ -6,11 +6,11 @@ function handleOpenURL(url) {
   window.location.hash = '#/' + url.substring('otmeet://'.length);
 }
 
-var OT = {
-    $:{},
-    onLoad: function (fn) {
-        document.addEventListener('deviceReady', fn);
-    }
+if (!OT) {
+  var OT = {};
+}
+OT.onLoad = function (fn) {
+  document.addEventListener('deviceReady', fn);
 };
 OT.$ = window.OTHelpers;
 
