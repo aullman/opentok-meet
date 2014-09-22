@@ -9,13 +9,15 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
     $scope.isAndroid = /Android/g.test(navigator.userAgent);
     $scope.connected = false;
-    $scope.screenShareFailed = false;
+    $scope.screenShareFailed = null;
     $scope.mouseMove = false;
     $scope.showWhiteboard = false;
     $scope.showEditor = false;
     $scope.whiteboardUnread = false;
     $scope.editorUnread = false;
     $scope.leaving = false;
+    $scope.selectingScreenSource = false;
+    $scope.promptToInstall = false;
     
     $scope.screenPublisherProps = {
         name: "screen",
@@ -24,13 +26,8 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
         constraints: {
             video: {
                 mandatory: {
-                    chromeMediaSource: "screen",
-                    maxWidth: screen.width,
-                    minWidth: screen.width,
-                    maxHeight: screen.height,
-                    minHeight: screen.height,
-                    maxFrameRate: 7,
-                    minFrameRate: 7
+                    maxWidth: 1920,
+                    maxHeight: 1080
                 },
                 optional: []
             },
@@ -67,10 +64,42 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     };
     
     $scope.toggleShareScreen = function() {
-        if (!$scope.sharingMyScreen) {
-            $scope.screenShareFailed = false;
+        if (!$scope.sharingMyScreen && !$scope.selectingScreenSource) {
+          $scope.selectingScreenSource = true;
+          $scope.screenShareFailed = null;
+          
+          var screenSharing = OTChromeScreenSharingExtensionHelper('gloebbmiakfjnkcohlmbciijakonfehm');
+          screenSharing.isAvailable(function (extensionIsAvailable) {
+            if (extensionIsAvailable) {
+              screenSharing.getVideoSource(function(error, source) {
+                $scope.$apply(function () {
+                  if (error) {
+                    // either the extension is not available or the user clicked cancel
+                    $scope.screenShareFailed = error.message;
+                  } else {
+                    $scope.screenPublisherProps.videoSource = source;
+                    $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSource = 'desktop';
+                    $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSourceId = source.deviceId;
+                    $scope.sharingMyScreen = true;
+                  }
+                  $scope.selectingScreenSource = false;
+                });
+              });
+            } else {
+              $scope.$apply(function () {
+                $scope.promptToInstall = true;
+                $scope.selectingScreenSource = false;
+              });
+            }
+          });
+        } else if ($scope.sharingMyScreen) {
+          $scope.sharingMyScreen = false;
         }
-        $scope.sharingMyScreen = !$scope.sharingMyScreen;
+    };
+    
+    $scope.installScreenshareExtension = function () {
+      chrome.webstore.install();
+      $scope.promptToInstall = false;
     };
     
     $scope.publishHDChange = function () {
@@ -146,7 +175,7 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     $scope.$on("otPublisherError", function (event, error, publisher) {
         if (publisher.id === 'screenPublisher') {
             $scope.$apply(function () {
-                $scope.screenShareFailed = true;
+                $scope.screenShareFailed = error.message;
                 $scope.toggleShareScreen();
             });
         }
