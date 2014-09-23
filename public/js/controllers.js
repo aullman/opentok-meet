@@ -98,8 +98,11 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
     };
     
     $scope.installScreenshareExtension = function () {
-      chrome.webstore.install();
-      $scope.promptToInstall = false;
+      chrome.webstore.install('https://chrome.google.com/webstore/detail/gloebbmiakfjnkcohlmbciijakonfehm', function () {
+        console.log('successfully installed');
+      }, function () {
+        console.error('failed to install', arguments);
+      });
     };
     
     $scope.publishHDChange = function () {

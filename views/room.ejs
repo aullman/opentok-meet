@@ -116,20 +116,12 @@
                 Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
             </div>
             <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed {{screenShareFailed}}</div>
-            <div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">You need a Chrome extension to share your screen. <a href='javascript:chromeInstall()'>Install Screensharing Extension</a>. Once you have installed refresh your browser and click the share screen button again.</div>
+            <div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">You need a Chrome extension to share your screen. <a href="" sync-click="installScreenshareExtension()">Install Screensharing Extension</a>. Once you have installed refresh your browser and click the share screen button again.</div>
             <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
                 Screen Sharing currently requires Google Chrome on Desktop.
             </div>
         </div>
         <script type="text/javascript" charset="utf-8">
-            function chromeInstall() {
-              chrome.webstore.install('https://chrome.google.com/webstore/detail/gloebbmiakfjnkcohlmbciijakonfehm', function () {
-                console.log('successfully installed');
-              }, function () {
-                console.error('failed to install', arguments);
-              })
-            }
-        
             opentokMeet.value({
                 room: '<%=room%>',
                 baseURL: '/'

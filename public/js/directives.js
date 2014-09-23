@@ -47,4 +47,17 @@ opentokMeet.directive('draggable', function ($document) {
             $($document[0].body).on("mouseleave", mouseUpHandler);
         });
     };
+})
+.directive('syncClick', function () {
+  return {
+    restrict: 'A',
+    scope: {
+        syncClick: '&'
+    },
+    link: function(scope, element, attrs){
+      element.on('click', function () {
+        scope.syncClick();
+      });
+    }
+  };
 });
