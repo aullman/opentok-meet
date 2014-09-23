@@ -1,4 +1,4 @@
-function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, baseURL) {
+function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
     $scope.publishing = false;
@@ -80,6 +80,24 @@ function RoomCtrl($scope, $http, $window, $document, OTSession, RoomService, bas
                     $scope.screenPublisherProps.videoSource = source;
                     $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSource = 'desktop';
                     $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSourceId = source.deviceId;
+                    
+                    // REMOVE ME: This is to fix a bug in opentok that that gives you InvalidStateError
+                    // Because of no audio context. With the next release of OpenTok we can remove this
+                    // workaround
+                    var oldHasCapabilities = OT.$.hasCapabilities;
+                    OT.$.hasCapabilities = function (type) {
+                      if (type === 'webAudio') {
+                        return false;
+                      } else {
+                        oldHasCapabilities.apply(this, arguments);
+                      }
+                    };
+                    $timeout(function () {
+                      // After the digest cycle completes we want to put back OT.$.hasCapabilities
+                      OT.$.hasCapabilities = oldHasCapabilities;
+                    }, 0, false);
+                    // END REMOVE ME:
+                    
                     $scope.sharingMyScreen = true;
                   }
                   $scope.selectingScreenSource = false;
