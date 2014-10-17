@@ -12,7 +12,7 @@ if (!OT) {
 OT.onLoad = function (fn) {
   document.addEventListener('deviceReady', fn);
 };
-OT.$ = window.OTHelpers;
+OT.$ = OT.getHelper();
 
 function HomeCtrl($scope, $location) {
     $scope.joinRoom = function () {

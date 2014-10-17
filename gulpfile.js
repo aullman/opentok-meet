@@ -10,15 +10,9 @@ gulp.task('default', function(){
 gulp.task('cordova-bower', function (cb) {
   // couldn't figure out how to get bower to run in a different directory
   exec('cd opentok-meet-cordova;bower install');
-  
-  // Compile common-js-helpers
-  exec('cd opentok-meet-cordova/www/js/lib/common-js-helpers;npm install;grunt', function (err, stdout) {
-    console.log(stdout);
-    cb(err);
-  });
 });
 
-gulp.task('cordova', ['cordova-bower'], function (cb) {
+gulp.task('cordova', function (cb) {
   // Copy over the single-sourced JS
   gulp.src('./public/js/*.js')
     .pipe(gulp.dest('opentok-meet-cordova/www/js'));
