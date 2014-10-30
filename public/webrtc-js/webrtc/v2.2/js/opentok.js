@@ -20926,7 +20926,7 @@ OT.Publisher = function(options) {
         onLoaded.call(this);
         return;
       }
-      
+
       _container = new OT.WidgetView(targetElement, _properties);
       this.id = _domId = _container.domId();
       this.element = _container.domElement;
@@ -21136,12 +21136,12 @@ OT.Publisher = function(options) {
     publishToSession: OT.$.bind(function(session) {
       // Add session property to Publisher
       this.session = _session = session;
-      
+
       var simulcastEnabled = true;
       var screensharing = _properties.constraints &&
          _properties.constraints.video &&
          _properties.constraints.video.mandatory &&
-         _properties.constraints.video.mandatory.chromeMediaSource !== null;
+         _properties.constraints.video.mandatory.chromeMediaSource;
       var p2p = _session ? _session.sessionInfo.p2pEnabled : true;
 
       if (screensharing || p2p) {
