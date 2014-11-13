@@ -20940,7 +20940,6 @@ OT.Publisher = function(options) {
           OT.warn('Setting audio constraint to false, there are no audio sources');
           _properties.constraints.audio = false;
         }
-        _properties.constraints.fake = true;
         OT.$.getUserMedia(
           _properties.constraints,
           OT.$.bind(onStreamAvailable, this),
