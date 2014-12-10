@@ -122,10 +122,10 @@ var getRoom = function(room, apiKey, secret, goToRoom) {
             }
             // Create the session
             otSDK.createSession(props, function (err, session) {
-                var sessionId = session.sessionId;
                 if (err) {
                     goToRoom(err);
                 } else {
+                    var sessionId = session.sessionId;
                     // Store the room to sessionId mapping
                     redis.hset("rooms", room, sessionId, function (err) {
                         if (err) {
