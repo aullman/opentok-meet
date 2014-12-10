@@ -202,7 +202,8 @@ app.get('/:room', function(req, res) {
             var ua = req.headers['user-agent'];
             // If we're on iOS forward them to the iOS App
             if (/like Mac OS X/.test(ua)) {
-                var iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
+                var iOSRegex = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua),
+                  iOS = iOSRegex && iOSRegex.length > 2 && iOSRegex[2].replace(/_/g, '.');
                 if (iOS) {
                     res.render('roomiOS', {
                         room: room
