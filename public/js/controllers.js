@@ -2,7 +2,6 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
     $scope.publishing = false;
-    $scope.publishHD = true;
     $scope.screenBig = true;
     $scope.archiveId = null;
     $scope.archiving = false;
@@ -123,13 +122,9 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
       });
     };
     
-    $scope.publishHDChange = function () {
-        $scope.publishHD = !$scope.publishHD;
-    };
-    
-    $scope.togglePublish = function () {
+    $scope.togglePublish = function (publishHD) {
         if (!$scope.publishing) {
-            $scope.facePublisherProps = $scope.publishHD ? facePublisherPropsHD : facePublisherPropsSD;
+            $scope.facePublisherProps = publishHD ? facePublisherPropsHD : facePublisherPropsSD;
         }
         $scope.publishing = !$scope.publishing;
     };

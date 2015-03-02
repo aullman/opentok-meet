@@ -99,11 +99,9 @@
                 ng-click="toggleArchiving()" title="Record"></button>
 
             <span id="publishUI">
-                <button name="publish" id="publishBtn" ng-click="togglePublish()" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam"></button>
-                <span id="publishHDCheck">
-                    <label for="publishHD" ng-if="!publishing">HD</label>
-                    <input type="checkbox" name="publishHD" ng-model="publishHD" id="publishHD" ng-if="!publishing" ng-change="publishHDChange()">
-                </span>
+                <button name="publish" id="publishBtn" ng-click="togglePublish(true)" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam"><span ng-if="!publishing">HD</span></button>
+                <button name="publishSD" id="publishSDBtn" ng-if="!publishing" ng-click="togglePublish(false)" class="publish-btn green icon-left ion ion-ios7-videocam" title="WebCam"><span ng-if="!publishing">SD</span></button>
+              </span>
             </span>
             <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave"></button>
             <!-- <div id="footer">
