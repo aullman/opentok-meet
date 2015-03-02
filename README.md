@@ -25,3 +25,8 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 5. Add your OpenTok API Key and Secret to the environment `heroku config:set HEROKU=true OT_API_KEY=<YOUR_API_KEY> OT_API_SECRET=<YOUR_SECRET>`
 6. `git push heroku master`
 7. Visit your heroku URL
+
+##Running Tests
+
+* You can run the unit tests using karma with `npm test`
+* You can run E2E tests using protractor with `npm run protractor`
