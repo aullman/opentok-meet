@@ -25,12 +25,24 @@ module.exports = function(config){
     plugins : [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-coverage'
             ],
 
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
+    },
+
+    preprocessors : {
+      'public/js/*.js': 'coverage'
+    },
+
+    reporters: ['progress', 'coverage'],
+
+    coverageReporter: {
+      type : 'lcov',
+      dir : 'coverage/'
     }
 
   });
