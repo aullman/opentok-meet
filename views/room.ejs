@@ -13,7 +13,6 @@
         <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//static.opentok.com/v2/js/opentok.js"></script>
-        <script src="/js/OTChromeScreenSharingExtensionHelper.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <!-- OpenTok Whiteboard -->
@@ -116,13 +115,14 @@
             <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed {{screenShareFailed}}</div>
             <div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">You need a Chrome extension to share your screen. <a href="" sync-click="installScreenshareExtension()">Install Screensharing Extension</a>. Once you have installed refresh your browser and click the share screen button again.</div>
             <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
-                Screen Sharing currently requires Google Chrome on Desktop.
+                Screen Sharing currently requires Google Chrome or Firefox on Desktop.
             </div>
         </div>
         <script type="text/javascript" charset="utf-8">
             opentokMeet.value({
                 room: '<%=room%>',
-                baseURL: '/'
+                baseURL: '/',
+                chromeExtensionId: '<%=chromeExtensionId%>'
             });
         </script>
         <script type="text/javascript">

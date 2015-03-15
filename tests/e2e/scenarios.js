@@ -176,15 +176,25 @@ describe('OpenTok Meet App', function() {
 
       describe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
-        // Can't test screen sharing properly right now because the extension isn't registered for localhost
-        it('shows an install prompt when you click it and it changes colour', function () {
-          expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+        it('shares the screen when you click it', function () {
           expect(screenShareBtn.getAttribute('class')).toContain('green');
           screenShareBtn.click();
-          expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+          expect(screenShareBtn.getAttribute('class')).toContain('red');
           browser.wait(function () {
-            return element(by.css('#installScreenshareExtension')).isPresent();
+            return element(by.css('#screenPublisher')).isPresent();
           }, 10000);
+        });
+        it('shows an install prompt when you click it and the extension is not installed', function (done) {
+          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(function () {
+            expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+            expect(screenShareBtn.getAttribute('class')).toContain('green');
+            screenShareBtn.click();
+            expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+            browser.wait(function () {
+              return element(by.css('#installScreenshareExtension')).isPresent();
+            }, 10000);
+            done();
+          });
         });
       });
 

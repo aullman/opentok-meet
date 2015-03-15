@@ -11,7 +11,8 @@ if(process.env.HEROKU) {
     config = {
         "port": process.env.PORT,
         "apiKey": process.env.OT_API_KEY,
-        "apiSecret": process.env.OT_API_SECRET
+        "apiSecret": process.env.OT_API_SECRET,
+        "chromeExtensionId": process.env.CHROME_EXTENSION_ID
     };
 } else {
     try {
@@ -211,7 +212,8 @@ app.get('/:room', function(req, res) {
                 }
             }
             res.render('room', {
-                room: room
+                room: room,
+                chromeExtensionId: config.chromeExtensionId
             });
         }
     });

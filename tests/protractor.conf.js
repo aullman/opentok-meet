@@ -6,7 +6,10 @@ exports.config = {
   ],
 
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      'args': ['load-extension=/Users/adamu/src/screensharing-extensions/chrome/ScreenSharing/']
+    }
   },
 
   chromeOnly: true,

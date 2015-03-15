@@ -13,6 +13,7 @@ describe('OpenTok Meet controllers', function() {
     beforeEach(module('opentok-meet'));
     
     beforeEach(inject(function($controller, $rootScope, $q, $injector) {
+      spyOn(OT, 'registerScreenSharingExtension').and.callThrough();
       scope = $rootScope.$new();
       scope.session = {
         connection: {
@@ -31,15 +32,29 @@ describe('OpenTok Meet controllers', function() {
       documentMock = {context: { body: jasmine.createSpyObj('body', ['addEventListener'])}};
       $httpBackend = $injector.get('$httpBackend');
       ctrl = $controller('RoomCtrl', {$scope:scope, $window: windowMock, 
-        $document: documentMock, $timeout: {}, OTSession: {}, RoomService: RoomServiceMock, baseURL: ''});
+        $document: documentMock, $timeout: {}, OTSession: {}, RoomService: RoomServiceMock, baseURL: '', chromeExtensionId: 'mockExtensionId'});
     }));
 
     it('should define screenPublisherProps', function () {
-      expect(scope.screenPublisherProps).toBeDefined();
+      expect(scope.screenPublisherProps).toEqual({
+          name: "screen",
+          style:{nameDisplayMode:"off"},
+          publishAudio: false,
+          videoSource: 'screen'
+      });
     });
     
     it('should define facePublisherProps', function () {
-      expect(scope.facePublisherProps).toBeDefined();
+      expect(scope.facePublisherProps).toEqual({
+          name:'face',
+          width: '100%',
+          height: '100%',
+          style: {
+              nameDisplayMode: 'off'
+          },
+          resolution: '1280x720',
+          frameRate: 30
+      });
     });
 
     it('should have a notMine method that works', function () {
@@ -102,6 +117,60 @@ describe('OpenTok Meet controllers', function() {
         scope.toggleArchiving();
         $httpBackend.flush();
         expect(scope.archiving).toBe(true);
+      });
+    });
+
+    describe('toggleShareScreen', function () {
+      it('Calls OT.registerScreenSharingExtension', function () {
+        expect(OT.registerScreenSharingExtension).toHaveBeenCalledWith('chrome', 'mockExtensionId');
+      });
+      it('Calls OT.checkScreenSharingCapability', function () {
+        spyOn(OT, 'checkScreenSharingCapability').and.callThrough();
+        scope.toggleShareScreen();
+        expect(OT.checkScreenSharingCapability).toHaveBeenCalledWith(jasmine.any(Function));
+      });
+      it('Sets screenShareSupported to false if screensharing is not supported', function () {
+        scope.screenShareSupported = true;
+        spyOn(OT, 'checkScreenSharingCapability').and.callFake(function (callback) {
+          callback({supported: false});
+        });
+        scope.toggleShareScreen();
+        expect(scope.screenShareSupported).toBe(false);
+      });
+      it('Prompts to install if the extension is not installed', function () {
+        expect(scope.promptToInstall).toBe(false);
+        spyOn(OT, 'checkScreenSharingCapability').and.callFake(function (callback) {
+          callback({supported: true, extensionInstalled: false});
+        });
+        scope.toggleShareScreen();
+        expect(scope.promptToInstall).toBe(true);
+        expect(scope.selectingScreenSource).toBe(false);
+      });
+      it('Shares your screen if supported and the extension is installed', function () {
+        expect(scope.sharingMyScreen).toBe(false);
+        spyOn(OT, 'checkScreenSharingCapability').and.callFake(function (callback) {
+          callback({supported: true, extensionInstalled: true});
+        });
+        scope.toggleShareScreen();
+        expect(scope.sharingMyScreen).toBe(true);
+        expect(scope.selectingScreenSource).toBe(false);
+      });
+      it('Stops sharing if you previously were', function () {
+        scope.sharingMyScreen = true;
+        scope.toggleShareScreen();
+        expect(scope.sharingMyScreen).toBe(false);
+      });
+      it('Stops sharing if the stream is destroyed', function () {
+        scope.sharingMyScreen = true;
+        scope.publisher = {id: 'screenPublisher'};
+        scope.$emit('otStreamDestroyed');
+        expect(scope.sharingMyScreen).toBe(false);
+      });
+      it('Shows a failed message if you get a otPublisherError error', function () {
+        scope.sharingMyScreen = true;
+        scope.$emit('otPublisherError', {message: 'mockErrorMessage'}, {id: 'screenPublisher'});
+        expect(scope.sharingMyScreen).toBe(false);
+        expect(scope.screenShareFailed).toBe('mockErrorMessage');
       });
     });
   });

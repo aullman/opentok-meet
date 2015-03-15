@@ -1,11 +1,11 @@
-function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
+function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL, chromeExtensionId) {
     $scope.streams = OTSession.streams;
     $scope.sharingMyScreen = false;
     $scope.publishing = false;
     $scope.screenBig = true;
     $scope.archiveId = null;
     $scope.archiving = false;
-    $scope.screenShareSupported = !!navigator.webkitGetUserMedia;
+    $scope.screenShareSupported = false;
     $scope.isAndroid = /Android/g.test(navigator.userAgent);
     $scope.connected = false;
     $scope.screenShareFailed = null;
@@ -17,25 +17,18 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
     $scope.leaving = false;
     $scope.selectingScreenSource = false;
     $scope.promptToInstall = false;
-    
+
+    OT.registerScreenSharingExtension('chrome', chromeExtensionId);
+    OT.checkScreenSharingCapability(function (response) {
+      $scope.screenShareSupported = response.supported && response.extensionRegistered !== false;
+      $scope.$apply();
+    });
+
     $scope.screenPublisherProps = {
         name: "screen",
         style:{nameDisplayMode:"off"},
         publishAudio: false,
-        constraints: {
-            video: {
-                mandatory: {
-                    maxWidth: 1920,
-                    maxHeight: 1080
-                },
-                optional: []
-            },
-            audio: false
-        },
-        mirror: false,
-        width: screen.width,
-        height: screen.height,
-        aspectRatio: screen.width / screen.height
+        videoSource: 'screen'
     };
     
     var facePublisherPropsHD = {
@@ -66,48 +59,19 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
         if (!$scope.sharingMyScreen && !$scope.selectingScreenSource) {
           $scope.selectingScreenSource = true;
           $scope.screenShareFailed = null;
-          
-          var screenSharing = OTChromeScreenSharingExtensionHelper('gloebbmiakfjnkcohlmbciijakonfehm');
-          screenSharing.isAvailable(function (extensionIsAvailable) {
-            if (extensionIsAvailable) {
-              screenSharing.getVideoSource(function(error, source) {
-                $scope.$apply(function () {
-                  if (error) {
-                    // either the extension is not available or the user clicked cancel
-                    $scope.screenShareFailed = error.message;
-                  } else {
-                    $scope.screenPublisherProps.videoSource = source;
-                    $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSource = 'desktop';
-                    $scope.screenPublisherProps.constraints.video.mandatory.chromeMediaSourceId = source.deviceId;
-                    
-                    // REMOVE ME: This is to fix a bug in opentok that that gives you InvalidStateError
-                    // Because of no audio context. With the next release of OpenTok we can remove this
-                    // workaround
-                    var oldHasCapabilities = OT.$.hasCapabilities;
-                    OT.$.hasCapabilities = function (type) {
-                      if (type === 'webAudio') {
-                        return false;
-                      } else {
-                        oldHasCapabilities.apply(this, arguments);
-                      }
-                    };
-                    $timeout(function () {
-                      // After the digest cycle completes we want to put back OT.$.hasCapabilities
-                      OT.$.hasCapabilities = oldHasCapabilities;
-                    }, 0, false);
-                    // END REMOVE ME:
-                    
-                    $scope.sharingMyScreen = true;
-                  }
-                  $scope.selectingScreenSource = false;
-                });
-              });
-            } else {
-              $scope.$apply(function () {
+
+          OT.checkScreenSharingCapability(function (response) {
+            if(!response.supported || response.extensionRegistered === false) {
+                $scope.screenShareSupported = false;
+                $scope.selectingScreenSource = false;
+            } else if(response.extensionInstalled === false) {
                 $scope.promptToInstall = true;
                 $scope.selectingScreenSource = false;
-              });
+            } else {
+              $scope.sharingMyScreen = true;
+              $scope.selectingScreenSource = false;
             }
+            $scope.$apply();
           });
         } else if ($scope.sharingMyScreen) {
           $scope.sharingMyScreen = false;
@@ -115,7 +79,7 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
     };
     
     $scope.installScreenshareExtension = function () {
-      chrome.webstore.install('https://chrome.google.com/webstore/detail/gloebbmiakfjnkcohlmbciijakonfehm', function () {
+      chrome.webstore.install('https://chrome.google.com/webstore/detail/' + chromeExtensionId, function () {
         console.log('successfully installed');
       }, function () {
         console.error('failed to install', arguments);
@@ -196,7 +160,15 @@ function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomSe
             });
         }
     });
-    
+
+    $scope.$on("otStreamDestroyed", function (event) {
+      if (event.targetScope.publisher.id === 'screenPublisher') {
+        $scope.$apply(function () {
+          $scope.sharingMyScreen = false;
+        });
+      }
+    });
+
     $scope.toggleWhiteboard = function () {
         $scope.showWhiteboard = !$scope.showWhiteboard;
         $scope.whiteboardUnread = false;
