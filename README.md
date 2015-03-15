@@ -31,3 +31,6 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 
 * You can run the unit tests using karma with `npm test`
 * You can run E2E tests using protractor with `npm run protractor`
+  * Make sure that you have started your server `npm start`
+  * Updated [protractor.conf.js](/tests/protractor.conf.js) to point to your local server and your local copy of the screensharing extension for Chrome. 
+  * Also make sure that your screensharing extension is allowing access to your local server by updating the matches property in the [manifest.json](https://github.com/opentok/screensharing-extensions/blob/master/chrome/ScreenSharing/manifest.json#L16) file.
