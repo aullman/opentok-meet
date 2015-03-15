@@ -20,13 +20,11 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
-    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js",
-    "test-single-run": "node node_modules/karma/bin/karma start tests/karma.conf.js  --single-run",
+    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js --single-run --browsers Firefox",
+    "test-run": "node node_modules/karma/bin/karma start tests/karma.conf.js",
     "start": "node app.js",
-
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
-
     "preprotractor": "npm run update-webdriver",
     "protractor": "node node_modules/protractor/bin/protractor tests/protractor.conf.js"
   },
@@ -34,6 +32,7 @@
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.7",
+    "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "protractor": "^1.7.0"
   }
