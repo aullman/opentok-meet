@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/aullman/opentok-meet.svg?branch=master)](https://travis-ci.org/aullman/opentok-meet)
+[![Code Climate](https://codeclimate.com/github/aullman/opentok-meet/badges/gpa.svg)](https://codeclimate.com/github/aullman/opentok-meet)
+[![Test Coverage](https://codeclimate.com/github/aullman/opentok-meet/badges/coverage.svg)](https://codeclimate.com/github/aullman/opentok-meet)
 
 opentok-meet
 ===============
