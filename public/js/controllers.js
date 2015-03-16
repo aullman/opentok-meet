@@ -1,7 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'chromeExtensionId',
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'chromeExtensionId', 'mouseMoveTimeoutTime',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      chromeExtensionId) {
+      chromeExtensionId, mouseMoveTimeoutTime) {
   $scope.streams = OTSession.streams;
   $scope.sharingMyScreen = false;
   $scope.publishing = false;
@@ -139,6 +139,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }
   };
 
+  // This is the double click to enlarge functionality
   // It's a bit weird to handle changes in size at this level. Really this should be
   // in the Subscriber Directive but I'm trying not to pollute the generic 
   // Subscriber Directive
@@ -280,7 +281,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.$apply(function() {
         $scope.mouseMove = false;
       });
-    }, 5000);
+    }, mouseMoveTimeoutTime);
   };
   $window.addEventListener('mousemove', mouseMoved);
   $window.addEventListener('touchstart', mouseMoved);

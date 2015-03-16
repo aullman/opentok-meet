@@ -8,7 +8,14 @@
       "angular": true,
       "$": true,
       "cordova": true,
-      "opentokMeet": true
+      "opentokMeet": true,
+      "describe": true,
+      "beforeEach": true,
+      "spyOn": true,
+      "inject": true,
+      "jasmine": true,
+      "it": true,
+      "expect": true
     },
     "globalstrict": true,
     "node": true,
