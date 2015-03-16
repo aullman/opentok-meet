@@ -1,11 +1,9 @@
 var express = require("express"),
     fs = require("fs"),
     OpenTok = require("opentok"),
-    moniker = require("moniker"),
     https = require("https"),
     app = express(),
-    config,
-    rooms = {};
+    config;
 
 if(process.env.HEROKU) {
     config = {
@@ -292,8 +290,6 @@ app.post('/:room/stopArchive', function (req, res) {
         }
     });
 });
-
-var generator = moniker.generator([moniker.noun]);
 
 app.get('/', function(req, res) {
     res.render('index.ejs');
