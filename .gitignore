@@ -25,3 +25,7 @@ server.crt
 server.csr
 
 dump.rdb
+
+/coverage/*
+OpenTok-iOS-2.4.0/
+opentok-ios-sdk-*

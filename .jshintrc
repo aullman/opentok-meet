@@ -1,0 +1,31 @@
+{
+    "globals": {
+      "TB": true,
+      "OT": true,
+      "OTPlugin": true,
+      "OTHelpers": true,
+      "chrome": true,
+      "angular": true,
+      "$": true,
+      "cordova": true,
+      "opentokMeet": true
+    },
+    "globalstrict": true,
+    "node": true,
+    "browser": true,
+    "esnext": true,
+    "strict": false,
+    "camelcase": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "expr": true,
+    "indent": 2,
+    "latedef": true,
+    "maxlen": 100,
+    "newcap": true,
+    "quotmark": "single",
+    "smarttabs": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+}
