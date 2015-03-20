@@ -1,7 +1,7 @@
 var OpenTok = require('opentok');
 
 module.exports = function(redis, ot) {
-  return {
+  var roomStore = {
     isP2P: function (room) {
       return room.toLowerCase().indexOf('p2p') >= 0;
     },
@@ -17,7 +17,7 @@ module.exports = function(redis, ot) {
           var props = {
             mediaMode: 'routed'
           };
-          if (this.isP2P(room)) {
+          if (roomStore.isP2P(room)) {
             props.mediaMode = 'relayed';
           }
           var otSDK = ot;
@@ -72,4 +72,5 @@ module.exports = function(redis, ot) {
       });
     }
   };
+  return roomStore;
 };
