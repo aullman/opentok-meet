@@ -57,7 +57,8 @@ describe('OpenTok Meet App', function() {
           expect(publishSDBtn.isPresent()).toBe(false);
         });
 
-        it('publishBtn toggles the publisher when clicked and goes between green and red and publishes in HD', function () {
+        it('publishBtn toggles the publisher when clicked and goes between green and red ' +
+            'and publishes in HD', function () {
           var publisher = element(by.css('div#facePublisher'));
           expect(publisher.isPresent()).toBe(true);
           publishBtn.click();
@@ -104,7 +105,8 @@ describe('OpenTok Meet App', function() {
           expect(showWhiteboardBtn.getAttribute('class')).toContain('green');
         });
 
-        it('toggles the whiteboard when you click it and the button goes between green and red', function () {
+        it('toggles the whiteboard when you click it and the button goes between green and red',
+            function () {
           browser.wait(function () {
             return element(by.css('ot-whiteboard')).isPresent();
           }, 10000);
@@ -128,7 +130,8 @@ describe('OpenTok Meet App', function() {
           expect(showEditorBtn.getAttribute('class')).toContain('green');
         });
 
-        it('toggles the editor when you click it and the button goes between green and red', function () {
+        it('toggles the editor when you click it and the button goes between green and red',
+            function () {
           browser.wait(function () {
             return element(by.css('ot-editor')).isPresent();
           }, 10000);
@@ -184,8 +187,10 @@ describe('OpenTok Meet App', function() {
             return element(by.css('#screenPublisher')).isPresent();
           }, 10000);
         });
-        it('shows an install prompt when you click it and the extension is not installed', function (done) {
-          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(function () {
+        it('shows an install prompt when you click it and the extension is not installed',
+            function (done) {
+          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+              .then(function () {
             expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
             expect(screenShareBtn.getAttribute('class')).toContain('green');
             screenShareBtn.click();
@@ -250,19 +255,39 @@ describe('OpenTok Meet App', function() {
       secondBrowser.get('testRoom');
     });
 
-    it('should subscribe to one another and display a video element with the right videoWidth and videoHeight', function () {
-      var firstSubscriberVideo = element(by.css('.OT_subscriber:not(.OT_loading) video'));
-      var secondSubscriberVideo = secondBrowser.element(by.css('.OT_subscriber:not(.OT_loading) video'));
-      browser.wait(function () {
-        return firstSubscriberVideo.isPresent();
+    describe('2 browsers subscribing to one another', function () {
+      var firstSubscriberVideo,
+        secondSubscriberVideo,
+        firstSubscriber,
+        secondSubscriber;
+      beforeEach(function () {
+        firstSubscriber = element(by.css('ot-subscriber'));
+        secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
+        firstSubscriberVideo = element(by.css('ot-subscriber:not(.OT_loading) video'));
+        secondSubscriberVideo = secondBrowser.element(by.css(
+          'ot-subscriber:not(.OT_loading) video'));
+        browser.wait(function () {
+          return firstSubscriberVideo.isPresent();
+        });
+        secondBrowser.wait(function () {
+          return secondSubscriberVideo.isPresent();
+        });
       });
-      secondBrowser.wait(function () {
-        return secondSubscriberVideo.isPresent();
+
+      it('should display a video element with the right videoWidth and videoHeight', function () {
+        expect(firstSubscriberVideo.getAttribute('videoWidth')).toBe('1280');
+        expect(firstSubscriberVideo.getAttribute('videoHeight')).toBe('720');
+        expect(secondSubscriberVideo.getAttribute('videoWidth')).toBe('1280');
+        expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe('720');
       });
-      expect(firstSubscriberVideo.getAttribute('videoWidth')).toBe('1280');
-      expect(firstSubscriberVideo.getAttribute('videoHeight')).toBe('720');
-      expect(secondSubscriberVideo.getAttribute('videoWidth')).toBe('1280');
-      expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe('720');
+
+      it('subscribers should change size when you double-click', function () {
+        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
+        browser.actions().doubleClick(firstSubscriber).perform();
+        expect(firstSubscriber.getAttribute('class')).toContain('OT_big');
+        browser.actions().doubleClick(firstSubscriber).perform();
+        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
+      });
     });
   });
 });
