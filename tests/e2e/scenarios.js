@@ -1,5 +1,7 @@
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
-
+/* global browser: false */
+/* global element: false */
+/* global by: false */
 describe('OpenTok Meet App', function() {
   describe('Room', function() {
 
@@ -87,7 +89,7 @@ describe('OpenTok Meet App', function() {
             browser.wait(function () {
               return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
             }, 10000);
-            var publisherVideo = publisher.element(by.css('video'));
+            //var publisherVideo = publisher.element(by.css('video'));
             // Not sure why but below fails if I run all the tests but not 
             // if I run this test alone
             //expect(publisherVideo.getAttribute('videoWidth')).toBe('640');
@@ -254,6 +256,9 @@ describe('OpenTok Meet App', function() {
       secondBrowser = browser.forkNewDriverInstance();
       secondBrowser.get('testRoom');
     });
+    afterEach(function () {
+      secondBrowser.close();
+    });
 
     describe('2 browsers subscribing to one another', function () {
       var firstSubscriberVideo,
@@ -327,12 +332,13 @@ describe('OpenTok Meet App', function() {
           });
 
           it('displays the text', function () {
-            expect(defaultText.getInnerHtml()).toBe('// Write code herehello world')
+            expect(defaultText.getInnerHtml()).toContain('hello world');
           });
 
           it('makes the red dot blink for the first browser', function () {
             browser.wait(function () {
-              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn')).isPresent();
+              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
+                .isPresent();
             });
           });
 
@@ -345,22 +351,18 @@ describe('OpenTok Meet App', function() {
             });
             
             it('text shows up on the first browser', function () {
-              expect(firstBrowserText.getInnerHtml()).toBe('// Write code herehello world');
+              expect(firstBrowserText.getInnerHtml()).toContain('hello world');
             });
 
             describe('when you enter text on the first browser', function () {
               beforeEach(function () {
                 browser.actions().mouseDown(firstBrowserText).perform();
-                browser.actions().sendKeys('hello world').perform();
+                browser.actions().sendKeys('foo bar').perform();
               });
 
-              it('makes it to the second browser', function (done) {
-                setTimeout(function () {
-                  defaultText.getInnerHtml().then(function (innerHtml) {
-                    expect(innerHtml).toBe('// Write code hello worldherehello world');
-                    done();
-                  });
-                }, 1000);
+              it('makes it to the second browser within 2 seconds', function () {
+                browser.sleep(2000);
+                expect(defaultText.getInnerHtml()).toContain('foo bar');
               });
             });
           });

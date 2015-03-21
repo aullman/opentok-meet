@@ -11,6 +11,7 @@
       "opentokMeet": true,
       "describe": true,
       "beforeEach": true,
+      "afterEach": true,
       "spyOn": true,
       "inject": true,
       "jasmine": true,
