@@ -231,7 +231,7 @@ describe('OpenTok Meet App', function() {
     
     var roomField = element(by.model('room')),
       submit = element(by.css('#joinRoomBtn'));
-    
+
     it('should go to a room when you click the join button', function () {
       roomField.sendKeys('testRoom');
       submit.click();
@@ -299,6 +299,72 @@ describe('OpenTok Meet App', function() {
           expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
           done();
         }, 1000);
+      });
+
+      describe('using the collaborative editor', function () {
+        var firstShowEditorBtn, secondShowEditorBtn, defaultText;
+        beforeEach(function () {
+          firstShowEditorBtn = element(by.css('#showEditorBtn'));
+          secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
+          secondShowEditorBtn.click();
+          secondBrowser.wait(function () {
+            return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          });
+          defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+        });
+
+        it('contains the default text', function () {
+          expect(defaultText.isPresent()).toBe(true);
+          expect(defaultText.getInnerHtml()).toBe('// Write code here');
+        });
+
+        describe('when you enter text on the second browser', function () {
+          var firstBrowserText;
+          beforeEach(function () {
+            firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
+            secondBrowser.actions().mouseDown(defaultText).perform();
+            secondBrowser.actions().sendKeys('hello world').perform();
+          });
+
+          it('displays the text', function () {
+            expect(defaultText.getInnerHtml()).toBe('// Write code herehello world')
+          });
+
+          it('makes the red dot blink for the first browser', function () {
+            browser.wait(function () {
+              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn')).isPresent();
+            });
+          });
+
+          describe('showing the editor on the first browser', function () {
+            beforeEach(function () {
+              firstShowEditorBtn.click();
+              browser.wait(function () {
+                return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+              });
+            });
+            
+            it('text shows up on the first browser', function () {
+              expect(firstBrowserText.getInnerHtml()).toBe('// Write code herehello world');
+            });
+
+            describe('when you enter text on the first browser', function () {
+              beforeEach(function () {
+                browser.actions().mouseDown(firstBrowserText).perform();
+                browser.actions().sendKeys('hello world').perform();
+              });
+
+              it('makes it to the second browser', function (done) {
+                setTimeout(function () {
+                  defaultText.getInnerHtml().then(function (innerHtml) {
+                    expect(innerHtml).toBe('// Write code hello worldherehello world');
+                    done();
+                  });
+                }, 1000);
+              });
+            });
+          });
+        });
       });
     });
   });
