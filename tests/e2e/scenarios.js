@@ -288,6 +288,18 @@ describe('OpenTok Meet App', function() {
         browser.actions().doubleClick(firstSubscriber).perform();
         expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
       });
+
+      it('subscribers change size when you click the resize button', function (done) {
+        expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+        var resizeBtn = secondBrowser.element(by.css('ot-subscriber .resize-btn'));
+        secondBrowser.actions().mouseDown(secondSubscriber).perform();
+        // Have to wait for the button to show up
+        setTimeout(function () {
+          resizeBtn.click();
+          expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+          done();
+        }, 1000);
+      });
     });
   });
 });
