@@ -12,7 +12,7 @@ exports.config = {
     }
   },
 
-  chromeOnly: true,
+  directConnect: true,
 
   baseUrl: 'https://adam.local:5000/',
 
