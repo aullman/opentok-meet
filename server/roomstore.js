@@ -8,6 +8,11 @@ module.exports = function(redis, ot) {
     getRooms: function(callback) {
       redis.hkeys('rooms', callback);
     },
+    clearRooms: function (callback) {
+      // This deletes all of the rooms. Only use this when migrating to
+      // a different environment
+      redis.del('rooms', callback);
+    },
     getRoom: function(room, apiKey, secret, goToRoom) {
       console.log('getRoom: ' + room + ' ' + apiKey + ' ' + secret);
       goToRoom = arguments[arguments.length - 1];

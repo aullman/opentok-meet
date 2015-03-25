@@ -42,7 +42,7 @@ app.configure(function() {
   app.use(app.router);
 });
 
-var ot = new OpenTok(config.apiKey, config.apiSecret);
+var ot = new OpenTok(config.apiKey, config.apiSecret, 'https://anvil-tbdev.opentok.com');
 
 require('./server/routes.js')(app, config, redis, ot);
 
