@@ -5,7 +5,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.streams = OTSession.streams;
   $scope.sharingMyScreen = false;
   $scope.publishing = false;
-  $scope.screenBig = true;
   $scope.archiveId = null;
   $scope.archiving = false;
   $scope.screenShareSupported = false;
@@ -150,13 +149,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     } else {
       event.targetScope.stream.othLarge = !event.targetScope.stream.othLarge;
     }
-    setTimeout(function() {
-      event.targetScope.$emit('otLayout');
-    }, 10);
-  });
-
-  $scope.$on('changeScreenSize', function(event) {
-    $scope.screenBig = !$scope.screenBig;
     setTimeout(function() {
       event.targetScope.$emit('otLayout');
     }, 10);

@@ -31,11 +31,11 @@ describe('OpenTok Meet App', function() {
   describe('Room', function() {
 
     beforeEach(function() {
-      browser.get('testRoom');
+      browser.get('testRoomp2p');
     });
     
     it('should have the right title', function () {
-      expect(browser.getTitle()).toEqual('OpenTok Meet : testRoom');
+      expect(browser.getTitle()).toEqual('OpenTok Meet : testRoomp2p');
     });
 
     it('should have a loader being displayed', function () {
@@ -206,15 +206,29 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      describe('screenshare button', function () {
+      ddescribe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
-        it('shares the screen when you click it', function () {
+        
+        it('exists and is green', function () {
+          expect(screenShareBtn.isPresent()).toBe(true);
           expect(screenShareBtn.getAttribute('class')).toContain('green');
-          screenShareBtn.click();
-          expect(screenShareBtn.getAttribute('class')).toContain('red');
-          browser.wait(function () {
-            return element(by.css('#screenPublisher')).isPresent();
-          }, 10000);
+        });
+        
+        describe('has been clicked', function () {
+          beforeEach(function () {
+            screenShareBtn.click();
+          });
+          it('shares the screen and the screen moves when it is dragged', function () {
+            expect(screenShareBtn.getAttribute('class')).toContain('red');
+            var screenPublisher = element(by.css('#screenPublisher'));
+            browser.wait(function () {
+              return screenPublisher.isPresent();
+            }, 10000);
+            var oldLocation = screenPublisher.getLocation();
+            browser.actions().dragAndDrop(screenPublisher, element(by.css('body'))).perform();
+            var newLocation = screenPublisher.getLocation();
+            expect(newLocation).not.toEqual(oldLocation);
+          });
         });
         it('shows an install prompt when you click it and the extension is not installed',
             function (done) {
@@ -270,26 +284,26 @@ describe('OpenTok Meet App', function() {
       submit = element(by.css('#joinRoomBtn'));
 
     it('should go to a room when you click the join button', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys('testRoomp2p');
       submit.click();
       
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoomp2p');
     });
     
     it('should go to a room when you submit the form', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys('testRoomp2p');
       roomField.submit();
       
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoomp2p');
     });
   });
 
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get('testRoom');
+      browser.get('testRoomp2p');
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get('testRoom');
+      secondBrowser.get('testRoomp2p');
     });
     afterEach(function () {
       secondBrowser.close();

@@ -21,19 +21,27 @@ body input {
 }
 
 
-#facePublisher {
-    width: 178px;
+#facePublisher, #screenPublisher {
+    width: 160px;
     height: 100px;
     display: block;
     position: absolute;
     cursor: move;
     cursor: -webkit-grab;
     cursor: -moz-grab;
-    top: 15px;
-    right: 15px;
     border-radius: 5px;
     z-index: 99;
     transition: width 200ms, height 200ms ease;
+}
+
+#facePublisher {
+    top: 15px;
+    right: 15px;
+}
+
+#screenPublisher {
+    top: 30px;
+    left: 30px;
 }
 
 #facePublisher ot-publisher {
@@ -43,7 +51,7 @@ body input {
     margin: 0;
 }
 
-#facePublisher:active {
+#facePublisher:active, #screenPublisher:active {
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
 }
@@ -260,7 +268,7 @@ button:disabled {
 }
 
 @media screen and (max-width: 650px) {  
-  #facePublisher {
+  #facePublisher, #screenPublisher {
       width: 89px;
       height: 50px;
   }
@@ -278,14 +286,14 @@ button:disabled {
 }
 
 @media only screen and (orientation: portrait) {
-    #facePublisher {
+    #facePublisher, #screenPublisher {
         width: 100px;
         height: 150px;
     }
 }
 
 @media only screen and (orientation: portrait) and (max-width: 650px) {
-    #facePublisher {
+    #facePublisher, #screenPublisher {
         width: 50px;
         height: 75px;
     }
