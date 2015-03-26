@@ -106,7 +106,7 @@
                 <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
             </div> -->
         </div>
-        <i id="connCount" class="ion-ios7-people"> {{connections.length}}</i>
+        <i id="connCount" class="ion-ios7-people" title="{{connections.length}} participant in the room"> {{connections.length}}</i>
         <div id="statusMessages">
             <div id="archiveStatus" class="statusMessage" ng-if="archiveId">
                 Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
