@@ -304,20 +304,6 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
-    describe('changeScreenSize', function () {
-      it('switches screenBig', function () {
-        expect(scope.screenBig).toBe(true);
-        scope.$emit('changeScreenSize');
-        expect(scope.screenBig).toBe(false);
-      });
-      it('emits otLayout', function (done) {
-        scope.$on('otLayout', function () {
-          done();
-        });
-        scope.$emit('changeScreenSize');
-      });
-    });
-
     describe('RoomService.getRoom()', function () {
       beforeEach(function () {
         roomDefer.resolve({
