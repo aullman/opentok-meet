@@ -127,10 +127,6 @@ ot-editor .CodeMirror {
   z-index: 98;
 }
 
-body.mouse-move #bottomBar {
-  opacity: 1;
-}
-
 button.icon-left:before {
     font-family: "Ionicons";
     padding-right: 8px;
@@ -299,10 +295,6 @@ button:disabled {
     }
 }
 
-body.mouse-move #statusMessages {
-  opacity: 1;
-}
-
 #bottomBar #footer {
     position: absolute;
     bottom: -15px;
@@ -317,4 +309,18 @@ body.mouse-move #statusMessages {
 
 #bottomBar:hover ~ #statusMessages > #screenShareUnsupported {
     opacity: 1;
+}
+
+#connCount {
+    color: #DCD9CD;
+    opacity: 0;
+    font-size: 15px;
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    transition: opacity 200ms ease;
+}
+
+body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount {
+  opacity: 1;
 }
