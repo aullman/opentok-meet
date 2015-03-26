@@ -252,23 +252,24 @@ describe('OpenTok Meet App', function() {
 
       describe('connCount icon', function () {
         var connCount;
-        beforeEach(function (done) {
+        beforeEach(function () {
           connCount = element(by.css('#connCount'));
+        });
+        it('shows up when you move the mouse', function () {
+          expect(connCount.isPresent()).toBe(true);
+          expect(connCount.isDisplayed()).toBe(false);
+          browser.actions().mouseDown(connCount).mouseMove(element(by.css('body'))).perform();
+          expect(connCount.isDisplayed()).toBe(true);
+        });
+        it('is present and displays 1 connection', function (done) {
           // Wait until we're connected
           customWait(function () {
             return element(by.css('div.session-connected')).isPresent();
           }).then(function () {
+            expect(connCount.getInnerHtml()).toContain('1');
+            expect(connCount.getAttribute('title')).toBe('1 participant in the room');
             done();
           });
-        });
-        it('is present and displays 1 connection', function () {
-          expect(connCount.isPresent()).toBe(true);
-          expect(connCount.getInnerHtml()).toContain('1');
-        });
-        it('shows up when you move the mouse', function () {
-          expect(connCount.isDisplayed()).toBe(false);
-          browser.actions().mouseDown(connCount).perform();
-          expect(connCount.isDisplayed()).toBe(true);
         });
       });
 
