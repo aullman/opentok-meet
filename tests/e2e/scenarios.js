@@ -250,7 +250,7 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      ddescribe('connCount icon', function () {
+      describe('connCount icon', function () {
         var connCount;
         beforeEach(function (done) {
           connCount = element(by.css('#connCount'));
@@ -263,7 +263,7 @@ describe('OpenTok Meet App', function() {
         });
         it('is present and displays 1 connection', function () {
           expect(connCount.isPresent()).toBe(true);
-          expect(connCount.getInnerHtml()).toBe(1);
+          expect(connCount.getInnerHtml()).toContain('1');
         });
         it('shows up when you move the mouse', function () {
           expect(connCount.isDisplayed()).toBe(false);
