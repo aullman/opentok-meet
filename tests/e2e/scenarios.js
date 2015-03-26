@@ -250,6 +250,28 @@ describe('OpenTok Meet App', function() {
         });
       });
 
+      describe('connCount icon', function () {
+        var connCount;
+        beforeEach(function (done) {
+          connCount = element(by.css('#connCount'));
+          // Wait until we're connected
+          customWait(function () {
+            return element(by.css('div.session-connected')).isPresent();
+          }).then(function () {
+            done();
+          });
+        });
+        it('is present and displays 1 connection', function () {
+          expect(connCount.isPresent()).toBe(true);
+          expect(connCount.getInnerHtml()).toContain('1');
+        });
+        it('shows up when you move the mouse', function () {
+          expect(connCount.isDisplayed()).toBe(false);
+          browser.actions().mouseDown(connCount).perform();
+          expect(connCount.isDisplayed()).toBe(true);
+        });
+      });
+
       describe('changeRoom button', function () {
         var changeRoomBtn = element(by.css('#changeRoom'));
 

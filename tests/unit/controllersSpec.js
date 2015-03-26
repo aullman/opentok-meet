@@ -39,6 +39,8 @@ describe('OpenTok Meet controllers', function() {
       };
       $httpBackend = $injector.get('$httpBackend');
       MockOTSession = jasmine.createSpyObj('OTSession', ['init']);
+      MockOTSession.streams = [];
+      MockOTSession.connections = [];
       ctrl = $controller('RoomCtrl', {
         $scope: scope,
         $window: windowMock,
@@ -51,6 +53,14 @@ describe('OpenTok Meet controllers', function() {
         mouseMoveTimeoutTime: 10
       });
     }));
+
+    it('should define streams', function () {
+      expect(scope.streams).toBe(MockOTSession.streams);
+    });
+
+    it('should define connections', function () {
+      expect(scope.connections).toBe(MockOTSession.connections);
+    });
 
     it('should define screenPublisherProps', function() {
       expect(scope.screenPublisherProps).toEqual({
