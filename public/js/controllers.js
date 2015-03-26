@@ -3,6 +3,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
       chromeExtensionId, mouseMoveTimeoutTime) {
   $scope.streams = OTSession.streams;
+  $scope.connections = OTSession.connections;
   $scope.sharingMyScreen = false;
   $scope.publishing = false;
   $scope.archiveId = null;
