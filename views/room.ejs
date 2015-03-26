@@ -42,13 +42,6 @@
                     ng-dblclick="$emit('changeSize')">
                         <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');"></button>
                 </ot-subscriber>
-                <ot-publisher id="screenPublisher"
-                    ng-if="sharingMyScreen"
-                    props='screenPublisherProps'
-                    ng-class="{OT_big: screenBig}" 
-                    ng-dblclick="$emit('changeScreenSize');">
-                    <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeScreenSize');"></button>
-                </ot-publisher>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
                     width="1280"
@@ -73,6 +66,11 @@
                     props="facePublisherProps">
                 </ot-publisher>
             </div>
+            <ot-publisher id="screenPublisher"
+                ng-if="sharingMyScreen"
+                props='screenPublisherProps'
+                draggable="true">
+            </ot-publisher>
         </div>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
         <div id="shareInfo" 
