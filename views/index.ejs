@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="opentok-meet-login">
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <meta name="mobile-web-app-capable" content="yes">
@@ -30,13 +30,13 @@
             </form>
         </div>
         <script type="text/javascript" charset="utf-8">
-        function MainCtrl($scope, $window) {
+        angular.module('opentok-meet-login', [])
+          .controller('MainCtrl', function($scope, $window) {
             $scope.room;
             $scope.joinRoom = function () {
                 $window.location.href = $window.location.href + encodeURIComponent($scope.room);
             }
-        };
-        
+        });
         </script>
     </body>
 </html>

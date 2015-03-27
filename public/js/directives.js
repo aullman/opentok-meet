@@ -63,4 +63,14 @@ angular.module('opentok-meet').directive('draggable', function($document) {
         });
       }
     };
+  })
+  .directive('muteVideo', function () {
+    return {
+      restrict: 'E',
+      scope: {
+        muted: '='
+      },
+      template: '<i class="video-icon ion-ios7-videocam"></i><i class="cross-icon" ' +
+        'ng-class="{\'ion-ios7-checkmark\': muted, \'ion-ios7-close\': !muted}"></i>'
+    };
   });

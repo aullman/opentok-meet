@@ -4,23 +4,6 @@
 /* global by: false */
 /* global protractor: false */
 
-// Had to write a custom wait function because for some reason
-// waiting for an element to be present isn't working in Firefox
-var customWait = function(expectation) {
-  var deferred = protractor.promise.defer();
-  var check = function () {
-    expectation().then(function (expect) {
-      if (expect) {
-        deferred.fulfill();
-      } else {
-        setTimeout(check, 50);
-      }
-    });
-  };
-  check();
-  return deferred.promise;
-};
-
 describe('OpenTok Meet App', function() {
   beforeEach(function () {
     browser.getCapabilities().then(function (cap) {
@@ -72,6 +55,28 @@ describe('OpenTok Meet App', function() {
         browser.actions().dragAndDrop(publisher, element(by.css('body'))).perform();
         var newLocation = publisher.getLocation();
         expect(newLocation).not.toEqual(oldLocation);
+      });
+
+      it('mutes video when you click the mute-video icon', function () {
+        browser.wait(function () {
+          return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
+        }, 10000);
+        var muteVideo = publisher.element(by.css('mute-video'));
+        expect(muteVideo.isPresent()).toBe(true);
+        expect(muteVideo.isDisplayed()).toBe(false);
+        browser.actions().mouseMove(muteVideo).perform();
+        browser.wait(function () {
+          return muteVideo.isDisplayed();
+        }, 10000);
+        expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+        muteVideo.click();
+        expect(muteVideo.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
+        expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+          .toContain('OT_audio-only');
+        muteVideo.click();
+        expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+        expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+          .not.toContain('OT_audio-only');
       });
     });
 
@@ -263,9 +268,9 @@ describe('OpenTok Meet App', function() {
         });
         it('is present and displays 1 connection', function (done) {
           // Wait until we're connected
-          customWait(function () {
+          browser.wait(function () {
             return element(by.css('div.session-connected')).isPresent();
-          }).then(function () {
+          }, 10000).then(function () {
             expect(connCount.getInnerHtml()).toContain('1');
             expect(connCount.getAttribute('title')).toBe('1 participant in the room');
             done();
@@ -276,23 +281,17 @@ describe('OpenTok Meet App', function() {
       describe('changeRoom button', function () {
         var changeRoomBtn = element(by.css('#changeRoom'));
 
-        beforeEach(function (done) {
-          // Wait until we're connected
-          customWait(function () {
-            return element(by.css('div.session-connected')).isPresent();
-          }).then(function () {
-            done();
-          });
+        beforeEach(function () {
           // The below line doesn't work in Firefox for some reason, it just doesn't wait
-          // browser.wait(function () {
-          //   return element(by.css('div.session-connected')).isPresent();
-          // });
+          browser.wait(function () {
+            return element(by.css('div.session-connected')).isPresent();
+          }, 10000);
         });
 
         it('takes you back to the login screen if you click it', function () {
           changeRoomBtn.click();
           browser.sleep(2000);
-          expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl);
+          expect(browser.getCurrentUrl()).toBe(browser.baseUrl);
         });
       });
     });
@@ -309,15 +308,13 @@ describe('OpenTok Meet App', function() {
     it('should go to a room when you click the join button', function () {
       roomField.sendKeys('testRoom');
       submit.click();
-      
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
     });
     
     it('should go to a room when you submit the form', function () {
       roomField.sendKeys('testRoom');
       roomField.submit();
-      
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
     });
   });
 
@@ -344,12 +341,12 @@ describe('OpenTok Meet App', function() {
         secondSubscriberVideo = secondBrowser.element(by.css(
           'ot-subscriber:not(.OT_loading) video'));
         var subscriberWait = {};
-        subscriberWait.first = customWait(function () {
+        subscriberWait.first = browser.wait(function () {
           return firstSubscriberVideo.isPresent();
-        });
-        subscriberWait.second = customWait(function () {
+        }, 10000);
+        subscriberWait.second = browser.wait(function () {
           return secondSubscriberVideo.isPresent();
-        });
+        }, 10000);
         protractor.promise.fullyResolved(subscriberWait).then(function () {
           done();
         });
@@ -366,6 +363,8 @@ describe('OpenTok Meet App', function() {
           browser.browserName === 'chrome' ? '1280' : '640');
         expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe(
           browser.browserName === 'chrome' ? '720' : '480');
+        var connCount = element(by.css('#connCount'));
+        expect(connCount.getInnerHtml()).toContain('2');
       });
 
       it('subscribers should change size when you double-click', function () {
@@ -376,14 +375,37 @@ describe('OpenTok Meet App', function() {
         expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
       });
 
-      it('subscribers change size when you click the resize button', function () {
-        expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
-        var resizeBtn = secondBrowser.element(by.css('ot-subscriber .resize-btn'));
-        secondBrowser.actions().mouseDown(secondSubscriber).perform();
-        // Have to wait for the button to show up
-        browser.sleep(1000);
-        resizeBtn.click();
-        expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+      describe('subscriber buttons', function () {
+        beforeEach(function (done) {
+          // Move the publisher out of the way
+          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:0, left:0});')
+            .then(function () {
+            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            // Have to wait for the buttons to show up
+            browser.sleep(1000).then(function () {
+              done();
+            });
+          });
+        });
+        it('change size button works', function () {
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+          var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
+          resizeBtn.click();
+          expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+          browser.sleep(500);
+          resizeBtn.click();
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+        });
+        it('muteVideo button works', function () {
+          var muteBtn = secondSubscriber.element(by.css('mute-video'));
+          expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+          muteBtn.click();
+          expect(secondSubscriber.getAttribute('class')).toContain('OT_audio-only');
+          expect(muteBtn.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
+          muteBtn.click();
+          expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
+        });
       });
 
       describe('using the collaborative editor', function () {
@@ -392,9 +414,9 @@ describe('OpenTok Meet App', function() {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
           secondShowEditorBtn.click();
-          customWait(function () {
+          browser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }).then(function () {
+          }, 10000).then(function () {
             defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
             done();
           });
@@ -417,22 +439,20 @@ describe('OpenTok Meet App', function() {
             secondBrowser.actions().sendKeys('hello world').perform();
           });
 
-          it('makes the red dot blink for the first browser', function (done) {
+          it('makes the red dot blink for the first browser', function () {
             expect(defaultText.getInnerHtml()).toContain('hello world');
-            customWait(function () {
+            browser.wait(function () {
               return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
                 .isPresent();
-            }).then(function () {
-              done();
-            });
+            }, 10000);
           });
 
           describe('showing the editor on the first browser', function () {
             beforeEach(function (done) {
               firstShowEditorBtn.click();
-              customWait(function () {
+              browser.wait(function () {
                 return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-              }).then(function () {
+              }, 10000).then(function () {
                 browser.sleep(2000).then(function () {
                   done();
                 });
