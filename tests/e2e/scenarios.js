@@ -269,7 +269,7 @@ describe('OpenTok Meet App', function() {
         it('takes you back to the login screen if you click it', function () {
           changeRoomBtn.click();
           browser.sleep(2000);
-          expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl);
+          expect(browser.getCurrentUrl()).toBe(browser.baseUrl);
         });
       });
     });
@@ -286,15 +286,14 @@ describe('OpenTok Meet App', function() {
     it('should go to a room when you click the join button', function () {
       roomField.sendKeys('testRoom');
       submit.click();
-      
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
     });
     
     it('should go to a room when you submit the form', function () {
       roomField.sendKeys('testRoom');
       roomField.submit();
-      
-      expect(browser.getLocationAbsUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
     });
   });
 
