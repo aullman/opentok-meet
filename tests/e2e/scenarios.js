@@ -56,6 +56,23 @@ describe('OpenTok Meet App', function() {
         var newLocation = publisher.getLocation();
         expect(newLocation).not.toEqual(oldLocation);
       });
+
+      it('mutes video when you click the mute-video icon', function () {
+        browser.wait(function () {
+          return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
+        }, 10000);
+        var muteVideo = publisher.element(by.css('mute-video'));
+        expect(muteVideo.isPresent()).toBe(true);
+        expect(muteVideo.isDisplayed()).toBe(false);
+        browser.actions().mouseMove(muteVideo).perform();
+        browser.wait(function () {
+          return muteVideo.isDisplayed();
+        }, 10000);
+        muteVideo.click();
+        browser.sleep(50);
+        expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+          .toContain('OT_audio-only');
+      });
     });
 
     describe('bottomBar', function () {
@@ -286,7 +303,6 @@ describe('OpenTok Meet App', function() {
     it('should go to a room when you click the join button', function () {
       roomField.sendKeys('testRoom');
       submit.click();
-
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
     });
     

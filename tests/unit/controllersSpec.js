@@ -10,7 +10,8 @@ describe('OpenTok Meet controllers', function() {
       $httpBackend,
       roomDefer,
       MockOTSession,
-      documentMock;
+      documentMock,
+      facePublisher;
 
     beforeEach(module('opentok-meet'));
 
@@ -41,6 +42,9 @@ describe('OpenTok Meet controllers', function() {
       MockOTSession = jasmine.createSpyObj('OTSession', ['init']);
       MockOTSession.streams = [];
       MockOTSession.connections = [];
+      facePublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
+      facePublisher.id = 'facePublisher';
+      MockOTSession.publishers = [{}, facePublisher, {}];
       ctrl = $controller('RoomCtrl', {
         $scope: scope,
         $window: windowMock,
@@ -446,6 +450,18 @@ describe('OpenTok Meet controllers', function() {
         scope.shareURL = 'http://mockURL';
         scope.sendEmail();
         expect(windowMock.location.href).toBe('mailto:?subject=Let\'s Meet&body=http://mockURL');
+      });
+    });
+
+    describe('togglePublishVideo', function () {
+      it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
+        expect(scope.publisherVideoMuted).toBe(false);
+        scope.togglePublishVideo();
+        expect(scope.publisherVideoMuted).toBe(true);
+        expect(facePublisher.publishVideo).toHaveBeenCalledWith(false);
+        scope.togglePublishVideo();
+        expect(scope.publisherVideoMuted).toBe(false);
+        expect(facePublisher.publishVideo).toHaveBeenCalledWith(true);
       });
     });
 

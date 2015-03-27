@@ -324,3 +324,33 @@ button:disabled {
 body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount {
   opacity: 1;
 }
+
+/* Mute Video Directive */
+mute-video {
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    bottom: -15px;
+    left: -10px;
+    z-index: 100;
+    transition: opacity 500ms ease-in;
+    opacity: 0;
+}
+
+#facePublisher:hover mute-video {
+    opacity: 1;
+}
+
+mute-video .video-icon {
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+mute-video .cross-icon {
+    font-size: 10px;
+    position: absolute;
+    left: 1.5px;
+    color: black;
+    top: 4px;
+}

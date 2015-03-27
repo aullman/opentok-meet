@@ -69,6 +69,7 @@
                 <ot-publisher id="facePublisher" 
                     props="facePublisherProps">
                 </ot-publisher>
+                <mute-video muted="publisherVideoMuted" ng-click="togglePublishVideo()"></mute-video>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"

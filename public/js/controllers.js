@@ -20,6 +20,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.leaving = false;
   $scope.selectingScreenSource = false;
   $scope.promptToInstall = false;
+  $scope.publisherVideoMuted = false;
 
   OT.registerScreenSharingExtension('chrome', chromeExtensionId);
   OT.checkScreenSharingCapability(function(response) {
@@ -258,6 +259,14 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   $scope.sendEmail = function() {
     $window.location.href = 'mailto:?subject=Let\'s Meet&body=' + $scope.shareURL;
+  };
+
+  $scope.togglePublishVideo = function () {
+    var facePublisher = OTSession.publishers.filter(function (el) {
+      return el.id === 'facePublisher';
+    })[0];
+    facePublisher.publishVideo($scope.publisherVideoMuted);
+    $scope.publisherVideoMuted = !$scope.publisherVideoMuted;
   };
 
   var mouseMoveTimeout;
