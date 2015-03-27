@@ -318,6 +318,24 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
+    describe('muteVideo', function () {
+      var mockSubscriber;
+      beforeEach(function () {
+        mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
+        scope.session.getSubscribersForStream = function () {
+          return [mockSubscriber];
+        };
+      });
+      it('toggles stream.videoMuted and calls subscribeToVideo', function () {
+        scope.stream = {};
+        scope.$emit('muteVideo');
+        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
+        expect(scope.stream.videoMuted).toBe(true);
+        scope.$emit('muteVideo');
+        expect(scope.stream.videoMuted).toBe(false);
+      });
+    });
+
     describe('RoomService.getRoom()', function () {
       beforeEach(function () {
         roomDefer.resolve({

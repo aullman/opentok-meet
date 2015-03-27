@@ -156,6 +156,14 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }, 10);
   });
 
+  $scope.$on('muteVideo', function(event) {
+    var subscriber = $scope.session.getSubscribersForStream(event.targetScope.stream)[0];
+    if (subscriber) {
+      subscriber.subscribeToVideo(!!event.targetScope.stream.videoMuted);
+      event.targetScope.stream.videoMuted = !event.targetScope.stream.videoMuted;
+    }
+  });
+
   $scope.$on('otPublisherError', function(event, error, publisher) {
     if (publisher.id === 'screenPublisher') {
       $scope.$apply(function() {

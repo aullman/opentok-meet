@@ -68,10 +68,15 @@ describe('OpenTok Meet App', function() {
         browser.wait(function () {
           return muteVideo.isDisplayed();
         }, 10000);
+        expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
         muteVideo.click();
-        browser.sleep(50);
+        expect(muteVideo.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
         expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
           .toContain('OT_audio-only');
+        muteVideo.click();
+        expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+        expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+          .not.toContain('OT_audio-only');
       });
     });
 
@@ -358,6 +363,8 @@ describe('OpenTok Meet App', function() {
           browser.browserName === 'chrome' ? '1280' : '640');
         expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe(
           browser.browserName === 'chrome' ? '720' : '480');
+        var connCount = element(by.css('#connCount'));
+        expect(connCount.getInnerHtml()).toContain('2');
       });
 
       it('subscribers should change size when you double-click', function () {
@@ -368,14 +375,37 @@ describe('OpenTok Meet App', function() {
         expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
       });
 
-      it('subscribers change size when you click the resize button', function () {
-        expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
-        var resizeBtn = secondBrowser.element(by.css('ot-subscriber .resize-btn'));
-        secondBrowser.actions().mouseDown(secondSubscriber).perform();
-        // Have to wait for the button to show up
-        browser.sleep(1000);
-        resizeBtn.click();
-        expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+      describe('subscriber buttons', function () {
+        beforeEach(function (done) {
+          // Move the publisher out of the way
+          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:0, left:0});')
+            .then(function () {
+            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            // Have to wait for the buttons to show up
+            browser.sleep(1000).then(function () {
+              done();
+            });
+          });
+        });
+        it('change size button works', function () {
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+          var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
+          resizeBtn.click();
+          expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+          browser.sleep(500);
+          resizeBtn.click();
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+        });
+        it('muteVideo button works', function () {
+          var muteBtn = secondSubscriber.element(by.css('mute-video'));
+          expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+          muteBtn.click();
+          expect(secondSubscriber.getAttribute('class')).toContain('OT_audio-only');
+          expect(muteBtn.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
+          muteBtn.click();
+          expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
+        });
       });
 
       describe('using the collaborative editor', function () {

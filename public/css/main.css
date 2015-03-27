@@ -35,8 +35,8 @@ body input {
 }
 
 #facePublisher {
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
 }
 
 #screenPublisher {
@@ -330,6 +330,9 @@ mute-video {
     color: white;
     cursor: pointer;
     position: absolute;
+}
+
+#facePublisher mute-video {
     bottom: -15px;
     left: -10px;
     z-index: 100;
@@ -353,4 +356,31 @@ mute-video .cross-icon {
     left: 1.5px;
     color: black;
     top: 4px;
+}
+
+ot-subscriber mute-video {
+    position: absolute;
+    transition-property: top,bottom,opacity;
+    transition-duration: .5s;
+    transition-timing-function: ease-in;
+    opacity: 0;
+    top: -25px;
+    right: 65px;
+    margin-top: 2px;
+    z-index: 99;
+}
+
+ot-layout > :hover mute-video {
+    top: 0;
+    opacity: 1;
+}
+
+ot-subscriber mute-video .video-icon {
+    font-size: 32px;
+}
+
+ot-subscriber mute-video .cross-icon {
+    font-size: 17px;
+    top: 7px;
+    left: 2px;
 }
