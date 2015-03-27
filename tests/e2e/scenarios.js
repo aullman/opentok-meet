@@ -4,23 +4,6 @@
 /* global by: false */
 /* global protractor: false */
 
-// Had to write a custom wait function because for some reason
-// waiting for an element to be present isn't working in Firefox
-var customWait = function(expectation) {
-  var deferred = protractor.promise.defer();
-  var check = function () {
-    expectation().then(function (expect) {
-      if (expect) {
-        deferred.fulfill();
-      } else {
-        setTimeout(check, 50);
-      }
-    });
-  };
-  check();
-  return deferred.promise;
-};
-
 describe('OpenTok Meet App', function() {
   beforeEach(function () {
     browser.getCapabilities().then(function (cap) {
@@ -263,9 +246,9 @@ describe('OpenTok Meet App', function() {
         });
         it('is present and displays 1 connection', function (done) {
           // Wait until we're connected
-          customWait(function () {
+          browser.wait(function () {
             return element(by.css('div.session-connected')).isPresent();
-          }).then(function () {
+          }, 10000).then(function () {
             expect(connCount.getInnerHtml()).toContain('1');
             expect(connCount.getAttribute('title')).toBe('1 participant in the room');
             done();
@@ -276,17 +259,11 @@ describe('OpenTok Meet App', function() {
       describe('changeRoom button', function () {
         var changeRoomBtn = element(by.css('#changeRoom'));
 
-        beforeEach(function (done) {
-          // Wait until we're connected
-          customWait(function () {
-            return element(by.css('div.session-connected')).isPresent();
-          }).then(function () {
-            done();
-          });
+        beforeEach(function () {
           // The below line doesn't work in Firefox for some reason, it just doesn't wait
-          // browser.wait(function () {
-          //   return element(by.css('div.session-connected')).isPresent();
-          // });
+          browser.wait(function () {
+            return element(by.css('div.session-connected')).isPresent();
+          }, 10000);
         });
 
         it('takes you back to the login screen if you click it', function () {
@@ -344,12 +321,12 @@ describe('OpenTok Meet App', function() {
         secondSubscriberVideo = secondBrowser.element(by.css(
           'ot-subscriber:not(.OT_loading) video'));
         var subscriberWait = {};
-        subscriberWait.first = customWait(function () {
+        subscriberWait.first = browser.wait(function () {
           return firstSubscriberVideo.isPresent();
-        });
-        subscriberWait.second = customWait(function () {
+        }, 10000);
+        subscriberWait.second = browser.wait(function () {
           return secondSubscriberVideo.isPresent();
-        });
+        }, 10000);
         protractor.promise.fullyResolved(subscriberWait).then(function () {
           done();
         });
@@ -392,9 +369,9 @@ describe('OpenTok Meet App', function() {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
           secondShowEditorBtn.click();
-          customWait(function () {
+          browser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }).then(function () {
+          }, 10000).then(function () {
             defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
             done();
           });
@@ -417,22 +394,20 @@ describe('OpenTok Meet App', function() {
             secondBrowser.actions().sendKeys('hello world').perform();
           });
 
-          it('makes the red dot blink for the first browser', function (done) {
+          it('makes the red dot blink for the first browser', function () {
             expect(defaultText.getInnerHtml()).toContain('hello world');
-            customWait(function () {
+            browser.wait(function () {
               return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
                 .isPresent();
-            }).then(function () {
-              done();
-            });
+            }, 10000);
           });
 
           describe('showing the editor on the first browser', function () {
             beforeEach(function (done) {
               firstShowEditorBtn.click();
-              customWait(function () {
+              browser.wait(function () {
                 return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-              }).then(function () {
+              }, 10000).then(function () {
                 browser.sleep(2000).then(function () {
                   done();
                 });
