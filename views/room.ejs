@@ -45,6 +45,7 @@
                     ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}" 
                     ng-dblclick="$emit('changeSize')">
                         <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');"></button>
+                        <mute-video muted="stream.videoMuted" ng-click="$emit('muteVideo')"></mute-video>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
@@ -69,6 +70,7 @@
                 <ot-publisher id="facePublisher" 
                     props="facePublisherProps">
                 </ot-publisher>
+                <mute-video muted="publisherVideoMuted" ng-click="togglePublishVideo()"></mute-video>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"
