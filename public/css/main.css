@@ -100,6 +100,14 @@ ot-layout > .OT_big button.resize-btn:before {
     content: "\f267";
 }
 
+ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
 ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn {
     top: 0;
     opacity: 1;
