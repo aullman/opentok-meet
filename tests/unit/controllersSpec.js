@@ -332,7 +332,27 @@ describe('OpenTok Meet controllers', function() {
         expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
         expect(scope.stream.videoMuted).toBe(true);
         scope.$emit('muteVideo');
+        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
         expect(scope.stream.videoMuted).toBe(false);
+      });
+    });
+
+    describe('restrictFrameRate', function () {
+      var mockSubscriber;
+      beforeEach(function () {
+        mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
+        scope.session.getSubscribersForStream = function () {
+          return [mockSubscriber];
+        };
+      });
+      it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
+        scope.stream = {};
+        scope.$emit('restrictFrameRate');
+        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
+        expect(scope.stream.restrictedFrameRate).toBe(true);
+        scope.$emit('restrictFrameRate');
+        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
+        expect(scope.stream.restrictedFrameRate).toBe(false);
       });
     });
 
