@@ -333,8 +333,8 @@ mute-video {
 }
 
 #facePublisher mute-video {
-    bottom: -15px;
-    left: -10px;
+    bottom: -14px;
+    left: -7px;
     z-index: 100;
     transition: opacity 500ms ease-in;
     opacity: 0;
