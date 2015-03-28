@@ -387,6 +387,7 @@ describe('OpenTok Meet App', function() {
             });
           });
         });
+
         it('change size button works', function () {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
@@ -396,6 +397,7 @@ describe('OpenTok Meet App', function() {
           resizeBtn.click();
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
         });
+
         it('muteVideo button works', function () {
           var muteBtn = secondSubscriber.element(by.css('mute-video'));
           expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
@@ -405,6 +407,16 @@ describe('OpenTok Meet App', function() {
           muteBtn.click();
           expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
+        });
+
+        it('restrictFramerate button toggles the icon', function () {
+          var restrictFramerateBtn = secondSubscriber.element(by.css('.restrict-framerate-btn'));
+          expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
+          restrictFramerateBtn.click();
+          expect(restrictFramerateBtn.getAttribute('class')).toContain(
+            'ion-ios7-speedometer-outline');
+          restrictFramerateBtn.click();
+          expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
         });
       });
 

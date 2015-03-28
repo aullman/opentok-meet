@@ -74,7 +74,7 @@ ot-layout {
     height: 100%;
 }
 
-ot-layout button.resize-btn {
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn {
     transition-property: top,bottom,opacity;
     transition-duration: .5s;
     transition-timing-function: ease-in;
@@ -92,11 +92,15 @@ ot-layout button.resize-btn {
     z-index: 99;
 }
 
+ot-layout ot-subscriber button.restrict-framerate-btn {
+    right: 95px;
+}
+
 ot-layout > .OT_big button.resize-btn:before {
     content: "\f267";
 }
 
-ot-layout > :hover button.resize-btn {
+ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn {
     top: 0;
     opacity: 1;
 }
