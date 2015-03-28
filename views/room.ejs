@@ -44,8 +44,9 @@
                     props="{style: {nameDisplayMode: 'off'}}" 
                     ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}" 
                     ng-dblclick="$emit('changeSize')">
-                        <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');"></button>
+                        <button class="restrict-framerate-btn" ng-class="{'ion-ios7-speedometer-outline': stream.restrictedFrameRate, 'ion-ios7-speedometer': !stream.restrictedFrameRate}" ng-click="$emit('restrictFrameRate');"></button>
                         <mute-video muted="stream.videoMuted" ng-click="$emit('muteVideo')"></mute-video>
+                        <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');"></button>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
