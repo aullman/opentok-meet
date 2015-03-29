@@ -1,5 +1,6 @@
 angular.module('opentok-meet').directive('draggable', function($document) {
   var getEventProp = function(event, prop) {
+    if (event[prop] === 0) return 0;
     return event[prop] || (event.touches && event.touches[0][prop]) ||
       (event.originalEvent && event.originalEvent.touches &&
       event.originalEvent.touches[0][prop]);
