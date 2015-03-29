@@ -517,7 +517,7 @@ describe('OpenTok Meet controllers', function() {
         setTimeout(function () {
           expect(scope.mouseMove).toBe(false);
           done();
-        }, 11);
+        }, 20);
       });
       it('does not go back if you move again', function (done) {
         windowMock.trigger('mousemove');
