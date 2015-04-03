@@ -14,11 +14,11 @@ describe('OpenTok Meet App', function() {
   describe('Room', function() {
 
     beforeEach(function() {
-      browser.get('testRoom');
+      browser.get('testingRoom');
     });
     
     it('should have the right title', function () {
-      expect(browser.getTitle()).toEqual('OpenTok Meet : testRoom');
+      expect(browser.getTitle()).toEqual('OpenTok Meet : testingRoom');
     });
 
     it('should have a loader being displayed', function () {
@@ -306,24 +306,24 @@ describe('OpenTok Meet App', function() {
       submit = element(by.css('#joinRoomBtn'));
 
     it('should go to a room when you click the join button', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys('testingRoom');
       submit.click();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testingRoom');
     });
     
     it('should go to a room when you submit the form', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys('testingRoom');
       roomField.submit();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testingRoom');
     });
   });
 
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get('testRoom');
+      browser.get('testingRoom');
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get('testRoom');
+      secondBrowser.get('testingRoom');
     });
     afterEach(function () {
       secondBrowser.close();
@@ -420,6 +420,19 @@ describe('OpenTok Meet App', function() {
         });
       });
 
+      ddescribe('sharing the screen', function () {
+        beforeEach(function () {
+          element(by.css('#showscreen')).click();
+        });
+        it('subscribes to the screen and it is big', function () {
+          var subscriberVideo = secondBrowser.element(by.css(
+            'ot-subscriber.OT_big:not(.OT_loading) video'));
+          browser.wait(function () {
+            return subscriberVideo.isPresent();
+          }, 10000);
+        });
+      });
+
       describe('using the collaborative editor', function () {
         var firstShowEditorBtn, secondShowEditorBtn, defaultText;
         beforeEach(function (done) {
@@ -488,6 +501,66 @@ describe('OpenTok Meet App', function() {
             });
           });
         });
+      });
+    });
+  });
+
+  describe('Screen', function () {
+    beforeEach(function () {
+      browser.get('testingRoom/screen');
+    });
+
+    describe('screenshare button', function () {
+      var screenShareBtn = element(by.css('#showscreen'));
+      
+      it('exists and is green', function () {
+        expect(screenShareBtn.isPresent()).toBe(true);
+        expect(screenShareBtn.getAttribute('class')).toContain('green');
+      });
+      
+      describe('has been clicked', function () {
+        beforeEach(function () {
+          screenShareBtn.click();
+        });
+        it('shares the screen', function () {
+          expect(screenShareBtn.getAttribute('class')).toContain('red');
+          var screenPublisher = element(by.css('#screenPublisher'));
+          browser.wait(function () {
+            return screenPublisher.isPresent();
+          }, 10000);
+        });
+        describe('a subscriber', function () {
+          var secondBrowser;
+          beforeEach(function () {
+            secondBrowser = browser.forkNewDriverInstance();
+            secondBrowser.get('testingRoom');
+          });
+          it('subscribes to the screen and it is big', function () {
+            var subscriberVideo = secondBrowser.element(by.css(
+              'ot-subscriber.OT_big:not(.OT_loading) video'));
+            browser.wait(function () {
+              return subscriberVideo.isPresent();
+            }, 10000);
+          });
+        });
+      });
+      it('shows an install prompt when you click it and the extension is not installed',
+          function (done) {
+        if (browser.browserName === 'chrome') {
+          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+              .then(function () {
+            expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+            expect(screenShareBtn.getAttribute('class')).toContain('green');
+            screenShareBtn.click();
+            expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+            browser.wait(function () {
+              return element(by.css('#installScreenshareExtension')).isPresent();
+            }, 10000);
+            done();
+          });
+        } else {
+          done();
+        }
       });
     });
   });

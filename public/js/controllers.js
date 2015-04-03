@@ -1,41 +1,21 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'chromeExtensionId', 'mouseMoveTimeoutTime',
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'mouseMoveTimeoutTime',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      chromeExtensionId, mouseMoveTimeoutTime) {
+      mouseMoveTimeoutTime) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
-  $scope.sharingMyScreen = false;
   $scope.publishing = false;
   $scope.archiveId = null;
   $scope.archiving = false;
-  $scope.screenShareSupported = false;
   $scope.isAndroid = /Android/g.test(navigator.userAgent);
   $scope.connected = false;
-  $scope.screenShareFailed = null;
   $scope.mouseMove = false;
   $scope.showWhiteboard = false;
   $scope.showEditor = false;
   $scope.whiteboardUnread = false;
   $scope.editorUnread = false;
   $scope.leaving = false;
-  $scope.selectingScreenSource = false;
-  $scope.promptToInstall = false;
   $scope.publisherVideoMuted = false;
-
-  OT.registerScreenSharingExtension('chrome', chromeExtensionId);
-  OT.checkScreenSharingCapability(function(response) {
-    $scope.screenShareSupported = response.supported && response.extensionRegistered !== false;
-    $scope.$apply();
-  });
-
-  $scope.screenPublisherProps = {
-    name: 'screen',
-    style: {
-      nameDisplayMode: 'off'
-    },
-    publishAudio: false,
-    videoSource: 'screen'
-  };
 
   var facePublisherPropsHD = {
     name: 'face',
@@ -59,38 +39,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   $scope.notMine = function(stream) {
     return stream.connection.connectionId !== $scope.session.connection.connectionId;
-  };
-
-  $scope.toggleShareScreen = function() {
-    if (!$scope.sharingMyScreen && !$scope.selectingScreenSource) {
-      $scope.selectingScreenSource = true;
-      $scope.screenShareFailed = null;
-
-      OT.checkScreenSharingCapability(function(response) {
-        if (!response.supported || response.extensionRegistered === false) {
-          $scope.screenShareSupported = false;
-          $scope.selectingScreenSource = false;
-        } else if (response.extensionInstalled === false) {
-          $scope.promptToInstall = true;
-          $scope.selectingScreenSource = false;
-        } else {
-          $scope.sharingMyScreen = true;
-          $scope.selectingScreenSource = false;
-        }
-        $scope.$apply();
-      });
-    } else if ($scope.sharingMyScreen) {
-      $scope.sharingMyScreen = false;
-    }
-  };
-
-  $scope.installScreenshareExtension = function() {
-    chrome.webstore.install('https://chrome.google.com/webstore/detail/' + chromeExtensionId,
-      function() {
-      console.log('successfully installed');
-    }, function() {
-      console.error('failed to install', arguments);
-    });
   };
 
   $scope.togglePublish = function(publishHD) {
@@ -171,23 +119,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     if (subscriber) {
       subscriber.restrictFrameRate(!stream.restrictedFrameRate);
       stream.restrictedFrameRate = !stream.restrictedFrameRate;
-    }
-  });
-
-  $scope.$on('otPublisherError', function(event, error, publisher) {
-    if (publisher.id === 'screenPublisher') {
-      $scope.$apply(function() {
-        $scope.screenShareFailed = error.message;
-        $scope.toggleShareScreen();
-      });
-    }
-  });
-
-  $scope.$on('otStreamDestroyed', function(event) {
-    if (event.targetScope.publisher.id === 'screenPublisher') {
-      $scope.$apply(function() {
-        $scope.sharingMyScreen = false;
-      });
     }
   });
 
