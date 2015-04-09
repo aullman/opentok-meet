@@ -3,22 +3,24 @@
 /* global element: false */
 /* global by: false */
 /* global protractor: false */
+var uuid = require('uuid');
 
 describe('OpenTok Meet App', function() {
+  var roomName;
   beforeEach(function () {
+    roomName = uuid.v1();
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
     });
   });
 
   describe('Room', function() {
-
     beforeEach(function() {
-      browser.get('testingRoom');
+      browser.get(roomName);
     });
     
     it('should have the right title', function () {
-      expect(browser.getTitle()).toEqual('OpenTok Meet : testingRoom');
+      expect(browser.getTitle()).toEqual('OpenTok Meet : ' + roomName);
     });
 
     it('should have a loader being displayed', function () {
@@ -306,24 +308,24 @@ describe('OpenTok Meet App', function() {
       submit = element(by.css('#joinRoomBtn'));
 
     it('should go to a room when you click the join button', function () {
-      roomField.sendKeys('testingRoom');
+      roomField.sendKeys(roomName);
       submit.click();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testingRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
     
     it('should go to a room when you submit the form', function () {
-      roomField.sendKeys('testingRoom');
+      roomField.sendKeys(roomName);
       roomField.submit();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testingRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
   });
 
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get('testingRoom');
+      browser.get(roomName);
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get('testingRoom');
+      secondBrowser.get(roomName);
     });
     afterEach(function () {
       secondBrowser.close();
@@ -420,7 +422,7 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      ddescribe('sharing the screen', function () {
+      describe('sharing the screen', function () {
         beforeEach(function () {
           element(by.css('#showscreen')).click();
         });
@@ -507,7 +509,7 @@ describe('OpenTok Meet App', function() {
 
   describe('Screen', function () {
     beforeEach(function () {
-      browser.get('testingRoom/screen');
+      browser.get(roomName + '/screen');
     });
 
     describe('screenshare button', function () {
@@ -533,7 +535,7 @@ describe('OpenTok Meet App', function() {
           var secondBrowser;
           beforeEach(function () {
             secondBrowser = browser.forkNewDriverInstance();
-            secondBrowser.get('testingRoom');
+            secondBrowser.get(roomName);
           });
           it('subscribes to the screen and it is big', function () {
             var subscriberVideo = secondBrowser.element(by.css(
