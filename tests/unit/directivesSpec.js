@@ -100,23 +100,32 @@ describe('muteVideo', function () {
     element = $compile(element)(scope);
     scope.$digest();
   }));
-  
-  it('creates two i elements with the right classes', function () {
-    expect(element.find('i').length).toBe(2);
-    var firstI = element.find('i')[0];
-    expect(firstI.className).toContain('video-icon');
-    expect(firstI.className).toContain('ion-ios7-videocam');
-    var secondI = element.find('i')[1];
-    expect(secondI.className).toContain('cross-icon');
-    expect(secondI.className).toContain('ion-ios7-close');
-  });
 
-  it('changes classes when muted changes', function () {
-    var secondI = element.find('i')[1];
-    expect(scope.muted).toBe(false);
-    expect(secondI.className).toContain('ion-ios7-close');
-    scope.muted = true;
-    scope.$digest();
-    expect(secondI.className).toContain('ion-ios7-checkmark');
+  describe('two i elements', function () {
+    var firstI, secondI;
+    beforeEach(function () {
+      firstI = element.find('i')[0];
+      secondI = element.find('i')[1];
+    });
+    it('creates two i elements with the right classes', function () {
+      expect(element.find('i').length).toBe(2);
+      expect(firstI.className).toContain('video-icon');
+      expect(firstI.className).toContain('ion-ios7-videocam');
+      expect(secondI.className).toContain('cross-icon');
+      expect(secondI.className).toContain('ion-ios7-close');
+    });
+    it('changes title when muted changes', function () {
+      expect(firstI.getAttribute('title')).toBe('Mute Video');
+      scope.muted = true;
+      scope.$digest();
+      expect(firstI.getAttribute('title')).toBe('Unmute Video');
+    });
+    it('changes classes when muted changes', function () {
+      expect(scope.muted).toBe(false);
+      expect(secondI.className).toContain('ion-ios7-close');
+      scope.muted = true;
+      scope.$digest();
+      expect(secondI.className).toContain('ion-ios7-checkmark');
+    });
   });
 });

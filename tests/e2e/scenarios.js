@@ -393,14 +393,17 @@ describe('OpenTok Meet App', function() {
           });
         });
 
-        it('change size button works', function () {
+        iit('change size button works', function () {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
+          expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
           resizeBtn.click();
           expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+          expect(resizeBtn.getAttribute('title')).toBe('Shrink');
           browser.sleep(500);
           resizeBtn.click();
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+          expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
         });
 
         it('muteVideo button works', function () {
@@ -414,14 +417,17 @@ describe('OpenTok Meet App', function() {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
         });
 
-        it('restrictFramerate button toggles the icon', function () {
+        iit('restrictFramerate button toggles the icon and the title', function () {
           var restrictFramerateBtn = secondSubscriber.element(by.css('.restrict-framerate-btn'));
           expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
+          expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
           restrictFramerateBtn.click();
           expect(restrictFramerateBtn.getAttribute('class')).toContain(
             'ion-ios7-speedometer-outline');
+          expect(restrictFramerateBtn.getAttribute('title')).toBe('Unrestrict Framerate');
           restrictFramerateBtn.click();
           expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
+          expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
         });
       });
 

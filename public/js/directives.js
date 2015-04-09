@@ -58,7 +58,11 @@ angular.module('opentok-meet').directive('draggable', function($document) {
       scope: {
         muted: '='
       },
-      template: '<i class="video-icon ion-ios7-videocam"></i><i class="cross-icon" ' +
-        'ng-class="{\'ion-ios7-checkmark\': muted, \'ion-ios7-close\': !muted}"></i>'
+      template: '<i class="video-icon ion-ios7-videocam" ' +
+      'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"></i>' +
+      '<i class="cross-icon" ng-class="' +
+      '{\'ion-ios7-checkmark\': muted, \'ion-ios7-close\': !muted}" ' +
+      'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"' +
+      '</i>'
     };
   });
