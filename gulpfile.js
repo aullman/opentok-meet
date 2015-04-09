@@ -7,7 +7,7 @@ gulp.task('default', function(){
     .pipe(gulp.dest('public/js/lib/'));
 });
 
-gulp.task('cordova-bower', function (cb) {
+gulp.task('cordova-bower', function () {
   // couldn't figure out how to get bower to run in a different directory
   exec('cd opentok-meet-cordova;bower install');
 });
@@ -31,7 +31,8 @@ gulp.task('cordova', function (cb) {
       // Prepare for ios
       if (!err) {
         // If there's no error then you haven't already installed the platform
-        console.warn('If you want to hide the status bar you may need to add the following to OpenTokMeet-Info.plist');
+        console.warn('If you want to hide the status bar you may need to add the following to' +
+          ' OpenTokMeet-Info.plist');
         console.warn('<key>UIStatusBarHidden</key>\n' +
                   '<true/>\n' +
                   '<key>UIViewControllerBasedStatusBarAppearance</key>\n' +
@@ -76,7 +77,7 @@ gulp.task('cordova', function (cb) {
     'org.apache.cordova.splashscreen': 'org.apache.cordova.splashscreen'
   };
   // Install the cordova plugins if they're not already there
-  var output = exec('cd opentok-meet-cordova;cordova plugin list', function (err, stdout, stderr) {
+  exec('cd opentok-meet-cordova;cordova plugin list', function (err, stdout) {
     if (err) {
       cb(err);
       return;
@@ -90,7 +91,8 @@ gulp.task('cordova', function (cb) {
       }
       if (stdout.indexOf(key) < 0) {
         console.log('Installing cordova plugin from: ' + cordovaPlugins[key]);
-        exec('cd opentok-meet-cordova;cordova plugin add ' + cordovaPlugins[key], function (err, stdout, stderr) {
+        exec('cd opentok-meet-cordova;cordova plugin add ' + cordovaPlugins[key],
+            function (err, stdout) {
           console.log(stdout);
           if (err) cb(err);
           else {
@@ -105,6 +107,6 @@ gulp.task('cordova', function (cb) {
   });
 });
 
-gulp.task('serve-ios', ['cordova'], function (cb) {
+gulp.task('serve-ios', ['cordova'], function () {
   exec('cd opentok-meet-cordova;cordova serve ios');
 });
