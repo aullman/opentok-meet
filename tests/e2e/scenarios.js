@@ -3,22 +3,27 @@
 /* global element: false */
 /* global by: false */
 /* global protractor: false */
+var uuid = require('uuid');
 
 describe('OpenTok Meet App', function() {
+  var roomName;
   beforeEach(function () {
+    while(!roomName || roomName.indexOf('p2p') > -1) {
+      // Don't want the roomname to have p2p in it or it will be a p2p room
+      roomName = uuid.v1();
+    }
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
     });
   });
 
   describe('Room', function() {
-
     beforeEach(function() {
-      browser.get('testRoom');
+      browser.get(roomName);
     });
     
     it('should have the right title', function () {
-      expect(browser.getTitle()).toEqual('OpenTok Meet : testRoom');
+      expect(browser.getTitle()).toEqual('OpenTok Meet : ' + roomName);
     });
 
     it('should have a loader being displayed', function () {
@@ -306,24 +311,24 @@ describe('OpenTok Meet App', function() {
       submit = element(by.css('#joinRoomBtn'));
 
     it('should go to a room when you click the join button', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys(roomName);
       submit.click();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
     
     it('should go to a room when you submit the form', function () {
-      roomField.sendKeys('testRoom');
+      roomField.sendKeys(roomName);
       roomField.submit();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + 'testRoom');
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
   });
 
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get('testRoom');
+      browser.get(roomName);
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get('testRoom');
+      secondBrowser.get(roomName);
     });
     afterEach(function () {
       secondBrowser.close();
@@ -420,6 +425,21 @@ describe('OpenTok Meet App', function() {
         });
       });
 
+      if (browser.browserName === 'firefox') {
+        describe('sharing the screen', function () {
+          beforeEach(function () {
+            element(by.css('#showscreen')).click();
+          });
+          it('subscribes to the screen and it is big', function () {
+            var subscriberVideo = secondBrowser.element(by.css(
+              'ot-subscriber.OT_big:not(.OT_loading) video'));
+            browser.wait(function () {
+              return subscriberVideo.isPresent();
+            }, 10000);
+          });
+        });
+      }
+
       describe('using the collaborative editor', function () {
         var firstShowEditorBtn, secondShowEditorBtn, defaultText;
         beforeEach(function (done) {
@@ -488,6 +508,68 @@ describe('OpenTok Meet App', function() {
             });
           });
         });
+      });
+    });
+  });
+
+  describe('Screen', function () {
+    beforeEach(function () {
+      browser.get(roomName + '/screen');
+    });
+
+    describe('screenshare button', function () {
+      var screenShareBtn = element(by.css('#showscreen'));
+      
+      it('exists and is green', function () {
+        expect(screenShareBtn.isPresent()).toBe(true);
+        expect(screenShareBtn.getAttribute('class')).toContain('green');
+      });
+      
+      describe('has been clicked', function () {
+        beforeEach(function () {
+          screenShareBtn.click();
+        });
+        it('shares the screen', function () {
+          expect(screenShareBtn.getAttribute('class')).toContain('red');
+          var screenPublisher = element(by.css('#screenPublisher'));
+          browser.wait(function () {
+            return screenPublisher.isPresent();
+          }, 10000);
+        });
+        if (browser.browserName === 'firefox') {
+          describe('a subscriber', function () {
+            var secondBrowser;
+            beforeEach(function () {
+              secondBrowser = browser.forkNewDriverInstance();
+              secondBrowser.get(roomName);
+            });
+            it('subscribes to the screen and it is big', function () {
+              var subscriberVideo = secondBrowser.element(by.css(
+                'ot-subscriber.OT_big:not(.OT_loading) video'));
+              browser.wait(function () {
+                return subscriberVideo.isPresent();
+              }, 10000);
+            });
+          });
+        }
+      });
+      it('shows an install prompt when you click it and the extension is not installed',
+          function (done) {
+        if (browser.browserName === 'chrome') {
+          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+              .then(function () {
+            expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+            expect(screenShareBtn.getAttribute('class')).toContain('green');
+            screenShareBtn.click();
+            expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+            browser.wait(function () {
+              return element(by.css('#installScreenshareExtension')).isPresent();
+            }, 10000);
+            done();
+          });
+        } else {
+          done();
+        }
       });
     });
   });

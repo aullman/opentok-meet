@@ -12,6 +12,7 @@ module.exports = function(config) {
       'public/js/lib/opentok-editor/opentok-editor.js',
       'public/js/lib/opentok-whiteboard/opentok-whiteboard.js',
       'public/js/*.js',
+      'public/js/screen/*.js',
       'tests/unit/**/*.js'
     ],
 

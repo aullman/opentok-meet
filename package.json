@@ -37,6 +37,7 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "protractor": "^2.0.0",
-    "q": "^1.2.0"
+    "q": "^1.2.0",
+    "uuid": "^2.0.1"
   }
 }

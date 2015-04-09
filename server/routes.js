@@ -119,6 +119,13 @@ module.exports = function (app, config, redis, ot) {
     });
   });
 
+  app.get('/:room/screen', function(req, res) {
+    res.render('screen', {
+      room: req.param('room'),
+      chromeExtensionId: config.chromeExtensionId
+    });
+  });
+
   app.get('/:room/archives', function(req, res) {
     redis.smembers('archive_' + req.param('room'), function(err, members) {
       res.send(members);
