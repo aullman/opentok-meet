@@ -52,19 +52,6 @@ angular.module('opentok-meet').directive('draggable', function($document) {
     });
   };
 })
-  .directive('syncClick', function() {
-    return {
-      restrict: 'A',
-      scope: {
-        syncClick: '&'
-      },
-      link: function(scope, element) {
-        element.on('click', function() {
-          scope.syncClick();
-        });
-      }
-    };
-  })
   .directive('muteVideo', function () {
     return {
       restrict: 'E',

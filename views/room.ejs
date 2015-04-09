@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
-        <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/gloebbmiakfjnkcohlmbciijakonfehm">
+        <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/<%=chromeExtensionId%>">
         <link rel="icon" sizes="128x128" href="icon.png">
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
@@ -29,12 +29,14 @@
         <script src="/js/lib/CodeMirror/mode/markdown/markdown.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-editor/opentok-editor.js" type="text/javascript" charset="utf-8"></script>
         <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        
-        <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">        
+
+        <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/directives.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/sync-click.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/screen/directive.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -118,11 +120,7 @@
             <div id="archiveStatus" class="statusMessage" ng-if="archiveId">
                 Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
             </div>
-            <div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">Screen Share Failed {{screenShareFailed}}</div>
-            <div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">You need a Chrome extension to share your screen. <a href="" sync-click="installScreenshareExtension()">Install Screensharing Extension</a>. Once you have installed refresh your browser and click the share screen button again.</div>
-            <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
-                Screen Sharing currently requires Google Chrome or Firefox on Desktop.
-            </div>
+            <screen-share-dialogs></screen-share-dialogs>
         </div>
         <script type="text/javascript" charset="utf-8">
             angular.module('opentok-meet').value({

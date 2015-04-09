@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="opentok-meet">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/<%=chromeExtensionId%>">
+        <title><%=room%>: Screenshare</title>
+        <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//static.opentok.com/webrtc/v2.2/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            var opentokMeet = angular.module('opentok-meet', ['opentok']).value({
+                room: '<%=room%>',
+                chromeExtensionId: '<%=chromeExtensionId%>',
+                baseURL: '/'
+            });
+        </script>
+        <script src="/js/screen/controller.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/screen/directive.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/sync-click.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
+
+        <style type="text/css" media="screen">
+          body {
+              margin: 0;
+              padding: 0;
+          }
+
+          ot-publisher#screenPublisher {
+              position: absolute;
+              top: calc(50% - 50px);
+              left: calc(50% - 80px);
+              display: block;
+          }
+
+          #bottomBar, #statusMessages {
+            opacity: 1;
+          }
+
+          #screenPublisher, #screenPublisher:active {
+            cursor: auto;
+          }
+        </style>
+    </head>
+    <body ng-controller="ScreenCtrl">
+      <ot-publisher id="screenPublisher"
+          ng-if="sharingMyScreen"
+          props='screenPublisherProps'>
+      </ot-publisher>
+      <div id="statusMessages">
+        <screen-share-dialogs></screen-share-dialogs>
+      </div>
+      <div id="bottomBar">
+        <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" title="Share Screen"> {{sharingMyScreen ? 'Stop Sharing': 'Share Screen'}}</button>
+      </div>
+    </body>
+</html>
