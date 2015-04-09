@@ -8,7 +8,10 @@ var uuid = require('uuid');
 describe('OpenTok Meet App', function() {
   var roomName;
   beforeEach(function () {
-    roomName = uuid.v1();
+    while(!roomName || roomName.indexOf('p2p') > -1) {
+      // Don't want the roomname to have p2p in it or it will be a p2p room
+      roomName = uuid.v1();
+    }
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
     });
@@ -422,18 +425,20 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      describe('sharing the screen', function () {
-        beforeEach(function () {
-          element(by.css('#showscreen')).click();
+      if (browser.browserName === 'firefox') {
+        describe('sharing the screen', function () {
+          beforeEach(function () {
+            element(by.css('#showscreen')).click();
+          });
+          it('subscribes to the screen and it is big', function () {
+            var subscriberVideo = secondBrowser.element(by.css(
+              'ot-subscriber.OT_big:not(.OT_loading) video'));
+            browser.wait(function () {
+              return subscriberVideo.isPresent();
+            }, 10000);
+          });
         });
-        it('subscribes to the screen and it is big', function () {
-          var subscriberVideo = secondBrowser.element(by.css(
-            'ot-subscriber.OT_big:not(.OT_loading) video'));
-          browser.wait(function () {
-            return subscriberVideo.isPresent();
-          }, 10000);
-        });
-      });
+      }
 
       describe('using the collaborative editor', function () {
         var firstShowEditorBtn, secondShowEditorBtn, defaultText;
@@ -531,20 +536,22 @@ describe('OpenTok Meet App', function() {
             return screenPublisher.isPresent();
           }, 10000);
         });
-        describe('a subscriber', function () {
-          var secondBrowser;
-          beforeEach(function () {
-            secondBrowser = browser.forkNewDriverInstance();
-            secondBrowser.get(roomName);
+        if (browser.browserName === 'firefox') {
+          describe('a subscriber', function () {
+            var secondBrowser;
+            beforeEach(function () {
+              secondBrowser = browser.forkNewDriverInstance();
+              secondBrowser.get(roomName);
+            });
+            it('subscribes to the screen and it is big', function () {
+              var subscriberVideo = secondBrowser.element(by.css(
+                'ot-subscriber.OT_big:not(.OT_loading) video'));
+              browser.wait(function () {
+                return subscriberVideo.isPresent();
+              }, 10000);
+            });
           });
-          it('subscribes to the screen and it is big', function () {
-            var subscriberVideo = secondBrowser.element(by.css(
-              'ot-subscriber.OT_big:not(.OT_loading) video'));
-            browser.wait(function () {
-              return subscriberVideo.isPresent();
-            }, 10000);
-          });
-        });
+        }
       });
       it('shows an install prompt when you click it and the extension is not installed',
           function (done) {
