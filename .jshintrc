@@ -16,7 +16,8 @@
       "inject": true,
       "jasmine": true,
       "it": true,
-      "expect": true
+      "expect": true,
+      "Helpers": true
     },
     "globalstrict": true,
     "node": true,
