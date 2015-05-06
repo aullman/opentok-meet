@@ -14,7 +14,7 @@
     "redis": "~0.10.1"
   },
   "engines": {
-    "node": "0.10.x",
+    "node": "0.12.x",
     "npm": "1.2.x"
   },
   "scripts": {
