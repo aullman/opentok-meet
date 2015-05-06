@@ -11,12 +11,10 @@ body a {
 .message {
     font-size: 18px;
     text-align: center;
-    width: 550px;
+    width: 100%;
     padding: 10px;
     border-radius: 5px;
     background-color: #999;
     top: 35%;
     position: absolute;
-    left: 50%;
-    margin-left: -285px;
 }
