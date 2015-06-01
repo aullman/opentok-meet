@@ -25,7 +25,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       nameDisplayMode: 'off'
     },
     resolution: '1280x720',
-    frameRate: 30
+    frameRate: 30,
+    _enableSimulcast: true
   },
     facePublisherPropsSD = {
       name: 'face',
