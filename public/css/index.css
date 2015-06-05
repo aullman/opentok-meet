@@ -9,6 +9,7 @@ white: #DCD9CD
 body {
     margin: 0;
     padding: 0;
+    color: #DCD9CD;
 }
 
 #wrapper {
@@ -23,7 +24,19 @@ body {
 form#joinRoom {
     padding: 0;
     margin: 0;
-    width: 100%;
+    width: 320px;
+    margin-left: calc(50% - 160px);
+    text-align: left;
+}
+
+form#joinRoom #inputs {
+    float: left;
+    margin-right: 5px;
+    text-align: right;
+}
+
+form#joinRoom #inputs #p2pCheckbox {
+    margin-top: 5px;
 }
 
 form#joinRoom input[type='text'] {

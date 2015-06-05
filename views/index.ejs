@@ -25,18 +25,18 @@
         <div id="wrapper">
             <img src="images/opentok-meet-logo.png" alt="Logo" class="logo">
             <form id="joinRoom" ng-submit="joinRoom()">
-                <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
+                <div id="inputs">
+                  <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
+                  <div id="p2pCheckbox">
+                    <input type="checkbox" name="p2p" id="p2p" ng-model="p2p" ng-change="p2pChanged()">
+                      <label for="p2p">
+                        p2p <a href="https://support.tokbox.com/hc/en-us/articles/202997234-What-is-the-difference-between-a-Routed-vs-Relayed-Session-" target="_blank">?</a>
+                      </label>
+                  </div>
+                </div>
                 <input type="submit" name="joinRoom" value="Join" id="joinRoomBtn">
             </form>
         </div>
-        <script type="text/javascript" charset="utf-8">
-        angular.module('opentok-meet-login', [])
-          .controller('MainCtrl', function($scope, $window) {
-            $scope.room;
-            $scope.joinRoom = function () {
-                $window.location.href = $window.location.href + encodeURIComponent($scope.room);
-            }
-        });
-        </script>
+        <script src="/js/login/controllers.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>
