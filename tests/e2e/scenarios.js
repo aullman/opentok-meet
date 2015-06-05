@@ -315,11 +315,26 @@ describe('OpenTok Meet App', function() {
       submit.click();
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
-    
+
     it('should go to a room when you submit the form', function () {
       roomField.sendKeys(roomName);
       roomField.submit();
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
+    });
+
+    describe('p2p checkbox', function () {
+      var p2p = element(by.model('p2p'));
+      it('should add and remove p2p to the name when you click it', function () {
+        roomField.sendKeys(roomName);
+        p2p.click();
+        expect(roomField.getAttribute('value')).toBe(roomName + 'p2p');
+        p2p.click();
+        expect(roomField.getAttribute('value')).toBe(roomName);
+      });
+      it('should check when you enter p2p into the input field', function () {
+        roomField.sendKeys(roomName + 'p2p');
+        expect(p2p.getAttribute('checked')).toBe('true');
+      });
     });
   });
 
