@@ -34,7 +34,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       height: '100%',
       style: {
         nameDisplayMode: 'off'
-      }
+      },
+      _enableSimulcast: true
     };
   $scope.facePublisherProps = facePublisherPropsHD;
 
