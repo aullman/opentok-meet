@@ -35,6 +35,18 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       style: {
         nameDisplayMode: 'off'
       },
+      constraints: {
+        video: {
+          mandatory: {
+            maxWidth: 640,
+            maxHeight: 480,
+            minWidth: 640,
+            minHeight: 480
+          },
+          optional: []
+        },
+        audio: true
+      },
       _enableSimulcast: true
     };
   $scope.facePublisherProps = facePublisherPropsHD;
