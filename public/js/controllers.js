@@ -1,7 +1,8 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
     '$timeout', 'OTSession', 'RoomService', 'baseURL', 'mouseMoveTimeoutTime',
+    'SimulcastService',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      mouseMoveTimeoutTime) {
+      mouseMoveTimeoutTime, SimulcastService) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -204,6 +205,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       };
       $scope.$on('otEditorUpdate', editorUpdated);
       $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
+      SimulcastService.init($scope.streams, $scope.session);
     });
     $scope.publishing = true;
   });

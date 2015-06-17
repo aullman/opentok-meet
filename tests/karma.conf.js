@@ -11,6 +11,7 @@ module.exports = function(config) {
       'public/js/lib/opentok-angular/opentok-angular.js',
       'public/js/lib/opentok-editor/opentok-editor.js',
       'public/js/lib/opentok-whiteboard/opentok-whiteboard.js',
+      'public/js/lib/ng-debounce/angular-debounce.js',
       'public/js/*.js',
       'public/js/screen/*.js',
       'public/js/login/*.js',
