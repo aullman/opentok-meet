@@ -12,14 +12,20 @@ opentokMeet.factory('SimulcastService', ['debounce', '$rootScope',
               var $subscriber = $('#' + subscriber.id),
                 width = $subscriber.width(),
                 height = $subscriber.height();
-              subscriber.setMaxResolution({
+              if (!subscriber.setPreferredResolution && subscriber.setMaxResolution) {
+                subscriber.setPreferredResolution = subscriber.setMaxResolution;
+              }
+              if (!subscriber.setPreferredFrameRate && subscriber.setMaxFrameRate) {
+                subscriber.setPreferredFrameRate = subscriber.setMaxFrameRate;
+              }
+              subscriber.setPreferredResolution({
                 width: width,
                 height: height
               });
               if (width >= 320 && height >= 240) {
-                subscriber.setMaxFrameRate(null);
+                subscriber.setPreferredFrameRate(null);
               } else {
-                subscriber.setMaxFrameRate(15);
+                subscriber.setPreferredFrameRate(15);
               }
             });
           });
