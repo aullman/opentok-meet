@@ -12,12 +12,6 @@ opentokMeet.factory('SimulcastService', ['debounce', '$rootScope',
               var $subscriber = $('#' + subscriber.id),
                 width = $subscriber.width(),
                 height = $subscriber.height();
-              if (!subscriber.setPreferredResolution && subscriber.setMaxResolution) {
-                subscriber.setPreferredResolution = subscriber.setMaxResolution;
-              }
-              if (!subscriber.setPreferredFrameRate && subscriber.setMaxFrameRate) {
-                subscriber.setPreferredFrameRate = subscriber.setMaxFrameRate;
-              }
               subscriber.setPreferredResolution({
                 width: width,
                 height: height
