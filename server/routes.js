@@ -71,7 +71,10 @@ module.exports = function (app, config, redis, ot) {
       json: function() {
         var goToRoom = function(err, sessionId, apiKey, secret) {
           if (err) {
-            res.send(err);
+            console.error('Error getting room: ', err);
+            res.send({
+              error: err
+            });
           } else {
             res.set({
               'Access-Control-Allow-Origin': '*'
@@ -137,6 +140,7 @@ module.exports = function (app, config, redis, ot) {
 
     RoomStore.getRoom(room, function(err, sessionId, apiKey, secret) {
       if (err) {
+        console.error('Error getting room: ', err);
         res.send({
           error: err
         });
@@ -149,6 +153,7 @@ module.exports = function (app, config, redis, ot) {
         name: room
       }, function(err, archive) {
         if (err) {
+          console.error('Error starting archive: ', err);
           res.send({
             error: err
           });
@@ -169,6 +174,7 @@ module.exports = function (app, config, redis, ot) {
     // Lookup if there's a custom apiKey for this room
     redis.hget('apiKeys', room, function(err, apiKeySecret) {
       if (err) {
+        console.error('Error getting apiKeys: ', err);
         res.send({
           error: err
         });
@@ -181,6 +187,7 @@ module.exports = function (app, config, redis, ot) {
 
         otSDK.stopArchive(archiveId, function(err, archive) {
           if (err) {
+            console.error('Error stopping archive: ', err);
             res.send({
               error: err
             });
