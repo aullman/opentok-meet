@@ -17,7 +17,7 @@ opentokMeet.factory('SimulcastService', ['debounce', '$rootScope',
                 height: height
               });
               if (width >= 320 && height >= 240) {
-                subscriber.setPreferredFrameRate(null);
+                subscriber.setPreferredFrameRate(30);
               } else {
                 subscriber.setPreferredFrameRate(15);
               }
