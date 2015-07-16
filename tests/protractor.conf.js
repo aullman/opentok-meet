@@ -9,7 +9,8 @@ exports.config = {
     'browserName': 'chrome',
     'chromeOptions': {
       'args': ['load-extension=/Users/adamu/src/screensharing-extensions/chrome/ScreenSharing/',
-        'auto-select-desktop-capture-source="Entire screen"']
+        'auto-select-desktop-capture-source="Entire screen"', 'use-fake-device-for-media-stream',
+        'use-fake-ui-for-media-stream']
     }
   },
 

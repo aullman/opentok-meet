@@ -363,10 +363,10 @@ describe('OpenTok Meet App', function() {
         var subscriberWait = {};
         subscriberWait.first = browser.wait(function () {
           return firstSubscriberVideo.isPresent();
-        }, 10000);
+        }, 20000);
         subscriberWait.second = browser.wait(function () {
           return secondSubscriberVideo.isPresent();
-        }, 10000);
+        }, 20000);
         protractor.promise.fullyResolved(subscriberWait).then(function () {
           done();
         });
@@ -398,7 +398,7 @@ describe('OpenTok Meet App', function() {
       describe('subscriber buttons', function () {
         beforeEach(function (done) {
           // Move the publisher out of the way
-          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:0, left:0});')
+          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
             .then(function () {
             secondBrowser.actions().mouseDown(secondSubscriber).perform();
             // Have to wait for the buttons to show up
@@ -443,6 +443,17 @@ describe('OpenTok Meet App', function() {
           restrictFramerateBtn.click();
           expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
           expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
+        });
+
+        it('stats button works', function() {
+          var showStatsInfo = secondBrowser.element(by.css('.show-stats-info'));
+          var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
+          expect(showStatsInfo.isDisplayed()).toBe(false);
+          secondBrowser.actions().mouseMove(statsButton).perform();
+          secondBrowser.wait(function() {
+            return showStatsInfo.isDisplayed();
+          }, 2000);
+          expect(showStatsInfo.isDisplayed()).toBe(true);
         });
       });
 
