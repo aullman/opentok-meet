@@ -74,26 +74,33 @@ ot-layout {
     height: 100%;
 }
 
-ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn {
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout subscriber-stats {
     transition-property: top,bottom,opacity;
     transition-duration: .5s;
     transition-timing-function: ease-in;
     opacity: 0;
+    top: -25px;
+    position: absolute;
+    z-index: 99;
+    font-size: 27px;
+}
+
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn {
     width: 25px;
     height: 25px;
-    font-size: 27px;
     cursor: pointer;
-    position: absolute;
     background-color: transparent;
-    top: -25px;
     margin-top: 2px;
     right: 38px;
     border: none;
-    z-index: 99;
 }
 
 ot-layout ot-subscriber button.restrict-framerate-btn {
     right: 95px;
+}
+
+ot-layout ot-subscriber subscriber-stats {
+    left: 0px;
 }
 
 ot-layout > .OT_big button.resize-btn:before {
@@ -108,7 +115,8 @@ ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
     -ms-filter: "FlipH";
 }
 
-ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn {
+ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn,
+    ot-layout > :hover subscriber-stats {
     top: 0;
     opacity: 1;
 }
