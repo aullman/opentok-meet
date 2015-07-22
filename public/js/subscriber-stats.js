@@ -8,9 +8,9 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession',
       template: '<button class="show-stats-btn ion-stats-bars"></button>' +
         '<div class="show-stats-info" ng-show="stats">' +
         'Resolution: {{stats.width}}x{{stats.height}}<br>' +
-        'Audio Packet Loss: {{stats.packetLoss}}%<br>' +
+        'Audio Packet Loss: {{stats.audioPacketLoss}}%<br>' +
         'Audio Bitrate: {{stats.audioBitrate}} kbps<br>' +
-        'Video Packet Loss: {{videoPacketLoss}}%<br>' +
+        'Video Packet Loss: {{stats.videoPacketLoss}}%<br>' +
         'Video Bitrate: {{stats.videoBitrate}} kbps' +
         '</div>',
       link: function(scope, element) {

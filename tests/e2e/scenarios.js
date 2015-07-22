@@ -454,6 +454,16 @@ describe('OpenTok Meet App', function() {
             return showStatsInfo.isDisplayed();
           }, 2000);
           expect(showStatsInfo.isDisplayed()).toBe(true);
+          secondBrowser.wait(function() {
+            return showStatsInfo.getInnerHtml().then(function(innerHTML) {
+              var statsRegexp = new RegExp('Resolution: \\d+x\\d+<br>' +
+                'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
+                'Audio Bitrate: \\d+ kbps<br>' +
+                'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
+                'Video Bitrate: \\d+ kbps', 'gi');
+              return statsRegexp.test(innerHTML);
+            });
+          }, 5000);
         });
       });
 
