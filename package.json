@@ -25,7 +25,7 @@
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
-    "protractor": "node node_modules/protractor/bin/protractor tests/protractor.conf.js && node node_modules/protractor/bin/protractor tests/protractor-firefox.conf.js"
+    "protractor": "node node_modules/protractor/bin/protractor tests/protractor.conf.js"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.4",

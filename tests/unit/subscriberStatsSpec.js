@@ -1,5 +1,5 @@
 describe('subscriber-stats', function() {
-  var scope, element, mockStream = {}, OTSession, mockSubscriber;
+  var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats;
   beforeEach(module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
     OTSession = _OTSession_;
@@ -21,18 +21,7 @@ describe('subscriber-stats', function() {
     scope.stream = mockStream;
     element = $compile(element)(scope);
     scope.$digest();
-  }));
-
-  it('calls OTSession.session.getSubscribersForStream', function () {
-    expect(OTSession.session.getSubscribersForStream).toHaveBeenCalledWith(mockStream);
-  });
-
-  it('calls subscriber.getStats', function() {
-    expect(mockSubscriber.getStats).toHaveBeenCalled();
-  });
-
-  it('sets scope.stats on mouseover and refreshes every second', function(done) {
-    var mockStats = {
+    mockStats = {
       audio: {
         packetsLost: 200,
         packetsReceived: 1000,
@@ -45,6 +34,17 @@ describe('subscriber-stats', function() {
       },
       timestamp: 1000
     };
+  }));
+
+  it('calls OTSession.session.getSubscribersForStream', function () {
+    expect(OTSession.session.getSubscribersForStream).toHaveBeenCalledWith(mockStream);
+  });
+
+  it('calls subscriber.getStats', function() {
+    expect(mockSubscriber.getStats).toHaveBeenCalled();
+  });
+
+  it('sets scope.stats on mouseover and refreshes every second', function(done) {
     // getStats should have been called once
     expect(mockSubscriber.getStats.calls.count()).toBe(1);
     // Fire the getStats callback with the mockStats
@@ -104,5 +104,27 @@ describe('subscriber-stats', function() {
       expect(scope.$$childHead.stats).toBe(null);
       done();
     }, 1010);
+  });
+
+  it('displays the stats correctly', function() {
+    scope.$$childHead.stats = {
+      width: 200,
+      height: 200,
+      audio: mockStats.audio,
+      video: mockStats.video,
+      audioPacketLoss: '20.00',
+      videoPacketLoss: '20.00',
+      audioBitrate: '0',
+      videoBitrate: '0',
+      timestamp: mockStats.timestamp
+    };
+    scope.$digest();
+    expect(element.find('div').html()).toEqual(
+      'Resolution: 200x200<br>' +
+      'Audio Packet Loss: 20.00%<br>' +
+      'Audio Bitrate: 0 kbps<br>' +
+      'Video Packet Loss: 20.00%<br>' +
+      'Video Bitrate: 0 kbps'
+    );
   });
 });
