@@ -10,13 +10,13 @@ opentokMeet.factory('SimulcastService', ['debounce', '$rootScope',
             var subscribers = session.getSubscribersForStream(stream);
             subscribers.forEach(function (subscriber) {
               var $subscriber = $('#' + subscriber.id),
-                width = $subscriber.width(),
-                height = $subscriber.height();
+                pixelWidth = $subscriber.width() * window.devicePixelRatio,
+                pixelHeight = $subscriber.height() * window.devicePixelRatio;
               subscriber.setPreferredResolution({
-                width: width,
-                height: height
+                width: pixelWidth,
+                height: pixelHeight
               });
-              if (width >= 320 && height >= 240) {
+              if (pixelWidth >= 320 && pixelHeight >= 240) {
                 subscriber.setPreferredFrameRate(null);
               } else {
                 subscriber.setPreferredFrameRate(15);
