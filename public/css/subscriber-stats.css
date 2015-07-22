@@ -11,9 +11,8 @@ subscriber-stats button.show-stats-btn {
     border: none;
     z-index: 99;
 }
-subscriber-stats div {
-    border: 1px solid white;
+subscriber-stats div.show-stats-info {
     background: rgba(0,0,0,.4);
-    width: 300px;
     padding: 10px;
+    margin-top: 4px;
 }
