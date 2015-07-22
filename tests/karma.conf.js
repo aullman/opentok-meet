@@ -17,6 +17,10 @@ module.exports = function(config) {
       'public/js/login/*.js',
       'tests/unit/**/*.js'
     ],
+    
+    exclude: [
+      'public/js/opentok.js'
+    ],
 
     autoWatch: true,
 
