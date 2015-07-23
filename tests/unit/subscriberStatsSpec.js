@@ -119,12 +119,52 @@ describe('subscriber-stats', function() {
       timestamp: mockStats.timestamp
     };
     scope.$digest();
-    expect(element.find('div').html()).toEqual(
-      'Resolution: 200x200<br>' +
+    expect(element.find('div').html()).toMatch(
+      new RegExp('Resolution: 200x200<br>.*' +
       'Audio Packet Loss: 20.00%<br>' +
-      'Audio Bitrate: 0 kbps<br>' +
+      'Audio Bitrate: 0 kbps<br>.*' +
       'Video Packet Loss: 20.00%<br>' +
-      'Video Bitrate: 0 kbps'
+      'Video Bitrate: 0 kbps', 'g')
     );
+  });
+
+  it('works if you have no audio stats eg. for screensharing', function() {
+    delete mockStats.audio;
+    // Fire the getStats callback with the mockStats without audio
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    }).not.toThrow();
+    // Trigger a mouseover
+    var statsBtn = element.find('button');
+    statsBtn.triggerHandler({type: 'mouseover'});
+    // stats should be defined now
+    expect(scope.$$childHead.stats).toEqual({
+      width: 200,
+      height: 200,
+      video: mockStats.video,
+      videoPacketLoss: '20.00',
+      videoBitrate: '0',
+      timestamp: mockStats.timestamp
+    });
+  });
+
+  it('works if you have no video stats', function() {
+    delete mockStats.video;
+    // Fire the getStats callback with the mockStats without audio
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    }).not.toThrow();
+    // Trigger a mouseover
+    var statsBtn = element.find('button');
+    statsBtn.triggerHandler({type: 'mouseover'});
+    // stats should be defined now
+    expect(scope.$$childHead.stats).toEqual({
+      width: 200,
+      height: 200,
+      audio: mockStats.audio,
+      audioPacketLoss: '20.00',
+      audioBitrate: '0',
+      timestamp: mockStats.timestamp
+    });
   });
 });
