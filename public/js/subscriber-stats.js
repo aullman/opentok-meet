@@ -43,7 +43,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession',
                   ((stats.audio.packetsLost/stats.audio.packetsReceived) * 100).toFixed(2);
                 if (lastStats) {
                   var audioBitsReceived = (stats.audio.bytesReceived -
-                    lastStats.audio.bytesReceived) * 8;
+                    (lastStats.audio ? lastStats.audio.bytesReceived : 0)) * 8;
                   currStats.audioBitrate = ((audioBitsReceived / secondsElapsed)/1000).toFixed(0);
                 } else {
                   currStats.audioBitrate = '0';
@@ -53,9 +53,9 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession',
                 currStats.video = stats.video;
                 currStats.videoPacketLoss =
                   ((stats.video.packetsLost/stats.video.packetsReceived) * 100).toFixed(2);
-                if (lastStats) {
+                if (lastStats && lastStats) {
                   var videoBitsReceived = (stats.video.bytesReceived -
-                    lastStats.video.bytesReceived) * 8;
+                    (lastStats.video ? lastStats.video.bytesReceived : 0)) * 8;
                   currStats.videoBitrate = ((videoBitsReceived / secondsElapsed)/1000).toFixed(0);
                 } else {
                   currStats.videoBitrate = '0';
