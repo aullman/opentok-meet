@@ -150,7 +150,7 @@ describe('subscriber-stats', function() {
 
   it('works if you have no video stats', function() {
     delete mockStats.video;
-    // Fire the getStats callback with the mockStats without audio
+    // Fire the getStats callback with the mockStats without video
     expect(function() {
       mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
     }).not.toThrow();
@@ -165,6 +165,84 @@ describe('subscriber-stats', function() {
       audioPacketLoss: '20.00',
       audioBitrate: '0',
       timestamp: mockStats.timestamp
+    });
+  });
+
+  it('handles if it previously did not have audio and now it does', function() {
+    delete mockStats.audio;
+    // Fire the getStats callback with the mockStats without audio
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    // Trigger a mouseover
+    var statsBtn = element.find('button');
+    statsBtn.triggerHandler({type: 'mouseover'});
+
+    var mockStats2 = {
+      audio: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      video: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      timestamp: 2000
+    };
+
+    // Fire the getStats callback with the new mockStats
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
+    }).not.toThrow();
+    expect(scope.$$childHead.stats).toEqual({
+      width: 200,
+      height: 200,
+      audio: mockStats2.audio,
+      video: mockStats2.video,
+      audioPacketLoss: '30.00',
+      videoPacketLoss: '30.00',
+      audioBitrate: '16',
+      videoBitrate: '8',
+      timestamp: mockStats2.timestamp
+    });
+  });
+
+  it('handles if it previously did not have video and now it does', function() {
+    delete mockStats.video;
+    // Fire the getStats callback with the mockStats without video
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    // Trigger a mouseover
+    var statsBtn = element.find('button');
+    statsBtn.triggerHandler({type: 'mouseover'});
+
+    var mockStats2 = {
+      audio: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      video: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      timestamp: 2000
+    };
+
+    // Fire the getStats callback with the new mockStats
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
+    }).not.toThrow();
+    expect(scope.$$childHead.stats).toEqual({
+      width: 200,
+      height: 200,
+      audio: mockStats2.audio,
+      video: mockStats2.video,
+      audioPacketLoss: '30.00',
+      videoPacketLoss: '30.00',
+      audioBitrate: '8',
+      videoBitrate: '16',
+      timestamp: mockStats2.timestamp
     });
   });
 });
