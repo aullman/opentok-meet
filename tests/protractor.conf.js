@@ -18,6 +18,10 @@ exports.config = {
 
   baseUrl: 'https://adam.local:5000/',
 
+  params: {
+    testScreenSharing: true
+  },
+
   framework: 'jasmine',
 
   jasmineNodeOpts: {

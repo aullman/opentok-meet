@@ -27,7 +27,9 @@ describe('OpenTok Meet App', function() {
     });
 
     it('should have a loader being displayed', function () {
-      expect(element(by.css('#loader')).isDisplayed()).toBe(true);
+      browser.wait(function() {
+        return element(by.css('#loader')).isDisplayed();
+      }, 10000);
     });
 
     it('should show a shareInfo message when you connect', function () {
@@ -216,49 +218,53 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      describe('screenshare button', function () {
-        var screenShareBtn = element(by.css('#showscreen'));
+      if (browser.params.testScreenSharing) {
+        // Taking this out for Sauce Labs Tests for now until I can figure out how to
+        // install extensions
+        describe('screenshare button', function () {
+          var screenShareBtn = element(by.css('#showscreen'));
         
-        it('exists and is green', function () {
-          expect(screenShareBtn.isPresent()).toBe(true);
-          expect(screenShareBtn.getAttribute('class')).toContain('green');
-        });
+          it('exists and is green', function () {
+            expect(screenShareBtn.isPresent()).toBe(true);
+            expect(screenShareBtn.getAttribute('class')).toContain('green');
+          });
         
-        describe('has been clicked', function () {
-          beforeEach(function () {
-            screenShareBtn.click();
-          });
-          it('shares the screen and the screen moves when it is dragged', function () {
-            expect(screenShareBtn.getAttribute('class')).toContain('red');
-            var screenPublisher = element(by.css('#screenPublisher'));
-            browser.wait(function () {
-              return screenPublisher.isPresent();
-            }, 10000);
-            var oldLocation = screenPublisher.getLocation();
-            browser.actions().dragAndDrop(screenPublisher, element(by.css('body'))).perform();
-            var newLocation = screenPublisher.getLocation();
-            expect(newLocation).not.toEqual(oldLocation);
-          });
-        });
-        it('shows an install prompt when you click it and the extension is not installed',
-            function (done) {
-          if (browser.browserName === 'chrome') {
-            browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
-                .then(function () {
-              expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
-              expect(screenShareBtn.getAttribute('class')).toContain('green');
+          describe('has been clicked', function () {
+            beforeEach(function () {
               screenShareBtn.click();
-              expect(screenShareBtn.getAttribute('disabled')).toBe('true');
-              browser.wait(function () {
-                return element(by.css('#installScreenshareExtension')).isPresent();
-              }, 10000);
-              done();
             });
-          } else {
-            done();
-          }
+            it('shares the screen and the screen moves when it is dragged', function () {
+              expect(screenShareBtn.getAttribute('class')).toContain('red');
+              var screenPublisher = element(by.css('#screenPublisher'));
+              browser.wait(function () {
+                return screenPublisher.isPresent();
+              }, 10000);
+              var oldLocation = screenPublisher.getLocation();
+              browser.actions().dragAndDrop(screenPublisher, element(by.css('body'))).perform();
+              var newLocation = screenPublisher.getLocation();
+              expect(newLocation).not.toEqual(oldLocation);
+            });
+          });
+          it('shows an install prompt when you click it and the extension is not installed',
+              function (done) {
+            if (browser.browserName === 'chrome') {
+              browser.driver.executeScript(
+                'OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(function () {
+                expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+                expect(screenShareBtn.getAttribute('class')).toContain('green');
+                screenShareBtn.click();
+                expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+                browser.wait(function () {
+                  return element(by.css('#installScreenshareExtension')).isPresent();
+                }, 10000);
+                done();
+              });
+            } else {
+              done();
+            }
+          });
         });
-      });
+      }
 
       describe('connCount icon', function () {
         var connCount;
@@ -560,65 +566,70 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  describe('Screen', function () {
-    beforeEach(function () {
-      browser.get(roomName + '/screen');
-    });
+  if (browser.params.testScreenSharing) {
+    describe('Screen', function () {
+      beforeEach(function () {
+        browser.get(roomName + '/screen');
+      });
 
-    describe('screenshare button', function () {
-      var screenShareBtn = element(by.css('#showscreen'));
+      describe('screenshare button', function () {
+        var screenShareBtn = element(by.css('#showscreen'));
       
-      it('exists and is green', function () {
-        expect(screenShareBtn.isPresent()).toBe(true);
-        expect(screenShareBtn.getAttribute('class')).toContain('green');
-      });
+        it('exists and is green', function () {
+          expect(screenShareBtn.isPresent()).toBe(true);
+          expect(screenShareBtn.getAttribute('class')).toContain('green');
+        });
       
-      describe('has been clicked', function () {
-        beforeEach(function () {
-          screenShareBtn.click();
-        });
-        it('shares the screen', function () {
-          expect(screenShareBtn.getAttribute('class')).toContain('red');
-          var screenPublisher = element(by.css('#screenPublisher'));
-          browser.wait(function () {
-            return screenPublisher.isPresent();
-          }, 10000);
-        });
-        if (browser.browserName === 'firefox') {
-          describe('a subscriber', function () {
-            var secondBrowser;
-            beforeEach(function () {
-              secondBrowser = browser.forkNewDriverInstance();
-              secondBrowser.get(roomName);
-            });
-            it('subscribes to the screen and it is big', function () {
-              var subscriberVideo = secondBrowser.element(by.css(
-                'ot-subscriber.OT_big:not(.OT_loading) video'));
-              browser.wait(function () {
-                return subscriberVideo.isPresent();
-              }, 10000);
-            });
-          });
-        }
-      });
-      it('shows an install prompt when you click it and the extension is not installed',
-          function (done) {
-        if (browser.browserName === 'chrome') {
-          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
-              .then(function () {
-            expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
-            expect(screenShareBtn.getAttribute('class')).toContain('green');
+        describe('has been clicked', function () {
+          beforeEach(function () {
             screenShareBtn.click();
-            expect(screenShareBtn.getAttribute('disabled')).toBe('true');
-            browser.wait(function () {
-              return element(by.css('#installScreenshareExtension')).isPresent();
-            }, 10000);
-            done();
           });
-        } else {
-          done();
-        }
+          it('shares the screen', function () {
+            expect(screenShareBtn.getAttribute('class')).toContain('red');
+            var screenPublisher = element(by.css('#screenPublisher'));
+            browser.wait(function () {
+              return screenPublisher.isPresent();
+            }, 10000);
+          });
+          if (browser.browserName === 'firefox') {
+            describe('a subscriber', function () {
+              var secondBrowser;
+              beforeEach(function () {
+                secondBrowser = browser.forkNewDriverInstance();
+                secondBrowser.get(roomName);
+              });
+              afterEach(function() {
+                secondBrowser.close();
+              });
+              it('subscribes to the screen and it is big', function () {
+                var subscriberVideo = secondBrowser.element(by.css(
+                  'ot-subscriber.OT_big:not(.OT_loading) video'));
+                browser.wait(function () {
+                  return subscriberVideo.isPresent();
+                }, 10000);
+              });
+            });
+          }
+        });
+        it('shows an install prompt when you click it and the extension is not installed',
+            function (done) {
+          if (browser.browserName === 'chrome') {
+            browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+                .then(function () {
+              expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+              expect(screenShareBtn.getAttribute('class')).toContain('green');
+              screenShareBtn.click();
+              expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+              browser.wait(function () {
+                return element(by.css('#installScreenshareExtension')).isPresent();
+              }, 10000);
+              done();
+            });
+          } else {
+            done();
+          }
+        });
       });
     });
-  });
+  }
 });
