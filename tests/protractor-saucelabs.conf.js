@@ -9,6 +9,7 @@ exports.config = {
   ],
 
   capabilities: {
+    'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
     'browserName': 'chrome',
     'chromeOptions': {
       'args': ['use-fake-device-for-media-stream', 'use-fake-ui-for-media-stream']
