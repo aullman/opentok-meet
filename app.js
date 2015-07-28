@@ -5,7 +5,7 @@ var express = require('express'),
   app = express(),
   config;
 
-if (process.env.HEROKU) {
+if (process.env.HEROKU || process.env.TRAVIS) {
   config = {
     'port': process.env.PORT,
     'apiKey': process.env.OT_API_KEY,
@@ -44,9 +44,12 @@ app.configure(function() {
 
 var ot = new OpenTok(config.apiKey, config.apiSecret);
 
-require('./server/routes.js')(app, config, redis, ot);
+var useSSL = fs.existsSync(__dirname + '/server.key') &&
+  fs.existsSync(__dirname + '/server.crt');
 
-if (process.env.HEROKU) {
+require('./server/routes.js')(app, config, redis, ot, useSSL);
+
+if (process.env.HEROKU || !useSSL) {
   app.listen(config.port, function() {
     console.log('Listening on ' + config.port);
   });

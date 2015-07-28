@@ -2,10 +2,25 @@ language: node_js
 node_js:
 - '0.12'
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-after_script:
-  - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+before_script:
+- echo
+- npm start
+after_success:
+- cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
   code_climate:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
+  sauce_connect: true
+services:
+- redis-server
+env:
+  global:
+  - TRAVIS=true
+  - PORT=5000
+  - CHROME_EXTENSION_ID=none
+  - OT_API_KEY=1974561
+  - secure: UTGPkvGdlise2HWGIDGQvQAItv4zw2PZFOeIHOSvKBn2vuzhN8pX8OVR44n3Ddr28aW7YQkCLWKEsHsBgdsxUmWoFBnUrVX12dPKAjTq3gMeHuPAxkg6nBQJ4/y9r57wenAjGCd79H9n04jQtvDZkfe1+hpTLCMnMPkceIZdxO0=
+  - secure: H8AA0IvOE8HpZgsQdHXUq110NtvheQEy76ZNGZU7mF4bNAfQ0PVWVpJ+HL/1itJFBVlGiu+MqzKJ2MtdhrlrBxYBcyM1yHdfCkoM6Uh2ff4hEGbZsZ65ClzgvnhabUQrzFGn3Qidba9ICKspdl0jXrhRnpbnN22kPGM9w/Izvv0=
+  - secure: ok76rt0pPigW7fl0/WWzUr98yhNy1WxJieOKs/nNOF8JoGSkjdli/S4BryMXkd11zjoT29VPSu9GuyRkKuyvA0PzcNelUTzWZ9kIaInIaNpPylK2Wd2yc2/9iHh0UqD3Z7BtHHb/ZONyEyGUnAFB6KJwZ+306WxGCZfiuZTDBLg=
