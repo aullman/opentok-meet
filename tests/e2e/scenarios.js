@@ -400,7 +400,7 @@ describe('OpenTok Meet App', function() {
         expect(connCount.getInnerHtml()).toContain('2');
       });
 
-      it('subscribers should change size when you double-click', function () {
+      iit('subscribers should change size when you double-click', function () {
         expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
         browser.actions().doubleClick(firstSubscriber).perform();
         expect(firstSubscriber.getAttribute('class')).toContain('OT_big');

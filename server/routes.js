@@ -70,6 +70,7 @@ module.exports = function (app, config, redis, ot, useSSL) {
     res.format({
       json: function() {
         var goToRoom = function(err, sessionId, apiKey, secret) {
+          console.log('goToRoom: ' + sessionId + ' ' + apiKey);
           if (err) {
             console.error('Error getting room: ', err);
             res.send({
