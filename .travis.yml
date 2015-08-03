@@ -17,6 +17,7 @@ addons:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
 services:
 - redis-server
+sudo: false
 env:
   global:
   - TRAVIS=true
