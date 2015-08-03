@@ -33,7 +33,7 @@ describe('OpenTok Meet App', function() {
       }, 10000);
     });
 
-    it('should show a shareInfo message when you connect', function () {
+    iit('should show a shareInfo message when you connect', function () {
       browser.wait(function () {
         return element(by.css('#shareInfo')).isPresent();
       }, 10000);
