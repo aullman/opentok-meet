@@ -6,7 +6,7 @@ exports.config = {
   ],
 
   capabilities: {
-    'browserstack.user' : process.env.BROWSERSTACK_USER,
+    'browserstack.user' : process.env.BROWSERSTACK_USERNAME,
     'browserstack.key' : process.env.BROWSERSTACK_KEY,
     'browserstack.local' : 'true',
     'browserName': 'chrome',
