@@ -31,7 +31,7 @@
     "angular-mocks": "~1.2.23"
   },
   "resolutions": {
-    "opentok-layout-js": "~0.1.2",
+    "opentok-layout-js": "~0.1.3",
     "opentok-angular": "0.4.0",
     "angular": "~1.3.10"
   }
