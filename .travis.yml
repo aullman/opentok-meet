@@ -16,7 +16,7 @@ services:
 env:
   global:
   - TRAVIS=true
-  - PORT=5000
+  - PORT=3000
   - CHROME_EXTENSION_ID=none
   - OT_API_KEY=1974561
   - BROWSERSTACK_USERNAME=adamullman1
