@@ -5,7 +5,11 @@ before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 before_script:
-- npm start &
+- npm start > /dev/null &
+- wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+- unzip BrowserStackLocal-linux-x64.zip
+- ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
+- sleep 10
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
