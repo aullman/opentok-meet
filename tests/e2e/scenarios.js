@@ -107,7 +107,7 @@ describe('OpenTok Meet App', function() {
           publishBtn.click();
           browser.wait(function() {
             return !publisher.isPresent();
-          });
+          }, 1000);
           expect(publishBtn.getAttribute('class')).toContain('green');
           publishBtn.click();
           expect(publisher.isPresent()).toBe(true);
