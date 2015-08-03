@@ -1,11 +1,11 @@
 var OpenTok = require('opentok');
 
-module.exports = function (app, config, redis, ot) {
+module.exports = function (app, config, redis, ot, useSSL) {
   var RoomStore = require('./roomstore.js')(redis, ot);
   app.get('*', function(req, res, next) {
     if (req.host === 'hangout.tokbox.com') {
       res.redirect('https://meet.tokbox.com' + req.url);
-    } else if (req.protocol !== 'https' && req.headers['x-forwarded-proto'] !== 'https') {
+    } else if (useSSL && req.protocol !== 'https' && req.headers['x-forwarded-proto'] !== 'https') {
       res.redirect('https://' + req.host + req.url);
     } else {
       next();
