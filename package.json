@@ -19,13 +19,13 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
-    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js --single-run --browsers Firefox",
+    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js --single-run --browsers Firefox && node_modules/.bin/protractor/ tests/protractor-browserstack.conf.js",
     "test-run": "node node_modules/karma/bin/karma start tests/karma.conf.js",
     "start": "node app.js",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
-    "protractor": "node node_modules/protractor/bin/protractor tests/protractor.conf.js"
+    "protractor": "node_modules/.bin/protractor/ tests/protractor.conf.js"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.4",
