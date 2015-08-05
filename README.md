@@ -9,9 +9,9 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 
 ## Disclaimer
 
->This is a fork of the [opentok-meet](/aullman/opentok-meet) project that deploys to [meet.tokbox.com](https://meet.tokbox.com). It is pointing to the OpenTok nightly environment which is experimental and likely to break. It also includes experimental features.
+>This is a fork of the [opentok-meet](https://github.com/aullman/opentok-meet) project that deploys to [meet.tokbox.com](https://meet.tokbox.com). It is pointing to the OpenTok nightly environment which is experimental and likely to break. It also includes experimental features.
 
->If you wish to fork this project, please fork the [parent project](/aullman/opentok-meet).
+>If you wish to fork this project, please fork the [parent project](https://github.com/aullman/opentok-meet).
 
 ## Deploying to meet.tokbox.com
 

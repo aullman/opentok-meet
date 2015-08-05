@@ -14,7 +14,7 @@ after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
   code_climate:
-    repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
+    repo_token: 4abde268e416aa3752bccf1311ecfe7cd3d6a445ff4849ee4632bc7f9bbde251
 services:
 - redis-server
 sudo: false
