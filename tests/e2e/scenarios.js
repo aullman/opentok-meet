@@ -21,7 +21,7 @@ describe('OpenTok Meet App', function() {
     beforeEach(function() {
       browser.get(roomName);
     });
-    
+
     it('should have the right title', function () {
       expect(browser.getTitle()).toEqual('OpenTok Meet : ' + roomName);
     });
@@ -45,7 +45,7 @@ describe('OpenTok Meet App', function() {
         expect(publisher.isPresent()).toBe(true);
         expect(publisher.isDisplayed()).toBe(true);
       });
-      
+
       it('contains a video element and is HD', function () {
         browser.wait(function () {
           return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
@@ -57,7 +57,7 @@ describe('OpenTok Meet App', function() {
         expect(publisherVideo.getAttribute('videoHeight')).toBe(
           browser.browserName === 'chrome' ? '720' : '480');
       });
-      
+
       it('moves when it is dragged', function () {
         var oldLocation = publisher.getLocation();
         browser.actions().dragAndDrop(publisher, element(by.css('body'))).perform();
@@ -123,7 +123,7 @@ describe('OpenTok Meet App', function() {
           expect(publisherVideo.getAttribute('videoHeight')).toBe(
             browser.browserName === 'chrome' ? '720' : '480');
         });
-        
+
         it('publishSDBtn shows up when you unpublish and can publish', function () {
           var publisher = element(by.css('div#facePublisher'));
           publishBtn.click();
@@ -137,7 +137,7 @@ describe('OpenTok Meet App', function() {
             return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
           }, 10000);
           //var publisherVideo = publisher.element(by.css('video'));
-          // Not sure why but below fails if I run all the tests but not 
+          // Not sure why but below fails if I run all the tests but not
           // if I run this test alone
           //expect(publisherVideo.getAttribute('videoWidth')).toBe('640');
           //expect(publisherVideo.getAttribute('videoHeight')).toBe('480');
@@ -229,12 +229,12 @@ describe('OpenTok Meet App', function() {
         // install extensions
         describe('screenshare button', function () {
           var screenShareBtn = element(by.css('#showscreen'));
-        
+
           it('exists and is green', function () {
             expect(screenShareBtn.isPresent()).toBe(true);
             expect(screenShareBtn.getAttribute('class')).toContain('green');
           });
-        
+
           describe('has been clicked', function () {
             beforeEach(function () {
               screenShareBtn.click();
@@ -320,7 +320,7 @@ describe('OpenTok Meet App', function() {
     beforeEach(function () {
       browser.get('');
     });
-    
+
     var roomField = element(by.model('room')),
       submit = element(by.css('#joinRoomBtn'));
 
@@ -352,9 +352,7 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  // Taking this out for now because browserstack can't run them until I enable
-  // multiple VMs (I think)
-  xdescribe('2 browsers in the same room', function () {
+  describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
       browser.get(roomName);
@@ -543,7 +541,7 @@ describe('OpenTok Meet App', function() {
                 return element(by.css('ot-editor .opentok-editor')).isDisplayed();
               }, 10000);
             });
-            
+
             it('text shows up on the first browser', function () {
               browser.wait(function() {
                 return firstBrowserText.getInnerHtml().then(function(innerHTML) {
@@ -582,12 +580,12 @@ describe('OpenTok Meet App', function() {
 
       describe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
-      
+
         it('exists and is green', function () {
           expect(screenShareBtn.isPresent()).toBe(true);
           expect(screenShareBtn.getAttribute('class')).toContain('green');
         });
-      
+
         describe('has been clicked', function () {
           beforeEach(function () {
             screenShareBtn.click();
