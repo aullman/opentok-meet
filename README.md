@@ -5,11 +5,11 @@
 opentok-meet
 ===============
 
-Opentok app with screen sharing using the WebRTC screen sharing and Archiving features. You can check it out running at [meet.tokbox.com](https://meet.tokbox.com). 
+Opentok app with screen sharing using the WebRTC screen sharing and Archiving features. You can check it out running at [meet.tokbox.com](https://meet.tokbox.com).
 
 ## Running locally
 
-1. If you haven't already, [sign up for OpenTok](https://tokbox.com/signup). 
+1. If you haven't already, [sign up for OpenTok](https://tokbox.com/signup).
 1. Clone this repo
 2. `cp config.json.sample config.json`
 3. Add your OpenTok apikey and secret to config.json
@@ -22,7 +22,7 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 
 ## Running on Heroku
 
-1. If you haven't already, [sign up for OpenTok](https://tokbox.com/signup). 
+1. If you haven't already, [sign up for OpenTok](https://tokbox.com/signup).
 1. Create a [Heroku](heroku.com) instance
 2. Clone this repo
 3. In the repo run `heroku git:remote -a <instance name>` to add the remote to github.
@@ -36,5 +36,7 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 * You can run the unit tests using karma with `npm test`
 * You can run E2E tests using protractor with `npm run protractor`
   * Make sure that you have started your server `npm start`
-  * Updated [protractor.conf.js](/tests/protractor.conf.js) to point to your local server and your local copy of the screensharing extension for Chrome. 
+  * Updated [protractor.conf.js](/tests/protractor.conf.js) to point to your local server and your local copy of the screensharing extension for Chrome.
   * Also make sure that your screensharing extension is allowing access to your local server by updating the matches property in the [manifest.json](https://github.com/opentok/screensharing-extensions/blob/master/chrome/ScreenSharing/manifest.json#L16) file.
+
+These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [Browserstack Automate](browserstack.com/automate). 
