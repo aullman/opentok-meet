@@ -497,7 +497,7 @@ describe('OpenTok Meet App', function() {
       }
 
       describe('using the collaborative editor', function () {
-        var firstShowEditorBtn, secondShowEditorBtn, defaultText;
+        var firstShowEditorBtn, secondShowEditorBtn;
         beforeEach(function (done) {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
@@ -505,23 +505,24 @@ describe('OpenTok Meet App', function() {
           browser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
           }, 10000).then(function () {
-            defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
             done();
           });
         });
 
         afterEach(function () {
-          defaultText = firstShowEditorBtn = secondShowEditorBtn = null;
+          firstShowEditorBtn = secondShowEditorBtn = null;
         });
 
         it('contains the default text', function () {
+          var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
           expect(defaultText.isPresent()).toBe(true);
           expect(defaultText.getInnerHtml()).toBe('// Write code here');
         });
 
         describe('when you enter text on the second browser', function () {
           beforeEach(function () {
-            secondBrowser.actions().mouseDown(defaultText).perform();
+            var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+            secondBrowser.actions().mouseDown(inputText).perform();
             secondBrowser.actions().sendKeys('hello world').perform();
           });
 
@@ -541,6 +542,9 @@ describe('OpenTok Meet App', function() {
             });
 
             it('text shows up on the first browser', function () {
+              // CodeMirror messes with DOM, need to wait before we try to select elements
+              // otherwise we get the old element
+              browser.sleep(2000);
               browser.wait(function() {
                 var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
                 return firstBrowserText.getInnerHtml().then(function(innerHTML) {
@@ -551,19 +555,26 @@ describe('OpenTok Meet App', function() {
 
             describe('when you enter text on the first browser', function () {
               beforeEach(function () {
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
+                browser.sleep(2000);
                 var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
                 browser.actions().mouseDown(firstBrowserText).perform();
                 browser.actions().sendKeys('foo bar').perform();
               });
 
-              it('shows up on the second browser within 2 seconds', function () {
+              it('shows up on the second browser within 4 seconds', function () {
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
                 browser.sleep(2000);
+                var secondBrowserText = secondBrowser.element(
+                  by.css('.CodeMirror-code pre .cm-comment'));
                 browser.wait(function() {
-                  return defaultText.getInnerHtml().then(function(innerHTML) {
+                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
                     return innerHTML.indexOf('foo bar') > -1;
                   });
                 }, 4000);
-                expect(defaultText.getInnerHtml()).toContain('foo bar');
+                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
               });
             });
           });
