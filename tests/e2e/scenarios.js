@@ -520,9 +520,7 @@ describe('OpenTok Meet App', function() {
         });
 
         describe('when you enter text on the second browser', function () {
-          var firstBrowserText;
           beforeEach(function () {
-            firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
             secondBrowser.actions().mouseDown(defaultText).perform();
             secondBrowser.actions().sendKeys('hello world').perform();
           });
@@ -544,6 +542,7 @@ describe('OpenTok Meet App', function() {
 
             it('text shows up on the first browser', function () {
               browser.wait(function() {
+                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
                 return firstBrowserText.getInnerHtml().then(function(innerHTML) {
                   return innerHTML.indexOf('hello world') > -1;
                 });
@@ -552,6 +551,7 @@ describe('OpenTok Meet App', function() {
 
             describe('when you enter text on the first browser', function () {
               beforeEach(function () {
+                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
                 browser.actions().mouseDown(firstBrowserText).perform();
                 browser.actions().sendKeys('foo bar').perform();
               });
