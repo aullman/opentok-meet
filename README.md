@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/opentok/opentok-meet.svg?branch=master)](https://travis-ci.org/opentok/opentok-meet)
 [![Code Climate](https://codeclimate.com/github/opentok/opentok-meet/badges/gpa.svg)](https://codeclimate.com/github/opentok/opentok-meet)
-[![Test Coverage](https://codeclimate.com/opentok/aullman/opentok-meet/badges/coverage.svg)](https://codeclimate.com/github/opentok/opentok-meet)
+[![Test Coverage](https://codeclimate.com/github/opentok/opentok-meet/badges/coverage.svg)](https://codeclimate.com/github/opentok/opentok-meet/coverage)
 
 opentok-meet
 ===============
