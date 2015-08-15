@@ -20,6 +20,9 @@ body input {
     font-family: 'Ropa Sans', sans-serif;
 }
 
+button {
+  outline: none;
+}
 
 #facePublisher, #screenPublisher {
     width: 160px;
@@ -116,7 +119,9 @@ ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
 }
 
 ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn,
-    ot-layout > :hover subscriber-stats {
+    ot-layout > :hover subscriber-stats, ot-layout button.OT_mode-on ~ subscriber-stats,
+    ot-layout button.OT_mode-on ~ button.resize-btn,
+    ot-layout button.OT_mode-on ~ button.restrict-framerate-btn {
     top: 0;
     opacity: 1;
 }
@@ -217,7 +222,7 @@ button.red {
 }
 
 button.unread {
-    
+
 }
 
 button:disabled {
@@ -283,18 +288,18 @@ button:disabled {
     z-index: 98;
 }
 
-@media screen and (max-width: 650px) {  
+@media screen and (max-width: 650px) {
   #facePublisher, #screenPublisher {
       width: 89px;
       height: 50px;
   }
-  
+
   #shareInfo {
       width: 250px;
       left: 50%;
       margin-left: -135px;
   }
-  
+
   #statusMessages {
       width: 340px;
       left: calc(50% - 180px);
@@ -390,7 +395,7 @@ ot-subscriber mute-video {
     z-index: 99;
 }
 
-ot-layout > :hover mute-video {
+ot-layout > :hover mute-video, ot-layout button.OT_mode-on ~ mute-video {
     top: 0;
     opacity: 1;
 }

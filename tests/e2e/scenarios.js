@@ -463,7 +463,7 @@ describe('OpenTok Meet App', function() {
           var showStatsInfo = secondBrowser.element(by.css('.show-stats-info'));
           var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
           expect(showStatsInfo.isDisplayed()).toBe(false);
-          secondBrowser.actions().mouseMove(statsButton).perform();
+          statsButton.click();
           secondBrowser.wait(function() {
             return showStatsInfo.isDisplayed();
           }, 2000);

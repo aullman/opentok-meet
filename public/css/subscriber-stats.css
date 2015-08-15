@@ -16,3 +16,7 @@ subscriber-stats div.show-stats-info {
     padding: 10px;
     margin-top: 4px;
 }
+
+subscriber-stats button.show-stats {
+  text-shadow: 0px 0px 8px #fff;
+}

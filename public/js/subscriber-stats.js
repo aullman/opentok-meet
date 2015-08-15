@@ -1,12 +1,98 @@
-angular.module('opentok-meet').directive('subscriberStats', ['OTSession',
-  function(OTSession) {
+// StatsService runs on a particular interval and updates the stats for all
+// of the subscribers
+function SubscriberStats(subscriber, onStats) {
+  this.subscriber = subscriber;
+  this.onStats = onStats;
+  this.lastStats; // The previous getStats result
+  this.lastLastStats; // The getStats result before that
+}
+
+angular.module('opentok-meet').factory('StatsService', ['$interval',
+  function($interval) {
+    var interval,
+      subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
+    var updateStats = function () {
+      Object.keys(subscribers).forEach(function (subscriberId) {
+        var subscriberStats = subscribers[subscriberId];
+        var subscriber = subscriberStats.subscriber,
+          lastStats = subscriberStats.lastStats,
+          lastLastStats = subscriberStats.lastLastStats;
+        subscriber.getStats(function(err, stats) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          var currStats = {
+            width: subscriber.videoWidth(),
+            height: subscriber.videoHeight(),
+            timestamp: stats.timestamp
+          };
+          var secondsElapsed;
+          if (lastStats) {
+            secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
+          }
+          var setCurrStats = function(type) {
+            currStats[type] = stats[type];
+            if (stats[type].packetsReceived > 0) {
+              currStats[type + 'PacketLoss'] = ((stats[type].packetsLost /
+                stats[type].packetsReceived) * 100).toFixed(2);
+            }
+            if (lastStats) {
+              if (lastLastStats && stats[type].packetsReceived -
+                lastLastStats[type].packetsReceived > 0) {
+                currStats[type + 'PacketLoss'] =
+                  (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
+                    (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
+                    .toFixed(2);
+              }
+              var bitsReceived = (stats[type].bytesReceived -
+                (lastStats[type] ? lastStats[type].bytesReceived : 0)) * 8;
+              currStats[type + 'Bitrate'] = ((bitsReceived / secondsElapsed)/1000).toFixed(0);
+            } else {
+              currStats[type + 'Bitrate'] = '0';
+            }
+          };
+          if (stats.audio) {
+            setCurrStats('audio');
+          }
+          if (stats.video) {
+            setCurrStats('video');
+          }
+          subscriberStats.lastLastStats = subscriberStats.lastStats;
+          subscriberStats.lastStats = currStats;
+          subscriberStats.onStats(currStats);
+        });
+      });
+    };
+    return {
+      addSubscriber: function(subscriber, onStats) {
+        subscribers[subscriber.id] = new SubscriberStats(subscriber, onStats);
+        if (!interval) {
+          interval = $interval(updateStats, 2000);
+          updateStats();
+        }
+      },
+      removeSubscriber: function(subscriberId) {
+        delete subscribers[subscriberId];
+        if (Object.keys(subscribers).length === 0) {
+          $interval.cancel(interval);
+          interval = null;
+        }
+      }
+    };
+  }
+]);
+
+angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'StatsService',
+  '$timeout', function(OTSession, StatsService, $timeout) {
     return {
       restrict: 'E',
       scope: {
         stream: '='
       },
-      template: '<button class="show-stats-btn ion-stats-bars"></button>' +
-        '<div class="show-stats-info" ng-show="stats">' +
+      template: '<button class="show-stats-btn ion-stats-bars" ' +
+        'ng-class="{\'show-stats\': showStats}"></button>' +
+        '<div class="show-stats-info" ng-show="showStats">' +
         'Resolution: {{stats.width}}x{{stats.height}}<br/>' +
         '<div ng-show="stats.audio">' +
         'Audio Packet Loss: {{stats.audioPacketLoss}}%<br/>' +
@@ -16,85 +102,30 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession',
         'Video Bitrate: {{stats.videoBitrate}} kbps' +
         '</div></div>',
       link: function(scope, element) {
-        var lastStats,
-          showingStats = false,
-          statsInterval;
+        var subscriber, subscriberId;
+        var timeout = $timeout(function () {
+          // subscribe hasn't been called yet so we wait a few milliseconds
+          subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+          subscriberId = subscriber.id;
 
-        var updateStats = function() {
-          var subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
-          if (subscriber) {
-            subscriber.getStats(function(err, stats) {
-              if (err) {
-                console.error(err);
-                return;
-              }
-              var currStats = {
-                width: subscriber.videoWidth(),
-                height: subscriber.videoHeight(),
-                timestamp: stats.timestamp
-              };
-              var secondsElapsed;
-              if (lastStats) {
-                secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
-              }
-              if (stats.audio) {
-                currStats.audio = stats.audio;
-                currStats.audioPacketLoss =
-                  ((stats.audio.packetsLost/stats.audio.packetsReceived) * 100).toFixed(2);
-                if (lastStats) {
-                  var audioBitsReceived = (stats.audio.bytesReceived -
-                    (lastStats.audio ? lastStats.audio.bytesReceived : 0)) * 8;
-                  currStats.audioBitrate = ((audioBitsReceived / secondsElapsed)/1000).toFixed(0);
-                } else {
-                  currStats.audioBitrate = '0';
-                }
-              }
-              if (stats.video) {
-                currStats.video = stats.video;
-                currStats.videoPacketLoss =
-                  ((stats.video.packetsLost/stats.video.packetsReceived) * 100).toFixed(2);
-                if (lastStats && lastStats) {
-                  var videoBitsReceived = (stats.video.bytesReceived -
-                    (lastStats.video ? lastStats.video.bytesReceived : 0)) * 8;
-                  currStats.videoBitrate = ((videoBitsReceived / secondsElapsed)/1000).toFixed(0);
-                } else {
-                  currStats.videoBitrate = '0';
-                }
-              }
+          StatsService.addSubscriber(subscriber, function (stats) {
+            scope.stats = stats;
+            scope.$apply();
+          });
+        }, 100);
 
-              lastStats = currStats;
-              if (showingStats) {
-                scope.stats = currStats;
-                scope.$apply();
-              }
-            });
-          }
-        };
-        updateStats();
-
-        angular.element(element).find('button').on('mouseover', function() {
-          showingStats = true;
-          scope.stats = lastStats;
-          if (statsInterval) {
-            clearInterval(statsInterval);
-          }
-          statsInterval = setInterval(updateStats, 1000);
-          updateStats();
-        });
-        angular.element(element).on('mouseout', function() {
-          showingStats = false;
-          scope.stats = null;
+        angular.element(element).find('button').on('click', function() {
+          scope.showStats = !scope.showStats;
+          subscriber.setStyle({
+            buttonDisplayMode: scope.showStats ? 'on' : 'auto'
+          });
           scope.$apply();
-          if (statsInterval) {
-            clearInterval(statsInterval);
-            statsInterval = null;
-          }
         });
         scope.$on('$destroy', function() {
-          if (statsInterval) {
-            clearInterval(statsInterval);
-            statsInterval = null;
+          if (subscriberId) {
+            StatsService.removeSubscriber(subscriberId);
           }
+          $timeout.cancel(timeout);
         });
       }
     };
