@@ -183,3 +183,31 @@ describe('mutePublisher', function () {
     expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
   });
 });
+
+describe('restrictFrameRate', function () {
+  var scope, element, mockSubscriber, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
+    OTSession.session = {};
+    OTSession.session.getSubscribersForStream = function () {
+      return [mockSubscriber];
+    };
+
+    element = '<restrict-framerate></restrict-framerate>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
+    expect(scope.restrictedFrameRate).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
+    expect(scope.restrictedFrameRate).toBe(true);
+    element.triggerHandler({type: 'click'});
+    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
+    expect(scope.restrictedFrameRate).toBe(false);
+  });
+});

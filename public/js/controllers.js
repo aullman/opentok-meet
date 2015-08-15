@@ -103,15 +103,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }, 10);
   });
 
-  $scope.$on('restrictFrameRate', function (event) {
-    var stream = event.targetScope.stream,
-      subscriber = $scope.session.getSubscribersForStream(stream)[0];
-    if (subscriber) {
-      subscriber.restrictFrameRate(!stream.restrictedFrameRate);
-      stream.restrictedFrameRate = !stream.restrictedFrameRate;
-    }
-  });
-
   $scope.toggleWhiteboard = function() {
     $scope.showWhiteboard = !$scope.showWhiteboard;
     $scope.whiteboardUnread = false;

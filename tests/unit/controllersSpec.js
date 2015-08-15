@@ -237,25 +237,6 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
-    describe('restrictFrameRate', function () {
-      var mockSubscriber;
-      beforeEach(function () {
-        mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
-        scope.session.getSubscribersForStream = function () {
-          return [mockSubscriber];
-        };
-      });
-      it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
-        scope.stream = {};
-        scope.$emit('restrictFrameRate');
-        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
-        expect(scope.stream.restrictedFrameRate).toBe(true);
-        scope.$emit('restrictFrameRate');
-        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
-        expect(scope.stream.restrictedFrameRate).toBe(false);
-      });
-    });
-
     describe('RoomService.getRoom()', function () {
       beforeEach(function () {
         roomDefer.resolve({

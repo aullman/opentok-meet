@@ -108,4 +108,27 @@ angular.module('opentok-meet').directive('draggable', function($document) {
         });
       }
     };
+  }])
+  .directive('restrictFramerate', ['OTSession', function (OTSession) {
+    return {
+      restrict: 'E',
+      template: '<button class="restrict-framerate-btn" ng-class="' +
+      '{\'ion-ios7-speedometer-outline\': restrictedFrameRate, ' +
+      '\'ion-ios7-speedometer\': !restrictedFrameRate}" title="{{' +
+      'restrictedFrameRate ? \'Unrestrict Framerate\' : \'Restrict Framerate\'}}"></button>',
+      link: function (scope, element) {
+        var subscriber;
+        scope.restrictedFrameRate = false;
+        angular.element(element).on('click', function () {
+          if (!subscriber) {
+            subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+          }
+          if (subscriber) {
+            subscriber.restrictFrameRate(!scope.restrictedFrameRate);
+            scope.restrictedFrameRate = !scope.restrictedFrameRate;
+            scope.$apply();
+          }
+        });
+      }
+    };
   }]);
