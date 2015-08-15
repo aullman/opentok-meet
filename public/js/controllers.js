@@ -102,31 +102,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }
   };
 
-  // This is the double click to enlarge functionality
-  // It's a bit weird to handle changes in size at this level. Really this should be
-  // in the Subscriber Directive but I'm trying not to pollute the generic
-  // Subscriber Directive
-  $scope.$on('changeSize', function(event) {
-    if (event.targetScope.stream.othLarge === undefined) {
-      // If we're a screen we default to large otherwise we default to small
-      event.targetScope.stream.othLarge = event.targetScope.stream.name !== 'screen';
-    } else {
-      event.targetScope.stream.othLarge = !event.targetScope.stream.othLarge;
-    }
-    setTimeout(function() {
-      event.targetScope.$emit('otLayout');
-    }, 10);
-  });
-
-  $scope.$on('restrictFrameRate', function (event) {
-    var stream = event.targetScope.stream,
-      subscriber = $scope.session.getSubscribersForStream(stream)[0];
-    if (subscriber) {
-      subscriber.restrictFrameRate(!stream.restrictedFrameRate);
-      stream.restrictedFrameRate = !stream.restrictedFrameRate;
-    }
-  });
-
   $scope.toggleWhiteboard = function() {
     $scope.showWhiteboard = !$scope.showWhiteboard;
     $scope.whiteboardUnread = false;

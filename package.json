@@ -20,7 +20,7 @@
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
     "test": "node node_modules/karma/bin/karma start tests/karma.conf.js --single-run --browsers Firefox && node_modules/.bin/protractor tests/protractor-browserstack.conf.js",
-    "test-run": "node node_modules/karma/bin/karma start tests/karma.conf.js",
+    "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",

@@ -44,12 +44,12 @@
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine"
                     stream="stream"
                     props="{style: {nameDisplayMode: 'off'}}"
-                    ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}"
+                    ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
-                        <button class="restrict-framerate-btn" ng-class="{'ion-ios7-speedometer-outline': stream.restrictedFrameRate, 'ion-ios7-speedometer': !stream.restrictedFrameRate}" ng-click="$emit('restrictFrameRate');" title="{{stream.restrictedFrameRate ? 'Unrestrict Framerate' : 'Restrict Framerate'}}"></button>
+                        <restrict-framerate></restrict-framerate>
                         <mute-video mute-subscriber></mute-video>
-                        <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');" title="{{stream.othLarge ? 'Shrink' : 'Enlarge'}}"></button>
+                        <expand-button></expand-button>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
