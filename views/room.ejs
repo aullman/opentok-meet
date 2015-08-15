@@ -48,7 +48,7 @@
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
                         <button class="restrict-framerate-btn" ng-class="{'ion-ios7-speedometer-outline': stream.restrictedFrameRate, 'ion-ios7-speedometer': !stream.restrictedFrameRate}" ng-click="$emit('restrictFrameRate');" title="{{stream.restrictedFrameRate ? 'Unrestrict Framerate' : 'Restrict Framerate'}}"></button>
-                        <mute-video muted="stream.videoMuted" ng-click="$emit('muteVideo')"></mute-video>
+                        <mute-video mute-subscriber></mute-video>
                         <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');" title="{{stream.othLarge ? 'Shrink' : 'Enlarge'}}"></button>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
@@ -74,7 +74,7 @@
                 <ot-publisher id="facePublisher"
                     props="facePublisherProps">
                 </ot-publisher>
-                <mute-video muted="publisherVideoMuted" ng-click="togglePublishVideo()"></mute-video>
+                <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"

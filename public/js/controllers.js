@@ -16,7 +16,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.whiteboardUnread = false;
   $scope.editorUnread = false;
   $scope.leaving = false;
-  $scope.publisherVideoMuted = false;
 
   var facePublisherPropsHD = {
     name: 'face',
@@ -105,7 +104,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   // This is the double click to enlarge functionality
   // It's a bit weird to handle changes in size at this level. Really this should be
-  // in the Subscriber Directive but I'm trying not to pollute the generic 
+  // in the Subscriber Directive but I'm trying not to pollute the generic
   // Subscriber Directive
   $scope.$on('changeSize', function(event) {
     if (event.targetScope.stream.othLarge === undefined) {
@@ -117,15 +116,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     setTimeout(function() {
       event.targetScope.$emit('otLayout');
     }, 10);
-  });
-
-  $scope.$on('muteVideo', function(event) {
-    var stream = event.targetScope.stream,
-      subscriber = $scope.session.getSubscribersForStream(stream)[0];
-    if (subscriber) {
-      subscriber.subscribeToVideo(!!stream.videoMuted);
-      stream.videoMuted = !stream.videoMuted;
-    }
   });
 
   $scope.$on('restrictFrameRate', function (event) {
@@ -224,14 +214,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   $scope.sendEmail = function() {
     $window.location.href = 'mailto:?subject=Let\'s Meet&body=' + $scope.shareURL;
-  };
-
-  $scope.togglePublishVideo = function () {
-    var facePublisher = OTSession.publishers.filter(function (el) {
-      return el.id === 'facePublisher';
-    })[0];
-    facePublisher.publishVideo($scope.publisherVideoMuted);
-    $scope.publisherVideoMuted = !$scope.publisherVideoMuted;
   };
 
   var mouseMoveTimeout;

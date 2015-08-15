@@ -55,9 +55,6 @@ angular.module('opentok-meet').directive('draggable', function($document) {
   .directive('muteVideo', function () {
     return {
       restrict: 'E',
-      scope: {
-        muted: '='
-      },
       template: '<i class="video-icon ion-ios7-videocam" ' +
       'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"></i>' +
       '<i class="cross-icon" ng-class="' +
@@ -65,4 +62,50 @@ angular.module('opentok-meet').directive('draggable', function($document) {
       'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"' +
       '</i>'
     };
-  });
+  })
+  .directive('muteSubscriber', ['OTSession', function (OTSession) {
+    return {
+      restrict: 'A',
+      link : function(scope, element) {
+        var subscriber;
+        scope.muted = false;
+        angular.element(element).on('click', function () {
+          if (!subscriber) {
+            subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+          }
+          if (subscriber) {
+            subscriber.subscribeToVideo(scope.muted);
+            scope.muted = !scope.muted;
+            scope.$apply();
+          }
+        });
+        scope.$on('$destroy', function () {
+          subscriber = null;
+        });
+      }
+    };
+  }])
+  .directive('mutePublisher', ['OTSession', function (OTSession) {
+    return {
+      restrict: 'A',
+      link : function(scope, element, attrs) {
+        var publisher;
+        scope.muted = false;
+        angular.element(element).on('click', function () {
+          if (!publisher) {
+            publisher = OTSession.publishers.filter(function (el) {
+              return el.id === attrs.publisherId;
+            })[0];
+          }
+          if (publisher) {
+            publisher.publishVideo(scope.muted);
+            scope.muted = !scope.muted;
+            scope.$apply();
+          }
+        });
+        scope.$on('$destroy', function () {
+          publisher = null;
+        });
+      }
+    };
+  }]);

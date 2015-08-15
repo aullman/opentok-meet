@@ -241,25 +241,6 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
-    describe('muteVideo', function () {
-      var mockSubscriber;
-      beforeEach(function () {
-        mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
-        scope.session.getSubscribersForStream = function () {
-          return [mockSubscriber];
-        };
-      });
-      it('toggles stream.videoMuted and calls subscribeToVideo', function () {
-        scope.stream = {};
-        scope.$emit('muteVideo');
-        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
-        expect(scope.stream.videoMuted).toBe(true);
-        scope.$emit('muteVideo');
-        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
-        expect(scope.stream.videoMuted).toBe(false);
-      });
-    });
-
     describe('restrictFrameRate', function () {
       var mockSubscriber;
       beforeEach(function () {
@@ -308,7 +289,7 @@ describe('OpenTok Meet controllers', function() {
           mockSession;
         beforeEach(function () {
           callback = MockOTSession.init.calls.mostRecent().args[3];
-          
+
           mockSession = OT.initSession('mockSessionId');
           spyOn(mockSession, 'on').and.callThrough();
           callback(null, mockSession);
@@ -414,18 +395,6 @@ describe('OpenTok Meet controllers', function() {
         scope.shareURL = 'http://mockURL';
         scope.sendEmail();
         expect(windowMock.location.href).toBe('mailto:?subject=Let\'s Meet&body=http://mockURL');
-      });
-    });
-
-    describe('togglePublishVideo', function () {
-      it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
-        expect(scope.publisherVideoMuted).toBe(false);
-        scope.togglePublishVideo();
-        expect(scope.publisherVideoMuted).toBe(true);
-        expect(facePublisher.publishVideo).toHaveBeenCalledWith(false);
-        scope.togglePublishVideo();
-        expect(scope.publisherVideoMuted).toBe(false);
-        expect(facePublisher.publishVideo).toHaveBeenCalledWith(true);
       });
     });
 

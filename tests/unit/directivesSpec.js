@@ -129,3 +129,57 @@ describe('muteVideo', function () {
     });
   });
 });
+
+describe('muteSubscriber', function () {
+  var scope, element, mockSubscriber, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
+    OTSession.session = {};
+    OTSession.session.getSubscribersForStream = function () {
+      return [mockSubscriber];
+    };
+
+    element = '<div mute-subscriber></div>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles subscribeToVideo on click', function () {
+    expect(scope.muted).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(true);
+    expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(false);
+    expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
+  });
+});
+
+describe('mutePublisher', function () {
+  var scope, element, mockPublisher, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
+    mockPublisher.id = 'mockPublisher';
+    OTSession.publishers = [mockPublisher];
+
+    element = '<div publisher-id="mockPublisher" mute-publisher></div>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
+    expect(scope.muted).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(true);
+    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(false);
+    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+  });
+});
