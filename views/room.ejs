@@ -39,10 +39,10 @@
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
             <ot-layout props="{animate:true,bigFixedRatio:true}">
-                <ot-subscriber ng-repeat="stream in streams | filter:notMine" 
-                    stream="stream" 
-                    props="{style: {nameDisplayMode: 'off'}}" 
-                    ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}" 
+                <ot-subscriber ng-repeat="stream in streams | filter:notMine"
+                    stream="stream"
+                    props="{style: {nameDisplayMode: 'off'}}"
+                    ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
                         <button class="restrict-framerate-btn" ng-class="{'ion-ios7-speedometer-outline': stream.restrictedFrameRate, 'ion-ios7-speedometer': !stream.restrictedFrameRate}" ng-click="$emit('restrictFrameRate');" title="{{stream.restrictedFrameRate ? 'Unrestrict Framerate' : 'Restrict Framerate'}}"></button>
@@ -65,11 +65,11 @@
                     class="OT_big">
                 </ot-editor>
             </ot-layout>
-            
+
             <div id="facePublisher"
                 ng-if="publishing"
                 draggable="true">
-                <ot-publisher id="facePublisher" 
+                <ot-publisher id="facePublisher"
                     props="facePublisherProps">
                 </ot-publisher>
                 <mute-video muted="publisherVideoMuted" ng-click="togglePublishVideo()"></mute-video>
@@ -81,7 +81,7 @@
             </ot-publisher>
         </div>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
-        <div id="shareInfo" 
+        <div id="shareInfo"
             ng-if="connected && !streams.length"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
@@ -93,12 +93,12 @@
                 <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
                 <span class="indicator"></span>
             </span>
-            
+
             <span class="unread-indicator" ng-class="{unread: editorUnread}">
                 <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
                 <span class="indicator"></span>
             </span>
-            
+
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"
                 ng-click="toggleArchiving()" title="Record"></button>
