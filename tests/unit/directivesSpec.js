@@ -211,3 +211,40 @@ describe('restrictFrameRate', function () {
     expect(scope.restrictedFrameRate).toBe(false);
   });
 });
+
+// This is the double click to enlarge functionality
+describe('changeSize', function () {
+  var scope, parent, expandButton;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile) {
+    scope = $rootScope.$new();
+    scope.stream = {name: 'face'};
+    expandButton = angular.element('<expand-button></expand-button>');
+    parent = angular.element('<div></div>');
+    parent.append(expandButton);
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
+  }));
+  it('defaults screens to large', function () {
+    expect(scope.expanded).toBeFalsy();
+    scope.stream.name = 'screen';
+    expandButton.triggerHandler({type: 'click'});
+    expect(scope.expanded).toBe(false);
+  });
+  it('defaults other screens to small', function () {
+    expandButton.triggerHandler({type: 'click'});
+    expect(scope.expanded).toBe(true);
+  });
+  it('emits otLayout', function (done) {
+    scope.$on('otLayout', function () {
+      done();
+    });
+    expandButton.triggerHandler({type: 'click'});
+  });
+  it('works when you double click the parent', function () {
+    parent.triggerHandler({type: 'dblclick'});
+    expect(scope.expanded).toBe(true);
+    parent.triggerHandler({type: 'dblclick'});
+    expect(scope.expanded).toBe(false);
+  });
+});

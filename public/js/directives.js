@@ -131,4 +131,25 @@ angular.module('opentok-meet').directive('draggable', function($document) {
         });
       }
     };
-  }]);
+  }])
+  .directive('expandButton', function () {
+    return {
+      restrict: 'E',
+      template: '<button class="resize-btn ion-arrow-expand" ng-click="$emit(\'changeSize\');"' +
+        ' title="{{expanded ? \'Shrink\' : \'Enlarge\'}}"></button>',
+      link: function (scope, element) {
+        var toggleExpand = function () {
+          if (scope.expanded === undefined) {
+            // If we're a screen we default to large otherwise we default to small
+            scope.expanded = scope.stream.name !== 'screen';
+          } else {
+            scope.expanded = !scope.expanded;
+          }
+          scope.$apply();
+          scope.$emit('otLayout');
+        };
+        angular.element(element).on('click', toggleExpand);
+        angular.element(element).parent().on('dblclick', toggleExpand);
+      }
+    };
+  });

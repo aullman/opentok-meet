@@ -216,27 +216,6 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
-    // This is the double click to enlarge functionality
-    describe('changeSize', function () {
-      it('defaults screens to large', function () {
-        scope.stream = {name: 'screen'};
-        scope.$emit('changeSize');
-        expect(scope.stream.othLarge).toBe(false);
-      });
-      it('defaults other screens to small', function () {
-        scope.stream = {name: 'face'};
-        scope.$emit('changeSize');
-        expect(scope.stream.othLarge).toBe(true);
-      });
-      it('emits otLayout', function (done) {
-        scope.stream = {name: 'face'};
-        scope.$emit('changeSize');
-        scope.$on('otLayout', function () {
-          done();
-        });
-      });
-    });
-
     describe('RoomService.getRoom()', function () {
       beforeEach(function () {
         roomDefer.resolve({
