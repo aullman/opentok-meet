@@ -89,6 +89,15 @@ describe('OpenTok Meet App', function() {
       });
     });
 
+    describe('footer', function () {
+      it('Github link and report issue link is present', function () {
+        var githubLink = element(by.css('#footer a [title="View source on GitHub"]'));
+        expect(githubLink.isPresent()).toBe(true);
+        var issueLink = element(by.css('#footer a [title="Report Issue"]'));
+        expect(issueLink.isPresent()).toBe(true);
+      });
+    });
+
     describe('bottomBar', function () {
       describe('publish buttons', function () {
         var publishBtn = element(by.css('#publishBtn')),
