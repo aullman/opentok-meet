@@ -320,11 +320,13 @@ button:disabled {
     }
 }
 
-#bottomBar #footer {
+#footer {
     position: absolute;
-    bottom: -15px;
-    left: 0;
-    font-size: 12px;
+    opacity: 0;
+    bottom: 15px;
+    right: 15px;
+    font-size: 15px;
+    transition: opacity 200ms ease;
 }
 
 #screenShareUnsupported {
@@ -346,7 +348,8 @@ button:disabled {
     transition: opacity 200ms ease;
 }
 
-body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount {
+body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount,
+  body.mouse-move #footer {
   opacity: 1;
 }
 
