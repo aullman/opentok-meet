@@ -149,7 +149,7 @@ ot-editor .CodeMirror {
   bottom: 20px;
   position: absolute;
   text-align: center;
-  z-index: 98;
+  z-index: 97;
 }
 
 button.icon-left:before {
@@ -327,6 +327,7 @@ button:disabled {
     right: 15px;
     font-size: 15px;
     transition: opacity 200ms ease;
+    z-index: 98;
 }
 
 #screenShareUnsupported {
