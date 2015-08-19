@@ -4,9 +4,8 @@
 /* global by: false */
 /* global protractor: false */
 var uuid = require('uuid');
-
 describe('OpenTok Meet App', function() {
-  var roomName;
+  var roomName, roomURL;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -14,12 +13,13 @@ describe('OpenTok Meet App', function() {
     }
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
+      roomURL = browser.browserName === 'firefox' ? roomName + '?fakeDevices=true' : roomName;
     });
   });
 
   describe('Room', function() {
     beforeEach(function() {
-      browser.get(roomName + '?fakeDevices=true');
+      browser.get(roomURL);
     });
 
     it('should have the right title', function () {
@@ -364,9 +364,9 @@ describe('OpenTok Meet App', function() {
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get(roomName + '?fakeDevices=true');
+      browser.get(roomURL);
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get(roomName + '?fakeDevices=true');
+      secondBrowser.get(roomURL);
     });
     afterEach(function () {
       secondBrowser.quit();
@@ -627,7 +627,7 @@ describe('OpenTok Meet App', function() {
               var secondBrowser;
               beforeEach(function () {
                 secondBrowser = browser.forkNewDriverInstance();
-                secondBrowser.get(roomName + '?fakeDevices=true');
+                secondBrowser.get(roomURL);
               });
               afterEach(function() {
                 secondBrowser.quit();
