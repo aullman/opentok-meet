@@ -52,7 +52,8 @@ describe('OpenTok Meet controllers', function() {
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
         baseURL: '',
-        mouseMoveTimeoutTime: 10
+        mouseMoveTimeoutTime: 10,
+        fakeDevices: ''
       });
     }));
 
