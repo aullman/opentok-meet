@@ -490,20 +490,18 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      if (browser.browserName === 'firefox') {
-        describe('sharing the screen', function () {
-          beforeEach(function () {
-            element(by.css('#showscreen')).click();
-          });
-          it('subscribes to the screen and it is big', function () {
-            var subscriberVideo = secondBrowser.element(by.css(
-              'ot-subscriber.OT_big:not(.OT_loading) video'));
-            browser.wait(function () {
-              return subscriberVideo.isPresent();
-            }, 10000);
-          });
+      describe('sharing the screen', function () {
+        beforeEach(function () {
+          element(by.css('#showscreen')).click();
         });
-      }
+        xit('subscribes to the screen and it is big', function () {
+          var subscriberVideo = secondBrowser.element(by.css(
+            'ot-subscriber.OT_big:not(.OT_loading) video'));
+          browser.wait(function () {
+            return subscriberVideo.isPresent();
+          }, 10000);
+        });
+      });
 
       describe('using the collaborative editor', function () {
         var firstShowEditorBtn, secondShowEditorBtn;
@@ -562,35 +560,31 @@ describe('OpenTok Meet App', function() {
               }, 4000);
             });
 
-            if (browser.browserName !== 'firefox') {
-              // TODO: Get this to work properly in Firefox on Browserstack
-              // This isn't passing in browserstack sometimes the mouseDown action seems
-              // to cause an error ATM but only if all the tests are run
-              describe('when you enter text on the first browser', function () {
-                beforeEach(function () {
-                  // CodeMirror messes with DOM, need to wait before we try to select elements
-                  // otherwise we get the old element
-                  browser.sleep(2000);
-                  var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-                  browser.actions().mouseDown(firstBrowserText).perform();
-                  browser.actions().sendKeys('foo bar').perform();
-                });
-
-                it('shows up on the second browser within 4 seconds', function () {
-                  // CodeMirror messes with DOM, need to wait before we try to select elements
-                  // otherwise we get the old element
-                  browser.sleep(2000);
-                  var secondBrowserText = secondBrowser.element(
-                    by.css('.CodeMirror-code pre .cm-comment'));
-                  browser.wait(function() {
-                    return secondBrowserText.getInnerHtml().then(function(innerHTML) {
-                      return innerHTML.indexOf('foo bar') > -1;
-                    });
-                  }, 4000);
-                  expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
-                });
+            describe('when you enter text on the first browser', function () {
+              beforeEach(function () {
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
+                browser.sleep(2000);
+                var firstBrowserText =
+                  element.all(by.css('.CodeMirror-code pre .cm-comment')).get(0);
+                browser.actions().mouseDown(firstBrowserText).perform();
+                browser.actions().sendKeys('foo bar').perform();
               });
-            }
+
+              it('shows up on the second browser within 4 seconds', function () {
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
+                browser.sleep(2000);
+                var secondBrowserText = secondBrowser.element(
+                  by.css('.CodeMirror-code pre .cm-comment'));
+                browser.wait(function() {
+                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
+                    return innerHTML.indexOf('foo bar') > -1;
+                  });
+                }, 4000);
+                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
+              });
+            });
           });
         });
       });
@@ -622,25 +616,23 @@ describe('OpenTok Meet App', function() {
               return screenPublisher.isPresent();
             }, 10000);
           });
-          if (browser.browserName === 'firefox') {
-            describe('a subscriber', function () {
-              var secondBrowser;
-              beforeEach(function () {
-                secondBrowser = browser.forkNewDriverInstance();
-                secondBrowser.get(roomURL);
-              });
-              afterEach(function() {
-                secondBrowser.quit();
-              });
-              it('subscribes to the screen and it is big', function () {
-                var subscriberVideo = secondBrowser.element(by.css(
-                  'ot-subscriber.OT_big:not(.OT_loading) video'));
-                browser.wait(function () {
-                  return subscriberVideo.isPresent();
-                }, 10000);
-              });
+          describe('a subscriber', function () {
+            var secondBrowser;
+            beforeEach(function () {
+              secondBrowser = browser.forkNewDriverInstance();
+              secondBrowser.get(roomURL);
             });
-          }
+            afterEach(function() {
+              secondBrowser.quit();
+            });
+            xit('subscribes to the screen and it is big', function () {
+              var subscriberVideo = secondBrowser.element(by.css(
+                'ot-subscriber.OT_big:not(.OT_loading) video'));
+              browser.wait(function () {
+                return subscriberVideo.isPresent();
+              }, 10000);
+            });
+          });
         });
         it('shows an install prompt when you click it and the extension is not installed',
             function (done) {
