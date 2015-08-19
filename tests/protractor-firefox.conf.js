@@ -12,6 +12,10 @@ exports.config = {
 
   getMultiCapabilities: helper.getFirefoxProfile,
 
+  params: {
+    testScreenSharing: true
+  },
+
   jasmineNodeOpts: {
     defaultTimeoutInterval: 30000
   }

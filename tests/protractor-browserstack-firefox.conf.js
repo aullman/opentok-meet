@@ -15,6 +15,10 @@ exports.config = {
 
   framework: 'jasmine',
 
+  params: {
+    testScreenSharing: true
+  },
+
   jasmineNodeOpts: {
     defaultTimeoutInterval: 60000
   }

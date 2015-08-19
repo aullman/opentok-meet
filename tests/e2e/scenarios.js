@@ -625,7 +625,7 @@ describe('OpenTok Meet App', function() {
             afterEach(function() {
               secondBrowser.quit();
             });
-            xit('subscribes to the screen and it is big', function () {
+            it('subscribes to the screen and it is big', function () {
               var subscriberVideo = secondBrowser.element(by.css(
                 'ot-subscriber.OT_big:not(.OT_loading) video'));
               browser.wait(function () {
