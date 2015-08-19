@@ -566,8 +566,8 @@ describe('OpenTok Meet App', function() {
                 // otherwise we get the old element
                 browser.sleep(2000);
                 var firstBrowserText =
-                  element.all(by.css('.CodeMirror-code pre .cm-comment')).get(0);
-                browser.actions().mouseDown(firstBrowserText).perform();
+                  element(by.css('.CodeMirror-code pre .cm-comment'));
+                firstBrowserText.click();
                 browser.actions().sendKeys('foo bar').perform();
               });
 
