@@ -55,7 +55,8 @@ describe('OpenTok Meet controllers', function() {
         RoomService: RoomServiceMock,
         baseURL: '',
         mouseMoveTimeoutTime: 10,
-        SimulcastService: SimulcastServiceMock
+        SimulcastService: SimulcastServiceMock,
+        fakeDevices: ''
       });
     }));
 

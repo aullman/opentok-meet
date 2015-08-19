@@ -72,13 +72,14 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
   });
 
   // To set a custom APIKey and Secret for a particular room you can make a CURL request with
-  // apiKey and secret params. eg. 
+  // apiKey and secret params. eg.
   // curl -k https://localhost:5000/customKey -d "apiKey=APIKEY&secret=SECRET" -X "GET"
   // This room has to not already exist though.
   app.get('/:room', function(req, res) {
     var room = req.param('room'),
       apiKey = req.param('apiKey'),
-      secret = req.param('secret');
+      secret = req.param('secret'),
+      fakeDevices = req.param('fakeDevices');
     res.format({
       json: function() {
         var goToRoom = function(err, sessionId, apiKey, secret) {
@@ -122,6 +123,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         }
         res.render('room', {
           room: room,
+          fakeDevices: fakeDevices,
           chromeExtensionId: config.chromeExtensionId
         });
       }
