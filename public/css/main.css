@@ -126,19 +126,41 @@ ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framera
     opacity: 1;
 }
 
+ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
+  display: block;
+}
+
 ot-whiteboard {
-    display: block;
+    display: none;
     background-color: #DCD9CD;
 }
 
 ot-editor {
-    display: block;
+    display: none;
     background-color: #DCD9CD;
-    overflow: scroll;
+    padding: 0;
 }
 
 ot-editor .CodeMirror {
     background-color: #DCD9CD;
+}
+
+ot-editor > div.opentok-editor-connected {
+  width: 100%;
+  height: 100%;
+  height: calc(100% - 20px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 20px;
+}
+
+ot-editor > div.opentok-editor-mode-select {
+  float: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }
 
 #bottomBar {

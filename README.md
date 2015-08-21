@@ -38,5 +38,5 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
   * Make sure that you have started your server `npm start`
   * Updated [protractor.conf.js](/tests/protractor.conf.js) to point to your local server and your local copy of the screensharing extension for Chrome.
   * Also make sure that your screensharing extension is allowing access to your local server by updating the matches property in the [manifest.json](https://github.com/opentok/screensharing-extensions/blob/master/chrome/ScreenSharing/manifest.json#L16) file.
-
-These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [BrowserStack Automate](browserstack.com/automate). 
+* If you want to run your protractor tests against IE, here are [some instructions for getting setup](http://elgalu.github.io/2014/run-protractor-against-internet-explorer-vm/#step4).
+These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [BrowserStack Automate](browserstack.com/automate).
