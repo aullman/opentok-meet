@@ -52,7 +52,8 @@ describe('OpenTok Meet controllers', function() {
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
         baseURL: '',
-        mouseMoveTimeoutTime: 10
+        mouseMoveTimeoutTime: 10,
+        fakeDevices: ''
       });
     }));
 
@@ -216,65 +217,6 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
-    // This is the double click to enlarge functionality
-    describe('changeSize', function () {
-      it('defaults screens to large', function () {
-        scope.stream = {name: 'screen'};
-        scope.$emit('changeSize');
-        expect(scope.stream.othLarge).toBe(false);
-      });
-      it('defaults other screens to small', function () {
-        scope.stream = {name: 'face'};
-        scope.$emit('changeSize');
-        expect(scope.stream.othLarge).toBe(true);
-      });
-      it('emits otLayout', function (done) {
-        scope.stream = {name: 'face'};
-        scope.$emit('changeSize');
-        scope.$on('otLayout', function () {
-          done();
-        });
-      });
-    });
-
-    describe('muteVideo', function () {
-      var mockSubscriber;
-      beforeEach(function () {
-        mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
-        scope.session.getSubscribersForStream = function () {
-          return [mockSubscriber];
-        };
-      });
-      it('toggles stream.videoMuted and calls subscribeToVideo', function () {
-        scope.stream = {};
-        scope.$emit('muteVideo');
-        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
-        expect(scope.stream.videoMuted).toBe(true);
-        scope.$emit('muteVideo');
-        expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
-        expect(scope.stream.videoMuted).toBe(false);
-      });
-    });
-
-    describe('restrictFrameRate', function () {
-      var mockSubscriber;
-      beforeEach(function () {
-        mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
-        scope.session.getSubscribersForStream = function () {
-          return [mockSubscriber];
-        };
-      });
-      it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
-        scope.stream = {};
-        scope.$emit('restrictFrameRate');
-        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
-        expect(scope.stream.restrictedFrameRate).toBe(true);
-        scope.$emit('restrictFrameRate');
-        expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
-        expect(scope.stream.restrictedFrameRate).toBe(false);
-      });
-    });
-
     describe('RoomService.getRoom()', function () {
       beforeEach(function () {
         roomDefer.resolve({
@@ -304,7 +246,7 @@ describe('OpenTok Meet controllers', function() {
           mockSession;
         beforeEach(function () {
           callback = MockOTSession.init.calls.mostRecent().args[3];
-          
+
           mockSession = OT.initSession('mockSessionId');
           spyOn(mockSession, 'on').and.callThrough();
           callback(null, mockSession);
@@ -407,18 +349,6 @@ describe('OpenTok Meet controllers', function() {
         scope.shareURL = 'http://mockURL';
         scope.sendEmail();
         expect(windowMock.location.href).toBe('mailto:?subject=Let\'s Meet&body=http://mockURL');
-      });
-    });
-
-    describe('togglePublishVideo', function () {
-      it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
-        expect(scope.publisherVideoMuted).toBe(false);
-        scope.togglePublishVideo();
-        expect(scope.publisherVideoMuted).toBe(true);
-        expect(facePublisher.publishVideo).toHaveBeenCalledWith(false);
-        scope.togglePublishVideo();
-        expect(scope.publisherVideoMuted).toBe(false);
-        expect(facePublisher.publishVideo).toHaveBeenCalledWith(true);
       });
     });
 

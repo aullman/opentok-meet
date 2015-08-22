@@ -1,18 +1,19 @@
 describe('subscriber-stats', function() {
-  var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats;
+  var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
   beforeEach(module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+  beforeEach(module(function ($provide) {
+      $provide.value('statsInterval', 10);
+  }));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_, _StatsService_, _$timeout_) {
     OTSession = _OTSession_;
     OTSession.session = {
       getSubscribersForStream: function() {}
     };
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats']);
-    mockSubscriber.videoWidth = function() {
-      return 200;
-    };
-    mockSubscriber.videoHeight = function() {
-      return 200;
-    };
+    $timeout = _$timeout_;
+    StatsService = _StatsService_;
+    spyOn(StatsService, 'addSubscriber');
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
+    mockSubscriber.id = 'mockId';
     spyOn(OTSession.session, 'getSubscribersForStream').and.callFake(function() {
       return [mockSubscriber];
     });
@@ -21,89 +22,40 @@ describe('subscriber-stats', function() {
     scope.stream = mockStream;
     element = $compile(element)(scope);
     scope.$digest();
-    mockStats = {
-      audio: {
-        packetsLost: 200,
-        packetsReceived: 1000,
-        bytesReceived: 1000
-      },
-      video: {
-        packetsLost: 200,
-        packetsReceived: 1000,
-        bytesReceived: 1000
-      },
-      timestamp: 1000
-    };
+    mockStats = {};
+    $timeout.flush();
   }));
 
   it('calls OTSession.session.getSubscribersForStream', function () {
     expect(OTSession.session.getSubscribersForStream).toHaveBeenCalledWith(mockStream);
   });
 
-  it('calls subscriber.getStats', function() {
-    expect(mockSubscriber.getStats).toHaveBeenCalled();
+  it('adds a subscriber to StatsService', function () {
+    expect(StatsService.addSubscriber).toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
   });
 
-  it('sets scope.stats on mouseover and refreshes every second', function(done) {
-    // getStats should have been called once
-    expect(mockSubscriber.getStats.calls.count()).toBe(1);
-    // Fire the getStats callback with the mockStats
-    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
-    expect(scope.$$childHead.stats).not.toBeDefined();
-    // Trigger a mouseover
+  it('sets stats on the scope', function () {
+    StatsService.addSubscriber.calls.mostRecent().args[1](mockStats);
+    expect(scope.$$childHead.stats).toBe(mockStats);
+  });
+
+  it('handles $destroy', function () {
+    spyOn(StatsService, 'removeSubscriber');
+    spyOn($timeout, 'cancel');
+    scope.$destroy();
+    expect(StatsService.removeSubscriber).toHaveBeenCalledWith(mockSubscriber.id);
+    expect($timeout.cancel).toHaveBeenCalled();
+  });
+
+  it('toggles showStats and buttonDisplayMode on click', function () {
+    expect(scope.$$childHead.showStats).toBeFalsy();
     var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'mouseover'});
-    // We mouse'd over so getStats was called again
-    expect(mockSubscriber.getStats.calls.count()).toBe(2);
-    // stats should be defined now
-    expect(scope.$$childHead.stats).toEqual({
-      width: 200,
-      height: 200,
-      audio: mockStats.audio,
-      video: mockStats.video,
-      audioPacketLoss: '20.00',
-      videoPacketLoss: '20.00',
-      audioBitrate: '0',
-      videoBitrate: '0',
-      timestamp: mockStats.timestamp
-    });
-    
-    var mockStats2 = {
-      audio: {
-        packetsLost: 300,
-        packetsReceived: 1000,
-        bytesReceived: 2000
-      },
-      video: {
-        packetsLost: 300,
-        packetsReceived: 1000,
-        bytesReceived: 2000
-      },
-      timestamp: 2000
-    };
-
-    // Fire the getStats callback with the new mockStats
-    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
-    expect(scope.$$childHead.stats).toEqual({
-      width: 200,
-      height: 200,
-      audio: mockStats2.audio,
-      video: mockStats2.video,
-      audioPacketLoss: '30.00',
-      videoPacketLoss: '30.00',
-      audioBitrate: '8',
-      videoBitrate: '8',
-      timestamp: mockStats2.timestamp
-    });
-    
-
-    setTimeout(function() {
-      // getStats should have been called a second time
-      expect(mockSubscriber.getStats.calls.count()).toBe(3);
-      element.triggerHandler({type: 'mouseout'});
-      expect(scope.$$childHead.stats).toBe(null);
-      done();
-    }, 1010);
+    statsBtn.triggerHandler({type: 'click'});
+    expect(scope.$$childHead.showStats).toBe(true);
+    expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'on'});
+    statsBtn.triggerHandler({type: 'click'});
+    expect(scope.$$childHead.showStats).toBe(false);
+    expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'auto'});
   });
 
   it('displays the stats correctly', function() {
@@ -127,54 +79,59 @@ describe('subscriber-stats', function() {
       'Video Bitrate: 0 kbps', 'g')
     );
   });
+});
 
-  it('works if you have no audio stats eg. for screensharing', function() {
-    delete mockStats.audio;
-    // Fire the getStats callback with the mockStats without audio
-    expect(function() {
-      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
-    }).not.toThrow();
-    // Trigger a mouseover
-    var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'mouseover'});
-    // stats should be defined now
-    expect(scope.$$childHead.stats).toEqual({
-      width: 200,
-      height: 200,
-      video: mockStats.video,
-      videoPacketLoss: '20.00',
-      videoBitrate: '0',
-      timestamp: mockStats.timestamp
-    });
-  });
+describe('StatsService', function () {
+  var StatsService, $interval, onStats, mockSubscriber, mockStats;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function (_StatsService_, _$interval_) {
+    StatsService = _StatsService_;
+    $interval = _$interval_;
+    onStats = jasmine.createSpy('onStats');
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
+    mockSubscriber.id = 'mockId';
+    mockSubscriber.videoWidth = mockSubscriber.videoHeight = function () {
+      return 200;
+    };
+    StatsService.addSubscriber(mockSubscriber, onStats);
+    mockStats = {
+      audio: {
+        packetsLost: 200,
+        packetsReceived: 1000,
+        bytesReceived: 1000
+      },
+      video: {
+        packetsLost: 200,
+        packetsReceived: 1000,
+        bytesReceived: 1000
+      },
+      timestamp: 1000
+    };
+  }));
 
-  it('works if you have no video stats', function() {
-    delete mockStats.video;
-    // Fire the getStats callback with the mockStats without video
-    expect(function() {
-      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
-    }).not.toThrow();
-    // Trigger a mouseover
-    var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'mouseover'});
-    // stats should be defined now
-    expect(scope.$$childHead.stats).toEqual({
+  it('triggers onStats with the right stats', function() {
+    // getStats should have been called once
+    expect(mockSubscriber.getStats.calls.count()).toBe(1);
+    // Fire the getStats callback with the mockStats
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    expect(onStats).toHaveBeenCalled();
+    // onStats should have been called with the right stats
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
       width: 200,
       height: 200,
       audio: mockStats.audio,
+      video: mockStats.video,
       audioPacketLoss: '20.00',
+      videoPacketLoss: '20.00',
       audioBitrate: '0',
+      videoBitrate: '0',
       timestamp: mockStats.timestamp
     });
-  });
 
-  it('handles if it previously did not have audio and now it does', function() {
-    delete mockStats.audio;
-    // Fire the getStats callback with the mockStats without audio
-    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
-    // Trigger a mouseover
-    var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'mouseover'});
+    // After 2 seconds
+    $interval.flush(2000);
+    // getStats should be called again
+    expect(mockSubscriber.getStats.calls.count()).toBe(2);
 
     var mockStats2 = {
       audio: {
@@ -191,10 +148,83 @@ describe('subscriber-stats', function() {
     };
 
     // Fire the getStats callback with the new mockStats
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
+      width: 200,
+      height: 200,
+      audio: mockStats2.audio,
+      video: mockStats2.video,
+      audioPacketLoss: '30.00',
+      videoPacketLoss: '30.00',
+      audioBitrate: '8',
+      videoBitrate: '8',
+      timestamp: mockStats2.timestamp
+    });
+
+    $interval.flush(2000);
+    expect(mockSubscriber.getStats.calls.count()).toBe(3);
+  });
+
+  it('works if you have no audio stats eg. for screensharing', function() {
+    delete mockStats.audio;
+    // Fire the getStats callback with the mockStats without audio
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    }).not.toThrow();
+
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
+      width: 200,
+      height: 200,
+      video: mockStats.video,
+      videoPacketLoss: '20.00',
+      videoBitrate: '0',
+      timestamp: mockStats.timestamp
+    });
+  });
+
+  it('works if you have no video stats', function() {
+    delete mockStats.video;
+    // Fire the getStats callback with the mockStats without video
+    expect(function() {
+      mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    }).not.toThrow();
+
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
+      width: 200,
+      height: 200,
+      audio: mockStats.audio,
+      audioPacketLoss: '20.00',
+      audioBitrate: '0',
+      timestamp: mockStats.timestamp
+    });
+  });
+
+  it('handles if it previously did not have audio and now it does', function() {
+    delete mockStats.audio;
+    // Fire the getStats callback with the mockStats without audio
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+
+    var mockStats2 = {
+      audio: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      video: {
+        packetsLost: 300,
+        packetsReceived: 1000,
+        bytesReceived: 2000
+      },
+      timestamp: 2000
+    };
+
+    $interval.flush(2000);
+
+    // Fire the getStats callback with the new mockStats
     expect(function() {
       mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
     }).not.toThrow();
-    expect(scope.$$childHead.stats).toEqual({
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
       width: 200,
       height: 200,
       audio: mockStats2.audio,
@@ -211,9 +241,8 @@ describe('subscriber-stats', function() {
     delete mockStats.video;
     // Fire the getStats callback with the mockStats without video
     mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
-    // Trigger a mouseover
-    var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'mouseover'});
+
+    $interval.flush(2000);
 
     var mockStats2 = {
       audio: {
@@ -233,7 +262,7 @@ describe('subscriber-stats', function() {
     expect(function() {
       mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats2);
     }).not.toThrow();
-    expect(scope.$$childHead.stats).toEqual({
+    expect(onStats.calls.mostRecent().args[0]).toEqual({
       width: 200,
       height: 200,
       audio: mockStats2.audio,
@@ -244,5 +273,11 @@ describe('subscriber-stats', function() {
       videoBitrate: '16',
       timestamp: mockStats2.timestamp
     });
+  });
+
+  it('removeSubscriber cancels the interval', function () {
+    spyOn($interval, 'cancel');
+    StatsService.removeSubscriber(mockSubscriber.id);
+    expect($interval.cancel).toHaveBeenCalled();
   });
 });

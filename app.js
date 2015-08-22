@@ -44,11 +44,10 @@ app.configure(function() {
 
 console.log('apikey: ' + config.apiKey + ' secret: ' + config.apiSecret.substr(0, 10) + '...');
 var ot = new OpenTok(config.apiKey, config.apiSecret);
-
 var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
 
-require('./server/routes.js')(app, config, redis, ot, useSSL);
+require('./server/routes.js')(app, config, redis, ot, useSSL || process.env.HEROKU);
 
 if (process.env.HEROKU || !useSSL) {
   app.listen(config.port, function() {

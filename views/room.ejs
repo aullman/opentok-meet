@@ -9,6 +9,7 @@
         <link rel="icon" sizes="128x128" href="icon.png">
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="/css/subscriber-stats.css" type="text/css" media="screen">
         <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -25,7 +26,6 @@
         <script src="/js/lib/CodeMirror/mode/javascript/javascript.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/CodeMirror/mode/markdown/markdown.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-editor/opentok-editor.js" type="text/javascript" charset="utf-8"></script>
-        <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
         <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
@@ -39,15 +39,15 @@
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
             <ot-layout props="{animate:true,bigFixedRatio:true}">
-                <ot-subscriber ng-repeat="stream in streams | filter:notMine" 
-                    stream="stream" 
-                    props="{style: {nameDisplayMode: 'off'}}" 
-                    ng-class="{OT_big: (stream.othLarge == undefined && stream.name == 'screen') || stream.othLarge}" 
+                <ot-subscriber ng-repeat="stream in streams | filter:notMine"
+                    stream="stream"
+                    props="{style: {nameDisplayMode: 'off'}}"
+                    ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
-                        <button class="restrict-framerate-btn" ng-class="{'ion-ios7-speedometer-outline': stream.restrictedFrameRate, 'ion-ios7-speedometer': !stream.restrictedFrameRate}" ng-click="$emit('restrictFrameRate');" title="{{stream.restrictedFrameRate ? 'Unrestrict Framerate' : 'Restrict Framerate'}}"></button>
-                        <mute-video muted="stream.videoMuted" ng-click="$emit('muteVideo')"></mute-video>
-                        <button class="resize-btn ion-arrow-expand" ng-click="$emit('changeSize');" title="{{stream.othLarge ? 'Shrink' : 'Enlarge'}}"></button>
+                        <restrict-framerate></restrict-framerate>
+                        <mute-video mute-subscriber></mute-video>
+                        <expand-button></expand-button>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
@@ -65,14 +65,14 @@
                     class="OT_big">
                 </ot-editor>
             </ot-layout>
-            
+
             <div id="facePublisher"
                 ng-if="publishing"
                 draggable="true">
-                <ot-publisher id="facePublisher" 
+                <ot-publisher id="facePublisher"
                     props="facePublisherProps">
                 </ot-publisher>
-                <mute-video muted="publisherVideoMuted" ng-click="togglePublishVideo()"></mute-video>
+                <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"
@@ -81,7 +81,7 @@
             </ot-publisher>
         </div>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
-        <div id="shareInfo" 
+        <div id="shareInfo"
             ng-if="connected && !streams.length"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
@@ -93,12 +93,12 @@
                 <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
                 <span class="indicator"></span>
             </span>
-            
+
             <span class="unread-indicator" ng-class="{unread: editorUnread}">
                 <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
                 <span class="indicator"></span>
             </span>
-            
+
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"
                 ng-click="toggleArchiving()" title="Record"></button>
@@ -109,10 +109,10 @@
               </span>
             </span>
             <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave"></button>
-            <!-- <div id="footer">
-                <a href="https://github.com/aullman/opentok-meet" target="_blank">View Source</a>|
-                <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank">Report Issue</a>
-            </div> -->
+        </div>
+        <div id="footer">
+            <a href="https://github.com/aullman/opentok-meet" target="_blank"><i class="ion-social-github" title="View source on GitHub"></i></a>|
+            <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank"><i class="ion-bug" title="Report Issue"></i></a>
         </div>
         <i id="connCount" class="ion-ios7-people" title="{{connections.length}} participant in the room"> {{connections.length}}</i>
         <div id="statusMessages">
@@ -124,6 +124,7 @@
         <script type="text/javascript" charset="utf-8">
             angular.module('opentok-meet').value({
                 room: '<%=room%>',
+                fakeDevices: '<%=fakeDevices%>',  // Set by protractor for testing Firefox
                 baseURL: '/',
                 chromeExtensionId: '<%=chromeExtensionId%>',
                 mouseMoveTimeoutTime: 5000

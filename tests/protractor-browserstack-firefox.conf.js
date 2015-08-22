@@ -2,21 +2,24 @@ var helper = require('./firefox-helper.js');
 
 exports.config = {
   allScriptsTimeout: 11000,
-  directConnect: true,
 
   specs: [
     'e2e/*.js'
   ],
 
-  baseUrl: 'https://adam.local:5000/',
-
   getMultiCapabilities: helper.getFirefoxProfile,
+
+  seleniumAddress: 'http://hub.browserstack.com/wd/hub',
+
+  baseUrl: 'http://localhost:3000/',
+
+  framework: 'jasmine',
 
   params: {
     testScreenSharing: true
   },
 
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
+    defaultTimeoutInterval: 60000
   }
 };

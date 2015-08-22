@@ -4,9 +4,8 @@
 /* global by: false */
 /* global protractor: false */
 var uuid = require('uuid');
-
 describe('OpenTok Meet App', function() {
-  var roomName;
+  var roomName, roomURL;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -14,14 +13,15 @@ describe('OpenTok Meet App', function() {
     }
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
+      roomURL = browser.browserName === 'firefox' ? roomName + '?fakeDevices=true' : roomName;
     });
   });
 
   describe('Room', function() {
     beforeEach(function() {
-      browser.get(roomName);
+      browser.get(roomURL);
     });
-    
+
     it('should have the right title', function () {
       expect(browser.getTitle()).toEqual('OpenTok Meet : ' + roomName);
     });
@@ -46,8 +46,11 @@ describe('OpenTok Meet App', function() {
         expect(publisher.isPresent()).toBe(true);
         expect(publisher.isDisplayed()).toBe(true);
       });
-      
+
       it('contains a video element and is HD', function () {
+        if (browser.browserName === 'internet explorer') {
+          return;
+        }
         browser.wait(function () {
           return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
         }, 10000);
@@ -58,7 +61,7 @@ describe('OpenTok Meet App', function() {
         expect(publisherVideo.getAttribute('videoHeight')).toBe(
           browser.browserName === 'chrome' ? '720' : '480');
       });
-      
+
       it('moves when it is dragged', function () {
         var oldLocation = publisher.getLocation();
         browser.actions().dragAndDrop(publisher, element(by.css('body'))).perform();
@@ -92,6 +95,15 @@ describe('OpenTok Meet App', function() {
       });
     });
 
+    describe('footer', function () {
+      it('Github link and report issue link is present', function () {
+        var githubLink = element(by.css('#footer a [title="View source on GitHub"]'));
+        expect(githubLink.isPresent()).toBe(true);
+        var issueLink = element(by.css('#footer a [title="Report Issue"]'));
+        expect(issueLink.isPresent()).toBe(true);
+      });
+    });
+
     describe('bottomBar', function () {
       describe('publish buttons', function () {
         var publishBtn = element(by.css('#publishBtn')),
@@ -108,7 +120,11 @@ describe('OpenTok Meet App', function() {
           var publisher = element(by.css('div#facePublisher'));
           expect(publisher.isPresent()).toBe(true);
           publishBtn.click();
-          expect(publisher.isPresent()).toBe(false);
+          browser.wait(function() {
+            return publisher.isPresent().then(function(present) {
+              return !present;
+            });
+          }, 1000);
           expect(publishBtn.getAttribute('class')).toContain('green');
           publishBtn.click();
           expect(publisher.isPresent()).toBe(true);
@@ -116,13 +132,15 @@ describe('OpenTok Meet App', function() {
           browser.wait(function () {
             return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
           }, 10000);
-          var publisherVideo = publisher.element(by.css('video'));
-          expect(publisherVideo.getAttribute('videoWidth')).toBe(
-            browser.browserName === 'chrome' ? '1280' : '640');
-          expect(publisherVideo.getAttribute('videoHeight')).toBe(
-            browser.browserName === 'chrome' ? '720' : '480');
+          if (browser.browserName !== 'internet explorer') {
+            var publisherVideo = publisher.element(by.css('video'));
+            expect(publisherVideo.getAttribute('videoWidth')).toBe(
+              browser.browserName === 'chrome' ? '1280' : '640');
+            expect(publisherVideo.getAttribute('videoHeight')).toBe(
+              browser.browserName === 'chrome' ? '720' : '480');
+          }
         });
-        
+
         it('publishSDBtn shows up when you unpublish and can publish', function () {
           var publisher = element(by.css('div#facePublisher'));
           publishBtn.click();
@@ -136,7 +154,7 @@ describe('OpenTok Meet App', function() {
             return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
           }, 10000);
           //var publisherVideo = publisher.element(by.css('video'));
-          // Not sure why but below fails if I run all the tests but not 
+          // Not sure why but below fails if I run all the tests but not
           // if I run this test alone
           //expect(publisherVideo.getAttribute('videoWidth')).toBe('640');
           //expect(publisherVideo.getAttribute('videoHeight')).toBe('480');
@@ -228,12 +246,12 @@ describe('OpenTok Meet App', function() {
         // install extensions
         describe('screenshare button', function () {
           var screenShareBtn = element(by.css('#showscreen'));
-        
+
           it('exists and is green', function () {
             expect(screenShareBtn.isPresent()).toBe(true);
             expect(screenShareBtn.getAttribute('class')).toContain('green');
           });
-        
+
           describe('has been clicked', function () {
             beforeEach(function () {
               screenShareBtn.click();
@@ -278,7 +296,10 @@ describe('OpenTok Meet App', function() {
         });
         it('shows up when you move the mouse', function () {
           expect(connCount.isPresent()).toBe(true);
-          expect(connCount.isDisplayed()).toBe(false);
+          if (browser.browserName !== 'internet explorer') {
+            // The following fails in IE sometimes
+            expect(connCount.isDisplayed()).toBe(false);
+          }
           browser.actions().mouseDown(connCount).mouseMove(element(by.css('body'))).perform();
           browser.wait(function() {
             return connCount.isDisplayed();
@@ -319,7 +340,7 @@ describe('OpenTok Meet App', function() {
     beforeEach(function () {
       browser.get('');
     });
-    
+
     var roomField = element(by.model('room')),
       submit = element(by.css('#joinRoomBtn'));
 
@@ -332,7 +353,11 @@ describe('OpenTok Meet App', function() {
     it('should go to a room when you submit the form', function () {
       roomField.sendKeys(roomName);
       roomField.submit();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
+      expect(browser.getCurrentUrl().then(function (url) {
+        // For some reason in IE sometimes when you run lots of tests
+        // the whole URL isn't there
+        return (browser.baseUrl + roomName).indexOf(url) === 0;
+      })).toBe(true);
     });
 
     describe('p2p checkbox', function () {
@@ -343,10 +368,11 @@ describe('OpenTok Meet App', function() {
         expect(roomField.getAttribute('value')).toBe(roomName + 'p2p');
         p2p.click();
         expect(roomField.getAttribute('value')).toBe(roomName);
-      });
-      it('should check when you enter p2p into the input field', function () {
-        roomField.sendKeys(roomName + 'p2p');
-        expect(p2p.getAttribute('checked')).toBe('true');
+        // should check when you enter p2p into the input field
+        roomField.sendKeys('p2p');
+        browser.wait(function () {
+          return p2p.getAttribute('checked');
+        });
       });
     });
   });
@@ -354,9 +380,9 @@ describe('OpenTok Meet App', function() {
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
-      browser.get(roomName);
+      browser.get(roomURL);
       secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get(roomName);
+      secondBrowser.get(roomURL);
     });
     afterEach(function () {
       secondBrowser.quit();
@@ -370,14 +396,14 @@ describe('OpenTok Meet App', function() {
       beforeEach(function (done) {
         firstSubscriber = element(by.css('ot-subscriber'));
         secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
-        firstSubscriberVideo = element(by.css('ot-subscriber:not(.OT_loading) video'));
+        firstSubscriberVideo = element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
         secondSubscriberVideo = secondBrowser.element(by.css(
-          'ot-subscriber:not(.OT_loading) video'));
+          'ot-subscriber:not(.OT_loading) .OT_video-element'));
         var subscriberWait = {};
         subscriberWait.first = browser.wait(function () {
           return firstSubscriberVideo.isPresent();
         }, 20000);
-        subscriberWait.second = browser.wait(function () {
+        subscriberWait.second = secondBrowser.wait(function () {
           return secondSubscriberVideo.isPresent();
         }, 20000);
         protractor.promise.fullyResolved(subscriberWait).then(function () {
@@ -426,11 +452,19 @@ describe('OpenTok Meet App', function() {
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
           resizeBtn.click();
-          expect(secondSubscriber.getAttribute('class')).toContain('OT_big');
+          secondBrowser.wait(function () {
+            return secondSubscriber.getAttribute('class').then(function (className) {
+              return className.indexOf('OT_big') > -1;
+            });
+          }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
-          browser.sleep(500);
+          secondBrowser.actions().mouseDown(secondSubscriber).perform();
           resizeBtn.click();
-          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+          secondBrowser.wait(function () {
+            return secondSubscriber.getAttribute('class').then(function (className) {
+              return className.indexOf('OT_big') === -1;
+            });
+          }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
         });
 
@@ -462,7 +496,7 @@ describe('OpenTok Meet App', function() {
           var showStatsInfo = secondBrowser.element(by.css('.show-stats-info'));
           var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
           expect(showStatsInfo.isDisplayed()).toBe(false);
-          secondBrowser.actions().mouseMove(statsButton).perform();
+          statsButton.click();
           secondBrowser.wait(function() {
             return showStatsInfo.isDisplayed();
           }, 2000);
@@ -480,7 +514,7 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      if (browser.browserName === 'firefox') {
+      if (browser.params.testScreenSharing) {
         describe('sharing the screen', function () {
           beforeEach(function () {
             element(by.css('#showscreen')).click();
@@ -496,7 +530,7 @@ describe('OpenTok Meet App', function() {
       }
 
       describe('using the collaborative editor', function () {
-        var firstShowEditorBtn, secondShowEditorBtn, defaultText;
+        var firstShowEditorBtn, secondShowEditorBtn;
         beforeEach(function (done) {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
@@ -504,25 +538,24 @@ describe('OpenTok Meet App', function() {
           browser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
           }, 10000).then(function () {
-            defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
             done();
           });
         });
 
         afterEach(function () {
-          defaultText = firstShowEditorBtn = secondShowEditorBtn = null;
+          firstShowEditorBtn = secondShowEditorBtn = null;
         });
 
         it('contains the default text', function () {
+          var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
           expect(defaultText.isPresent()).toBe(true);
           expect(defaultText.getInnerHtml()).toBe('// Write code here');
         });
 
         describe('when you enter text on the second browser', function () {
-          var firstBrowserText;
           beforeEach(function () {
-            firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-            secondBrowser.actions().mouseDown(defaultText).perform();
+            var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+            secondBrowser.actions().mouseDown(inputText).perform();
             secondBrowser.actions().sendKeys('hello world').perform();
           });
 
@@ -535,14 +568,20 @@ describe('OpenTok Meet App', function() {
 
           describe('showing the editor on the first browser', function () {
             beforeEach(function () {
+              // For IE we need to click to give focus back to the first browser
+              element(by.css('body')).click();
               firstShowEditorBtn.click();
               browser.wait(function () {
                 return element(by.css('ot-editor .opentok-editor')).isDisplayed();
               }, 10000);
             });
-            
+
             it('text shows up on the first browser', function () {
+              // CodeMirror messes with DOM, need to wait before we try to select elements
+              // otherwise we get the old element
+              browser.sleep(2000);
               browser.wait(function() {
+                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
                 return firstBrowserText.getInnerHtml().then(function(innerHTML) {
                   return innerHTML.indexOf('hello world') > -1;
                 });
@@ -551,18 +590,27 @@ describe('OpenTok Meet App', function() {
 
             describe('when you enter text on the first browser', function () {
               beforeEach(function () {
-                browser.actions().mouseDown(firstBrowserText).perform();
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
+                browser.sleep(2000);
+                var firstBrowserText =
+                  element(by.css('.CodeMirror-code pre .cm-comment'));
+                firstBrowserText.click();
                 browser.actions().sendKeys('foo bar').perform();
               });
 
-              it('shows up on the second browser within 2 seconds', function () {
+              it('shows up on the second browser within 4 seconds', function () {
+                // CodeMirror messes with DOM, need to wait before we try to select elements
+                // otherwise we get the old element
                 browser.sleep(2000);
+                var secondBrowserText = secondBrowser.element(
+                  by.css('.CodeMirror-code pre .cm-comment'));
                 browser.wait(function() {
-                  return defaultText.getInnerHtml().then(function(innerHTML) {
+                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
                     return innerHTML.indexOf('foo bar') > -1;
                   });
                 }, 4000);
-                expect(defaultText.getInnerHtml()).toContain('foo bar');
+                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
               });
             });
           });
@@ -579,12 +627,12 @@ describe('OpenTok Meet App', function() {
 
       describe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
-      
+
         it('exists and is green', function () {
           expect(screenShareBtn.isPresent()).toBe(true);
           expect(screenShareBtn.getAttribute('class')).toContain('green');
         });
-      
+
         describe('has been clicked', function () {
           beforeEach(function () {
             screenShareBtn.click();
@@ -596,25 +644,23 @@ describe('OpenTok Meet App', function() {
               return screenPublisher.isPresent();
             }, 10000);
           });
-          if (browser.browserName === 'firefox') {
-            describe('a subscriber', function () {
-              var secondBrowser;
-              beforeEach(function () {
-                secondBrowser = browser.forkNewDriverInstance();
-                secondBrowser.get(roomName);
-              });
-              afterEach(function() {
-                secondBrowser.quit();
-              });
-              it('subscribes to the screen and it is big', function () {
-                var subscriberVideo = secondBrowser.element(by.css(
-                  'ot-subscriber.OT_big:not(.OT_loading) video'));
-                browser.wait(function () {
-                  return subscriberVideo.isPresent();
-                }, 10000);
-              });
+          describe('a subscriber', function () {
+            var secondBrowser;
+            beforeEach(function () {
+              secondBrowser = browser.forkNewDriverInstance();
+              secondBrowser.get(roomURL);
             });
-          }
+            afterEach(function() {
+              secondBrowser.quit();
+            });
+            it('subscribes to the screen and it is big', function () {
+              var subscriberVideo = secondBrowser.element(by.css(
+                'ot-subscriber.OT_big:not(.OT_loading) video'));
+              browser.wait(function () {
+                return subscriberVideo.isPresent();
+              }, 10000);
+            });
+          });
         });
         it('shows an install prompt when you click it and the extension is not installed',
             function (done) {

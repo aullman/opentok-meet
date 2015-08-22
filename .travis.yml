@@ -5,7 +5,7 @@ before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 before_script:
-- npm start &
+- npm start > /dev/null &
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:

@@ -20,6 +20,9 @@ body input {
     font-family: 'Ropa Sans', sans-serif;
 }
 
+button {
+  outline: none;
+}
 
 #facePublisher, #screenPublisher {
     width: 160px;
@@ -116,24 +119,48 @@ ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
 }
 
 ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn,
-    ot-layout > :hover subscriber-stats {
+    ot-layout > :hover subscriber-stats, ot-layout button.OT_mode-on ~ subscriber-stats,
+    ot-layout button.OT_mode-on ~ button.resize-btn,
+    ot-layout button.OT_mode-on ~ button.restrict-framerate-btn {
     top: 0;
     opacity: 1;
 }
 
+ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
+  display: block;
+}
+
 ot-whiteboard {
-    display: block;
+    display: none;
     background-color: #DCD9CD;
 }
 
 ot-editor {
-    display: block;
+    display: none;
     background-color: #DCD9CD;
-    overflow: scroll;
+    padding: 0;
 }
 
 ot-editor .CodeMirror {
     background-color: #DCD9CD;
+}
+
+ot-editor > div.opentok-editor-connected {
+  width: 100%;
+  height: 100%;
+  height: calc(100% - 20px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 20px;
+}
+
+ot-editor > div.opentok-editor-mode-select {
+  float: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }
 
 #bottomBar {
@@ -144,7 +171,7 @@ ot-editor .CodeMirror {
   bottom: 20px;
   position: absolute;
   text-align: center;
-  z-index: 98;
+  z-index: 97;
 }
 
 button.icon-left:before {
@@ -217,7 +244,7 @@ button.red {
 }
 
 button.unread {
-    
+
 }
 
 button:disabled {
@@ -283,18 +310,18 @@ button:disabled {
     z-index: 98;
 }
 
-@media screen and (max-width: 650px) {  
+@media screen and (max-width: 650px) {
   #facePublisher, #screenPublisher {
       width: 89px;
       height: 50px;
   }
-  
+
   #shareInfo {
       width: 250px;
       left: 50%;
       margin-left: -135px;
   }
-  
+
   #statusMessages {
       width: 340px;
       left: calc(50% - 180px);
@@ -315,11 +342,14 @@ button:disabled {
     }
 }
 
-#bottomBar #footer {
+#footer {
     position: absolute;
-    bottom: -15px;
-    left: 0;
-    font-size: 12px;
+    opacity: 0;
+    bottom: 15px;
+    right: 15px;
+    font-size: 15px;
+    transition: opacity 200ms ease;
+    z-index: 98;
 }
 
 #screenShareUnsupported {
@@ -341,7 +371,8 @@ button:disabled {
     transition: opacity 200ms ease;
 }
 
-body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount {
+body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount,
+  body.mouse-move #footer {
   opacity: 1;
 }
 
@@ -390,7 +421,7 @@ ot-subscriber mute-video {
     z-index: 99;
 }
 
-ot-layout > :hover mute-video {
+ot-layout > :hover mute-video, ot-layout button.OT_mode-on ~ mute-video {
     top: 0;
     opacity: 1;
 }

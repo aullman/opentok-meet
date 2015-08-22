@@ -16,6 +16,7 @@
       "inject": true,
       "jasmine": true,
       "it": true,
+      "xit": true,
       "expect": true,
       "Helpers": true
     },

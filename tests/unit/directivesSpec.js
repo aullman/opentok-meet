@@ -129,3 +129,122 @@ describe('muteVideo', function () {
     });
   });
 });
+
+describe('muteSubscriber', function () {
+  var scope, element, mockSubscriber, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
+    OTSession.session = {};
+    OTSession.session.getSubscribersForStream = function () {
+      return [mockSubscriber];
+    };
+
+    element = '<div mute-subscriber></div>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles subscribeToVideo on click', function () {
+    expect(scope.muted).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(true);
+    expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(false);
+    expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
+  });
+});
+
+describe('mutePublisher', function () {
+  var scope, element, mockPublisher, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
+    mockPublisher.id = 'mockPublisher';
+    OTSession.publishers = [mockPublisher];
+
+    element = '<div publisher-id="mockPublisher" mute-publisher></div>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
+    expect(scope.muted).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(true);
+    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
+    element.triggerHandler({type: 'click'});
+    expect(scope.muted).toBe(false);
+    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+  });
+});
+
+describe('restrictFrameRate', function () {
+  var scope, element, mockSubscriber, OTSession;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
+    OTSession.session = {};
+    OTSession.session.getSubscribersForStream = function () {
+      return [mockSubscriber];
+    };
+
+    element = '<restrict-framerate></restrict-framerate>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
+    expect(scope.restrictedFrameRate).toBe(false);
+    element.triggerHandler({type: 'click'});
+    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
+    expect(scope.restrictedFrameRate).toBe(true);
+    element.triggerHandler({type: 'click'});
+    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
+    expect(scope.restrictedFrameRate).toBe(false);
+  });
+});
+
+// This is the double click to enlarge functionality
+describe('changeSize', function () {
+  var scope, parent, expandButton;
+  beforeEach(module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile) {
+    scope = $rootScope.$new();
+    scope.stream = {name: 'face'};
+    expandButton = angular.element('<expand-button></expand-button>');
+    parent = angular.element('<div></div>');
+    parent.append(expandButton);
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
+  }));
+  it('defaults screens to large', function () {
+    expect(scope.expanded).toBeFalsy();
+    scope.stream.name = 'screen';
+    expandButton.triggerHandler({type: 'click'});
+    expect(scope.expanded).toBe(false);
+  });
+  it('defaults other screens to small', function () {
+    expandButton.triggerHandler({type: 'click'});
+    expect(scope.expanded).toBe(true);
+  });
+  it('emits otLayout', function (done) {
+    scope.$on('otLayout', function () {
+      done();
+    });
+    expandButton.triggerHandler({type: 'click'});
+  });
+  it('works when you double click the parent', function () {
+    parent.triggerHandler({type: 'dblclick'});
+    expect(scope.expanded).toBe(true);
+    parent.triggerHandler({type: 'dblclick'});
+    expect(scope.expanded).toBe(false);
+  });
+});
