@@ -455,7 +455,10 @@ describe('OpenTok Meet App', function() {
             });
           }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
-          secondBrowser.actions().mouseDown(secondSubscriber).perform();
+          if (browser.browserName === 'internet explorer') {
+            // For some reason you need to focus the second browser again
+            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+          }
           resizeBtn.click();
           secondBrowser.wait(function () {
             return secondSubscriber.getAttribute('class').then(function (className) {
