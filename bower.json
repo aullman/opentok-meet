@@ -24,7 +24,7 @@
     "opentok-angular": "0.4.0",
     "opentok-whiteboard": "~0.1.1",
     "ionicons": "~1.4.1",
-    "opentok-editor": "~0.1.0",
+    "opentok-editor": "~0.1.2",
     "ng-debounce": "~0.1.5"
   },
   "devDependencies": {
