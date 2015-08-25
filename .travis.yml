@@ -11,7 +11,8 @@ after_success:
 addons:
   code_climate:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
-  sauce_connect: true
+  sauce_connect:
+    no_ssl_bump_domains: all
 services:
 - redis-server
 env:

@@ -8,7 +8,7 @@ exports.config = {
   capabilities: {
     'browserName': 'internet explorer',
     'platform': 'ANY',
-    'version': '10',
+    'version': '11',
     'ignoreZoomSetting': true
   },
 

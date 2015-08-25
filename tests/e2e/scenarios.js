@@ -17,6 +17,68 @@ describe('OpenTok Meet App', function() {
     });
   });
 
+  afterEach(function () {
+    roomName = null;
+    roomURL = null;
+  });
+
+  describe('Login', function () {
+    beforeEach(function () {
+      browser.get('');
+    });
+
+    if (browser.params.startDelay) {
+      it('wait to start the tests', function () {
+        // We need to wait a little bit for the tests before starting. This is to allow
+        // the Plugin installer to finish in IE
+        browser.sleep(browser.params.startDelay);
+      });
+    }
+
+    var roomField = element(by.model('room')),
+      submit = element(by.css('#joinRoomBtn'));
+
+    xit('should go to a room when you click the join button', function () {
+      roomField.sendKeys(roomName);
+      submit.click();
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
+    });
+
+    describe('p2p checkbox', function () {
+      var p2p = element(by.model('p2p'));
+      it('should add and remove p2p to the name when you click it', function () {
+        roomField.sendKeys(roomName);
+        p2p.click();
+        browser.wait(function () {
+          return roomField.getAttribute('value').then(function (value) {
+            return value === roomName + 'p2p';
+          });
+        }, 1000);
+        p2p.click();
+        browser.wait(function () {
+          return roomField.getAttribute('value').then(function (value) {
+            return value === roomName;
+          });
+        }, 1000);
+        // should check when you enter p2p into the input field
+        roomField.sendKeys('p2p');
+        browser.wait(function () {
+          return p2p.getAttribute('checked');
+        }, 1000);
+      });
+    });
+
+    it('should go to a room when you submit the form', function () {
+      roomField.sendKeys(roomName);
+      roomField.submit();
+      expect(browser.getCurrentUrl().then(function (url) {
+        // For some reason in IE sometimes when you run lots of tests
+        // the whole URL isn't there
+        return (browser.baseUrl + roomName).indexOf(url) === 0;
+      })).toBe(true);
+    });
+  });
+
   describe('Room', function() {
     beforeEach(function() {
       browser.get(roomURL);
@@ -37,7 +99,7 @@ describe('OpenTok Meet App', function() {
     it('should show a shareInfo message when you connect', function () {
       browser.wait(function () {
         return element(by.css('#shareInfo')).isPresent();
-      }, 10000);
+      }, 20000);
     });
 
     describe('publisher', function () {
@@ -336,47 +398,6 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  describe('Login', function () {
-    beforeEach(function () {
-      browser.get('');
-    });
-
-    var roomField = element(by.model('room')),
-      submit = element(by.css('#joinRoomBtn'));
-
-    xit('should go to a room when you click the join button', function () {
-      roomField.sendKeys(roomName);
-      submit.click();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
-    });
-
-    it('should go to a room when you submit the form', function () {
-      roomField.sendKeys(roomName);
-      roomField.submit();
-      expect(browser.getCurrentUrl().then(function (url) {
-        // For some reason in IE sometimes when you run lots of tests
-        // the whole URL isn't there
-        return (browser.baseUrl + roomName).indexOf(url) === 0;
-      })).toBe(true);
-    });
-
-    describe('p2p checkbox', function () {
-      var p2p = element(by.model('p2p'));
-      it('should add and remove p2p to the name when you click it', function () {
-        roomField.sendKeys(roomName);
-        p2p.click();
-        expect(roomField.getAttribute('value')).toBe(roomName + 'p2p');
-        p2p.click();
-        expect(roomField.getAttribute('value')).toBe(roomName);
-        // should check when you enter p2p into the input field
-        roomField.sendKeys('p2p');
-        browser.wait(function () {
-          return p2p.getAttribute('checked');
-        });
-      });
-    });
-  });
-
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
@@ -402,10 +423,10 @@ describe('OpenTok Meet App', function() {
         var subscriberWait = {};
         subscriberWait.first = browser.wait(function () {
           return firstSubscriberVideo.isPresent();
-        }, 20000);
+        }, 40000);
         subscriberWait.second = secondBrowser.wait(function () {
           return secondSubscriberVideo.isPresent();
-        }, 20000);
+        }, 40000);
         protractor.promise.fullyResolved(subscriberWait).then(function () {
           done();
         });
@@ -426,7 +447,7 @@ describe('OpenTok Meet App', function() {
         expect(connCount.getInnerHtml()).toContain('2');
       });
 
-      iit('subscribers should change size when you double-click', function () {
+      it('subscribers should change size when you double-click', function () {
         expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
         browser.actions().doubleClick(firstSubscriber).perform();
         expect(firstSubscriber.getAttribute('class')).toContain('OT_big');
@@ -510,7 +531,7 @@ describe('OpenTok Meet App', function() {
                 'Video Bitrate: \\d+ kbps', 'gi');
               return statsRegexp.test(innerHTML);
             });
-          }, 5000);
+          }, 10000);
         });
       });
 
