@@ -11,9 +11,9 @@ exports.config = {
   capabilities: {
     'name': 'chrome-' + process.env.TRAVIS_BRANCH + '-' + process.env.TRAVIS_PULL_REQUEST,
     'build': process.env.TRAVIS_BUILD_NUMBER,
-    'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
+    'tunnel-identifier' : 'saucey',//process.env.TRAVIS_JOB_NUMBER,
     'browserName': 'chrome',
-    'platform' : 'Windows 8',
+    'platform' : 'Windows 8.1',
 
     'chromeOptions': {
       'args': ['use-fake-device-for-media-stream', 'use-fake-ui-for-media-stream']

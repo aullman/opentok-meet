@@ -1,7 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'mouseMoveTimeoutTime', 'fakeDevices',
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'fakeDevices',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      mouseMoveTimeoutTime, fakeDevices) {
+      fakeDevices) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -183,23 +183,26 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   };
 
   var mouseMoveTimeout;
-  var mouseMoved = function() {
+  var mouseMoved = function(timeout) {
     if (!$scope.mouseMove) {
-      $scope.$apply(function() {
-        $scope.mouseMove = true;
-      });
+      $scope.mouseMove = true;
+      $scope.$apply();
     }
     if (mouseMoveTimeout) {
-      clearTimeout(mouseMoveTimeout);
+      $timeout.cancel(mouseMoveTimeout);
     }
-    mouseMoveTimeout = setTimeout(function() {
-      $scope.$apply(function() {
-        $scope.mouseMove = false;
-      });
-    }, mouseMoveTimeoutTime);
+    mouseMoveTimeout = $timeout(function() {
+      $scope.mouseMove = false;
+      $scope.$apply();
+    }, timeout);
   };
-  $window.addEventListener('mousemove', mouseMoved);
-  $window.addEventListener('touchstart', mouseMoved);
+  mouseMoved(20000); // Show the UI on first load for longer mainly for automated testing
+  $window.addEventListener('mousemove', function () {
+    mouseMoved(5000);
+  });
+  $window.addEventListener('touchstart', function () {
+    mouseMoved(5000);
+  });
   $document.context.body.addEventListener('orientationchange', function() {
     $scope.$emit('otLayout');
   });

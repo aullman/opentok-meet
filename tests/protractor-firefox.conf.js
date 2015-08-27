@@ -8,7 +8,7 @@ exports.config = {
     'e2e/*.js'
   ],
 
-  baseUrl: 'https://adam.local:5000/',
+  baseUrl: 'http://localhost:5000/',
 
   getMultiCapabilities: helper.getFirefoxProfile,
 

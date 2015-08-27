@@ -16,7 +16,7 @@ exports.config = {
 
   directConnect: true,
 
-  baseUrl: 'https://adam.local:5000/',
+  baseUrl: 'http://adam.local:5000/',
 
   params: {
     testScreenSharing: true

@@ -9,28 +9,29 @@ exports.config = {
   ],
 
   capabilities: {
-    'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
+    'tunnel-identifier' : 'saucey', //process.env.TRAVIS_JOB_NUMBER,
     'name': 'ie11-' + process.env.TRAVIS_BRANCH + '-' + process.env.TRAVIS_PULL_REQUEST,
     'build': process.env.TRAVIS_BUILD_NUMBER,
     'browserName': 'internet explorer',
-    'platform': 'Windows 8.1',
+    'platform': 'Windows 7',
     'version': '11',
     'prerun': {
-      'executable': 'https://dl.dropboxusercontent.com/u/21519477/OpenTokManyCamInstaller2.EXE',
+      'executable': 'http://dl.dropboxusercontent.com/u/21519477/OpenTokManyCamInstaller2.EXE',
       'background': true,
       'timeout': 120
     }
   },
 
   params: {
-    startDelay: 3000    // Wait 3 seconds to start for the installer to install
+    startDelay: 10000,    // Wait 3 seconds to start for the installer to install
+    noMultiParty: true    // Multi party not working in IE on sauce labs
   },
 
-  baseUrl: 'https://opentok-meet.herokuapp.com/',
+  baseUrl: 'http://localhost:5000/',
 
   framework: 'jasmine',
 
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 60000
+    defaultTimeoutInterval: 90000
   }
 };
