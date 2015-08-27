@@ -9,7 +9,7 @@ exports.config = {
   ],
 
   capabilities: {
-    'tunnel-identifier' : 'saucey', //process.env.TRAVIS_JOB_NUMBER,
+    'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
     'name': 'ie11-' + process.env.TRAVIS_BRANCH + '-' + process.env.TRAVIS_PULL_REQUEST,
     'build': process.env.TRAVIS_BUILD_NUMBER,
     'browserName': 'internet explorer',
