@@ -650,7 +650,8 @@ describe('OpenTok Meet App', function() {
           // Disconnect the second browser
           secondBrowser.element(by.css('#changeRoom')).click();
         });
-        it('by quitting the browser', function () {
+        // Taking this test out for now until OPENTOK-24943 is fixed
+        xit('by quitting the browser', function () {
           secondBrowser.quit();
           secondBrowser = null;
         });
