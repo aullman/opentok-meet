@@ -17,6 +17,10 @@ describe('OpenTok Meet App', function() {
     });
   });
 
+  afterEach(function () {
+    roomName = roomURL = null;
+  });
+
   describe('Room', function() {
     beforeEach(function() {
       browser.get(roomURL);
@@ -382,7 +386,9 @@ describe('OpenTok Meet App', function() {
       secondBrowser.get(roomURL);
     });
     afterEach(function () {
-      secondBrowser.quit();
+      if (secondBrowser) {
+        secondBrowser.quit();
+      }
     });
 
     describe('subscribing to one another', function () {
@@ -614,6 +620,39 @@ describe('OpenTok Meet App', function() {
               });
             });
           });
+        });
+      });
+
+      describe('disconnecting', function () {
+        var connCount;
+        beforeEach(function () {
+          connCount = element(by.css('#connCount'));
+          expect(firstSubscriber.isPresent()).toBe(true);
+          expect(connCount.getInnerHtml()).toContain('2');
+        });
+
+        afterEach(function () {
+          // Wait 5 seconds for the connection count to go down to 1
+          browser.wait(function () {
+            return connCount.getInnerHtml().then(function (innerHTML) {
+              return innerHTML.trim() === '1';
+            });
+          }, 5000);
+          // Wait 5 seconds for the Subscriber to go away
+          browser.wait(function () {
+            return firstSubscriber.isPresent().then(function (present) {
+              return !present;
+            });
+          }, 5000);
+        });
+
+        it('with change room button', function () {
+          // Disconnect the second browser
+          secondBrowser.element(by.css('#changeRoom')).click();
+        });
+        it('by quitting the browser', function () {
+          secondBrowser.quit();
+          secondBrowser = null;
         });
       });
     });
