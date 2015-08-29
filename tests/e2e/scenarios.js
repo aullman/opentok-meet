@@ -38,13 +38,13 @@ describe('OpenTok Meet App', function() {
     var roomField = element(by.model('room')),
       submit = element(by.css('#joinRoomBtn'));
 
-    xit('should go to a room when you click the join button', function () {
+    it('should go to a room when you click the join button', function () {
       roomField.sendKeys(roomName);
       submit.click();
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
 
-    xdescribe('p2p checkbox', function () {
+    describe('p2p checkbox', function () {
       var p2p = element(by.model('p2p'));
       it('should add and remove p2p to the name when you click it', function () {
         roomField.sendKeys(roomName);
@@ -250,7 +250,7 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      xdescribe('startArchiveBtn', function () {
+      describe('startArchiveBtn', function () {
         var startArchiveBtn = element(by.css('#startArchiveBtn'));
         beforeEach(function () {
           browser.wait(function () {
@@ -403,7 +403,7 @@ describe('OpenTok Meet App', function() {
           });
         });
 
-        xit('should display a video element with the right videoWidth and videoHeight',
+        it('should display a video element with the right videoWidth and videoHeight',
           function () {
           // Have to wait a little longer on Firefox for the videoWidth and videoHeight
           browser.sleep(1000);
