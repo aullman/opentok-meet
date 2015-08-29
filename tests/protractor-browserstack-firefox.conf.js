@@ -4,7 +4,7 @@ exports.config = {
   allScriptsTimeout: 11000,
 
   specs: [
-    'e2e/*.js'
+    'e2e/scenarios.js'
   ],
 
   getMultiCapabilities: helper.getFirefoxProfile,
