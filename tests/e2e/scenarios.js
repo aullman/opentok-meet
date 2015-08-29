@@ -44,7 +44,7 @@ describe('OpenTok Meet App', function() {
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
     });
 
-    describe('p2p checkbox', function () {
+    xdescribe('p2p checkbox', function () {
       var p2p = element(by.model('p2p'));
       it('should add and remove p2p to the name when you click it', function () {
         roomField.sendKeys(roomName);
@@ -250,7 +250,7 @@ describe('OpenTok Meet App', function() {
         });
       });
 
-      describe('startArchiveBtn', function () {
+      xdescribe('startArchiveBtn', function () {
         var startArchiveBtn = element(by.css('#startArchiveBtn'));
         beforeEach(function () {
           browser.wait(function () {
