@@ -31,11 +31,6 @@ exports.config = {
     getCapabilitiesFor('Windows 8', 'internet explorer', '10')
   ],
 
-  params: {
-    startDelay: 10000,    // Wait 3 seconds to start for the installer to install
-    noMultiParty: true    // Multi party not working in IE on sauce labs
-  },
-
   baseUrl: 'http://localhost:5000/',
 
   framework: 'jasmine',

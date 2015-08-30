@@ -11,7 +11,7 @@ exports.config = {
 
   seleniumAddress: 'http://hub.browserstack.com/wd/hub',
 
-  baseUrl: 'http://localhost:3000/',
+  baseUrl: 'http://localhost:5000/',
 
   framework: 'jasmine',
 

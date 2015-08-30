@@ -9,7 +9,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.archiving = false;
   $scope.isAndroid = /Android/g.test(navigator.userAgent);
   $scope.connected = false;
-  $scope.mouseMove = false;
+  $scope.mouseMove = true;
   $scope.showWhiteboard = false;
   $scope.showEditor = false;
   $scope.whiteboardUnread = false;
@@ -183,7 +183,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   };
 
   var mouseMoveTimeout;
-  var mouseMoved = function(timeout) {
+  var mouseMoved = function() {
     if (!$scope.mouseMove) {
       $scope.mouseMove = true;
       $scope.$apply();
@@ -194,15 +194,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     mouseMoveTimeout = $timeout(function() {
       $scope.mouseMove = false;
       $scope.$apply();
-    }, timeout);
+    }, 5000);
   };
-  mouseMoved(20000); // Show the UI on first load for longer mainly for automated testing
-  $window.addEventListener('mousemove', function () {
-    mouseMoved(5000);
-  });
-  $window.addEventListener('touchstart', function () {
-    mouseMoved(5000);
-  });
+  $window.addEventListener('mousemove', mouseMoved);
+  $window.addEventListener('touchstart', mouseMoved);
   $document.context.body.addEventListener('orientationchange', function() {
     $scope.$emit('otLayout');
   });

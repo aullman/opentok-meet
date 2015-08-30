@@ -60,8 +60,9 @@ describe('IE Smoke Test', function() {
     expect(connCount.getInnerHtml()).toContain('2');
     // Wait for Subscriber to load
     browser.wait(function () {
-      return element(by.css('ot-subscriber:not(.OT_loading)')).isPresent() &&
-        element(by.css('ot-subscriber:not(.OT_loading)')).isDisplayed();
+      return element(by.css('ot-subscriber')).getAttribute('class').then(function (className) {
+        return className.indexOf('.OT_loading') < 0;
+      });
     }, 10000);
   });
 });

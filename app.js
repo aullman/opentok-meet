@@ -42,7 +42,6 @@ app.configure(function() {
   app.use(app.router);
 });
 
-console.log('apikey: ' + config.apiKey + ' secret: ' + config.apiSecret.substr(0, 10) + '...');
 var ot = new OpenTok(config.apiKey, config.apiSecret);
 var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
