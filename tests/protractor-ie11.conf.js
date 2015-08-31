@@ -1,14 +1,14 @@
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 30000,
 
   specs: [
-    'e2e/*.js'
+    'e2e/iesmoketest.js'
   ],
 
   capabilities: {
     'browserName': 'internet explorer',
     'platform': 'ANY',
-    'version': '10',
+    'version': '11',
     'ignoreZoomSetting': true
   },
 
