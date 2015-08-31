@@ -5,7 +5,7 @@
 // the other tests don't pass consistently there
 var uuid = require('uuid');
 describe('IE Smoke Test', function() {
-  it('wait to start the tests', function (done) {
+  it('has the plugin installed and audio, video input devices', function (done) {
     // We need to wait a little bit for the tests before starting. This is to allow
     // the Plugin installer to finish in IE.
     var videoInput = element(by.css('.videoInput'));
