@@ -15,15 +15,20 @@ after_success:
 addons:
   code_climate:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
+  sauce_connect:
+    no_ssl_bump_domains: all
+    tunnel_domains: localhost
 services:
 - redis-server
 sudo: false
 env:
   global:
   - TRAVIS=true
-  - PORT=3000
+  - PORT=5000
   - CHROME_EXTENSION_ID=none
   - OT_API_KEY=1974561
   - BROWSERSTACK_USERNAME=adamullman1
   - secure: ATYQg+EY0uo9KRx3su5NwijIMDIpPu8axX9AeATzjz3ree73eDU/jM0pTxV0tTLRtmMoC8b95DIvrhDfKIUXqTA4m2eHiwamv4+7Ocr7twEQJ6tjA3jX2Zv7H6QFZEGC1hIl7CJm4q9vMiS1NfVgG4VHTSsYkWCldwKyQvpfm9g=
   - secure: gXLtG+aBTQCJ4ovSwexMF38V5f56jBgxhyJaUC/lAzdQuyK5VFWCTubohOohFx4GokfN5A4JETVRiFfn4heRVmBxi5ZAlWwZpbWD6yBBu4l5SN7ST1umwzGEc+1zjZ0LyvaC8LK7GI7gdCVY+XWP1SryS1n9JEytiR1S93giflQ=
+  - secure: UTGPkvGdlise2HWGIDGQvQAItv4zw2PZFOeIHOSvKBn2vuzhN8pX8OVR44n3Ddr28aW7YQkCLWKEsHsBgdsxUmWoFBnUrVX12dPKAjTq3gMeHuPAxkg6nBQJ4/y9r57wenAjGCd79H9n04jQtvDZkfe1+hpTLCMnMPkceIZdxO0=
+  - secure: H8AA0IvOE8HpZgsQdHXUq110NtvheQEy76ZNGZU7mF4bNAfQ0PVWVpJ+HL/1itJFBVlGiu+MqzKJ2MtdhrlrBxYBcyM1yHdfCkoM6Uh2ff4hEGbZsZ65ClzgvnhabUQrzFGn3Qidba9ICKspdl0jXrhRnpbnN22kPGM9w/Izvv0=

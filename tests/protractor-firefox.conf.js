@@ -5,10 +5,10 @@ exports.config = {
   directConnect: true,
 
   specs: [
-    'e2e/*.js'
+    'e2e/scenarios.js'
   ],
 
-  baseUrl: 'https://adam.local:5000/',
+  baseUrl: 'http://localhost:5000/',
 
   getMultiCapabilities: helper.getFirefoxProfile,
 

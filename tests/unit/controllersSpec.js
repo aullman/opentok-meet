@@ -11,11 +11,13 @@ describe('OpenTok Meet controllers', function() {
       roomDefer,
       MockOTSession,
       documentMock,
-      facePublisher;
+      facePublisher,
+      $timeout;
 
     beforeEach(module('opentok-meet'));
 
-    beforeEach(inject(function($controller, $rootScope, $q, $injector) {
+    beforeEach(inject(function($controller, $rootScope, $q, $injector, _$timeout_) {
+      $timeout = _$timeout_;
       scope = $rootScope.$new();
       scope.session = OT.initSession('mockSessionId');
       scope.session.connection = {
@@ -48,11 +50,10 @@ describe('OpenTok Meet controllers', function() {
         $scope: scope,
         $window: windowMock,
         $document: documentMock,
-        $timeout: {},
+        $timeout: $timeout,
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
         baseURL: '',
-        mouseMoveTimeoutTime: 10,
         fakeDevices: ''
       });
     }));
@@ -358,15 +359,10 @@ describe('OpenTok Meet controllers', function() {
         windowMock.trigger('mousemove');
         setTimeout(function () {
           expect(scope.mouseMove).toBe(true);
-          done();
-        });
-      });
-      it('goes back to being false after mouseMoveTimeoutTime', function (done) {
-        windowMock.trigger('mousemove');
-        setTimeout(function () {
+          $timeout.flush();
           expect(scope.mouseMove).toBe(false);
           done();
-        }, 20);
+        });
       });
       it('does not go back if you move again', function (done) {
         windowMock.trigger('mousemove');

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="This is used to check devices for IE integration tests.">
+    <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="//static.opentok.com/v2/js/opentok.js"></script>
+    <title>Test Devices</title>
+    <script type="text/javascript">
+      angular.module('MyApp', []);
+      angular.module('MyApp').controller('MainCtrl', ['$scope', function($scope) {
+        $scope.loaded = false;
+        OT.getDevices(function (err, devices) {
+          $scope.devices = devices;
+          $scope.loaded = true;
+          $scope.$apply();
+        });
+      }]);
+    </script>
+  </head>
+  <body ng-controller="MainCtrl" ng-class="{'loaded': loaded}">
+    <ul>
+      <li ng-repeat="device in devices" class="{{device.kind}}">Device Type {{device.kind}}</li>
+    </ul>
+  </body>
+</html>

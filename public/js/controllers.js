@@ -1,7 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'mouseMoveTimeoutTime', 'fakeDevices',
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'fakeDevices',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      mouseMoveTimeoutTime, fakeDevices) {
+      fakeDevices) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -190,13 +190,13 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       });
     }
     if (mouseMoveTimeout) {
-      clearTimeout(mouseMoveTimeout);
+      $timeout.cancel(mouseMoveTimeout);
     }
-    mouseMoveTimeout = setTimeout(function() {
+    mouseMoveTimeout = $timeout(function() {
       $scope.$apply(function() {
         $scope.mouseMove = false;
       });
-    }, mouseMoveTimeoutTime);
+    }, 5000);
   };
   $window.addEventListener('mousemove', mouseMoved);
   $window.addEventListener('touchstart', mouseMoved);

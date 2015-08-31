@@ -4,14 +4,14 @@ exports.config = {
   allScriptsTimeout: 11000,
 
   specs: [
-    'e2e/*.js'
+    'e2e/scenarios.js'
   ],
 
   getMultiCapabilities: helper.getFirefoxProfile,
 
   seleniumAddress: 'http://hub.browserstack.com/wd/hub',
 
-  baseUrl: 'http://localhost:3000/',
+  baseUrl: 'http://localhost:5000/',
 
   framework: 'jasmine',
 
