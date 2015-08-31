@@ -9,7 +9,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.archiving = false;
   $scope.isAndroid = /Android/g.test(navigator.userAgent);
   $scope.connected = false;
-  $scope.mouseMove = true;
+  $scope.mouseMove = false;
   $scope.showWhiteboard = false;
   $scope.showEditor = false;
   $scope.whiteboardUnread = false;
@@ -185,15 +185,17 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   var mouseMoveTimeout;
   var mouseMoved = function() {
     if (!$scope.mouseMove) {
-      $scope.mouseMove = true;
-      $scope.$apply();
+      $scope.$apply(function() {
+        $scope.mouseMove = true;
+      });
     }
     if (mouseMoveTimeout) {
       $timeout.cancel(mouseMoveTimeout);
     }
     mouseMoveTimeout = $timeout(function() {
-      $scope.mouseMove = false;
-      $scope.$apply();
+      $scope.$apply(function() {
+        $scope.mouseMove = false;
+      });
     }, 5000);
   };
   $window.addEventListener('mousemove', mouseMoved);

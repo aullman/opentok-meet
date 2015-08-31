@@ -298,50 +298,35 @@ describe('OpenTok Meet controllers', function() {
         describe('otEditorUpdate', function () {
           it('updates unread when not looking at editor', function () {
             expect(scope.editorUnread).toBe(false);
-            expect(scope.mouseMove).toBe(true);
+            expect(scope.mouseMove).toBe(false);
             scope.$emit('otEditorUpdate');
             expect(scope.editorUnread).toBe(true);
             expect(scope.mouseMove).toBe(true);
           });
-          it('does not update unread when already looking at editor', function (done) {
+          it('does not update unread when already looking at editor', function () {
             scope.showEditor = true;
             expect(scope.editorUnread).toBe(false);
-            windowMock.trigger('mousemove');
-            setTimeout(function () {
-              $timeout.flush();
-              expect(scope.mouseMove).toBe(false);
-              scope.$emit('otEditorUpdate');
-              expect(scope.editorUnread).toBe(false);
-              expect(scope.mouseMove).toBe(false);
-              done();
-            });
+            expect(scope.mouseMove).toBe(false);
+            scope.$emit('otEditorUpdate');
+            expect(scope.editorUnread).toBe(false);
+            expect(scope.mouseMove).toBe(false);
           });
         });
         describe('otWhiteboardUpdate', function () {
-          it('updates unread when not looking at whiteboard', function (done) {
+          it('updates unread when not looking at whiteboard', function () {
             expect(scope.whiteboardUnread).toBe(false);
-            windowMock.trigger('mousemove');
-            setTimeout(function () {
-              $timeout.flush();
-              expect(scope.mouseMove).toBe(false);
-              scope.$emit('otWhiteboardUpdate');
-              expect(scope.whiteboardUnread).toBe(true);
-              expect(scope.mouseMove).toBe(true);
-              done();
-            });
+            expect(scope.mouseMove).toBe(false);
+            scope.$emit('otWhiteboardUpdate');
+            expect(scope.whiteboardUnread).toBe(true);
+            expect(scope.mouseMove).toBe(true);
           });
-          it('does not update unread when already looking at whiteboard', function (done) {
+          it('does not update unread when already looking at whiteboard', function () {
             scope.showWhiteboard = true;
             expect(scope.whiteboardUnread).toBe(false);
-            windowMock.trigger('mousemove');
-            setTimeout(function () {
-              $timeout.flush();
-              expect(scope.mouseMove).toBe(false);
-              scope.$emit('otWhiteboardUpdate');
-              expect(scope.whiteboardUnread).toBe(false);
-              expect(scope.mouseMove).toBe(false);
-              done();
-            });
+            expect(scope.mouseMove).toBe(false);
+            scope.$emit('otWhiteboardUpdate');
+            expect(scope.whiteboardUnread).toBe(false);
+            expect(scope.mouseMove).toBe(false);
           });
         });
       });
@@ -370,7 +355,7 @@ describe('OpenTok Meet controllers', function() {
 
     describe('mouseMove', function () {
       it('gets set to true when the mouse moves', function (done) {
-        expect(scope.mouseMove).toBe(true);
+        expect(scope.mouseMove).toBe(false);
         windowMock.trigger('mousemove');
         setTimeout(function () {
           expect(scope.mouseMove).toBe(true);
@@ -390,7 +375,7 @@ describe('OpenTok Meet controllers', function() {
         }, 11);
       });
       it('gets set to true on touchstart', function (done) {
-        expect(scope.mouseMove).toBe(true);
+        expect(scope.mouseMove).toBe(false);
         windowMock.trigger('touchstart');
         setTimeout(function () {
           expect(scope.mouseMove).toBe(true);
