@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Installs Chrome or Firefox if missing
 #
@@ -23,7 +23,7 @@ fi
 PATH=$PATH:./node_modules/.bin
 # Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
 BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
-BROWSER_CAMEL=$(${BROWSER_UPPER:0:1}${BROWSER:1})
+BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
 export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
 echo "Starting Karma for browser $BROWSER_CAMEL"
 karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
