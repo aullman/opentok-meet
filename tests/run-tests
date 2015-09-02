@@ -4,14 +4,24 @@
 #
 BINDIR=./browsers/bin
 
-if [ -z $BROWSER ]; then
-	echo "No BROWSER variable specified, defaulting to locally installed Chrome"
-	# Default to Chrome
-  BROWSER="chrome"
-	case $OSTYPE in
-		darwin*) BROWSERBIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";;
-		linux*) ;;
-	esac
+if [ -z $TRAVIS ]; then
+	echo "No TRAVIS env variable, we must be running locally. Assuming OSX."
+  if [ -z $BROWSER ]; then
+	   # Default to Chrome
+     BROWSER="chrome"
+  fi
+  if [ -z $BVER ]; then
+    # Default to Stable
+    BVER="stable"
+  fi
+  case ${BROWSER}-${BVER} in
+    chrome-stable) BROWSERBIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";;
+    chrome-beta) BROWSERBIN="/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome";;
+    chrome-unstable) BROWSERBIN="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary";;
+    firefox-stable) BROWSERBIN="/Applications/Firefox.app/Contents/MacOS/firefox";;
+    firefox-beta) BROWSERBIN="/Applications/Firefox Beta.app/Contents/MacOS/firefox";;
+    firefox-unstable) BROWSERBIN="/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox";;
+  esac
 else
 	BROWSERBIN=$BINDIR/$BROWSER-$BVER
 fi
@@ -28,13 +38,10 @@ else
   BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
   BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
   export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
-  echo "Starting Karma for browser $BROWSER_CAMEL"
+  echo "Starting Karma for browser $BROWSER_CAMEL using $BROWSERBIN"
   karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
 
-  echo "Running Protractor tests on Browserstack"
-  wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-  unzip BrowserStackLocal-linux-x64.zip
-  ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
-  sleep 10
-  protractor tests/protractor-browserstack-$BROWSER.conf.js
+  echo "Running Protractor tests"
+  webdriver-manager update
+  protractor tests/protractor-$BROWSER.conf.js
 fi

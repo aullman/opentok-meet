@@ -3,6 +3,7 @@ var helper = require('./firefox-helper.js');
 exports.config = {
   allScriptsTimeout: 11000,
   directConnect: true,
+  firefoxPath: process.env.FIREFOX_BIN,
 
   specs: [
     'e2e/scenarios.js'
