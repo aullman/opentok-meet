@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Installs Chrome or Firefox if missing
+#
+BINDIR=./browsers/bin
+BROWSERBIN=$BINDIR/$BROWSER-$BVER
+if [ ! -x $BROWSERBIN ]; then
+  echo "Installing browser."
+  ./node_modules/travis-multirunner/setup.sh
+fi
+PATH=$PATH:./node_modules/.bin
+# Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
+export $(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')_BIN=$BROWSERBIN
+echo "Starting Karma for browser $BROWSER"
+karma start tests/karma.conf.js --single-run --browsers $BROWSER
+#protractor tests/protractor-browserstack-$BROWSER.conf.js
+
+# && node_modules/.bin/protractor tests/protractor-browserstack.conf.js && protractor tests/protractor-saucelabs-ie.conf.js
