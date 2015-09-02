@@ -3,16 +3,30 @@
 # Installs Chrome or Firefox if missing
 #
 BINDIR=./browsers/bin
-BROWSERBIN=$BINDIR/$BROWSER-$BVER
+
+if [ -z $BROWSER ]; then
+	echo "No BROWSER variable specified, defaulting to locally installed Chrome"
+	# Default to Chrome
+	case $OSTYPE in
+		darwin*) BROWSERBIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";;
+		linux*) ;;
+	esac
+	BROWSER="chrome"
+else
+	BROWSERBIN=$BINDIR/$BROWSER-$BVER
+fi
+
 if [ ! -x $BROWSERBIN ]; then
   echo "Installing browser."
   ./node_modules/travis-multirunner/setup.sh
 fi
 PATH=$PATH:./node_modules/.bin
 # Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
-export $(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')_BIN=$BROWSERBIN
-echo "Starting Karma for browser $BROWSER"
-karma start tests/karma.conf.js --single-run --browsers $BROWSER
-#protractor tests/protractor-browserstack-$BROWSER.conf.js
+BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
+BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
+export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
+echo "Starting Karma for browser $BROWSER_CAMEL"
+karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
+# protractor tests/protractor-browserstack-$BROWSER.conf.js
 
 # && node_modules/.bin/protractor tests/protractor-browserstack.conf.js && protractor tests/protractor-saucelabs-ie.conf.js
