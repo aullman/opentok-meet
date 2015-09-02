@@ -21,7 +21,12 @@ addons:
 services:
 - redis-server
 sudo: false
+matrix:
+  fast_finish: true
 env:
+  matrix:
+    - BROWSER=chrome  BVER=stable
+    - BROWSER=firefox BVER=stable
   global:
   - TRAVIS=true
   - PORT=5000
