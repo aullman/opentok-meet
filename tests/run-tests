@@ -42,8 +42,10 @@ else
   karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
 
   echo "Running Protractor tests"
-  wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-  unzip BrowserStackLocal-linux-x64.zip
+	if [ ! -x ./BrowserStackLocal ]; then
+  	wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+  	unzip BrowserStackLocal-linux-x64.zip
+	fi
   ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
   sleep 10
   webdriver-manager update

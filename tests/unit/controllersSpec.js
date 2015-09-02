@@ -53,8 +53,7 @@ describe('OpenTok Meet controllers', function() {
         $timeout: $timeout,
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
-        baseURL: '',
-        fakeDevices: ''
+        baseURL: ''
       });
     }));
 
