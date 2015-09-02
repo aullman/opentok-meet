@@ -16,17 +16,25 @@ else
 	BROWSERBIN=$BINDIR/$BROWSER-$BVER
 fi
 
-if [ ! -x $BROWSERBIN ]; then
-  echo "Installing browser."
-  ./node_modules/travis-multirunner/setup.sh
-fi
-PATH=$PATH:./node_modules/.bin
-# Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
-BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
-BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
-export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
-echo "Starting Karma for browser $BROWSER_CAMEL"
-karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
-# protractor tests/protractor-browserstack-$BROWSER.conf.js
+if [ $BROWSER == 'ie' ]; then
+  protractor tests/protractor-saucelabs-ie.conf.js
+else
+  if [ ! -x $BROWSERBIN ]; then
+    echo "Installing browser."
+    ./node_modules/travis-multirunner/setup.sh
+  fi
+  PATH=$PATH:./node_modules/.bin
+  # Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
+  BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
+  BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
+  export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
+  echo "Starting Karma for browser $BROWSER_CAMEL"
+  karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
 
-# && node_modules/.bin/protractor tests/protractor-browserstack.conf.js && protractor tests/protractor-saucelabs-ie.conf.js
+  echo "Running Protractor tests on Browserstack"
+  wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+  unzip BrowserStackLocal-linux-x64.zip
+  ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
+  sleep 10
+  protractor tests/protractor-browserstack-$BROWSER.conf.js
+fi
