@@ -19,6 +19,8 @@
             // Mock out mozGetUserMedia and force pass the fake:true contstraint
             var oldGetUserMedia = navigator.mozGetUserMedia;
             navigator.mozGetUserMedia = function(constraints) {
+              constraints.video = true;
+              constraints.audio = true;
               constraints.fake = true;
               oldGetUserMedia.apply(this, arguments);
             };
