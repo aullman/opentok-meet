@@ -43,4 +43,10 @@ export SAUCE_ACCESS_KEY=<YOUR_SAUCE_KEY>
 export TRAVIS_JOB_NUMBER=<ANYTHING>
 ```
 
+By default `npm test` will run the tests in Chrome Stable. If you want to run in different environments you can set the `BROWSER` and `BVER` environment variables. eg. `export BROWSER=ie BVER=11;npm test`. Supported combinations are:
+
+* ie (10,11)
+* chrome (stable, beta, unstable)
+* firefox (stable, beta, unstable)
+
 These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org), [BrowserStack Automate](browserstack.com/automate) and [Sauce Labs](https://saucelabs.com/).
