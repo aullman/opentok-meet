@@ -527,15 +527,13 @@ describe('OpenTok Meet App', function() {
 
       describe('using the collaborative editor', function () {
         var firstShowEditorBtn, secondShowEditorBtn;
-        beforeEach(function (done) {
+        beforeEach(function () {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
           secondShowEditorBtn.click();
           browser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000).then(function () {
-            done();
-          });
+          }, 10000);
         });
 
         afterEach(function () {
