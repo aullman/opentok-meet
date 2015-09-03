@@ -344,7 +344,7 @@ describe('OpenTok Meet controllers', function() {
         setTimeout(function () {
           expect(RoomServiceMock.changeRoom).toHaveBeenCalled();
           done();
-        });
+        }, 100);
       });
     });
 
@@ -383,7 +383,7 @@ describe('OpenTok Meet controllers', function() {
         setTimeout(function () {
           expect(scope.mouseMove).toBe(true);
           done();
-        });
+        }, 100);
       });
     });
 
