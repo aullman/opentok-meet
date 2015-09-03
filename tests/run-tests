@@ -85,4 +85,4 @@ if [ ! -z $b_pid ]; then
 	wait $b_pid
 fi
 
-exit $(( $karma && $protractor ))
+exit $(( $karma || $protractor ))
