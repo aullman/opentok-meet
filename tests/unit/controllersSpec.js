@@ -287,7 +287,7 @@ describe('OpenTok Meet controllers', function() {
           setTimeout(function () {
             expect(scope.connected).toBe(true);
             done();
-          });
+          }, 100);
         });
         it('handles sessionDisconnected', function (done) {
           scope.connected = true;
