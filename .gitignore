@@ -31,3 +31,4 @@ OpenTok-iOS-2.4.0/
 opentok-ios-sdk-*
 BrowserStackLocal
 /sc-*/*
+sauce-connect.log

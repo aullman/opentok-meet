@@ -19,6 +19,10 @@ describe('OpenTok Meet controllers', function() {
     beforeEach(inject(function($controller, $rootScope, $q, $injector, _$timeout_) {
       $timeout = _$timeout_;
       scope = $rootScope.$new();
+      OT.checkSystemRequirements = function () {
+        // Override checkSystemRequirements so that IE works without a plugin
+        return true;
+      };
       scope.session = OT.initSession('mockSessionId');
       scope.session.connection = {
         connectionId: 'mockConnectionId'
@@ -266,7 +270,7 @@ describe('OpenTok Meet controllers', function() {
             expect(scope.archiveId).toBe('mockArchiveId');
             expect(scope.archiving).toBe(true);
             done();
-          });
+          }, 100);
         });
         it('handles archiveStopped', function (done) {
           scope.archiving = true;
@@ -275,7 +279,7 @@ describe('OpenTok Meet controllers', function() {
             expect(scope.archiveId).toBe('mockArchiveId');
             expect(scope.archiving).toBe(false);
             done();
-          });
+          },100);
         });
         it('handles sessionConnected', function (done) {
           expect(scope.connected).toBe(false);
@@ -292,7 +296,7 @@ describe('OpenTok Meet controllers', function() {
             expect(scope.connected).toBe(false);
             expect(scope.publishing).toBe(false);
             done();
-          });
+          }, 100);
         });
         describe('otEditorUpdate', function () {
           it('updates unread when not looking at editor', function () {

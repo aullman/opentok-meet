@@ -4,54 +4,75 @@
 #
 BINDIR=./browsers/bin
 
+if [ -z $BROWSER ]; then
+	BROWSER="chrome"
+fi
+if [ -z $BVER ]; then
+	BVER="stable"
+fi
+
 if [ -z $TRAVIS ]; then
 	echo "No TRAVIS env variable, we must be running locally. Assuming OSX."
-  if [ -z $BROWSER ]; then
-	   # Default to Chrome
-     BROWSER="chrome"
-  fi
-  if [ -z $BVER ]; then
-    # Default to Stable
-    BVER="stable"
-  fi
-  case ${BROWSER}-${BVER} in
-    chrome-stable) BROWSERBIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";;
-    chrome-beta) BROWSERBIN="/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome";;
-    chrome-unstable) BROWSERBIN="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary";;
-    firefox-stable) BROWSERBIN="/Applications/Firefox.app/Contents/MacOS/firefox";;
-    firefox-beta) BROWSERBIN="/Applications/Firefox Beta.app/Contents/MacOS/firefox";;
-    firefox-unstable) BROWSERBIN="/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox";;
-  esac
+	case ${BROWSER}-${BVER} in
+		chrome-stable) BROWSERBIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";;
+		chrome-beta) BROWSERBIN="/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome";;
+		chrome-unstable) BROWSERBIN="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary";;
+		firefox-stable) BROWSERBIN="/Applications/Firefox.app/Contents/MacOS/firefox";;
+		firefox-beta) BROWSERBIN="/Applications/Firefox Beta.app/Contents/MacOS/firefox";;
+		firefox-unstable) BROWSERBIN="/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox";;
+	esac
 else
 	BROWSERBIN=$BINDIR/$BROWSER-$BVER
 fi
 
 if [ $BROWSER == 'ie' ]; then
-  protractor tests/protractor-saucelabs-ie.conf.js
-else
-  if [ ! -x $BROWSERBIN ]; then
-    echo "Installing browser."
-    ./node_modules/travis-multirunner/setup.sh
-  fi
-  PATH=$PATH:./node_modules/.bin
-  # Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
-  BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
-  BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
-  export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
-  echo "Starting Karma for browser $BROWSER_CAMEL using $BROWSERBIN"
-  karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
-
-	if [ ! -x ./BrowserStackLocal ]; then
-  	wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-  	unzip BrowserStackLocal-linux-x64.zip
+	echo "Starting Sauce Connect"
+	if [ ! -x ./sc-4.3.11-*/bin/sc ]; then
+		wget http://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz
+		tar -zxvf sc-4.3.11-linux.tar.gz
 	fi
-	echo "Starting BrowserStackLocal"
-  ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
-	b_pid=$!
-  sleep 10
-  webdriver-manager update
+	READY_FILE=sauce-connect-ready$TRAVIS_JOB_NUMBER
+	./sc-4.3.11-*/bin/sc -i $TRAVIS_JOB_NUMBER -f $READY_FILE -l sauce-connect.log -B all -t localhost &
+	s_pid=$!
+	echo "Waiting for Connect to be ready before exiting"
+	while [ ! -f $READY_FILE ]; do
+		sleep .5
+	done
+
+	echo "Starting Karma"
+	karma start tests/karma.conf.js --single-run --browsers "IE$BVER"
+
 	echo "Running Protractor tests"
-  protractor tests/protractor-browserstack-$BROWSER.conf.js
+	protractor tests/protractor-saucelabs-ie.conf.js
+
+	echo "Shutting down Sauce Connect"
+	kill -2 $s_pid
+	wait $s_pid
+else
+	if [ ! -x $BROWSERBIN ]; then
+		echo "Installing browser."
+		./node_modules/travis-multirunner/setup.sh
+	fi
+	PATH=$PATH:./node_modules/.bin
+	# Karma uses ${BROWSER}_BIN, eg. CHROME_BIN, to override the path to the browser
+	BROWSER_UPPER=$(echo "$BROWSER" | tr '[:lower:]' '[:upper:]')
+	BROWSER_CAMEL=${BROWSER_UPPER:0:1}${BROWSER:1}
+	export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
+	echo "Starting Karma for browser $BROWSER_CAMEL using $BROWSERBIN"
+	karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
+
+	echo "Starting BrowserStackLocal"
+	if [ ! -x ./BrowserStackLocal ]; then
+		wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
+		unzip BrowserStackLocal-linux-x64.zip
+	fi
+	./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
+	b_pid=$!
+	sleep 10
+
+	webdriver-manager update
+	echo "Running Protractor tests"
+	protractor tests/protractor-browserstack-$BROWSER.conf.js
 	echo "Shutting down BrowserstackLocal $b_pid"
 	kill -2 $b_pid
 	wait $b_pid

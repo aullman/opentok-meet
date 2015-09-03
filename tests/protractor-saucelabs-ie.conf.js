@@ -1,7 +1,7 @@
-function getCapabilitiesFor(platform, browserName, version) {
+function getCapabilitiesFor(browserName, version) {
   var base = {
     'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
-    'name': browserName + version + '-' + platform + '-' + process.env.TRAVIS_BRANCH + '-' +
+    'name': browserName + version + '-' + process.env.TRAVIS_BRANCH + '-' +
       process.env.TRAVIS_PULL_REQUEST,
     'build': process.env.TRAVIS_BUILD_NUMBER,
     'prerun': {
@@ -10,8 +10,9 @@ function getCapabilitiesFor(platform, browserName, version) {
       'timeout': 120
     }
   };
-  base.platform = platform;
-  base.browserName = browserName;
+  // Sauce Labs Supports IE 10 on Windows 8 and IE 11 on Windows 8.1
+  base.platform = version === '10' ? 'Windows 8' : 'Windows 8.1';
+  base.browserName = browserName === 'ie' ? 'internet explorer' : browserName;
   base.version = version;
   return base;
 }
@@ -26,10 +27,7 @@ exports.config = {
     'e2e/iesmoketest.js'
   ],
 
-  multiCapabilities: [
-    getCapabilitiesFor('Windows 8.1', 'internet explorer', '11'),
-    getCapabilitiesFor('Windows 8', 'internet explorer', '10')
-  ],
+  capabilities: getCapabilitiesFor(process.env.BROWSER, process.env.BVER),
 
   baseUrl: 'http://localhost:5000/',
 
