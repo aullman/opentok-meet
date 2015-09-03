@@ -41,9 +41,11 @@ if [ $BROWSER == 'ie' ]; then
 
 	echo "Starting Karma"
 	karma start tests/karma.conf.js --single-run --browsers "IE$BVER"
+	karma=$?
 
 	echo "Running Protractor tests"
 	protractor tests/protractor-saucelabs-ie.conf.js
+	protractor=$?
 
 	echo "Shutting down Sauce Connect"
 	kill -2 $s_pid
@@ -60,6 +62,7 @@ else
 	export ${BROWSER_UPPER}_BIN="$BROWSERBIN"
 	echo "Starting Karma for browser $BROWSER_CAMEL using $BROWSERBIN"
 	karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
+	karma=$?
 
 	echo "Starting BrowserStackLocal"
 	if [ ! -x ./BrowserStackLocal ]; then
@@ -73,7 +76,10 @@ else
 	webdriver-manager update
 	echo "Running Protractor tests"
 	protractor tests/protractor-browserstack-$BROWSER.conf.js
+	protractor=$?
 	echo "Shutting down BrowserstackLocal $b_pid"
 	kill -2 $b_pid
 	wait $b_pid
 fi
+
+exit $karma && $protractor
