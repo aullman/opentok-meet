@@ -295,18 +295,8 @@ describe('OpenTok Meet App', function() {
         beforeEach(function () {
           connCount = element(by.css('#connCount'));
         });
-        it('shows up when you move the mouse', function () {
-          expect(connCount.isPresent()).toBe(true);
-          if (browser.browserName !== 'internet explorer') {
-            // The following fails in IE sometimes
-            expect(connCount.isDisplayed()).toBe(false);
-          }
-          browser.actions().mouseDown(connCount).mouseMove(element(by.css('body'))).perform();
-          browser.wait(function() {
-            return connCount.isDisplayed();
-          }, 1000);
-        });
         it('is present and displays 1 connection', function (done) {
+          expect(connCount.isPresent()).toBe(true);
           // Wait until we're connected
           browser.wait(function () {
             return element(by.css('div.session-connected')).isPresent();

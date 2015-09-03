@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Installs Chrome or Firefox if missing
+# Installs Chrome or Firefox if missing and runs Karma and Protractor tests
 #
 BINDIR=./browsers/bin
 
@@ -41,13 +41,18 @@ else
   echo "Starting Karma for browser $BROWSER_CAMEL using $BROWSERBIN"
   karma start tests/karma.conf.js --single-run --browsers $BROWSER_CAMEL
 
-  echo "Running Protractor tests"
 	if [ ! -x ./BrowserStackLocal ]; then
   	wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
   	unzip BrowserStackLocal-linux-x64.zip
 	fi
+	echo "Starting BrowserStackLocal"
   ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
+	b_pid=$!
   sleep 10
   webdriver-manager update
+	echo "Running Protractor tests"
   protractor tests/protractor-browserstack-$BROWSER.conf.js
+	echo "Shutting down BrowserstackLocal $b_pid"
+	kill -2 $b_pid
+	wait $b_pid
 fi
