@@ -19,9 +19,9 @@ matrix:
 env:
   matrix:
     - BROWSER=chrome  BVER=stable
-    - BROWSER=firefox BVER=stable
-    - BROWSER=ie BVER=10
-    - BROWSER=ie BVER=11
+    - BROWSER=firefox BVER=stable BROWSERSTACK=true
+    - BROWSER=ie BVER=10  SAUCELABS=true
+    - BROWSER=ie BVER=11  SAUCELABS=true
   global:
   - TRAVIS=true
   - PORT=5000

@@ -1,18 +1,13 @@
 module.exports = function(config) {
   var sauceLaunchers = {
-    'IE10': {
+    'Ie': {
       base: 'SauceLabs',
       browserName: 'internet explorer',
-      platform: 'Windows 8',
-      version: '10'
-    },
-    'IE11': {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 8.1',
-      version: '11'
+      platform: process.env.BVER === '10' ? 'Windows 8' : 'Windows 8.1',
+      version: process.env.BVER
     }
   };
+  var browser = process.env.BROWSER;
   config.set({
 
     basePath: '../',
@@ -37,7 +32,7 @@ module.exports = function(config) {
 
     customLaunchers: sauceLaunchers,
 
-    browsers: ['Chrome'],
+    browsers: [browser[0].toUpperCase() + browser.substr(1)],
 
     plugins: [
       'karma-chrome-launcher',
