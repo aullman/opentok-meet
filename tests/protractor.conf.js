@@ -97,7 +97,7 @@ switch(process.env.BROWSER) {
       framework: 'jasmine',
 
       jasmineNodeOpts: {
-        defaultTimeoutInterval: 30000
+        defaultTimeoutInterval: 60000
       }
     };
   break;

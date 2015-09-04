@@ -378,7 +378,7 @@ describe('OpenTok Meet App', function() {
         secondBrowser.quit();
       }
     });
-    iit('text editing works', function (done) {
+    it('text editing works', function (done) {
       browser.wait(function () {
         return element(by.css('ot-editor')).isPresent();
       }, 5000);
