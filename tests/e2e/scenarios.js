@@ -406,8 +406,9 @@ describe('OpenTok Meet App', function() {
       firstBrowserText.getInnerHtml().then(function (firstInnerHTML) {
         browser.sleep(2000);
 
-        // Quit the first browser before using the second browser otherwise chrome crashes?
-        browser.quit();
+        // Navigate away in the first browser before using the second browser
+        // otherwise chrome crashes?
+        browser.get('');
 
         var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
         secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
