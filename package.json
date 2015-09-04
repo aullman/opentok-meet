@@ -19,7 +19,7 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
-    "test": "./tests/run-tests",
+    "test": "./tests/scripts/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
     "preupdate-webdriver": "npm install",
