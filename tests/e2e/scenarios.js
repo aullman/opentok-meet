@@ -440,7 +440,7 @@ describe('OpenTok Meet App', function() {
           });
         });
 
-        iit('change size button works', function () {
+        it('change size button works', function () {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
@@ -529,16 +529,17 @@ describe('OpenTok Meet App', function() {
         var firstShowEditorBtn, secondShowEditorBtn;
         beforeEach(function () {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
-          secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
-          secondShowEditorBtn.click();
-          secondBrowser.wait(function () {
-            return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000);
-          // showing the editor on the first browser
+          browser.actions().mouseMove(firstShowEditorBtn).perform();
           firstShowEditorBtn.click();
           browser.wait(function () {
             return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000);
+          }, 5000);
+          secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
+          secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
+          secondShowEditorBtn.click();
+          secondBrowser.wait(function () {
+            return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          }, 5000);
         });
 
         afterEach(function () {
@@ -546,55 +547,32 @@ describe('OpenTok Meet App', function() {
         });
 
         iit('text editing works back and forth', function () {
-          var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-          expect(defaultText.isPresent()).toBe(true);
-          expect(defaultText.getInnerHtml()).toBe('// Write code here');
-
-          // when you enter text on the second browser
-          var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-          secondBrowser.actions().mouseDown(inputText).perform();
+          // enter text into second browser
+          var secondBrowserText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+          expect(secondBrowserText.isPresent()).toBe(true);
+          expect(secondBrowserText.getInnerHtml()).toBe('// Write code here');
+          browser.sleep(2000);
+          secondBrowser.actions().mouseDown(secondBrowserText).perform();
           secondBrowser.actions().sendKeys('hello world').perform();
 
-          // makes the red dot blink for the first browser
-          // browser.wait(function () {
-          //   return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-          //     .isPresent();
-          // }, 10000);
-
-
-
-          // text shows up on the first browser
-          // CodeMirror messes with DOM, need to wait before we try to select elements
-          // otherwise we get the old element
-          browser.sleep(2000);
-          browser.wait(function() {
-            var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-            return firstBrowserText.getInnerHtml().then(function(innerHTML) {
+          browser.wait(function () {
+            return firstBrowserText.getInnerHtml().then(function (innerHTML) {
               return innerHTML.indexOf('hello world') > -1;
             });
-          }, 4000);
+          }, 10000);
 
-          // when you enter text on the first browser
-          // CodeMirror messes with DOM, need to wait before we try to select elements
-          // otherwise we get the old element
+          // enter text into first browser
+          var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
+          expect(firstBrowserText.isPresent()).toBe(true);
           browser.sleep(2000);
-          var firstBrowserText =
-            element(by.css('.CodeMirror-code pre .cm-comment'));
-          firstBrowserText.click();
+          browser.actions().mouseDown(firstBrowserText).perform();
           browser.actions().sendKeys('foo bar').perform();
 
-          // shows up on the second browser within 4 seconds
-          // CodeMirror messes with DOM, need to wait before we try to select elements
-          // otherwise we get the old element
-          secondBrowser.sleep(2000);
-          var secondBrowserText = secondBrowser.element(
-            by.css('.CodeMirror-code pre .cm-comment'));
-          secondBrowser.wait(function() {
-            return secondBrowserText.getInnerHtml().then(function(innerHTML) {
+          secondBrowser.wait(function () {
+            return secondBrowserText.getInnerHtml().then(function (innerHTML) {
               return innerHTML.indexOf('foo bar') > -1;
             });
-          }, 4000);
-          expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
+          }, 10000);
         });
       });
 
