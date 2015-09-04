@@ -19,7 +19,7 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
-    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js --single-run --browsers Firefox && node_modules/.bin/protractor tests/protractor-browserstack-firefox.conf.js && node_modules/.bin/protractor tests/protractor-browserstack.conf.js && protractor tests/protractor-saucelabs-ie.conf.js",
+    "test": "./tests/scripts/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
     "preupdate-webdriver": "npm install",
@@ -36,8 +36,10 @@
     "karma-coverage": "^0.2.7",
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
+    "karma-sauce-launcher": "^0.2.14",
     "protractor": "^2.0.0",
     "q": "^1.2.0",
+    "travis-multirunner": "^2.7.2",
     "uuid": "^2.0.1"
   }
 }

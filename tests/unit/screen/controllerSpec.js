@@ -13,6 +13,10 @@ describe('OpenTok Meet Screenshare Only Page', function() {
 
     beforeEach(inject(function($controller, $rootScope, $q) {
       scope = $rootScope.$new();
+      OT.checkSystemRequirements = function () {
+        // Override checkSystemRequirements so that IE works without a plugin
+        return true;
+      };
       scope.session = OT.initSession('mockSessionId');
       scope.session.connection = {
         connectionId: 'mockConnectionId'

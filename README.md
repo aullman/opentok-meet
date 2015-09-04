@@ -33,10 +33,20 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 
 ##Running Tests
 
-* You can run the unit tests using karma with `npm test`
-* You can run E2E tests using protractor with `npm run protractor`
-  * Make sure that you have started your server `npm start`
-  * Updated [protractor.conf.js](/tests/protractor.conf.js) to point to your local server and your local copy of the screensharing extension for Chrome.
-  * Also make sure that your screensharing extension is allowing access to your local server by updating the matches property in the [manifest.json](https://github.com/opentok/screensharing-extensions/blob/master/chrome/ScreenSharing/manifest.json#L16) file.
-* If you want to run your protractor tests against IE, here are [some instructions for getting setup](http://elgalu.github.io/2014/run-protractor-against-internet-explorer-vm/#step4).
-These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [BrowserStack Automate](browserstack.com/automate).
+You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Browserstack](browserstack.com/) and for [Sauce Labs](https://saucelabs.com/). Both of these services offer free options for Open Source. You will need the following environment variables set.
+
+```
+export BROWSERSTACK_USERNAME=<YOUR_BROWSERSTACK_USERNAME>
+export BROWSERSTACK_KEY=<YOUR_BROWSERSTACK_KEY>
+export SAUCE_USERNAME=<YOUR_SAUCE_USERNAME>
+export SAUCE_ACCESS_KEY=<YOUR_SAUCE_KEY>
+export TRAVIS_JOB_NUMBER=<ANYTHING>
+```
+
+By default `npm test` will run the tests in Chrome Stable. If you want to run in different environments you can set the `BROWSER` and `BVER` environment variables. eg. `export BROWSER=ie BVER=11;npm test`. Supported combinations are:
+
+* ie (10,11)
+* chrome (stable, beta, unstable)
+* firefox (stable, beta, unstable)
+
+These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org), [BrowserStack Automate](browserstack.com/automate) and [Sauce Labs](https://saucelabs.com/).

@@ -1,4 +1,13 @@
 module.exports = function(config) {
+  var sauceLaunchers = {
+    'Ie': {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: process.env.BVER === '10' ? 'Windows 8' : 'Windows 8.1',
+      version: process.env.BVER
+    }
+  };
+  var browser = process.env.BROWSER;
   config.set({
 
     basePath: '../',
@@ -21,13 +30,16 @@ module.exports = function(config) {
 
     frameworks: ['jasmine'],
 
-    browsers: ['Chrome'],
+    customLaunchers: sauceLaunchers,
+
+    browsers: [browser[0].toUpperCase() + browser.substr(1)],
 
     plugins: [
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-jasmine',
-      'karma-coverage'
+      'karma-coverage',
+      'karma-sauce-launcher'
     ],
 
     junitReporter: {
@@ -40,7 +52,12 @@ module.exports = function(config) {
       'public/js/screen/*.js': 'coverage'
     },
 
-    reporters: ['progress', 'coverage'],
+    sauceLabs: {
+      startConnect: false,
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
+    },
+
+    reporters: ['progress', 'saucelabs', 'coverage'],
 
     coverageReporter: {
       type: 'lcov',

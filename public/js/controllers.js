@@ -1,7 +1,6 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'fakeDevices',
-    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      fakeDevices) {
+    '$timeout', 'OTSession', 'RoomService', 'baseURL',
+    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -34,13 +33,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
         nameDisplayMode: 'off'
       }
     };
-  if (fakeDevices) {  // This is a property set by protractor
-    facePublisherPropsHD.constraints = facePublisherPropsSD.constraints = {
-      audio: true,
-      video: true,
-      fake: true  // Use fake devices for Firefox
-    };
-  }
   $scope.facePublisherProps = facePublisherPropsHD;
 
   $scope.notMine = function(stream) {
