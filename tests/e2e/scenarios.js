@@ -378,7 +378,7 @@ describe('OpenTok Meet App', function() {
         secondBrowser.quit();
       }
     });
-    iit('text editing works', function () {
+    iit('text editing works', function (done) {
       browser.wait(function () {
         return element(by.css('ot-editor')).isPresent();
       }, 5000);
@@ -402,23 +402,29 @@ describe('OpenTok Meet App', function() {
         return secondBrowser.element(by.css('ot-editor')).isPresent();
       }, 5000);
 
-      // Quit the first browser before using the second browser otherwise chrome crashes?
-      browser.quit();
+      browser.actions().sendKeys('hello world').perform();
+      firstBrowserText.getInnerHtml().then(function (firstInnerHTML) {
+        browser.sleep(2000);
 
-      var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
-      secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
-      secondShowEditorBtn.click();
-      secondBrowser.wait(function () {
-        return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-      }, 5000);
+        // Quit the first browser before using the second browser otherwise chrome crashes?
+        browser.quit();
 
-      // wait for text to show up in the second browser
-      // var secondBrowserText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-      // secondBrowser.wait(function () {
-      //   return secondBrowserText.getInnerHtml().then(function (innerHTML) {
-      //     return innerHTML.indexOf('foo bar') > -1;
-      //   });
-      // }, 10000);
+        var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
+        secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
+        secondShowEditorBtn.click();
+        secondBrowser.wait(function () {
+          return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
+        }, 5000);
+
+        // wait for text to show up in the second browser
+        var secondBrowserText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+        secondBrowser.wait(function () {
+          return secondBrowserText.getInnerHtml().then(function (innerHTML) {
+            return innerHTML === firstInnerHTML;
+          });
+        }, 10000);
+        done();
+      });
     });
   });
 
