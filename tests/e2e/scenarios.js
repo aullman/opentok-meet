@@ -540,74 +540,60 @@ describe('OpenTok Meet App', function() {
           firstShowEditorBtn = secondShowEditorBtn = null;
         });
 
-        iit('contains the default text', function () {
+        iit('text editing works back and forth', function () {
           var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
           expect(defaultText.isPresent()).toBe(true);
           expect(defaultText.getInnerHtml()).toBe('// Write code here');
-        });
 
-        describe('when you enter text on the second browser', function () {
-          beforeEach(function () {
-            var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-            secondBrowser.actions().mouseDown(inputText).perform();
-            secondBrowser.actions().sendKeys('hello world').perform();
-          });
+          // when you enter text on the second browser
+          var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+          secondBrowser.actions().mouseDown(inputText).perform();
+          secondBrowser.actions().sendKeys('hello world').perform();
 
-          iit('makes the red dot blink for the first browser', function () {
-            browser.wait(function () {
-              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-                .isPresent();
-            }, 10000);
-          });
+          // makes the red dot blink for the first browser
+          browser.wait(function () {
+            return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
+              .isPresent();
+          }, 10000);
 
-          describe('showing the editor on the first browser', function () {
-            beforeEach(function () {
-              // For IE we need to click to give focus back to the first browser
-              element(by.css('body')).click();
-              firstShowEditorBtn.click();
-              browser.wait(function () {
-                return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-              }, 10000);
+          // showing the editor on the first browser
+          firstShowEditorBtn.click();
+          browser.wait(function () {
+            return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          }, 10000);
+
+          // text shows up on the first browser
+          // CodeMirror messes with DOM, need to wait before we try to select elements
+          // otherwise we get the old element
+          browser.sleep(2000);
+          browser.wait(function() {
+            var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
+            return firstBrowserText.getInnerHtml().then(function(innerHTML) {
+              return innerHTML.indexOf('hello world') > -1;
             });
+          }, 4000);
 
-            iit('text shows up on the first browser', function () {
-              // CodeMirror messes with DOM, need to wait before we try to select elements
-              // otherwise we get the old element
-              browser.sleep(2000);
-              browser.wait(function() {
-                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-                return firstBrowserText.getInnerHtml().then(function(innerHTML) {
-                  return innerHTML.indexOf('hello world') > -1;
-                });
-              }, 4000);
+          // when you enter text on the first browser
+          // CodeMirror messes with DOM, need to wait before we try to select elements
+          // otherwise we get the old element
+          browser.sleep(2000);
+          var firstBrowserText =
+            element(by.css('.CodeMirror-code pre .cm-comment'));
+          firstBrowserText.click();
+          browser.actions().sendKeys('foo bar').perform();
+
+          // shows up on the second browser within 4 seconds
+          // CodeMirror messes with DOM, need to wait before we try to select elements
+          // otherwise we get the old element
+          secondBrowser.sleep(2000);
+          var secondBrowserText = secondBrowser.element(
+            by.css('.CodeMirror-code pre .cm-comment'));
+          secondBrowser.wait(function() {
+            return secondBrowserText.getInnerHtml().then(function(innerHTML) {
+              return innerHTML.indexOf('foo bar') > -1;
             });
-
-            describe('when you enter text on the first browser', function () {
-              beforeEach(function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                browser.sleep(2000);
-                var firstBrowserText =
-                  element(by.css('.CodeMirror-code pre .cm-comment'));
-                firstBrowserText.click();
-                browser.actions().sendKeys('foo bar').perform();
-              });
-
-              iit('shows up on the second browser within 4 seconds', function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                secondBrowser.sleep(2000);
-                var secondBrowserText = secondBrowser.element(
-                  by.css('.CodeMirror-code pre .cm-comment'));
-                secondBrowser.wait(function() {
-                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
-                    return innerHTML.indexOf('foo bar') > -1;
-                  });
-                }, 4000);
-                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
-              });
-            });
-          });
+          }, 4000);
+          expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
         });
       });
 
