@@ -531,7 +531,7 @@ describe('OpenTok Meet App', function() {
           firstShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
           secondShowEditorBtn.click();
-          browser.wait(function () {
+          secondBrowser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
           }, 10000);
         });
@@ -596,10 +596,10 @@ describe('OpenTok Meet App', function() {
               iit('shows up on the second browser within 4 seconds', function () {
                 // CodeMirror messes with DOM, need to wait before we try to select elements
                 // otherwise we get the old element
-                browser.sleep(2000);
+                secondBrowser.sleep(2000);
                 var secondBrowserText = secondBrowser.element(
                   by.css('.CodeMirror-code pre .cm-comment'));
-                browser.wait(function() {
+                secondBrowser.wait(function() {
                   return secondBrowserText.getInnerHtml().then(function(innerHTML) {
                     return innerHTML.indexOf('foo bar') > -1;
                   });
