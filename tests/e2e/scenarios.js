@@ -558,9 +558,9 @@ describe('OpenTok Meet App', function() {
 
           // showing the editor on the first browser
           firstShowEditorBtn.click();
-          browser.wait(function () {
-            return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000);
+          // browser.wait(function () {
+          //   return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          // }, 10000);
 
           // text shows up on the first browser
           // CodeMirror messes with DOM, need to wait before we try to select elements
