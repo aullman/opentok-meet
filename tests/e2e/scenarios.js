@@ -401,12 +401,22 @@ describe('OpenTok Meet App', function() {
       secondBrowser.wait(function () {
         return secondBrowser.element(by.css('ot-editor')).isPresent();
       }, 5000);
-      //var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
-      //secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
-      // secondShowEditorBtn.click();
-      // secondBrowser.wait(function () {
-      //   return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-      // }, 5000);
+
+      // Hide the first editor or Chrome crashes? Maybe?
+      firstShowEditorBtn.click();
+      browser.wait(function () {
+        return element(by.css('ot-editor .opentok-editor')).isDisplayed().then(
+        function (displayed) {
+          return !displayed;
+        });
+      }, 5000);
+
+      var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
+      secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
+      secondShowEditorBtn.click();
+      secondBrowser.wait(function () {
+        return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
+      }, 5000);
 
       // wait for text to show up in the second browser
       // var secondBrowserText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
