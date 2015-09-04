@@ -6,22 +6,22 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 before_script:
 - npm start > /dev/null &
-- wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
-- unzip BrowserStackLocal-linux-x64.zip
-- ./BrowserStackLocal $BROWSERSTACK_KEY localhost,8001,0 > /dev/null &
-- sleep 10
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
   code_climate:
     repo_token: 4abde268e416aa3752bccf1311ecfe7cd3d6a445ff4849ee4632bc7f9bbde251
-  sauce_connect:
-    no_ssl_bump_domains: all
-    tunnel_domains: localhost
 services:
 - redis-server
 sudo: false
+matrix:
+  fast_finish: true
 env:
+  matrix:
+    - BROWSER=firefox BVER=stable BROWSERSTACK=true
+    - BROWSER=ie BVER=11  SAUCELABS=true
+    - BROWSER=ie BVER=10  SAUCELABS=true
+    - BROWSER=chrome  BVER=stable BROWSERSTACK=true
   global:
   - TRAVIS=true
   - PORT=5000

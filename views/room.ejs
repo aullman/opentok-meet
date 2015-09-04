@@ -14,6 +14,18 @@
         <link rel="stylesheet" href="/css/subscriber-stats.css" type="text/css" media="screen">
         <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+          if ('<%=fakeDevices%>' !== '') { // Set by protractor for testing Firefox
+            // Mock out mozGetUserMedia and force pass the fake:true contstraint
+            var oldGetUserMedia = navigator.mozGetUserMedia;
+            navigator.mozGetUserMedia = function(constraints) {
+              constraints.video = true;
+              constraints.audio = true;
+              constraints.fake = true;
+              oldGetUserMedia.apply(this, arguments);
+            };
+          }
+        </script>
         <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
         <link rel="stylesheet" href="https://tbdev.tokbox.com/v2/css/TB.css" type="text/css" media="screen" charset="utf-8">
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
@@ -131,7 +143,6 @@
         <script type="text/javascript" charset="utf-8">
             angular.module('opentok-meet').value({
                 room: '<%=room%>',
-                fakeDevices: '<%=fakeDevices%>',  // Set by protractor for testing Firefox
                 baseURL: '/',
                 chromeExtensionId: '<%=chromeExtensionId%>'
             });
