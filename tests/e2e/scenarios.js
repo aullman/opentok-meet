@@ -534,6 +534,11 @@ describe('OpenTok Meet App', function() {
           secondBrowser.wait(function () {
             return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
           }, 10000);
+          // showing the editor on the first browser
+          firstShowEditorBtn.click();
+          browser.wait(function () {
+            return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          }, 10000);
         });
 
         afterEach(function () {
@@ -551,16 +556,12 @@ describe('OpenTok Meet App', function() {
           secondBrowser.actions().sendKeys('hello world').perform();
 
           // makes the red dot blink for the first browser
-          browser.wait(function () {
-            return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-              .isPresent();
-          }, 10000);
-
-          // showing the editor on the first browser
-          firstShowEditorBtn.click();
           // browser.wait(function () {
-          //   return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+          //   return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
+          //     .isPresent();
           // }, 10000);
+
+
 
           // text shows up on the first browser
           // CodeMirror messes with DOM, need to wait before we try to select elements
