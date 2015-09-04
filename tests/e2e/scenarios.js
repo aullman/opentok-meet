@@ -440,7 +440,7 @@ describe('OpenTok Meet App', function() {
           });
         });
 
-        it('change size button works', function () {
+        iit('change size button works', function () {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
@@ -540,7 +540,7 @@ describe('OpenTok Meet App', function() {
           firstShowEditorBtn = secondShowEditorBtn = null;
         });
 
-        it('contains the default text', function () {
+        iit('contains the default text', function () {
           var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
           expect(defaultText.isPresent()).toBe(true);
           expect(defaultText.getInnerHtml()).toBe('// Write code here');
@@ -553,7 +553,7 @@ describe('OpenTok Meet App', function() {
             secondBrowser.actions().sendKeys('hello world').perform();
           });
 
-          it('makes the red dot blink for the first browser', function () {
+          iit('makes the red dot blink for the first browser', function () {
             browser.wait(function () {
               return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
                 .isPresent();
@@ -570,7 +570,7 @@ describe('OpenTok Meet App', function() {
               }, 10000);
             });
 
-            it('text shows up on the first browser', function () {
+            iit('text shows up on the first browser', function () {
               // CodeMirror messes with DOM, need to wait before we try to select elements
               // otherwise we get the old element
               browser.sleep(2000);
@@ -593,7 +593,7 @@ describe('OpenTok Meet App', function() {
                 browser.actions().sendKeys('foo bar').perform();
               });
 
-              it('shows up on the second browser within 4 seconds', function () {
+              iit('shows up on the second browser within 4 seconds', function () {
                 // CodeMirror messes with DOM, need to wait before we try to select elements
                 // otherwise we get the old element
                 browser.sleep(2000);
