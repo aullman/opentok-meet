@@ -402,14 +402,8 @@ describe('OpenTok Meet App', function() {
         return secondBrowser.element(by.css('ot-editor')).isPresent();
       }, 5000);
 
-      // Hide the first editor or Chrome crashes? Maybe?
-      firstShowEditorBtn.click();
-      browser.wait(function () {
-        return element(by.css('ot-editor .opentok-editor')).isDisplayed().then(
-        function (displayed) {
-          return !displayed;
-        });
-      }, 5000);
+      // Quit the first browser before using the second browser otherwise chrome crashes?
+      browser.quit();
 
       var secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
       secondBrowser.actions().mouseMove(secondShowEditorBtn).perform();
