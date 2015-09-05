@@ -2,7 +2,6 @@
 /* global browser: false */
 /* global element: false */
 /* global by: false */
-/* global protractor: false */
 var uuid = require('uuid');
 describe('OpenTok Meet App', function() {
   var roomName, roomURL;
@@ -383,21 +382,85 @@ describe('OpenTok Meet App', function() {
   };
 
   var openSecondWindow = function () {
-    browser.driver.executeScript('window.open("' + roomURL + '");');
+    expect(browser.driver.executeScript('window.open("' + roomURL + '");').then(function () {
+      return true;
+    })).toBe(true);
   };
 
-  var closeSecondWindow = function (done) {
-    browser.getAllWindowHandles().then(function (handles) {
+  var closeSecondWindow = function () {
+    return browser.getAllWindowHandles().then(function (handles) {
       if (handles.length >= 2) {
         browser.switchTo().window(handles[1]);
         return browser.driver.executeScript('window.close();').then(function () {
           switchToWindow(1);
-          done();
         });
       }
-      done();
     });
   };
+
+  describe('using the collaborative editor', function () {
+    beforeEach(function () {
+      browser.get(roomURL);
+    });
+    afterEach(function (done) {
+      closeSecondWindow().then(done);
+    });
+    it('text editing works', function (done) {
+      browser.wait(function () {
+        return element(by.css('ot-editor')).isPresent();
+      }, 5000);
+      var firstShowEditorBtn = element(by.css('#showEditorBtn'));
+      browser.actions().mouseMove(firstShowEditorBtn).perform();
+      firstShowEditorBtn.click();
+      browser.wait(function () {
+        return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+      }, 5000);
+
+      // enter text into first browser
+      var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
+      expect(firstBrowserText.isPresent()).toBe(true);
+      browser.sleep(2000);
+      browser.actions().mouseDown(firstBrowserText).perform();
+      browser.actions().sendKeys('foo bar').perform();
+      expect(firstBrowserText.getInnerHtml()).toContain('foo bar');
+
+      openSecondWindow();
+      switchToWindow(2);
+      // Wait for flashing red dot indicator
+      browser.wait(function () {
+        return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
+          .isPresent();
+      }, 10000);
+      element(by.css('button#showEditorBtn')).click();
+
+      browser.wait(function () {
+        return element(by.css('ot-layout ot-editor .opentok-editor')).isDisplayed();
+      }, 5000);
+
+      // enter text into second browser
+      var secondBrowserText = element(by.css('.CodeMirror-code pre span.cm-comment'));
+      expect(secondBrowserText.isPresent()).toBe(true);
+      browser.sleep(2000);
+      browser.actions().mouseMove(secondBrowserText).mouseDown(secondBrowserText).perform();
+      browser.actions().sendKeys('baz').sendKeys('hello world').perform();
+      expect(firstBrowserText.getInnerHtml()).toContain('hello world');
+
+      secondBrowserText.getInnerHtml().then(function (secondInnerHTML) {
+        browser.sleep(2000);
+
+        closeSecondWindow().then(function () {
+          switchToWindow(1);
+          // wait for text to show up in the first browser
+          browser.wait(function () {
+            return firstBrowserText.getInnerHtml().then(function (innerHTML) {
+              return innerHTML === secondInnerHTML;
+            });
+          }, 10000);
+          done();
+        });
+      });
+    });
+  });
 
   describe('2 browsers in the same room', function () {
     beforeEach(function () {
@@ -405,7 +468,7 @@ describe('OpenTok Meet App', function() {
       openSecondWindow();
     });
     afterEach(function (done) {
-      closeSecondWindow(done);
+      closeSecondWindow.then(done);
     });
 
     describe('subscribing to one another', function () {
@@ -548,94 +611,6 @@ describe('OpenTok Meet App', function() {
         });
       }
 
-      describe('using the collaborative editor', function () {
-        var secondShowEditorBtn;
-        beforeEach(function () {
-          switchToWindow(2);
-          secondShowEditorBtn = element(by.css('#showEditorBtn'));
-          secondShowEditorBtn.click();
-          browser.wait(function () {
-            return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000);
-        });
-
-        afterEach(function () {
-          secondShowEditorBtn = null;
-        });
-
-        it('contains the default text', function () {
-          var defaultText = element(by.css('.CodeMirror-code pre .cm-comment'));
-          expect(defaultText.isPresent()).toBe(true);
-          expect(defaultText.getInnerHtml()).toBe('// Write code here');
-        });
-
-        describe('when you enter text on the second browser', function () {
-          beforeEach(function () {
-            var inputText = element(by.css('.CodeMirror-code pre span.cm-comment'));
-            browser.actions().mouseDown(inputText).perform();
-            browser.actions().sendKeys('hello world').perform();
-          });
-
-          it('makes the red dot blink for the first browser', function () {
-            switchToWindow(1);
-            browser.wait(function () {
-              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-                .isPresent();
-            }, 10000);
-          });
-
-          describe('showing the editor on the first browser', function () {
-            beforeEach(function () {
-              switchToWindow(1);
-              element(by.css('button#showEditorBtn')).click();
-              browser.wait(function () {
-                return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-              }, 10000);
-            });
-
-            it('text shows up on the first browser', function () {
-              // CodeMirror messes with DOM, need to wait before we try to select elements
-              // otherwise we get the old element
-              browser.sleep(2000);
-              browser.wait(function() {
-                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-                return firstBrowserText.getInnerHtml().then(function(innerHTML) {
-                  return innerHTML.indexOf('hello world') > -1;
-                });
-              }, 4000);
-            });
-
-            describe('when you enter text on the first browser', function () {
-              beforeEach(function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                browser.sleep(2000);
-                var firstBrowserText =
-                  element(by.css('.CodeMirror-code pre .cm-comment'));
-                browser.actions().mouseDown(firstBrowserText).perform();
-                browser.actions().sendKeys('foo bar').perform();
-              });
-
-              // Need to put this test back in but it's failing right now
-              xit('shows up on the second browser within 4 seconds', function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                browser.sleep(2000);
-                switchToWindow(2);
-                var secondBrowserText = element(
-                  by.css('.CodeMirror-code pre span.cm-comment'));
-                browser.wait(function() {
-                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
-                    return innerHTML.indexOf('foo bar') > -1;
-                  });
-                }, 4000);
-                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
-              });
-            });
-          });
-        });
-      });
-
       describe('disconnecting', function () {
         var connCount, firstSubscriber;
         beforeEach(function () {
@@ -707,7 +682,7 @@ describe('OpenTok Meet App', function() {
               openSecondWindow();
             });
             afterEach(function(done) {
-              closeSecondWindow(done);
+              closeSecondWindow.then(done);
             });
             it('subscribes to the screen and it is big', function () {
               var subscriberVideo = element(by.css(
