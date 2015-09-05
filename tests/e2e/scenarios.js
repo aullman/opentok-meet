@@ -369,70 +369,73 @@ describe('OpenTok Meet App', function() {
   });
 
   describe('2 browsers in the same room', function () {
-    var secondBrowser;
+    // Switch browser window. Specify the number, either 1 or 2
+    var switchToBrowser = function(no) {
+      expect(browser.getAllWindowHandles().then(function (handles) {
+        browser.switchTo().window(handles[no-1]);
+        return true;
+      })).toBe(true);
+    };
     beforeEach(function () {
       browser.get(roomURL);
-      secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get(roomURL);
+      // Open a new window
+      browser.driver.executeScript('window.open("' + roomURL + '");');
     });
-    afterEach(function () {
-      if (secondBrowser) {
-        secondBrowser.quit();
-      }
+    afterEach(function (done) {
+      // Close window
+      switchToBrowser(2);
+      browser.driver.executeScript('window.close();').then(function () {
+        switchToBrowser(1);
+        done();
+      });
     });
 
     describe('subscribing to one another', function () {
-      var firstSubscriberVideo,
-        secondSubscriberVideo,
-        firstSubscriber,
-        secondSubscriber;
-      beforeEach(function (done) {
-        firstSubscriber = element(by.css('ot-subscriber'));
-        secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
-        firstSubscriberVideo = element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
-        secondSubscriberVideo = secondBrowser.element(by.css(
-          'ot-subscriber:not(.OT_loading) .OT_video-element'));
-        var subscriberWait = {};
-        subscriberWait.first = browser.wait(function () {
-          return firstSubscriberVideo.isPresent();
+      beforeEach(function () {
+        switchToBrowser(1);
+        browser.wait(function () {
+          return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
         }, 20000);
-        subscriberWait.second = secondBrowser.wait(function () {
-          return secondSubscriberVideo.isPresent();
+        switchToBrowser(2);
+        browser.wait(function () {
+          return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
         }, 20000);
-        protractor.promise.fullyResolved(subscriberWait).then(function () {
-          done();
-        });
       });
 
-      xit('should display a video element with the right videoWidth and videoHeight', function () {
-        // Have to wait a little longer on Firefox for the videoWidth and videoHeight
-        browser.sleep(1000);
-        expect(firstSubscriberVideo.getAttribute('videoWidth')).toBe(
-          browser.browserName === 'chrome' ? '1280' : '640');
-        expect(firstSubscriberVideo.getAttribute('videoHeight')).toBe(
-          browser.browserName === 'chrome' ? '720' : '480');
-        expect(secondSubscriberVideo.getAttribute('videoWidth')).toBe(
-          browser.browserName === 'chrome' ? '1280' : '640');
-        expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe(
-          browser.browserName === 'chrome' ? '720' : '480');
-        var connCount = element(by.css('#connCount'));
-        expect(connCount.getInnerHtml()).toContain('2');
+      iit('should display a video element with the right videoWidth and videoHeight', function () {
+        var checkVideo = function() {
+          var subscriberVideo =
+            element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
+          expect(subscriberVideo.getAttribute('videoWidth')).toBe(
+            browser.browserName === 'chrome' ? '1280' : '640');
+          expect(subscriberVideo.getAttribute('videoHeight')).toBe(
+            browser.browserName === 'chrome' ? '720' : '480');
+          var connCount = element(by.css('#connCount'));
+          expect(connCount.getInnerHtml()).toContain('2');
+        };
+        switchToBrowser(1);
+        checkVideo();
+        switchToBrowser(2);
+        checkVideo();
       });
 
-      it('subscribers should change size when you double-click', function () {
-        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
-        browser.actions().doubleClick(firstSubscriber).perform();
-        expect(firstSubscriber.getAttribute('class')).toContain('OT_big');
-        browser.actions().doubleClick(firstSubscriber).perform();
-        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
+      iit('subscribers should change size when you double-click', function () {
+        switchToBrowser(2);
+        var subscriber = element(by.css('ot-subscriber'));
+        expect(subscriber.getAttribute('class')).not.toContain('OT_big');
+        browser.actions().doubleClick(subscriber).perform();
+        expect(subscriber.getAttribute('class')).toContain('OT_big');
+        browser.actions().doubleClick(subscriber).perform();
+        expect(subscriber.getAttribute('class')).not.toContain('OT_big');
       });
 
       describe('subscriber buttons', function () {
         beforeEach(function (done) {
+          switchToBrowser(2);
           // Move the publisher out of the way
-          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
+          browser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
             .then(function () {
-            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            browser.actions().mouseDown(element(by.css('ot-subscriber'))).perform();
             // Have to wait for the buttons to show up
             browser.sleep(1000).then(function () {
               done();
@@ -440,24 +443,25 @@ describe('OpenTok Meet App', function() {
           });
         });
 
-        it('change size button works', function () {
-          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
-          var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
+        iit('change size button works', function () {
+          var subscriber = element(by.css('ot-subscriber'));
+          expect(subscriber.getAttribute('class')).not.toContain('OT_big');
+          var resizeBtn = subscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
           resizeBtn.click();
-          secondBrowser.wait(function () {
-            return secondSubscriber.getAttribute('class').then(function (className) {
+          browser.wait(function () {
+            return subscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') > -1;
             });
           }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
           if (browser.browserName === 'internet explorer') {
             // For some reason you need to focus the second browser again
-            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            browser.actions().mouseDown(subscriber).perform();
           }
           resizeBtn.click();
-          secondBrowser.wait(function () {
-            return secondSubscriber.getAttribute('class').then(function (className) {
+          browser.wait(function () {
+            return subscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') === -1;
             });
           }, 5000);
