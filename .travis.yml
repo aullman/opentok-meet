@@ -21,7 +21,7 @@ env:
     - BROWSER=firefox BVER=stable BROWSERSTACK=true
     - BROWSER=ie BVER=11  SAUCELABS=true
     - BROWSER=ie BVER=10  SAUCELABS=true
-    - BROWSER=chrome  BVER=stable BROWSERSTACK=true
+    - BROWSER=chrome  BVER=stable
   global:
   - TRAVIS=true
   - PORT=5000
