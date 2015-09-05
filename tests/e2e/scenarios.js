@@ -430,8 +430,10 @@ describe('OpenTok Meet App', function() {
       });
 
       describe('subscriber buttons', function () {
+        var secondSubscriber;
         beforeEach(function (done) {
           switchToBrowser(2);
+          secondSubscriber = element(by.css('ot-subscriber'));
           // Move the publisher out of the way
           browser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
             .then(function () {
@@ -444,31 +446,30 @@ describe('OpenTok Meet App', function() {
         });
 
         iit('change size button works', function () {
-          var subscriber = element(by.css('ot-subscriber'));
-          expect(subscriber.getAttribute('class')).not.toContain('OT_big');
-          var resizeBtn = subscriber.element(by.css('.resize-btn'));
+          expect(secondSubscriber.getAttribute('class')).not.toContain('OT_big');
+          var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
           resizeBtn.click();
           browser.wait(function () {
-            return subscriber.getAttribute('class').then(function (className) {
+            return secondSubscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') > -1;
             });
           }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
           if (browser.browserName === 'internet explorer') {
             // For some reason you need to focus the second browser again
-            browser.actions().mouseDown(subscriber).perform();
+            browser.actions().mouseDown(secondSubscriber).perform();
           }
           resizeBtn.click();
           browser.wait(function () {
-            return subscriber.getAttribute('class').then(function (className) {
+            return secondSubscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') === -1;
             });
           }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
         });
 
-        it('muteVideo button works', function () {
+        iit('muteVideo button works', function () {
           var muteBtn = secondSubscriber.element(by.css('mute-video'));
           expect(muteBtn.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
           muteBtn.click();
@@ -479,7 +480,7 @@ describe('OpenTok Meet App', function() {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
         });
 
-        it('restrictFramerate button toggles the icon and the title', function () {
+        iit('restrictFramerate button toggles the icon and the title', function () {
           var restrictFramerateBtn = secondSubscriber.element(by.css('.restrict-framerate-btn'));
           expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
           expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
@@ -492,16 +493,16 @@ describe('OpenTok Meet App', function() {
           expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
         });
 
-        it('stats button works', function() {
-          var showStatsInfo = secondBrowser.element(by.css('.show-stats-info'));
+        iit('stats button works', function() {
+          var showStatsInfo = secondSubscriber.element(by.css('.show-stats-info'));
           var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
           expect(showStatsInfo.isDisplayed()).toBe(false);
           statsButton.click();
-          secondBrowser.wait(function() {
+          browser.wait(function() {
             return showStatsInfo.isDisplayed();
           }, 2000);
           expect(showStatsInfo.isDisplayed()).toBe(true);
-          secondBrowser.wait(function() {
+          browser.wait(function() {
             return showStatsInfo.getInnerHtml().then(function(innerHTML) {
               var statsRegexp = new RegExp('Resolution: \\d+x\\d+<br>.*' +
                 'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
@@ -519,8 +520,8 @@ describe('OpenTok Meet App', function() {
           beforeEach(function () {
             element(by.css('#showscreen')).click();
           });
-          it('subscribes to the screen and it is big', function () {
-            var subscriberVideo = secondBrowser.element(by.css(
+          iit('subscribes to the screen and it is big', function () {
+            var subscriberVideo = element(by.css(
               'ot-subscriber.OT_big:not(.OT_loading) video'));
             browser.wait(function () {
               return subscriberVideo.isPresent();
@@ -530,34 +531,35 @@ describe('OpenTok Meet App', function() {
       }
 
       describe('using the collaborative editor', function () {
-        var firstShowEditorBtn, secondShowEditorBtn;
+        var secondShowEditorBtn;
         beforeEach(function () {
-          firstShowEditorBtn = element(by.css('#showEditorBtn'));
-          secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
+          switchToBrowser(2);
+          secondShowEditorBtn = element(by.css('#showEditorBtn'));
           secondShowEditorBtn.click();
           browser.wait(function () {
-            return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
+            return element(by.css('ot-editor .opentok-editor')).isDisplayed();
           }, 10000);
         });
 
         afterEach(function () {
-          firstShowEditorBtn = secondShowEditorBtn = null;
+          secondShowEditorBtn = null;
         });
 
-        it('contains the default text', function () {
-          var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
+        iit('contains the default text', function () {
+          var defaultText = element(by.css('.CodeMirror-code pre .cm-comment'));
           expect(defaultText.isPresent()).toBe(true);
           expect(defaultText.getInnerHtml()).toBe('// Write code here');
         });
 
         describe('when you enter text on the second browser', function () {
           beforeEach(function () {
-            var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-            secondBrowser.actions().mouseDown(inputText).perform();
-            secondBrowser.actions().sendKeys('hello world').perform();
+            var inputText = element(by.css('.CodeMirror-code pre .cm-comment'));
+            browser.actions().mouseDown(inputText).perform();
+            browser.actions().sendKeys('hello world').perform();
           });
 
-          it('makes the red dot blink for the first browser', function () {
+          iit('makes the red dot blink for the first browser', function () {
+            switchToBrowser(1);
             browser.wait(function () {
               return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
                 .isPresent();
