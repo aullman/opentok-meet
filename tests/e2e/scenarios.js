@@ -13,6 +13,7 @@ describe('OpenTok Meet App', function() {
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
       roomURL = browser.browserName === 'firefox' ? roomName + '?fakeDevices=true' : roomName;
+      roomURL = '/' + roomURL;
     });
   });
 
@@ -607,9 +608,11 @@ describe('OpenTok Meet App', function() {
       if (browser.params.testScreenSharing) {
         describe('sharing the screen', function () {
           beforeEach(function () {
+            switchToWindow(2);
             element(by.css('#showscreen')).click();
           });
           it('subscribes to the screen and it is big', function () {
+            switchToWindow(1);
             var subscriberVideo = element(by.css(
               'ot-subscriber.OT_big:not(.OT_loading) video'));
             browser.wait(function () {
@@ -688,6 +691,7 @@ describe('OpenTok Meet App', function() {
           describe('a subscriber', function () {
             beforeEach(function () {
               openSecondWindow();
+              switchToWindow(2);
             });
             afterEach(function(done) {
               closeSecondWindow().then(done);
