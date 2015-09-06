@@ -41,7 +41,7 @@ describe('OpenTok Meet App', function() {
 
       if (browser.browserName !== 'firefox') {
         // fixme: for some reason Firefox sometimes gives an error about not being able to
-        // sync with the page 
+        // sync with the page
         expect(browser.getCurrentUrl().then(function (url) {
           // For some reason in IE sometimes when you run lots of tests
           // the whole URL isn't there
@@ -588,12 +588,20 @@ describe('OpenTok Meet App', function() {
       it('should display a video element with the right videoWidth and videoHeight', function () {
         var checkVideo = function(browser) {
           var subscriberVideo =
-            browser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
-          expect(subscriberVideo.getAttribute('videoWidth')).toBe(
-            browser.browserName === 'chrome' ? '1280' : '640');
-          expect(subscriberVideo.getAttribute('videoHeight')).toBe(
-            browser.browserName === 'chrome' ? '720' : '480');
-          var connCount = browser.element(by.css('#connCount'));
+            element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
+          if (browser.browserName === 'chrome') {
+            // With Simulcast your not sure what the dimensions are, but they should be the
+            // right aspect ratio.
+            expect(subscriberVideo.getAttribute('videoWidth').then(function (videoWidth) {
+              return subscriberVideo.getAttribute('videoHeight').then(function (videoHeight) {
+                return parseInt(videoWidth, 10) / parseInt(videoHeight, 10);
+              });
+            })).toEqual(1280/720);
+          } else {
+            expect(subscriberVideo.getAttribute('videoWidth')).toBe('640');
+            expect(subscriberVideo.getAttribute('videoHeight')).toBe('480');
+          }
+          var connCount = element(by.css('#connCount'));
           expect(connCount.getInnerHtml()).toContain('2');
         };
         checkVideo(browser);
