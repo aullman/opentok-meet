@@ -2,7 +2,6 @@
 /* global browser: false */
 /* global element: false */
 /* global by: false */
-/* global protractor: false */
 var uuid = require('uuid');
 describe('OpenTok Meet App', function() {
   var roomName, roomURL;
@@ -14,6 +13,7 @@ describe('OpenTok Meet App', function() {
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
       roomURL = browser.browserName === 'firefox' ? roomName + '?fakeDevices=true' : roomName;
+      roomURL = '/' + roomURL;
     });
   });
 
@@ -368,71 +368,166 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  describe('2 browsers in the same room', function () {
-    var secondBrowser;
+  // Switch browser window. Specify the number, either 1 or 2
+  var switchToWindow = function(no) {
+    expect(browser.getAllWindowHandles().then(function (handles) {
+      if (handles.length >= no) {
+        return browser.switchTo().window(handles[no-1]);
+      }
+      return false;
+    }).then(function () {
+      return browser.driver.executeScript('window.focus();');
+    }).then(function () {
+      return true;
+    })).toBe(true);
+  };
+
+  var openSecondWindow = function () {
+    expect(browser.driver.executeScript('window.open("' + roomURL + '");').then(function () {
+      return true;
+    })).toBe(true);
+  };
+
+  var closeSecondWindow = function () {
+    return browser.getAllWindowHandles().then(function (handles) {
+      if (handles.length >= 2) {
+        browser.switchTo().window(handles[1]);
+        return browser.driver.executeScript('window.close();').then(function () {
+          switchToWindow(1);
+        });
+      }
+    });
+  };
+
+  describe('using the collaborative editor', function () {
     beforeEach(function () {
       browser.get(roomURL);
-      secondBrowser = browser.forkNewDriverInstance();
-      secondBrowser.get(roomURL);
     });
-    afterEach(function () {
-      if (secondBrowser) {
-        secondBrowser.quit();
-      }
+    afterEach(function (done) {
+      closeSecondWindow().then(done);
+    });
+    it('text editing works', function (done) {
+      browser.wait(function () {
+        return element(by.css('ot-editor')).isPresent();
+      }, 5000);
+      var firstShowEditorBtn = element(by.css('#showEditorBtn'));
+      browser.actions().mouseMove(firstShowEditorBtn).perform();
+      firstShowEditorBtn.click();
+      browser.wait(function () {
+        return element(by.css('ot-editor .opentok-editor')).isDisplayed();
+      }, 5000);
+
+      // enter text into first browser
+      var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
+      expect(firstBrowserText.isPresent()).toBe(true);
+      browser.sleep(2000);
+      browser.actions().mouseDown(firstBrowserText).mouseUp(firstBrowserText).perform();
+      browser.actions().sendKeys('foo').sendKeys('bar').perform();
+      browser.wait(function () {
+        return firstBrowserText.getInnerHtml().then(function (innerHTML) {
+          return innerHTML.indexOf('bar') > -1;
+        });
+      }, 2000);
+
+      openSecondWindow();
+      switchToWindow(2);
+      // Wait for flashing red dot indicator
+      browser.wait(function () {
+        return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
+          .isPresent();
+      }, 10000);
+      element(by.css('button#showEditorBtn')).click();
+
+      browser.wait(function () {
+        return element(by.css('ot-layout ot-editor .opentok-editor')).isDisplayed();
+      }, 5000);
+
+      // enter text into second browser
+      var secondBrowserText = element(by.css('.CodeMirror-code pre span.cm-comment'));
+      expect(secondBrowserText.isPresent()).toBe(true);
+      browser.sleep(2000);
+      browser.actions().mouseMove(secondBrowserText).mouseDown(secondBrowserText)
+        .mouseUp(secondBrowserText).perform();
+      browser.actions().sendKeys('hello').sendKeys('world').perform();
+      var secondInnerHTML;
+      browser.wait(function () {
+        return secondBrowserText.getInnerHtml().then(function (innerHTML) {
+          secondInnerHTML = innerHTML;
+          return innerHTML.indexOf('world') > -1;
+        });
+      }, 2000);
+      browser.sleep(2000);
+
+      closeSecondWindow().then(function () {
+        switchToWindow(1);
+        // wait for text to show up in the first browser
+        browser.wait(function () {
+          return firstBrowserText.getInnerHtml().then(function (innerHTML) {
+            return innerHTML === secondInnerHTML;
+          });
+        }, 10000);
+        done();
+      });
+    });
+  });
+
+  describe('2 browsers in the same room', function () {
+    beforeEach(function () {
+      browser.get(roomURL);
+      openSecondWindow();
+    });
+    afterEach(function (done) {
+      closeSecondWindow().then(done);
     });
 
     describe('subscribing to one another', function () {
-      var firstSubscriberVideo,
-        secondSubscriberVideo,
-        firstSubscriber,
-        secondSubscriber;
-      beforeEach(function (done) {
-        firstSubscriber = element(by.css('ot-subscriber'));
-        secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
-        firstSubscriberVideo = element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
-        secondSubscriberVideo = secondBrowser.element(by.css(
-          'ot-subscriber:not(.OT_loading) .OT_video-element'));
-        var subscriberWait = {};
-        subscriberWait.first = browser.wait(function () {
-          return firstSubscriberVideo.isPresent();
+      beforeEach(function () {
+        switchToWindow(1);
+        browser.wait(function () {
+          return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
         }, 20000);
-        subscriberWait.second = secondBrowser.wait(function () {
-          return secondSubscriberVideo.isPresent();
+        switchToWindow(2);
+        browser.wait(function () {
+          return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
         }, 20000);
-        protractor.promise.fullyResolved(subscriberWait).then(function () {
-          done();
-        });
       });
 
-      xit('should display a video element with the right videoWidth and videoHeight', function () {
-        // Have to wait a little longer on Firefox for the videoWidth and videoHeight
-        browser.sleep(1000);
-        expect(firstSubscriberVideo.getAttribute('videoWidth')).toBe(
-          browser.browserName === 'chrome' ? '1280' : '640');
-        expect(firstSubscriberVideo.getAttribute('videoHeight')).toBe(
-          browser.browserName === 'chrome' ? '720' : '480');
-        expect(secondSubscriberVideo.getAttribute('videoWidth')).toBe(
-          browser.browserName === 'chrome' ? '1280' : '640');
-        expect(secondSubscriberVideo.getAttribute('videoHeight')).toBe(
-          browser.browserName === 'chrome' ? '720' : '480');
-        var connCount = element(by.css('#connCount'));
-        expect(connCount.getInnerHtml()).toContain('2');
+      it('should display a video element with the right videoWidth and videoHeight', function () {
+        var checkVideo = function() {
+          var subscriberVideo =
+            element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
+          expect(subscriberVideo.getAttribute('videoWidth')).toBe(
+            browser.browserName === 'chrome' ? '1280' : '640');
+          expect(subscriberVideo.getAttribute('videoHeight')).toBe(
+            browser.browserName === 'chrome' ? '720' : '480');
+          var connCount = element(by.css('#connCount'));
+          expect(connCount.getInnerHtml()).toContain('2');
+        };
+        switchToWindow(1);
+        checkVideo();
+        switchToWindow(2);
+        checkVideo();
       });
 
       it('subscribers should change size when you double-click', function () {
-        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
-        browser.actions().doubleClick(firstSubscriber).perform();
-        expect(firstSubscriber.getAttribute('class')).toContain('OT_big');
-        browser.actions().doubleClick(firstSubscriber).perform();
-        expect(firstSubscriber.getAttribute('class')).not.toContain('OT_big');
+        switchToWindow(2);
+        var subscriber = element(by.css('ot-subscriber'));
+        expect(subscriber.getAttribute('class')).not.toContain('OT_big');
+        browser.actions().doubleClick(subscriber).perform();
+        expect(subscriber.getAttribute('class')).toContain('OT_big');
+        browser.actions().doubleClick(subscriber).perform();
+        expect(subscriber.getAttribute('class')).not.toContain('OT_big');
       });
 
       describe('subscriber buttons', function () {
+        var secondSubscriber;
         beforeEach(function (done) {
+          switchToWindow(2);
+          secondSubscriber = element(by.css('ot-subscriber'));
           // Move the publisher out of the way
-          secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
+          browser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
             .then(function () {
-            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            browser.actions().mouseDown(element(by.css('ot-subscriber'))).perform();
             // Have to wait for the buttons to show up
             browser.sleep(1000).then(function () {
               done();
@@ -445,7 +540,7 @@ describe('OpenTok Meet App', function() {
           var resizeBtn = secondSubscriber.element(by.css('.resize-btn'));
           expect(resizeBtn.getAttribute('title')).toBe('Enlarge');
           resizeBtn.click();
-          secondBrowser.wait(function () {
+          browser.wait(function () {
             return secondSubscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') > -1;
             });
@@ -453,10 +548,10 @@ describe('OpenTok Meet App', function() {
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
           if (browser.browserName === 'internet explorer') {
             // For some reason you need to focus the second browser again
-            secondBrowser.actions().mouseDown(secondSubscriber).perform();
+            browser.actions().mouseDown(secondSubscriber).perform();
           }
           resizeBtn.click();
-          secondBrowser.wait(function () {
+          browser.wait(function () {
             return secondSubscriber.getAttribute('class').then(function (className) {
               return className.indexOf('OT_big') === -1;
             });
@@ -489,15 +584,15 @@ describe('OpenTok Meet App', function() {
         });
 
         it('stats button works', function() {
-          var showStatsInfo = secondBrowser.element(by.css('.show-stats-info'));
+          var showStatsInfo = secondSubscriber.element(by.css('.show-stats-info'));
           var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
           expect(showStatsInfo.isDisplayed()).toBe(false);
           statsButton.click();
-          secondBrowser.wait(function() {
+          browser.wait(function() {
             return showStatsInfo.isDisplayed();
           }, 2000);
           expect(showStatsInfo.isDisplayed()).toBe(true);
-          secondBrowser.wait(function() {
+          browser.wait(function() {
             return showStatsInfo.getInnerHtml().then(function(innerHTML) {
               var statsRegexp = new RegExp('Resolution: \\d+x\\d+<br>.*' +
                 'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
@@ -513,10 +608,12 @@ describe('OpenTok Meet App', function() {
       if (browser.params.testScreenSharing) {
         describe('sharing the screen', function () {
           beforeEach(function () {
+            switchToWindow(2);
             element(by.css('#showscreen')).click();
           });
           it('subscribes to the screen and it is big', function () {
-            var subscriberVideo = secondBrowser.element(by.css(
+            switchToWindow(1);
+            var subscriberVideo = element(by.css(
               'ot-subscriber.OT_big:not(.OT_loading) video'));
             browser.wait(function () {
               return subscriberVideo.isPresent();
@@ -525,95 +622,11 @@ describe('OpenTok Meet App', function() {
         });
       }
 
-      describe('using the collaborative editor', function () {
-        var firstShowEditorBtn, secondShowEditorBtn;
-        beforeEach(function () {
-          firstShowEditorBtn = element(by.css('#showEditorBtn'));
-          secondShowEditorBtn = secondBrowser.element(by.css('#showEditorBtn'));
-          secondShowEditorBtn.click();
-          browser.wait(function () {
-            return secondBrowser.element(by.css('ot-editor .opentok-editor')).isDisplayed();
-          }, 10000);
-        });
-
-        afterEach(function () {
-          firstShowEditorBtn = secondShowEditorBtn = null;
-        });
-
-        it('contains the default text', function () {
-          var defaultText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-          expect(defaultText.isPresent()).toBe(true);
-          expect(defaultText.getInnerHtml()).toBe('// Write code here');
-        });
-
-        describe('when you enter text on the second browser', function () {
-          beforeEach(function () {
-            var inputText = secondBrowser.element(by.css('.CodeMirror-code pre .cm-comment'));
-            secondBrowser.actions().mouseDown(inputText).perform();
-            secondBrowser.actions().sendKeys('hello world').perform();
-          });
-
-          it('makes the red dot blink for the first browser', function () {
-            browser.wait(function () {
-              return element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-                .isPresent();
-            }, 10000);
-          });
-
-          describe('showing the editor on the first browser', function () {
-            beforeEach(function () {
-              // For IE we need to click to give focus back to the first browser
-              element(by.css('body')).click();
-              firstShowEditorBtn.click();
-              browser.wait(function () {
-                return element(by.css('ot-editor .opentok-editor')).isDisplayed();
-              }, 10000);
-            });
-
-            it('text shows up on the first browser', function () {
-              // CodeMirror messes with DOM, need to wait before we try to select elements
-              // otherwise we get the old element
-              browser.sleep(2000);
-              browser.wait(function() {
-                var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
-                return firstBrowserText.getInnerHtml().then(function(innerHTML) {
-                  return innerHTML.indexOf('hello world') > -1;
-                });
-              }, 4000);
-            });
-
-            describe('when you enter text on the first browser', function () {
-              beforeEach(function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                browser.sleep(2000);
-                var firstBrowserText =
-                  element(by.css('.CodeMirror-code pre .cm-comment'));
-                firstBrowserText.click();
-                browser.actions().sendKeys('foo bar').perform();
-              });
-
-              it('shows up on the second browser within 4 seconds', function () {
-                // CodeMirror messes with DOM, need to wait before we try to select elements
-                // otherwise we get the old element
-                browser.sleep(2000);
-                var secondBrowserText = secondBrowser.element(
-                  by.css('.CodeMirror-code pre .cm-comment'));
-                browser.wait(function() {
-                  return secondBrowserText.getInnerHtml().then(function(innerHTML) {
-                    return innerHTML.indexOf('foo bar') > -1;
-                  });
-                }, 4000);
-                expect(secondBrowserText.getInnerHtml()).toContain('foo bar');
-              });
-            });
-          });
-        });
-      });
-
       describe('disconnecting', function () {
-        var connCount;
+        var connCount, firstSubscriber;
         beforeEach(function () {
+          switchToWindow(1);
+          firstSubscriber = element(by.css('ot-subscriber'));
           connCount = element(by.css('#connCount'));
           expect(firstSubscriber.isPresent()).toBe(true);
           expect(connCount.getInnerHtml()).toContain('2');
@@ -621,6 +634,7 @@ describe('OpenTok Meet App', function() {
 
         afterEach(function () {
           // Wait 5 seconds for the connection count to go down to 1
+          switchToWindow(1);
           browser.wait(function () {
             return connCount.getInnerHtml().then(function (innerHTML) {
               return innerHTML.trim() === '1';
@@ -636,12 +650,15 @@ describe('OpenTok Meet App', function() {
 
         it('with change room button', function () {
           // Disconnect the second browser
-          secondBrowser.element(by.css('#changeRoom')).click();
+          switchToWindow(2);
+          element(by.css('#changeRoom')).click();
         });
         // Taking this test out for now until OPENTOK-24943 is fixed
-        xit('by quitting the browser', function () {
-          secondBrowser.quit();
-          secondBrowser = null;
+        xit('by closing the browser window', function (done) {
+          switchToWindow(2);
+          browser.driver.executeScript('window.close();').then(function () {
+            done();
+          });
         });
       });
     });
@@ -673,16 +690,15 @@ describe('OpenTok Meet App', function() {
             }, 10000);
           });
           describe('a subscriber', function () {
-            var secondBrowser;
             beforeEach(function () {
-              secondBrowser = browser.forkNewDriverInstance();
-              secondBrowser.get(roomURL);
+              openSecondWindow();
+              switchToWindow(2);
             });
-            afterEach(function() {
-              secondBrowser.quit();
+            afterEach(function(done) {
+              closeSecondWindow().then(done);
             });
             it('subscribes to the screen and it is big', function () {
-              var subscriberVideo = secondBrowser.element(by.css(
+              var subscriberVideo = element(by.css(
                 'ot-subscriber.OT_big:not(.OT_loading) video'));
               browser.wait(function () {
                 return subscriberVideo.isPresent();
