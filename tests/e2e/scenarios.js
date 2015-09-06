@@ -421,8 +421,12 @@ describe('OpenTok Meet App', function() {
       expect(firstBrowserText.isPresent()).toBe(true);
       browser.sleep(2000);
       browser.actions().mouseDown(firstBrowserText).perform();
-      browser.actions().sendKeys('foo bar').perform();
-      expect(firstBrowserText.getInnerHtml()).toContain('foo bar');
+      browser.actions().sendKeys('foo').sendKeys('bar').perform();
+      browser.wait(function () {
+        return firstBrowserText.getInnerHtml().then(function (innerHTML) {
+          return innerHTML.indexOf('bar') > -1;
+        });
+      }, 2000);
 
       openSecondWindow();
       switchToWindow(2);
@@ -442,22 +446,25 @@ describe('OpenTok Meet App', function() {
       expect(secondBrowserText.isPresent()).toBe(true);
       browser.sleep(2000);
       browser.actions().mouseMove(secondBrowserText).mouseDown(secondBrowserText).perform();
-      browser.actions().sendKeys('baz').sendKeys('hello world').perform();
-      expect(firstBrowserText.getInnerHtml()).toContain('hello world');
-
-      secondBrowserText.getInnerHtml().then(function (secondInnerHTML) {
-        browser.sleep(2000);
-
-        closeSecondWindow().then(function () {
-          switchToWindow(1);
-          // wait for text to show up in the first browser
-          browser.wait(function () {
-            return firstBrowserText.getInnerHtml().then(function (innerHTML) {
-              return innerHTML === secondInnerHTML;
-            });
-          }, 10000);
-          done();
+      browser.actions().sendKeys('hello').sendKeys('world').perform();
+      var secondInnerHTML;
+      browser.wait(function () {
+        return secondBrowserText.getInnerHtml().then(function (innerHTML) {
+          secondInnerHTML = innerHTML;
+          return innerHTML.indexOf('world') > -1;
         });
+      }, 2000);
+      browser.sleep(2000);
+
+      closeSecondWindow().then(function () {
+        switchToWindow(1);
+        // wait for text to show up in the first browser
+        browser.wait(function () {
+          return firstBrowserText.getInnerHtml().then(function (innerHTML) {
+            return innerHTML === secondInnerHTML;
+          });
+        }, 10000);
+        done();
       });
     });
   });
@@ -468,7 +475,7 @@ describe('OpenTok Meet App', function() {
       openSecondWindow();
     });
     afterEach(function (done) {
-      closeSecondWindow.then(done);
+      closeSecondWindow().then(done);
     });
 
     describe('subscribing to one another', function () {
@@ -682,7 +689,7 @@ describe('OpenTok Meet App', function() {
               openSecondWindow();
             });
             afterEach(function(done) {
-              closeSecondWindow.then(done);
+              closeSecondWindow().then(done);
             });
             it('subscribes to the screen and it is big', function () {
               var subscriberVideo = element(by.css(
