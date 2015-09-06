@@ -7,7 +7,7 @@ module.exports = function(config) {
       version: process.env.BVER
     }
   };
-  var browser = process.env.BROWSER;
+  var browser = process.env.BROWSER || 'chrome';
   config.set({
 
     basePath: '../',
