@@ -34,6 +34,9 @@ module.exports = function(config) {
 
     browsers: [browser[0].toUpperCase() + browser.substr(1)],
 
+    CHROME_BIN: process.env.BROWSERBIN,
+    FIREFOX_BIN: process.env.BROWSERBIN,
+
     plugins: [
       'karma-chrome-launcher',
       'karma-firefox-launcher',

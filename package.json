@@ -19,7 +19,7 @@
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
-    "test": "./tests/scripts/run-tests",
+    "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
     "preupdate-webdriver": "npm install",
@@ -37,6 +37,7 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "karma-sauce-launcher": "^0.2.14",
+    "opentok-test-scripts": "^1.0.1",
     "protractor": "^2.0.0",
     "q": "^1.2.0",
     "travis-multirunner": "^2.7.2",
