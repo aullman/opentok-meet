@@ -52,9 +52,12 @@ switch(process.env.BROWSER) {
 
       getMultiCapabilities: helper.getFirefoxProfile,
 
-      seleniumAddress: 'http://hub.browserstack.com/wd/hub',
+      //seleniumAddress: 'http://hub.browserstack.com/wd/hub',
+      directConnect: true,
 
       baseUrl: 'http://localhost:5000/',
+
+      firefoxPath: process.env.BROWSERBIN,
 
       framework: 'jasmine',
 

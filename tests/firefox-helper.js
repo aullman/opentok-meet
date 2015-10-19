@@ -15,12 +15,6 @@ exports.getFirefoxProfile = function() {
   firefoxProfile.encoded(function(encodedProfile) {
     var multiCapabilities = [{
       browserName: 'firefox',
-      //browserVersion: 37,   // For some reason later versions of FF don't acquire a camera
-      'browserstack.user' : process.env.BROWSERSTACK_USERNAME,
-      'browserstack.key' : process.env.BROWSERSTACK_KEY,
-      'browserstack.local' : 'true',
-      'os' : 'OS X',
-      'os_version' : 'Yosemite',
       acceptSslCert: true,
       'firefox_profile' : encodedProfile
     }];
