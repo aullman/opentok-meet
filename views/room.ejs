@@ -17,13 +17,15 @@
         <script type="text/javascript">
           if ('<%=fakeDevices%>' !== '') { // Set by protractor for testing Firefox
             // Mock out mozGetUserMedia and force pass the fake:true contstraint
-            var oldGetUserMedia = navigator.getUserMedia;
-            navigator.getUserMedia = function(constraints) {
-              constraints.video = true;
-              constraints.audio = true;
-              constraints.fake = true;
-              oldGetUserMedia.apply(this, arguments);
-            };
+            if (navigator.mozGetUserMedia) {
+              var oldGetUserMedia = navigator.mozGetUserMedia;
+              navigator.getUserMedia = function(constraints) {
+                constraints.video = true;
+                constraints.audio = true;
+                constraints.fake = true;
+                oldGetUserMedia.apply(this, arguments);
+              };
+            }
           }
         </script>
         <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
