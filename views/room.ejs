@@ -17,8 +17,8 @@
         <script type="text/javascript">
           if ('<%=fakeDevices%>' !== '') { // Set by protractor for testing Firefox
             // Mock out mozGetUserMedia and force pass the fake:true contstraint
-            var oldGetUserMedia = navigator.mozGetUserMedia;
-            navigator.mozGetUserMedia = function(constraints) {
+            var oldGetUserMedia = navigator.getUserMedia;
+            navigator.getUserMedia = function(constraints) {
               constraints.video = true;
               constraints.audio = true;
               constraints.fake = true;
