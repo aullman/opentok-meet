@@ -17,7 +17,9 @@
     "redis": "~0.10.1",
     "webpack": "^1.13.0",
     "style-loader": "^0.13.1",
-    "css-loader": "^0.23.1"
+    "css-loader": "^0.23.1",
+    "glob": "^5.0.15",
+    "path": "^0.12.7"
   },
   "engines": {
     "node": "4.2.2",
