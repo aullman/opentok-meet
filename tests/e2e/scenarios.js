@@ -496,10 +496,18 @@ describe('OpenTok Meet App', function() {
         var checkVideo = function() {
           var subscriberVideo =
             element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
-          expect(subscriberVideo.getAttribute('videoWidth')).toBe(
-            browser.browserName === 'chrome' ? '1280' : '640');
-          expect(subscriberVideo.getAttribute('videoHeight')).toBe(
-            browser.browserName === 'chrome' ? '720' : '480');
+          if (browser.browserName === 'chrome') {
+            // With Simulcast your not sure what the dimensions are, but they should be the
+            // right aspect ratio.
+            expect(subscriberVideo.getAttribute('videoWidth').then(function (videoWidth) {
+              return subscriberVideo.getAttribute('videoHeight').then(function (videoHeight) {
+                return parseInt(videoWidth, 10) / parseInt(videoHeight, 10);
+              });
+            })).toEqual(1280/720);
+          } else {
+            expect(subscriberVideo.getAttribute('videoWidth')).toBe('640');
+            expect(subscriberVideo.getAttribute('videoHeight')).toBe('480');
+          }
           var connCount = element(by.css('#connCount'));
           expect(connCount.getInnerHtml()).toContain('2');
         };
@@ -653,7 +661,8 @@ describe('OpenTok Meet App', function() {
           switchToWindow(2);
           element(by.css('#changeRoom')).click();
         });
-        it('by closing the browser window', function (done) {
+        // Taking this test out for now until OPENTOK-24943 is fixed
+        xit('by closing the browser window', function (done) {
           switchToWindow(2);
           browser.driver.executeScript('window.close();').then(function () {
             done();

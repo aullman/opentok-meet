@@ -17,16 +17,19 @@
         <script type="text/javascript">
           if ('<%=fakeDevices%>' !== '') { // Set by protractor for testing Firefox
             // Mock out mozGetUserMedia and force pass the fake:true contstraint
-            var oldGetUserMedia = navigator.mozGetUserMedia;
-            navigator.mozGetUserMedia = function(constraints) {
-              constraints.video = true;
-              constraints.audio = true;
-              constraints.fake = true;
-              oldGetUserMedia.apply(this, arguments);
-            };
+            if (navigator.mozGetUserMedia) {
+              var oldGetUserMedia = navigator.mozGetUserMedia;
+              navigator.getUserMedia = function(constraints) {
+                constraints.video = true;
+                constraints.audio = true;
+                constraints.fake = true;
+                oldGetUserMedia.apply(this, arguments);
+              };
+            }
           }
         </script>
-        <script src="//static.opentok.com/v2/js/opentok.js"></script>
+        <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
+        <link rel="stylesheet" href="https://tbdev.tokbox.com/v2/css/TB.css" type="text/css" media="screen" charset="utf-8">
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <!-- OpenTok Whiteboard -->
@@ -38,6 +41,7 @@
         <script src="/js/lib/CodeMirror/mode/javascript/javascript.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/CodeMirror/mode/markdown/markdown.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-editor/opentok-editor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/ng-debounce/angular-debounce.js" type="text/javascript" charset="utf-8"></script>
 
         <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
@@ -47,6 +51,7 @@
         <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/screen/directive.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/simulcast-service.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
@@ -97,6 +102,10 @@
             ng-if="connected && !streams.length"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
+            <p>
+            <strong>Disclaimer</strong>: This application is running on a Nightly version of the OpenTok infrastructure and is unstable.
+            You may also use <a href="https://opentok-meet.herokuapp.com/<%=room%>">opentok-meet.herokuapp.com</a> for the production version of this app.
+            </p>
         </div>
         <div id="bottomBar">
             <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" ng-if="!isAndroid" title="Share Screen"></button>

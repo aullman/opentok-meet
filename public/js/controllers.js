@@ -1,6 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL',
-    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService',
+    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
+      SimulcastService) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -23,7 +24,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       nameDisplayMode: 'off'
     },
     resolution: '1280x720',
-    frameRate: 30
+    frameRate: 30,
+    _enableSimulcast: true
   },
     facePublisherPropsSD = {
       name: 'face',
@@ -31,7 +33,20 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       height: '100%',
       style: {
         nameDisplayMode: 'off'
-      }
+      },
+      constraints: {
+        video: {
+          mandatory: {
+            maxWidth: 640,
+            maxHeight: 480,
+            minWidth: 640,
+            minHeight: 480
+          },
+          optional: []
+        },
+        audio: true
+      },
+      _enableSimulcast: true
     };
   $scope.facePublisherProps = facePublisherPropsHD;
 
@@ -154,6 +169,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       };
       $scope.$on('otEditorUpdate', editorUpdated);
       $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
+      SimulcastService.init($scope.streams, $scope.session);
     });
     $scope.publishing = true;
   });
