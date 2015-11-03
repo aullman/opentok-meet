@@ -1,9 +1,0 @@
-#!/bin/bash
-PIDPATH=./tests/scripts/browserstack-local-$TRAVIS_JOB_NUMBER.pid
-
-if [ -f $PIDPATH ]; then
-	b_pid=`cat $PIDPATH`
-	echo "Shutting down BrowserstackLocal $b_pid"
-	kill -2 $b_pid
-	wait $b_pid
-fi

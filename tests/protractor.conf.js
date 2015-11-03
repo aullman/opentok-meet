@@ -82,7 +82,7 @@ switch(process.env.BROWSER) {
           'args': ['auto-select-desktop-capture-source="Entire screen"',
             'use-fake-device-for-media-stream',
             'use-fake-ui-for-media-stream'],
-          'binary': process.env.CHROME_BIN
+          'binary': process.env.BROWSERBIN
         }
       },
 

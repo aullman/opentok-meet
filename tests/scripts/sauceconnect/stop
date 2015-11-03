@@ -1,8 +1,0 @@
-#!/bin/bash
-PIDPATH=/tmp/sc_client_$TRAVIS_JOB_NUMBER.pid
-if [ -f $PIDPATH ]; then
-	echo "Shutting down Sauce Connect"
-  s_pid=`cat $PIDPATH`
-	kill -2 $s_pid
-	wait $s_pid
-fi
