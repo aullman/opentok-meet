@@ -81,8 +81,7 @@ describe('OpenTok Meet controllers', function() {
           nameDisplayMode: 'off'
         },
         resolution: '1280x720',
-        frameRate: 30,
-        _enableSimulcast: true
+        frameRate: 30
       });
     });
 
