@@ -508,8 +508,6 @@ describe('OpenTok Meet App', function() {
             expect(subscriberVideo.getAttribute('videoWidth')).toBe('640');
             expect(subscriberVideo.getAttribute('videoHeight')).toBe('480');
           }
-          var connCount = element(by.css('#connCount'));
-          expect(connCount.getInnerHtml()).toContain('2');
         };
         switchToWindow(1);
         checkVideo();
