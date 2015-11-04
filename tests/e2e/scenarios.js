@@ -672,6 +672,16 @@ describe('OpenTok Meet App', function() {
     });
   });
 
+  describe('Phone', function () {
+    beforeEach(function () {
+      browser.ignoreSynchronization = true;
+      browser.get(roomName + '/phone');
+    });
+    it('has the right phone number on the page', function () {
+      expect(element(by.css('p')).getInnerHtml()).toContain('Call ' + browser.params.phoneNumber);
+    });
+  });
+
   if (browser.params.testScreenSharing) {
     describe('Screen', function () {
       beforeEach(function () {

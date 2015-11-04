@@ -59,7 +59,8 @@ switch(process.env.BROWSER) {
       framework: 'jasmine',
 
       params: {
-        testScreenSharing: true
+        testScreenSharing: true,
+        phoneNumber: process.env.PHONE_NUMBER
       },
 
       jasmineNodeOpts: {
@@ -91,7 +92,8 @@ switch(process.env.BROWSER) {
       baseUrl: 'http://localhost:5000/',
 
       params: {
-        testScreenSharing: false
+        testScreenSharing: false,
+        phoneNumber: process.env.PHONE_NUMBER
       },
 
       framework: 'jasmine',

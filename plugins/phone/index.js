@@ -47,7 +47,7 @@ module.exports = function (app, config, redis, ot) {
     getPinCode(room, function(err, pinCode) {
       res.render('phone', {
         room: req.param('room'),
-        phoneNumber: config.phoneNumber,
+        phoneNumber: config.phoneNumber || process.env.PHONE_NUMBER,
         pinCode: pinCode,
       });
     });
