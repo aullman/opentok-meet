@@ -713,6 +713,10 @@ describe('OpenTok Meet App', function() {
           });
           describe('a subscriber', function () {
             beforeEach(function () {
+              var screenPublisher = element(by.css('#screenPublisher'));
+              browser.wait(function () {
+                return screenPublisher.isPresent();
+              }, 10000);
               openSecondWindow();
               switchToWindow(2);
             });
