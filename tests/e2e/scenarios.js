@@ -689,6 +689,12 @@ describe('OpenTok Meet App', function() {
       describe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
 
+        beforeEach(function () {
+          browser.wait(function () {
+            return screenShareBtn.isPresent();
+          });
+        });
+
         it('exists and is green', function () {
           expect(screenShareBtn.isPresent()).toBe(true);
           expect(screenShareBtn.getAttribute('class')).toContain('green');
