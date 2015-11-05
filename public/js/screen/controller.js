@@ -15,8 +15,8 @@ angular.module('opentok-meet').controller('ScreenCtrl',
         if ((session.is && session.is('connected')) || session.connected) {
           connectDisconnect(true);
         }
-        $scope.session.on('sessionConnected', connectDisconnect.bind(session, true));
-        $scope.session.on('sessionDisconnected', connectDisconnect.bind(session, false));
+        session.on('sessionConnected', connectDisconnect.bind(session, true));
+        session.on('sessionDisconnected', connectDisconnect.bind(session, false));
       });
     });
     $scope.screenPublisherProps = {

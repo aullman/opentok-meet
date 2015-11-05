@@ -691,8 +691,8 @@ describe('OpenTok Meet App', function() {
 
         beforeEach(function () {
           browser.wait(function () {
-            return screenShareBtn.isPresent();
-          });
+            return screenShareBtn.isDisplayed();
+          }, 10000);
         });
 
         it('exists and is green', function () {

@@ -53,7 +53,7 @@
         <screen-share-dialogs></screen-share-dialogs>
       </div>
       <div id="bottomBar">
-        <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" title="Share Screen"> {{sharingMyScreen ? 'Stop Sharing': 'Share Screen'}}</button>
+        <button name="screenshare" id="showscreen" ng-show="connected" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" title="Share Screen"> {{sharingMyScreen ? 'Stop Sharing': 'Share Screen'}}</button>
       </div>
     </body>
 </html>

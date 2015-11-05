@@ -7,7 +7,8 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       scope,
       RoomServiceMock,
       roomDefer,
-      MockOTSession;
+      MockOTSession,
+      mockSession;
 
     beforeEach(module('opentok-meet'));
 
@@ -17,11 +18,11 @@ describe('OpenTok Meet Screenshare Only Page', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
-      scope.session = OT.initSession('mockSessionId');
-      scope.session.connection = {
+      mockSession = OT.initSession('mockSessionId');
+      mockSession.connection = {
         connectionId: 'mockConnectionId'
       };
-      spyOn(scope.session, 'disconnect').and.callThrough();
+      spyOn(mockSession, 'disconnect').and.callThrough();
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
         getRoom: function() {
@@ -69,19 +70,19 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       });
       it('sets connected when the session is connected', function () {
         expect(scope.connected).toBe(false);
-        scope.session.connected = true;
-        callback(null, scope.session);
+        mockSession.connected = true;
+        callback(null, mockSession);
         expect(scope.connected).toBe(true);
       });
       it('sets connected on sessionConnected and sessionDisconnected', function (done) {
         expect(scope.connected).toBe(false);
-        scope.session.connected = false;
-        callback(null, scope.session);
+        mockSession.connected = false;
+        callback(null, mockSession);
         expect(scope.connected).toBe(false);
-        scope.session.trigger('sessionConnected');
+        mockSession.trigger('sessionConnected');
         setTimeout(function () {
           expect(scope.connected).toBe(true);
-          scope.session.trigger('sessionDisconnected');
+          mockSession.trigger('sessionDisconnected');
           setTimeout(function () {
             expect(scope.connected).toBe(false);
             done();
