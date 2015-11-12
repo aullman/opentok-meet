@@ -301,7 +301,7 @@ describe('OpenTok Meet controllers', function() {
             done();
           }, 100);
         });
-        it('calls init on SimulcastService', function () {
+        xit('calls init on SimulcastService', function () {
           expect(SimulcastServiceMock.init).toHaveBeenCalledWith(scope.streams, scope.session);
         });
         describe('otEditorUpdate', function () {

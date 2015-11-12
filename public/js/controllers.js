@@ -167,7 +167,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       };
       $scope.$on('otEditorUpdate', editorUpdated);
       $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
-      SimulcastService.init($scope.streams, $scope.session);
+      //SimulcastService.init($scope.streams, $scope.session);
     });
     $scope.publishing = true;
   });
