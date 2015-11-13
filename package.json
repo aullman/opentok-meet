@@ -2,6 +2,7 @@
   "name": "opentok-meet",
   "description": "Opentok app with screen sharing using the WebRTC screen sharing feature.",
   "version": "0.0.1",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "bower": "^1.3.9",
