@@ -75,7 +75,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
           if (err) {
             console.error('Error getting room: ', err);
             res.send({
-              error: err
+              error: err.message
             });
           } else {
             res.set({
@@ -145,7 +145,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
       if (err) {
         console.error('Error getting room: ', err);
         res.send({
-          error: err
+          error: err.message
         });
       }
       var otSDK = ot;
@@ -158,7 +158,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         if (err) {
           console.error('Error starting archive: ', err);
           res.send({
-            error: err
+            error: err.message
           });
         } else {
           redis.sadd('archive_' + room, archive.id);
@@ -179,7 +179,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
       if (err) {
         console.error('Error getting apiKeys: ', err);
         res.send({
-          error: err
+          error: err.message
         });
       } else {
         var otSDK = ot;
@@ -192,7 +192,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
           if (err) {
             console.error('Error stopping archive: ', err);
             res.send({
-              error: err
+              error: err.message
             });
           } else {
             res.send({
