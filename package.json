@@ -26,6 +26,7 @@
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
     "unit": "karma start tests/karma.conf.js --single-run",
+    "preintegration": "npm run update-webdriver",
     "integration": "protractor tests/protractor.conf.js",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
