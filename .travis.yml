@@ -6,6 +6,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 before_script:
 - npm start > /dev/null &
+- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
