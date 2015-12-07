@@ -46,7 +46,7 @@
     "opentok-test-scripts": "^2.2.0",
     "protractor": "^2.0.0",
     "q": "^1.2.0",
-    "travis-multirunner": "^2.7.2",
+    "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
   }
 }
