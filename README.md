@@ -7,6 +7,13 @@ opentok-meet
 
 Opentok app with screen sharing using the WebRTC screen sharing and Archiving features. You can check it out running at [meet.tokbox.com](https://meet.tokbox.com).
 
+## Mobile Applications
+
+There are a few different mobile applications that have been built to interoperate with this application. 
+
+* [meet-swift](https://github.com/robjperez/meet-swift) An iOS app built in Swift.
+* [opentok-meet-android](https://github.com/marinaserranomontes/opentok-meet-android) and Android application.
+
 ## Running locally
 
 1. If you haven't already, [sign up for OpenTok](https://tokbox.com/signup).
