@@ -38,8 +38,8 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
                 stats[type].packetsReceived) * 100).toFixed(2);
             }
             if (lastStats) {
-              if (lastLastStats && stats[type].packetsReceived -
-                lastLastStats[type].packetsReceived > 0) {
+              if (lastLastStats && lastLastStats[type] && lastLastStats[type].packetsReceived &&
+                (stats[type].packetsReceived - lastLastStats[type].packetsReceived > 0)) {
                 currStats[type + 'PacketLoss'] =
                   (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
                     (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
