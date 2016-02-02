@@ -18,11 +18,10 @@ describe('OpenTok Meet Screenshare Only Page', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
-      mockSession = OT.initSession('mockSessionId');
-      mockSession.connection = {
+      scope.session = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
+      scope.session.connection = {
         connectionId: 'mockConnectionId'
       };
-      spyOn(mockSession, 'disconnect').and.callThrough();
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
         getRoom: function() {
