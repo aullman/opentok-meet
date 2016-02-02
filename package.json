@@ -25,6 +25,9 @@
     "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
+    "unit": "karma start tests/karma.conf.js --single-run",
+    "preintegration": "npm run update-webdriver",
+    "integration": "protractor tests/protractor.conf.js",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
@@ -40,10 +43,10 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "karma-sauce-launcher": "^0.2.14",
-    "opentok-test-scripts": "^1.0.3",
+    "opentok-test-scripts": "^2.2.0",
     "protractor": "^2.0.0",
     "q": "^1.2.0",
-    "travis-multirunner": "^2.7.2",
+    "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
   }
 }
