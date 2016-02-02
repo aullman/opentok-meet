@@ -7,7 +7,8 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       scope,
       RoomServiceMock,
       roomDefer,
-      MockOTSession;
+      MockOTSession,
+      mockSession;
 
     beforeEach(module('opentok-meet'));
 
@@ -17,11 +18,11 @@ describe('OpenTok Meet Screenshare Only Page', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
-      scope.session = OT.initSession('mockSessionId');
-      scope.session.connection = {
+      mockSession = OT.initSession('mockSessionId');
+      mockSession.connection = {
         connectionId: 'mockConnectionId'
       };
-      spyOn(scope.session, 'disconnect').and.callThrough();
+      spyOn(mockSession, 'disconnect').and.callThrough();
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
         getRoom: function() {
@@ -51,6 +52,7 @@ describe('OpenTok Meet Screenshare Only Page', function() {
     });
 
     describe('RoomService.getRoom()', function() {
+      var callback;
       beforeEach(function() {
         roomDefer.resolve({
           p2p: true,
@@ -60,12 +62,33 @@ describe('OpenTok Meet Screenshare Only Page', function() {
           token: 'mockToken'
         });
         scope.$apply();
+        callback = MockOTSession.init.calls.mostRecent().args[3];
       });
       it('calls OTSession.init', function() {
         expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId',
-          'mockToken');
+          'mockToken', jasmine.any(Function));
       });
-
+      it('sets connected when the session is connected', function () {
+        expect(scope.connected).toBe(false);
+        mockSession.connected = true;
+        callback(null, mockSession);
+        expect(scope.connected).toBe(true);
+      });
+      it('sets connected on sessionConnected and sessionDisconnected', function (done) {
+        expect(scope.connected).toBe(false);
+        mockSession.connected = false;
+        callback(null, mockSession);
+        expect(scope.connected).toBe(false);
+        mockSession.trigger('sessionConnected');
+        setTimeout(function () {
+          expect(scope.connected).toBe(true);
+          mockSession.trigger('sessionDisconnected');
+          setTimeout(function () {
+            expect(scope.connected).toBe(false);
+            done();
+          }, 10);
+        }, 10);
+      });
     });
   });
 });

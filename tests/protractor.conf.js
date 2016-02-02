@@ -59,7 +59,8 @@ switch(process.env.BROWSER) {
       framework: 'jasmine',
 
       params: {
-        testScreenSharing: true
+        testScreenSharing: true,
+        phoneNumber: process.env.PHONE_NUMBER
       },
 
       jasmineNodeOpts: {
@@ -81,7 +82,7 @@ switch(process.env.BROWSER) {
         'chromeOptions': {
           'args': ['auto-select-desktop-capture-source="Entire screen"',
             'use-fake-device-for-media-stream',
-            'use-fake-ui-for-media-stream'],
+            'use-fake-ui-for-media-stream', 'disable-popup-blocking'],
           'binary': process.env.BROWSERBIN
         }
       },
@@ -91,7 +92,8 @@ switch(process.env.BROWSER) {
       baseUrl: 'http://localhost:5000/',
 
       params: {
-        testScreenSharing: false
+        testScreenSharing: false,
+        phoneNumber: process.env.PHONE_NUMBER
       },
 
       framework: 'jasmine',

@@ -6,6 +6,7 @@ describe('OpenTok Meet controllers', function() {
     var ctrl,
       scope,
       RoomServiceMock,
+      SimulcastServiceMock,
       windowMock,
       $httpBackend,
       roomDefer,
@@ -34,6 +35,7 @@ describe('OpenTok Meet controllers', function() {
           return roomDefer.promise;
         }
       };
+      SimulcastServiceMock = jasmine.createSpyObj('SimulcastService', ['init']);
       windowMock = jasmine.createSpyObj('$window', ['addEventListener']);
       windowMock.location = {};
       OT.$.eventing(windowMock);  // Add event handling to my mock window
@@ -56,7 +58,8 @@ describe('OpenTok Meet controllers', function() {
         $timeout: $timeout,
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
-        baseURL: ''
+        baseURL: '',
+        SimulcastService: SimulcastServiceMock,
       });
     }));
 
@@ -296,6 +299,9 @@ describe('OpenTok Meet controllers', function() {
             expect(scope.publishing).toBe(false);
             done();
           }, 100);
+        });
+        xit('calls init on SimulcastService', function () {
+          expect(SimulcastServiceMock.init).toHaveBeenCalledWith(scope.streams, scope.session);
         });
         describe('otEditorUpdate', function () {
           it('updates unread when not looking at editor', function () {
