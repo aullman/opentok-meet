@@ -18,11 +18,10 @@ describe('OpenTok Meet Screenshare Only Page', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
-      mockSession = OT.initSession('mockSessionId');
+      mockSession = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       mockSession.connection = {
         connectionId: 'mockConnectionId'
       };
-      spyOn(mockSession, 'disconnect').and.callThrough();
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
         getRoom: function() {
@@ -79,14 +78,18 @@ describe('OpenTok Meet Screenshare Only Page', function() {
         mockSession.connected = false;
         callback(null, mockSession);
         expect(scope.connected).toBe(false);
-        mockSession.trigger('sessionConnected');
+        expect(mockSession.on.calls.first().args[0]).toBe('sessionConnected');
+        var sessionConnectedHandler = mockSession.on.calls.first().args[1];
+        // Execute the sessionConnected Handler
+        sessionConnectedHandler();
+        expect(scope.connected).toBe(true);
+        expect(mockSession.on.calls.mostRecent().args[0]).toBe('sessionDisconnected');
+        var sessionDisconnectedHandler = mockSession.on.calls.mostRecent().args[1];
+        // Execute the sessionDisconnected Handler
+        sessionDisconnectedHandler();
         setTimeout(function () {
-          expect(scope.connected).toBe(true);
-          mockSession.trigger('sessionDisconnected');
-          setTimeout(function () {
-            expect(scope.connected).toBe(false);
-            done();
-          }, 10);
+          expect(scope.connected).toBe(false);
+          done();
         }, 10);
       });
     });
