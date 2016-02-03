@@ -23,11 +23,10 @@ describe('OpenTok Meet controllers', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
-      scope.session = OT.initSession('mockSessionId');
+      scope.session = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       scope.session.connection = {
         connectionId: 'mockConnectionId'
       };
-      spyOn(scope.session, 'disconnect').and.callThrough();
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
         getRoom: function() {
@@ -340,7 +339,9 @@ describe('OpenTok Meet controllers', function() {
         function (done) {
         scope.changeRoom();
         expect(scope.session.disconnect).toHaveBeenCalled();
-        scope.session.trigger('sessionDisconnected');
+        expect(scope.session.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
+        var handler = scope.session.on.calls.mostRecent().args[1];
+        handler();
         setTimeout(function () {
           expect(RoomServiceMock.changeRoom).toHaveBeenCalled();
           done();

@@ -6,6 +6,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 before_script:
 - npm start > /dev/null &
+- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
@@ -31,6 +32,8 @@ env:
   - CHROME_EXTENSION_ID=none
   - OT_API_KEY=1974561
   - BROWSERSTACK_USERNAME=adamullman1
+  - UNIT_CMD='npm run unit'
+  - INTEGRATION_CMD='npm run integration'
   - secure: ATYQg+EY0uo9KRx3su5NwijIMDIpPu8axX9AeATzjz3ree73eDU/jM0pTxV0tTLRtmMoC8b95DIvrhDfKIUXqTA4m2eHiwamv4+7Ocr7twEQJ6tjA3jX2Zv7H6QFZEGC1hIl7CJm4q9vMiS1NfVgG4VHTSsYkWCldwKyQvpfm9g=
   - secure: gXLtG+aBTQCJ4ovSwexMF38V5f56jBgxhyJaUC/lAzdQuyK5VFWCTubohOohFx4GokfN5A4JETVRiFfn4heRVmBxi5ZAlWwZpbWD6yBBu4l5SN7ST1umwzGEc+1zjZ0LyvaC8LK7GI7gdCVY+XWP1SryS1n9JEytiR1S93giflQ=
   - secure: UTGPkvGdlise2HWGIDGQvQAItv4zw2PZFOeIHOSvKBn2vuzhN8pX8OVR44n3Ddr28aW7YQkCLWKEsHsBgdsxUmWoFBnUrVX12dPKAjTq3gMeHuPAxkg6nBQJ4/y9r57wenAjGCd79H9n04jQtvDZkfe1+hpTLCMnMPkceIZdxO0=
