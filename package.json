@@ -16,7 +16,7 @@
   },
   "engines": {
     "node": "4.2.2",
-    "npm": "1.2.x"
+    "npm": "2.14.7"
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",
