@@ -10,6 +10,7 @@ exports.getFirefoxProfile = function() {
 
   var firefoxProfile = new FirefoxProfile();
   firefoxProfile.setPreference('media.navigator.permission.disabled', true);
+  firefoxProfile.setPreference('media.navigator.streams.fake', true);
   firefoxProfile.setPreference('media.getusermedia.screensharing.allowed_domains',
     'localhost,adam.local');
   firefoxProfile.encoded(function(encodedProfile) {
