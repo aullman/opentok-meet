@@ -445,6 +445,7 @@ describe('OpenTok Meet App', function() {
     beforeEach(function () {
       browser.get(roomURL);
       secondBrowser = browser.forkNewDriverInstance(true);
+      secondBrowser.browserName = browser.browserName;
     });
     afterEach(function () {
       if (secondBrowser) {
