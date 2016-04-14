@@ -10,13 +10,13 @@
     "express": "3.1.x",
     "gulp": "~3.5.5",
     "gulp-bower": "~0.0.3",
-    "hiredis": "~0.1.16",
+    "hiredis": "~0.4.1",
     "opentok": "^2.2.3",
     "redis": "~0.10.1"
   },
   "engines": {
-    "node": "0.12.x",
-    "npm": "1.2.x"
+    "node": "4.2.2",
+    "npm": "2.14.7"
   },
   "scripts": {
     "postinstall": "./node_modules/gulp/bin/gulp.js",

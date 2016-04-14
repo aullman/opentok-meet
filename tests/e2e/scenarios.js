@@ -12,7 +12,7 @@ describe('OpenTok Meet App', function() {
     }
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.caps_.browserName;
-      roomURL = browser.browserName === 'firefox' ? roomName + '?fakeDevices=true' : roomName;
+      roomURL = roomName;
       roomURL = '/' + roomURL;
     });
   });
