@@ -493,7 +493,7 @@ describe('OpenTok Meet App', function() {
           // Move the publisher out of the way
           secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
             .then(function () {
-            secondBrowser.actions().mouseDown(secondBrowser.element(by.css('ot-subscriber'))).perform();
+            secondBrowser.actions().mouseDown(secondSubscriber).mouseUp().perform();
             // Have to wait for the buttons to show up
             secondBrowser.sleep(1000).then(function () {
               done();
@@ -512,10 +512,7 @@ describe('OpenTok Meet App', function() {
             });
           }, 5000);
           expect(resizeBtn.getAttribute('title')).toBe('Shrink');
-          if (secondBrowser.browserName === 'internet explorer') {
-            // For some reason you need to focus the second browser again
-            secondBrowser.actions().mouseDown(secondSubscriber).perform();
-          }
+          secondBrowser.actions().mouseDown(secondSubscriber).mouseUp().perform();
           resizeBtn.click();
           secondBrowser.wait(function () {
             return secondSubscriber.getAttribute('class').then(function (className) {
