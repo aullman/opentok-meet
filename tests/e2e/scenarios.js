@@ -11,7 +11,7 @@ describe('OpenTok Meet App', function() {
       roomName = uuid.v1();
     }
     browser.getCapabilities().then(function (cap) {
-      browser.browserName = cap.browserName;
+      browser.browserName = cap.get('browserName');
       roomURL = roomName;
       roomURL = '/' + roomURL;
     });
