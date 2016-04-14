@@ -55,6 +55,8 @@ switch(process.env.BROWSER) {
       //seleniumAddress: 'http://hub.browserstack.com/wd/hub',
       directConnect: true,
 
+      keepAlive: true,
+
       baseUrl: 'http://localhost:5000/',
 
       firefoxPath: process.env.BROWSERBIN,
