@@ -378,7 +378,7 @@ describe('OpenTok Meet App', function() {
         secondBrowser.close();
       }
     });
-    it('text editing works', function (done) {
+    fit('text editing works', function (done) {
       browser.wait(function () {
         return element(by.css('ot-editor')).isPresent();
       }, 5000);
@@ -427,8 +427,7 @@ describe('OpenTok Meet App', function() {
           return innerHTML.indexOf('world') > -1;
         });
       }, 2000);
-      secondBrowser.sleep(2000);
-      secondBrowser.close().then(function () {
+      secondBrowser.sleep(2000).then(function () {
         // wait for text to show up in the first browser
         browser.wait(function () {
           return firstBrowserText.getInnerHtml().then(function (innerHTML) {
