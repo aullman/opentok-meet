@@ -20,7 +20,7 @@ matrix:
   fast_finish: true
 
   allow_failures:
-    - env: BROWSER=firefox  BVER=beta
+    - env: BROWSER=firefox BVER=beta
     - env: BROWSER=chrome  BVER=beta
     - env: BROWSER=ie BVER=11  SAUCELABS=true
     - env: BROWSER=ie BVER=10  SAUCELABS=true
