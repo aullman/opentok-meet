@@ -375,7 +375,7 @@ describe('OpenTok Meet App', function() {
     });
     afterEach(function () {
       if (secondBrowser) {
-        secondBrowser.close();
+        secondBrowser.quit();
       }
     });
     it('text editing works', function (done) {
@@ -448,7 +448,7 @@ describe('OpenTok Meet App', function() {
     });
     afterEach(function () {
       if (secondBrowser) {
-        secondBrowser.close();
+        secondBrowser.quit();
       }
     });
 
@@ -612,7 +612,7 @@ describe('OpenTok Meet App', function() {
           secondBrowser.element(by.css('#changeRoom')).click();
         });
         it('by closing the browser window', function () {
-          secondBrowser.close();
+          secondBrowser.quit();
           secondBrowser = null;
         });
       });
@@ -651,7 +651,7 @@ describe('OpenTok Meet App', function() {
               secondBrowser.get(roomURL);
             });
             afterEach(function() {
-              secondBrowser.close();
+              secondBrowser.quit();
             });
             it('subscribes to the screen and it is big', function () {
               var subscriberVideo = secondBrowser.element(by.css(
