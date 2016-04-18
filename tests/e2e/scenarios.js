@@ -439,6 +439,92 @@ describe('OpenTok Meet App', function() {
     });
   });
 
+  fdescribe('using the whiteboard', function () {
+    var secondBrowser, thirdBrowser;
+    beforeEach(function () {
+      browser.get(roomURL);
+    });
+    afterEach(function () {
+      if (secondBrowser) {
+        secondBrowser.quit();
+      }
+      if (thirdBrowser) {
+        thirdBrowser.quit();
+      }
+    });
+
+    var getWhiteboardData = function(browser) {
+      return browser.driver.executeScript(function() {
+        return document.querySelector('ot-whiteboard canvas').toDataURL('image/png');
+      });
+    };
+
+    it('drawing works', function () {
+      browser.wait(function () {
+        return element(by.css('ot-whiteboard')).isPresent();
+      }, 5000);
+      var firstShowWhiteboardBtn = element(by.css('#showWhiteboardBtn'));
+      browser.actions().mouseMove(firstShowWhiteboardBtn).perform();
+      firstShowWhiteboardBtn.click();
+      browser.wait(function () {
+        return element(by.css('#session.session-connected ot-whiteboard')).isDisplayed();
+      }, 5000);
+      // draw in the first browser
+      var firstBrowserCanvas = element(by.css('ot-whiteboard canvas'));
+      expect(firstBrowserCanvas.isPresent()).toBe(true);
+      var initialData;
+      getWhiteboardData(browser).then(function(data) {
+        initialData = data;
+      });
+
+      secondBrowser = browser.forkNewDriverInstance(true);
+      // Show the whiteboard in the second browser
+      var secondShowWhiteboardBtn = secondBrowser.element(by.css('#showWhiteboardBtn'));
+      secondBrowser.actions().mouseMove(secondShowWhiteboardBtn).perform();
+      secondShowWhiteboardBtn.click();
+      secondBrowser.wait(function () {
+        return secondBrowser.element(by.css('#session.session-connected ot-whiteboard')).isDisplayed();
+      }, 5000);
+      var secondBrowserCanvas = secondBrowser.element(by.css('ot-whiteboard canvas'));
+      // Check that the initial data of the second browser is the same as the first
+      getWhiteboardData(secondBrowser).then(function(data) {
+        expect(data).toEqual(initialData);
+      }).then(function() {
+        // Draw in the second browser
+        secondBrowser.actions().mouseMove(secondBrowserCanvas).mouseDown()
+           .mouseMove({x: 0, y:100}).mouseUp().perform();
+        return getWhiteboardData(secondBrowser);
+      }).then(function(secondBrowserData) {
+        // Wait for the changes to show up on the first browser
+        return browser.wait(function() {
+          return getWhiteboardData(browser).then(function(data) {
+            return data === secondBrowserData;
+          });
+        });
+      }).then(function() {
+        // Draw on the first browser
+        browser.actions().mouseMove(firstBrowserCanvas).mouseDown()
+           .mouseMove({x: 100, y:100}).mouseUp().perform();
+
+        return getWhiteboardData(browser);
+      }).then(function(firstBrowserData) {
+        // Wait for the changes to show up on the second browser
+        return browser.wait(function() {
+          return getWhiteboardData(secondBrowser).then(function(data) {
+            return data === firstBrowserData;
+          });
+        });
+      }).then(function() {
+        thirdBrowser = browser.forkNewDriverInstance(true);
+        // Wait for flashing red dot indicator in the third browser
+        thirdBrowser.wait(function () {
+          return thirdBrowser.element(by.css('body.mouse-move .unread-indicator.unread #showWhiteboardBtn'))
+            .isPresent();
+        }, 30000);
+      });
+    });
+  });
+
   describe('2 browsers in the same room', function () {
     var secondBrowser;
     beforeEach(function () {
