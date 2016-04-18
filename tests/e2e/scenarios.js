@@ -439,7 +439,7 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  fdescribe('using the whiteboard', function () {
+  describe('using the whiteboard', function () {
     var secondBrowser, thirdBrowser;
     beforeEach(function () {
       browser.get(roomURL);
