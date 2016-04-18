@@ -472,7 +472,7 @@ describe('OpenTok Meet App', function() {
       // draw in the first browser
       var firstBrowserCanvas = element(by.css('ot-whiteboard canvas'));
       expect(firstBrowserCanvas.isPresent()).toBe(true);
-      var initialData;
+      var initialData, firstDrawData, secondDrawData;
       getWhiteboardData(browser).then(function(data) {
         initialData = data;
       });
@@ -494,11 +494,13 @@ describe('OpenTok Meet App', function() {
         secondBrowser.actions().mouseMove(secondBrowserCanvas).mouseDown()
            .mouseMove({x: 0, y:100}).mouseUp().perform();
         return getWhiteboardData(secondBrowser);
-      }).then(function(secondBrowserData) {
+      }).then(function(data) {
+        firstDrawData = data;
+        expect(firstDrawData).not.toEqual(initialData);
         // Wait for the changes to show up on the first browser
         return browser.wait(function() {
           return getWhiteboardData(browser).then(function(data) {
-            return data === secondBrowserData;
+            return data === firstDrawData;
           });
         });
       }).then(function() {
@@ -507,11 +509,13 @@ describe('OpenTok Meet App', function() {
            .mouseMove({x: 100, y:100}).mouseUp().perform();
 
         return getWhiteboardData(browser);
-      }).then(function(firstBrowserData) {
+      }).then(function(data) {
+        secondDrawData = data;
+        expect(secondDrawData).not.toEqual(firstDrawData);
         // Wait for the changes to show up on the second browser
         return browser.wait(function() {
           return getWhiteboardData(secondBrowser).then(function(data) {
-            return data === firstBrowserData;
+            return data === secondDrawData;
           });
         });
       }).then(function() {
@@ -521,6 +525,10 @@ describe('OpenTok Meet App', function() {
           return thirdBrowser.element(by.css('body.mouse-move .unread-indicator.unread #showWhiteboardBtn'))
             .isPresent();
         }, 30000);
+
+        return getWhiteboardData(thirdBrowser);
+      }).then(function(data) {
+        expect(data).toEqual(secondDrawData);
       });
     });
   });
