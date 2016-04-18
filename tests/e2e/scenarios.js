@@ -525,9 +525,11 @@ describe('OpenTok Meet App', function() {
             return thirdBrowser.element(by.css('ot-whiteboard')) && thirdBrowser.element(by.css('ot-whiteboard')).isPresent();
           }, 5000);
 
-          return getWhiteboardData(thirdBrowser);
-        }).then(function(data) {
-          expect(data).toEqual(secondDrawData);
+          return thirdBrowser.wait(function() {
+            return getWhiteboardData(thirdBrowser).then(function(data) {
+              return data === secondDrawData;
+            });
+          });
         });
       };
     };
