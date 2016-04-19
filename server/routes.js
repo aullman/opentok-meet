@@ -67,8 +67,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
   app.get('/:room', function(req, res) {
     var room = req.param('room'),
       apiKey = req.param('apiKey'),
-      secret = req.param('secret'),
-      fakeDevices = req.param('fakeDevices');
+      secret = req.param('secret');
     res.format({
       json: function() {
         var goToRoom = function(err, sessionId, apiKey, secret) {
@@ -112,7 +111,6 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         }
         res.render('room', {
           room: room,
-          fakeDevices: fakeDevices,
           chromeExtensionId: config.chromeExtensionId
         });
       }

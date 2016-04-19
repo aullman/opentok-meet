@@ -32,3 +32,5 @@ opentok-ios-sdk-*
 /BrowserStackLocal
 /sc-*/*
 sauce-connect.log
+
+.tern-project

@@ -7,7 +7,7 @@
         <title><%=room%>: Whiteboard</title>
         <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="//static.opentok.com/v2/js/opentok.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="//static.opentok.com/v2.6/js/opentok.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/paper/dist/paper-core.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-whiteboard/opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
@@ -22,7 +22,7 @@
                 TB.checkSystemRequirements = function () {
                     return true;
                 };
-                
+
                 RoomService.getRoom().then(function (roomData) {
                     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function (err) {
                         if (!err) {
@@ -40,7 +40,7 @@
                 margin: 0;
                 padding: 0;
             }
-        
+
             ot-whiteboard {
                 display: block;
                 width: 100%;
