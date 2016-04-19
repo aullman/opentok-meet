@@ -147,28 +147,28 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           $scope.archiving = (event.type === 'archiveStarted');
         });
       });
-      var whiteboardUpdated = function() {
-        if (!$scope.showWhiteboard && !$scope.whiteboardUnread) {
-          // Someone did something to the whiteboard while we weren't looking
-          $scope.$apply(function() {
-            $scope.whiteboardUnread = true;
-            $scope.mouseMove = true; // Show the bottom bar
-          });
-        }
-      };
-      var editorUpdated = function() {
-        if (!$scope.showEditor && !$scope.editorUnread) {
-          // Someone did something to the editor while we weren't looking
-          $scope.$apply(function() {
-            $scope.editorUnread = true;
-            $scope.mouseMove = true; // Show the bottom bar
-          });
-        }
-      };
-      $scope.$on('otEditorUpdate', editorUpdated);
-      $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
       //SimulcastService.init($scope.streams, $scope.session);
     });
+    var whiteboardUpdated = function() {
+      if (!$scope.showWhiteboard && !$scope.whiteboardUnread) {
+        // Someone did something to the whiteboard while we weren't looking
+        $scope.$apply(function() {
+          $scope.whiteboardUnread = true;
+          $scope.mouseMove = true; // Show the bottom bar
+        });
+      }
+    };
+    var editorUpdated = function() {
+      if (!$scope.showEditor && !$scope.editorUnread) {
+        // Someone did something to the editor while we weren't looking
+        $scope.$apply(function() {
+          $scope.editorUnread = true;
+          $scope.mouseMove = true; // Show the bottom bar
+        });
+      }
+    };
+    $scope.$on('otEditorUpdate', editorUpdated);
+    $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
     $scope.publishing = true;
   });
 

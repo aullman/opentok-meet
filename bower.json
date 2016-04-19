@@ -22,10 +22,11 @@
   ],
   "dependencies": {
     "opentok-angular": "0.4.0",
-    "opentok-whiteboard": "~0.1.1",
+    "opentok-whiteboard": "~1.0.2",
     "ionicons": "~1.4.1",
     "opentok-editor": "~0.1.2",
     "ng-debounce": "~0.1.5"
+
   },
   "devDependencies": {
     "angular-mocks": "~1.2.23"
