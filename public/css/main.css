@@ -169,6 +169,7 @@ ot-editor > div.opentok-editor-mode-select {
   width: 100%;
   left: 0;
   bottom: 20px;
+  pointer-events: none;
   position: absolute;
   text-align: center;
   z-index: 97;
@@ -220,6 +221,7 @@ button.icon-left:before {
     transition: width 200ms, height 200ms ease;
     padding-left: 14px;
     padding-top: 5px;
+    pointer-events: auto;
 }
 
 #bottomBar #publishHDCheck {
