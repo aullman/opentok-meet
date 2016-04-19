@@ -64,7 +64,7 @@ angular.module('opentok-meet').directive('screenShareDialogs', function () {
             if (!response.supported || response.extensionRegistered === false) {
               $scope.screenShareSupported = false;
               $scope.selectingScreenSource = false;
-            } else if (response.extensionInstalled === false) {
+            } else if (response.extensionInstalled === false && response.extensionRegistered) {
               $scope.promptToInstall = true;
               $scope.selectingScreenSource = false;
             } else {
