@@ -43,7 +43,8 @@ describe('screenShareDialogs', function() {
     spyOn(OT, 'checkScreenSharingCapability').and.callFake(function(callback) {
       callback({
         supported: true,
-        extensionInstalled: false
+        extensionInstalled: false,
+        extensionRegistered: true
       });
     });
     scope.toggleShareScreen();
