@@ -6,8 +6,7 @@ function getCapabilitiesFor(browserName, version) {
     'build': process.env.TRAVIS_BUILD_NUMBER,
     'prerun': {
       'executable': 'http://localhost:5000/SauceLabsInstaller.exe',
-      'background': true,
-      'timeout': 120
+      'background': false
     }
   };
   // Sauce Labs Supports IE 10 on Windows 8 and IE 11 on Windows 8.1
