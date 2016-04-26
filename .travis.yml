@@ -22,16 +22,14 @@ matrix:
   allow_failures:
     - env: BROWSER=firefox BVER=beta
     - env: BROWSER=chrome  BVER=beta
-    - env: BROWSER=ie BVER=11  SAUCELABS=true
-    - env: BROWSER=ie BVER=10  SAUCELABS=true
 env:
   matrix:
     - BROWSER=chrome  BVER=stable
-    - BROWSER=chrome  BVER=beta
     - BROWSER=firefox BVER=stable
-    - BROWSER=firefox BVER=beta
     - BROWSER=ie BVER=11  SAUCELABS=true
     - BROWSER=ie BVER=10  SAUCELABS=true
+    - BROWSER=chrome  BVER=beta
+    - BROWSER=firefox BVER=beta
   global:
   - TRAVIS=true
   - PORT=5000
