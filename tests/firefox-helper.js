@@ -17,7 +17,9 @@ exports.getFirefoxProfile = function() {
     var multiCapabilities = [{
       browserName: 'firefox',
       acceptSslCert: true,
-      'firefox_profile' : encodedProfile
+      'firefox_profile' : encodedProfile,
+      firefox_binary: process.env.BROWSERBIN,
+      binary_: process.env.BROWSERBIN
     }];
     deferred.resolve(multiCapabilities);
   });

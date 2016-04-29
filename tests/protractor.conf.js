@@ -58,8 +58,6 @@ switch(process.env.BROWSER) {
 
       baseUrl: 'http://localhost:5000/',
 
-      firefoxPath: process.env.BROWSERBIN,
-
       framework: 'jasmine',
 
       params: {
