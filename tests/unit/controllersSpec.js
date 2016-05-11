@@ -109,7 +109,7 @@ describe('OpenTok Meet controllers', function() {
       it('publishes with SD properties', function() {
         scope.togglePublish(false);
         expect(scope.publishing).toBe(true);
-        expect(scope.facePublisherProps.resolution).not.toBeDefined();
+        expect(scope.facePublisherProps.resolution).toBe('640x480');
       });
     });
 
