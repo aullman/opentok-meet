@@ -754,6 +754,22 @@ describe('OpenTok Meet App', function() {
     });
   });
 
+  describe('Debug button', function() {
+    beforeEach(function() {
+      browser.get(roomURL);
+      browser.wait(function () {
+        return element(by.css('div.session-connected')).isPresent();
+      }, 10000);
+    });
+    it('Opens a new window', function() {
+      element(by.css('.ion-bug')).click();
+      browser.getAllWindowHandles().then(function (handles) {
+        expect(handles.length).toBe(2);
+        // I tried to check that the mailto link is there but getCurrentUrl was timing out
+      });
+    });
+  });
+
   if (browser.params.testScreenSharing) {
     describe('Screen', function () {
       beforeEach(function () {
