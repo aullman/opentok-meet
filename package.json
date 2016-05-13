@@ -19,7 +19,7 @@
     "npm": "2.14.7"
   },
   "scripts": {
-    "postinstall": "./node_modules/gulp/bin/gulp.js",
+    "postinstall": "gulp && webpack",
     "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.4",
+    "css-loader": "^0.23.1",
     "firefox-profile": "^0.3.9",
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.31",
@@ -44,7 +45,9 @@
     "opentok-test-scripts": "^3.0.3",
     "protractor": "3.2.2",
     "q": "^1.2.0",
+    "style-loader": "^0.13.1",
     "travis-multirunner": "^3.0.0",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "webpack": "^1.13.0"
   }
 }

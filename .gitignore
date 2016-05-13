@@ -34,3 +34,6 @@ opentok-ios-sdk-*
 sauce-connect.log
 
 .tern-project
+
+public/js/appBundle.min.js
+public/js/appBundle.min.js.map

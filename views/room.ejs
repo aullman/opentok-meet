@@ -9,33 +9,24 @@
         <link rel="icon" sizes="128x128" href="icon.png">
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="/css/subscriber-stats.css" type="text/css" media="screen">
-        <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/lib/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>-]
+        <script src="/js/lib/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>-]
+
         <script src="//static.opentok.com/v2/js/opentok.js"></script>
         <script src="/js/lib/opentok-layout-js/opentok-layout.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/opentok-angular/opentok-angular.js" type="text/javascript" charset="utf-8"></script>
         <!-- OpenTok Whiteboard -->
         <script src="/js/lib/paper/dist/paper-core.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/lib/opentok-whiteboard/opentok-whiteboard.js" type="text/javascript" charset="utf-8"></script>
-        <link rel="stylesheet" href="/js/lib/opentok-whiteboard/opentok-whiteboard.css" type="text/css" media="screen" charset="utf-8">
         <!-- OpenTok Editor -->
         <script src="/js/lib/CodeMirror/lib/codemirror.js" type="text/javascript" charset="utf-8"></script>
         <link rel="stylesheet" href="/js/lib/CodeMirror/lib/codemirror.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/lib/CodeMirror/mode/javascript/javascript.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/lib/CodeMirror/mode/markdown/markdown.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/js/lib/opentok-editor/opentok-editor.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <script src="/js/lib/opentok-editor/opentok-editor.js" type="text/javascript" charset="utf-8"></script>
 
         <link rel="stylesheet" href="/js/lib/ionicons/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <script src="/js/app.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/directives.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/sync-click.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/subscriber-stats.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/controllers.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/services.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/screen/directive.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/appBundle.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">

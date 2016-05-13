@@ -1,3 +1,5 @@
+require('../css/subscriber-stats.css');
+
 // StatsService runs on a particular interval and updates the stats for all
 // of the subscribers
 function SubscriberStats(subscriber, onStats) {
