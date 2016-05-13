@@ -43,8 +43,8 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "karma-sauce-launcher": "^0.2.14",
-    "opentok-test-scripts": "^3.0.2",
-    "protractor": "^3.2.2",
+    "opentok-test-scripts": "^3.0.3",
+    "protractor": "3.2.2",
     "q": "^1.2.0",
     "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
