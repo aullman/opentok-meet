@@ -20,8 +20,8 @@ module.exports = function(config) {
       'public/js/lib/opentok-angular/opentok-angular.js',
       'public/js/lib/opentok-editor/opentok-editor.js',
       'public/js/lib/opentok-whiteboard/opentok-whiteboard.js',
-      'public/js/*.js',
-      'public/js/screen/*.js',
+      'public/js/appBundle.min.js',
+      'public/js/screen/controller.js',
       'public/js/login/*.js',
       'tests/unit/**/*.js'
     ],
