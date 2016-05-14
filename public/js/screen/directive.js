@@ -35,7 +35,6 @@ angular.module('opentok-meet').directive('screenShareDialogs', function () {
 
       OT.checkScreenSharingCapability(function(response) {
         $scope.screenShareSupported = response.supported && response.extensionRegistered !== false;
-        $scope.$apply();
       });
 
       $scope.$on('otPublisherError', function(event, error, publisher) {
