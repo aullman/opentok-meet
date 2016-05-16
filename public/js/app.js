@@ -1,10 +1,17 @@
 /*jshint unused:false*/
 
+window.$ = window.jQuery = require('jquery');
+var angular = require('angular');
+
 var opentokMeet = angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
   'opentok-editor']);
 
-require('./lib/opentok-whiteboard/opentok-whiteboard.js');
-require('./lib/opentok-whiteboard/opentok-whiteboard.css');
+require('opentok-angular');
+require('opentok-whiteboard');
+require('opentok-whiteboard/opentok-whiteboard.css');
+require('opentok-editor');
+require('opentok-editor/opentok-editor.css');
+require('codemirror/lib/codemirror.css');
 
 require('../css/main.css');
 require('./directives.js');

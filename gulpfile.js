@@ -1,11 +1,5 @@
 var gulp = require('gulp'),
-    bower = require('gulp-bower'),
     exec = require('child_process').exec;
-
-gulp.task('default', function(){
-  bower()
-    .pipe(gulp.dest('public/js/lib/'));
-});
 
 gulp.task('cordova-bower', function () {
   // couldn't figure out how to get bower to run in a different directory
@@ -16,11 +10,11 @@ gulp.task('cordova', function (cb) {
   // Copy over the single-sourced JS
   gulp.src('./public/js/*.js')
     .pipe(gulp.dest('opentok-meet-cordova/www/js'));
-  
+
   // Copy over the single-source CSS
   gulp.src('./public/css/*.css')
     .pipe(gulp.dest('opentok-meet-cordova/www/css'));
-  
+
   // Copy over the images
   gulp.src('./public/images/*.*')
     .pipe(gulp.dest('opentok-meet-cordova/www/images'));
@@ -69,7 +63,7 @@ gulp.task('cordova', function (cb) {
       });
     });
   };
-  
+
   var cordovaPlugins = {
     'com.tokbox.cordova.opentok': 'https://github.com/songz/cordova-plugin-opentok.git',
     'com.phonegap.plugin.statusbar': 'https://github.com/phonegap-build/StatusBarPlugin.git',
