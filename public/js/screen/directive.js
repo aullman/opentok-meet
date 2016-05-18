@@ -15,7 +15,7 @@ angular.module('opentok-meet').directive('screenShareDialogs', function () {
     '<div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">' +
         'Screen Sharing currently requires Google Chrome or Firefox on Desktop.' +
     '</div>',
-    controller: function ($scope, chromeExtensionId) {
+    controller: ['$scope', 'chromeExtensionId', function ($scope, chromeExtensionId) {
       $scope.promptToInstall = false;
       $scope.selectingScreenSource = false;
       $scope.sharingMyScreen = false;
@@ -86,6 +86,6 @@ angular.module('opentok-meet').directive('screenShareDialogs', function () {
             console.error('failed to install', arguments);
           });
       };
-    }
+    }]
   };
 });

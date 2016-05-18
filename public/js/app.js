@@ -3,7 +3,7 @@
 window.$ = window.jQuery = require('jquery');
 var angular = require('angular');
 
-var opentokMeet = angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
+angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
   'opentok-editor']);
 
 require('opentok-angular');

@@ -11,5 +11,9 @@ module.exports = {
         loaders: [
             { test: /\.css$/, loader: 'style!css' }
         ]
-    }
+    },
+    plugins: [
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.UglifyJsPlugin()
+    ]
 };

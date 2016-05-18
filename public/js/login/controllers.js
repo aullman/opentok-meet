@@ -3,7 +3,7 @@ var isp2p = function (room) {
 };
 
 angular.module('opentok-meet-login', [])
-  .controller('MainCtrl', function($scope, $window) {
+  .controller('MainCtrl', ['$scope', '$window', function($scope, $window) {
     $scope.room = '';
     $scope.joinRoom = function() {
       $window.location.href = $window.location.href + encodeURIComponent($scope.room);
@@ -19,4 +19,4 @@ angular.module('opentok-meet-login', [])
         $scope.room = $scope.room.replace('p2p', '');
       }
     };
-  });
+  }]);

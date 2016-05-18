@@ -1,4 +1,4 @@
-angular.module('opentok-meet').directive('draggable', function($document) {
+angular.module('opentok-meet').directive('draggable', ['$document', function($document) {
   var getEventProp = function(event, prop) {
     if (event[prop] === 0) return 0;
     return event[prop] || (event.touches && event.touches[0][prop]) ||
@@ -51,7 +51,7 @@ angular.module('opentok-meet').directive('draggable', function($document) {
       $($document[0].body).on('mouseleave', mouseUpHandler);
     });
   };
-})
+}])
   .directive('muteVideo', function () {
     return {
       restrict: 'E',
