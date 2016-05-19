@@ -15,8 +15,8 @@ describe('draggable', function () {
   }));
 
   it('moves elements with mousedown and mousemove', function () {
-    expect(element.css('top')).toBe('');
-    expect(element.css('left')).toBe('');
+    expect(element.css('top') === '' || element.css('top') === 'auto').toBe(true);
+    expect(element.css('left') === '' || element.css('left') === 'auto').toBe(true);
     element.triggerHandler({
       type: 'mousedown',
       pageX: 0,
