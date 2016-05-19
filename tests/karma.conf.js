@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = function(config) {
   var sauceLaunchers = {
     'Ie': {
@@ -14,16 +16,7 @@ module.exports = function(config) {
 
     files: [
       'https://static.opentok.com/v2/js/opentok.js',
-      'public/js/lib/angular/angular.js',
-      'public/js/lib/jquery/dist/jquery.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'public/js/lib/opentok-angular/opentok-angular.js',
-      'public/js/lib/opentok-editor/opentok-editor.js',
-      'public/js/lib/opentok-whiteboard/opentok-whiteboard.js',
-      'public/js/appBundle.min.js',
-      'public/js/screen/controller.js',
-      'public/js/login/*.js',
-      'tests/unit/**/*.js'
+      'tests/unit/**/index.js'
     ],
 
     autoWatch: true,
@@ -39,7 +32,9 @@ module.exports = function(config) {
       'karma-firefox-launcher',
       'karma-jasmine',
       'karma-coverage',
-      'karma-sauce-launcher'
+      'karma-sauce-launcher',
+      'karma-webpack',
+      'karma-sourcemap-loader'
     ],
 
     junitReporter: {
@@ -48,13 +43,30 @@ module.exports = function(config) {
     },
 
     preprocessors: {
-      'public/js/*.js': 'coverage',
-      'public/js/screen/*.js': 'coverage'
+      'src/js/**/*.js': ['sourcemap', 'coverage'],
+      'tests/unit/**/index.js': ['webpack', 'sourcemap']
     },
 
     sauceLabs: {
       startConnect: false,
       tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
+    },
+
+    client: {
+      clearContext: true
+    },
+
+    webpack: {
+      module: {
+          loaders: [
+              { test: /\.css$/, loader: 'style!css' }
+          ]
+      },
+      devtool: 'inline-source-map'
+    },
+
+    webpackMiddleware: {
+      noInfo: true
     },
 
     reporters: ['progress', 'saucelabs', 'coverage'],

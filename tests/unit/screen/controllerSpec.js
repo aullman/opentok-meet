@@ -9,7 +9,7 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       roomDefer,
       MockOTSession;
 
-    beforeEach(module('opentok-meet'));
+    beforeEach(angular.mock.module('opentok-meet'));
 
     beforeEach(inject(function($controller, $rootScope, $q) {
       scope = $rootScope.$new();

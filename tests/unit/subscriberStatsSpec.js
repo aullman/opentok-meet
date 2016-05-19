@@ -1,7 +1,11 @@
+var angular = require('angular');
+// require('angular-mocks');
+require('../../src/js/app.js');
+
 describe('subscriber-stats', function() {
   var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
-  beforeEach(module('opentok-meet'));
-  beforeEach(module(function ($provide) {
+  beforeEach(angular.mock.module('opentok-meet'));
+  beforeEach(angular.mock.module(function ($provide) {
       $provide.value('statsInterval', 10);
   }));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_, _StatsService_, _$timeout_) {
@@ -83,7 +87,7 @@ describe('subscriber-stats', function() {
 
 describe('StatsService', function () {
   var StatsService, $interval, onStats, mockSubscriber, mockStats;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function (_StatsService_, _$interval_) {
     StatsService = _StatsService_;
     $interval = _$interval_;
