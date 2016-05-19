@@ -6,7 +6,6 @@
   "private": true,
   "dependencies": {
     "angular": "^1.5.5",
-    "codemirror": "^5.14.2",
     "ejs": ">= 0.0.1",
     "express": "3.1.x",
     "hiredis": "~0.4.1",
