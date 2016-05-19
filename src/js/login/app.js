@@ -1,3 +1,7 @@
+var angular = require('angular');
+require('../../css/main.css');
+require('../../css/index.css');
+
 var isp2p = function (room) {
   return room && room.toLowerCase().indexOf('p2p') > -1;
 };

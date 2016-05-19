@@ -16,7 +16,7 @@ node_modules
 npm-debug.log
 bower_components
 
-public/js/lib/*
+public/js/*
 
 config.json
 
@@ -34,6 +34,3 @@ opentok-ios-sdk-*
 sauce-connect.log
 
 .tern-project
-
-public/js/appBundle.min.js
-public/js/appBundle.min.js.map

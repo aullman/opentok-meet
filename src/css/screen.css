@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+ot-publisher#screenPublisher {
+    position: absolute;
+    top: calc(50% - 50px);
+    left: calc(50% - 80px);
+    display: block;
+}
+
+#bottomBar, #statusMessages {
+  opacity: 1;
+}
+
+#screenPublisher, #screenPublisher:active {
+  cursor: auto;
+}
