@@ -11,7 +11,7 @@ require('opentok-whiteboard');
 require('opentok-whiteboard/opentok-whiteboard.css');
 require('opentok-editor');
 require('opentok-editor/opentok-editor.css');
-require('codemirror/lib/codemirror.css');
+//require('codemirror/lib/codemirror.css');
 
 require('../css/main.css');
 require('./directives.js');
