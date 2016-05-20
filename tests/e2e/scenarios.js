@@ -689,7 +689,9 @@ describe('OpenTok Meet App', function() {
       if (browser.params.testScreenSharing) {
         describe('sharing the screen', function () {
           beforeEach(function () {
-            secondBrowser.element(by.css('#showscreen')).click();
+            var showScreenBtn = secondBrowser.element(by.css('#showscreen'));
+            secondBrowser.actions().mouseMove(showScreenBtn).perform();
+            showScreenBtn.click();
           });
           it('subscribes to the screen and it is big', function () {
             var subscriberVideo = element(by.css(
