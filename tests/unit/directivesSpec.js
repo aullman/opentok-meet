@@ -1,6 +1,11 @@
+var angular = require('angular');
+var $ = require('jquery');
+require('angular-mocks');
+require('../../src/js/app.js');
+
 describe('draggable', function () {
   var scope, element, $document;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _$document_) {
     scope = $rootScope.$new();
     $document = _$document_;
@@ -10,8 +15,8 @@ describe('draggable', function () {
   }));
 
   it('moves elements with mousedown and mousemove', function () {
-    expect(element.css('top')).toBe('');
-    expect(element.css('left')).toBe('');
+    expect(element.css('top') === '' || element.css('top') === 'auto').toBe(true);
+    expect(element.css('left') === '' || element.css('left') === 'auto').toBe(true);
     element.triggerHandler({
       type: 'mousedown',
       pageX: 0,
@@ -75,7 +80,7 @@ describe('draggable', function () {
 
 describe('syncClick', function () {
   var scope, element;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope.$new();
     scope.syncClick = jasmine.createSpy('syncClick');
@@ -92,7 +97,7 @@ describe('syncClick', function () {
 
 describe('muteVideo', function () {
   var scope, element;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope.$new();
     scope.muted = false;
@@ -132,7 +137,7 @@ describe('muteVideo', function () {
 
 describe('muteSubscriber', function () {
   var scope, element, mockSubscriber, OTSession;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
@@ -160,7 +165,7 @@ describe('muteSubscriber', function () {
 
 describe('mutePublisher', function () {
   var scope, element, mockPublisher, OTSession;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
@@ -186,7 +191,7 @@ describe('mutePublisher', function () {
 
 describe('restrictFrameRate', function () {
   var scope, element, mockSubscriber, OTSession;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
@@ -215,7 +220,7 @@ describe('restrictFrameRate', function () {
 // This is the double click to enlarge functionality
 describe('changeSize', function () {
   var scope, parent, expandButton;
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope.$new();
     scope.stream = {name: 'face'};

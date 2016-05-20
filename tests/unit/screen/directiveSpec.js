@@ -1,6 +1,6 @@
 describe('screenShareDialogs', function() {
   var scope, element;
-  beforeEach(module('opentok-meet', function($provide) {
+  beforeEach(angular.mock.module('opentok-meet', function($provide) {
     $provide.value('chromeExtensionId', 'mockExtensionId');
   }));
   beforeEach(inject(function ($rootScope, $compile) {
