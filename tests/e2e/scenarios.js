@@ -389,11 +389,11 @@ describe('OpenTok Meet App', function() {
         return element(by.css('ot-editor .opentok-editor')).isDisplayed();
       }, 5000);
 
+      browser.sleep(2000);
       // enter text into first browser
       var firstBrowserText = element(by.css('.CodeMirror-code pre .cm-comment'));
       expect(firstBrowserText.isPresent()).toBe(true);
-      browser.sleep(2000);
-      browser.actions().mouseDown(firstBrowserText).mouseUp(firstBrowserText).perform();
+      browser.actions().mouseDown(firstBrowserText).mouseUp().perform();
       browser.actions().sendKeys('foo').sendKeys('bar').perform();
       browser.wait(function () {
         return firstBrowserText.getInnerHtml().then(function (innerHTML) {
@@ -413,12 +413,12 @@ describe('OpenTok Meet App', function() {
         return secondBrowser.element(by.css('ot-layout ot-editor .opentok-editor')).isDisplayed();
       }, 5000);
 
+      secondBrowser.sleep(2000);
       // enter text into second browser
       var secondBrowserText = secondBrowser.element(by.css('.CodeMirror-code pre span.cm-comment'));
       expect(secondBrowserText.isPresent()).toBe(true);
-      secondBrowser.sleep(2000);
       secondBrowser.actions().mouseMove(secondBrowserText).mouseDown(secondBrowserText)
-        .mouseUp(secondBrowserText).perform();
+        .mouseUp().perform();
       secondBrowser.actions().sendKeys('hello').sendKeys('world').perform();
       var secondInnerHTML;
       secondBrowser.wait(function () {
