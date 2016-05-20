@@ -21,7 +21,7 @@ describe('OpenTok Meet App', function() {
     roomName = roomURL = null;
   });
 
-  fdescribe('Login', function () {
+  describe('Login', function () {
     beforeEach(function () {
       browser.get('');
     });
@@ -62,7 +62,7 @@ describe('OpenTok Meet App', function() {
     });
   });
 
-  fdescribe('Room', function() {
+  describe('Room', function() {
     beforeEach(function() {
       browser.get(roomURL);
     });
