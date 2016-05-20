@@ -21,7 +21,48 @@ describe('OpenTok Meet App', function() {
     roomName = roomURL = null;
   });
 
-  describe('Room', function() {
+  fdescribe('Login', function () {
+    beforeEach(function () {
+      browser.get('');
+    });
+
+    var roomField = element(by.model('room')),
+      submit = element(by.css('#joinRoomBtn'));
+
+    xit('should go to a room when you click the join button', function () {
+      roomField.sendKeys(roomName);
+      submit.click();
+      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
+    });
+
+    it('should go to a room when you submit the form', function () {
+      roomField.sendKeys(roomName);
+      roomField.submit();
+      expect(browser.getCurrentUrl().then(function (url) {
+        // For some reason in IE sometimes when you run lots of tests
+        // the whole URL isn't there
+        return (browser.baseUrl + roomName).indexOf(url) === 0;
+      })).toBe(true);
+    });
+
+    describe('p2p checkbox', function () {
+      var p2p = element(by.model('p2p'));
+      it('should add and remove p2p to the name when you click it', function () {
+        roomField.sendKeys(roomName);
+        p2p.click();
+        expect(roomField.getAttribute('value')).toBe(roomName + 'p2p');
+        p2p.click();
+        expect(roomField.getAttribute('value')).toBe(roomName);
+        // should check when you enter p2p into the input field
+        roomField.sendKeys('p2p');
+        browser.wait(function () {
+          return p2p.getAttribute('checked');
+        });
+      });
+    });
+  });
+
+  fdescribe('Room', function() {
     beforeEach(function() {
       browser.get(roomURL);
     });
@@ -322,47 +363,6 @@ describe('OpenTok Meet App', function() {
           changeRoomBtn.click();
           browser.sleep(2000);
           expect(browser.getCurrentUrl()).toBe(browser.baseUrl);
-        });
-      });
-    });
-  });
-
-  describe('Login', function () {
-    beforeEach(function () {
-      browser.get('');
-    });
-
-    var roomField = element(by.model('room')),
-      submit = element(by.css('#joinRoomBtn'));
-
-    xit('should go to a room when you click the join button', function () {
-      roomField.sendKeys(roomName);
-      submit.click();
-      expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName);
-    });
-
-    it('should go to a room when you submit the form', function () {
-      roomField.sendKeys(roomName);
-      roomField.submit();
-      expect(browser.getCurrentUrl().then(function (url) {
-        // For some reason in IE sometimes when you run lots of tests
-        // the whole URL isn't there
-        return (browser.baseUrl + roomName).indexOf(url) === 0;
-      })).toBe(true);
-    });
-
-    describe('p2p checkbox', function () {
-      var p2p = element(by.model('p2p'));
-      it('should add and remove p2p to the name when you click it', function () {
-        roomField.sendKeys(roomName);
-        p2p.click();
-        expect(roomField.getAttribute('value')).toBe(roomName + 'p2p');
-        p2p.click();
-        expect(roomField.getAttribute('value')).toBe(roomName);
-        // should check when you enter p2p into the input field
-        roomField.sendKeys('p2p');
-        browser.wait(function () {
-          return p2p.getAttribute('checked');
         });
       });
     });
