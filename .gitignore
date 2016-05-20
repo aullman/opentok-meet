@@ -16,7 +16,7 @@ node_modules
 npm-debug.log
 bower_components
 
-public/js/lib/*
+public/js/*
 
 config.json
 

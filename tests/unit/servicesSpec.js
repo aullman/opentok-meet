@@ -1,14 +1,18 @@
+var angular = require('angular');
+// require('angular-mocks');
+require('../../src/js/app.js');
+
 describe('RoomService', function() {
   var RoomService, windowMock, baseURL, $httpBackend, room;
 
-  beforeEach(module('opentok-meet'));
+  beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(function() {
     baseURL = 'https://mock.url/';
     windowMock = {
       location: {}
     };
     room = 'mockRoom';
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('baseURL', baseURL);
       $provide.value('room', room);
       $provide.value('$window', windowMock);

@@ -3,7 +3,7 @@ describe('OpenTok Login Page', function() {
 
   describe('MainCtrl', function() {
     var scope, ctrl, windowMock;
-    beforeEach(module('opentok-meet-login'));
+    beforeEach(angular.mock.module('opentok-meet-login'));
 
     beforeEach(inject(function($controller, $rootScope) {
       scope = $rootScope.$new();

@@ -1,4 +1,5 @@
 /* jasmine specs for controllers go here */
+
 describe('OpenTok Meet controllers', function() {
 
   describe('RoomCtrl', function() {
@@ -14,7 +15,7 @@ describe('OpenTok Meet controllers', function() {
       facePublisher,
       $timeout;
 
-    beforeEach(module('opentok-meet'));
+    beforeEach(angular.mock.module('opentok-meet'));
 
     beforeEach(inject(function($controller, $rootScope, $q, $injector, _$timeout_) {
       $timeout = _$timeout_;
