@@ -13,7 +13,6 @@ require('ng-debounce/dist/ng-debounce.js');
 angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
   'opentok-editor', 'debounce']);
 
-require('../css/main.css');
 require('./directives.js');
 require('./sync-click.js');
 require('./subscriber-stats.js');

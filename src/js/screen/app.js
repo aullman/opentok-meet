@@ -9,6 +9,3 @@ require('./controller.js');
 require('./directive.js');
 require('../sync-click.js');
 require('../services.js');
-
-require('../../css/main.css');
-require('../../css/screen.css');
