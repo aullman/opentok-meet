@@ -12,7 +12,6 @@ require('opentok-editor/opentok-editor.css');
 angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
   'opentok-editor']);
 
-require('../css/main.css');
 require('./directives.js');
 require('./sync-click.js');
 require('./subscriber-stats.js');
