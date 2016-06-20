@@ -217,6 +217,31 @@ describe('restrictFrameRate', function () {
   });
 });
 
+describe('reconnectingOverlay', function () {
+  var scope, element, $interval;
+  beforeEach(angular.mock.module('opentok-meet'));
+  beforeEach(inject(function ($rootScope, $compile, _$interval_) {
+    scope = $rootScope.$new();
+    $interval = _$interval_;
+
+    element = '<reconnecting-overlay></reconnecting-overlay>';
+    element = $compile(element)(scope);
+    scope.$digest();
+  }));
+
+  it('adds dots as time passes and resets after 3 dots', function () {
+    expect(scope.dots).toBe('');
+    $interval.flush(1000);
+    expect(scope.dots).toBe('.');
+    $interval.flush(1000);
+    expect(scope.dots).toBe('..');
+    $interval.flush(1000);
+    expect(scope.dots).toBe('...');
+    $interval.flush(1000);
+    expect(scope.dots).toBe('');
+  });
+});
+
 // This is the double click to enlarge functionality
 describe('changeSize', function () {
   var scope, parent, expandButton;

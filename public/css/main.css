@@ -255,7 +255,7 @@ button:disabled {
     cursor: auto;
 }
 
-#shareInfo {
+#shareInfo, #reconnectingOverlay {
     font-size: 18px;
     color: #DCD9CD;
     text-align: center;
@@ -318,7 +318,7 @@ button:disabled {
       height: 50px;
   }
 
-  #shareInfo {
+  #shareInfo, #reconnectingOverlay {
       width: 250px;
       left: 50%;
       margin-left: -135px;

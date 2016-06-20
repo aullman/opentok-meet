@@ -63,10 +63,14 @@
         </div>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
         <div id="shareInfo"
-            ng-if="connected && !streams.length"
+            ng-if="connected && !streams.length && !reconnecting"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
+        <reconnecting-overlay id="reconnectingOverlay"
+            ng-if="reconnecting"
+            ng-cloak>
+        </reconnecting-overlay>
         <div id="bottomBar">
             <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" ng-if="!isAndroid" title="Share Screen"></button>
 

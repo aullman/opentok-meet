@@ -263,6 +263,8 @@ describe('OpenTok Meet controllers', function() {
           expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
           expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped',
             jasmine.any(Function));
+          expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
+          expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
         });
         it('handles archiveStarted', function (done) {
           mockSession.trigger('archiveStarted', {type: 'archiveStarted', id: 'mockArchiveId'});
@@ -295,6 +297,38 @@ describe('OpenTok Meet controllers', function() {
           setTimeout(function () {
             expect(scope.connected).toBe(false);
             expect(scope.publishing).toBe(false);
+            done();
+          }, 100);
+        });
+        it('handles sessionConnected when reconnecting', function (done) {
+          scope.reconnecting = true
+          mockSession.trigger('sessionConnected');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(false);
+            done();
+          }, 100);
+        });
+        it('handles sessionDisconnected when reconnecting', function (done) {
+          scope.reconnecting = true;
+          mockSession.trigger('sessionDisconnected');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(false);
+            done();
+          }, 100);
+        });
+        it('handles sessionReconnecting', function (done) {
+          expect(scope.reconnecting).toBe(false);
+          mockSession.trigger('sessionReconnecting');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(true);
+            done();
+          }, 100);
+        });
+        it('handles sessionReconnected', function (done) {
+          scope.reconnecting = true;
+          mockSession.trigger('sessionReconnected');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(false);
             done();
           }, 100);
         });

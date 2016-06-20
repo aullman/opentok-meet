@@ -8,6 +8,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.archiving = false;
   $scope.isAndroid = /Android/g.test(navigator.userAgent);
   $scope.connected = false;
+  $scope.reconnecting = false;
   $scope.mouseMove = false;
   $scope.showWhiteboard = false;
   $scope.showEditor = false;
@@ -117,9 +118,15 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       var connectDisconnect = function(connected) {
         $scope.$apply(function() {
           $scope.connected = connected;
+          $scope.reconnecting = false;
           if (!connected) {
             $scope.publishing = false;
           }
+        });
+      };
+      var reconnecting = function(isReconnecting) {
+        $scope.$apply(function() {
+          $scope.reconnecting = isReconnecting;
         });
       };
       if ((session.is && session.is('connected')) || session.connected) {
@@ -134,6 +141,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           $scope.archiving = (event.type === 'archiveStarted');
         });
       });
+      $scope.session.on('sessionReconnecting', reconnecting.bind($scope.session, true));
+      $scope.session.on('sessionReconnected', reconnecting.bind($scope.session, false));
     });
     var whiteboardUpdated = function() {
       if (!$scope.showWhiteboard && !$scope.whiteboardUnread) {
