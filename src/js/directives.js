@@ -132,6 +132,29 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
       }
     };
   }])
+  .directive('reconnectingOverlay', ['$interval', function($interval) {
+    return {
+      restrict: 'E',
+      template: '<p>Reconnecting{{ dots }}</p>',
+      link: function (scope, element) {
+        var intervalPromise;
+
+        scope.dots = '';
+
+        intervalPromise = $interval(function() {
+          scope.dots += '.';
+
+          if (scope.dots.length > 3) {
+            scope.dots = '';
+          }
+        }, 1000);
+
+        scope.$on('$destroy', function() {
+          $interval.cancel(intervalPromise);
+        });
+      }
+    };
+  }])
   .directive('expandButton', function () {
     return {
       restrict: 'E',
