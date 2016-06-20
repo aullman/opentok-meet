@@ -288,7 +288,6 @@ describe('OpenTok Meet controllers', function() {
           mockSession.trigger('sessionConnected');
           setTimeout(function () {
             expect(scope.connected).toBe(true);
-            expect(scope.reconnecting).toBe(false);
             done();
           }, 100);
         });
@@ -297,8 +296,23 @@ describe('OpenTok Meet controllers', function() {
           mockSession.trigger('sessionDisconnected');
           setTimeout(function () {
             expect(scope.connected).toBe(false);
-            expect(scope.reconnecting).toBe(false);
             expect(scope.publishing).toBe(false);
+            done();
+          }, 100);
+        });
+        it('handles sessionConnected when reconnecting', function (done) {
+          scope.reconnecting = true
+          mockSession.trigger('sessionConnected');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(false);
+            done();
+          }, 100);
+        });
+        it('handles sessionDisconnected when reconnecting', function (done) {
+          scope.reconnecting = true;
+          mockSession.trigger('sessionDisconnected');
+          setTimeout(function () {
+            expect(scope.reconnecting).toBe(false);
             done();
           }, 100);
         });
