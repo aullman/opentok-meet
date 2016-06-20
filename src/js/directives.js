@@ -137,17 +137,14 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
       restrict: 'E',
       template: '<p>Reconnecting{{ dots }}</p>',
       link: function (scope, element) {
-        var dotCount = 0,
-            intervalPromise;
+        var intervalPromise;
 
         scope.dots = '';
 
         intervalPromise = $interval(function() {
-          dotCount++;
           scope.dots += '.';
 
-          if (dotCount > 3) {
-            dotCount = 0;
+          if (scope.dots.length > 3) {
             scope.dots = '';
           }
         }, 1000);
