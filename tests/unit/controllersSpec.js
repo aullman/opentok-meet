@@ -7,6 +7,7 @@ describe('OpenTok Meet controllers', function() {
     var ctrl,
       scope,
       RoomServiceMock,
+      SimulcastServiceMock,
       windowMock,
       $httpBackend,
       roomDefer,
@@ -35,7 +36,8 @@ describe('OpenTok Meet controllers', function() {
           return roomDefer.promise;
         }
       };
-      windowMock = jasmine.createSpyObj('$window', ['addEventListener']);
+      SimulcastServiceMock = jasmine.createSpyObj('SimulcastService', ['init']);
+      windowMock = jasmine.createSpyObj('$window', ['addEventListener', 'open']);
       windowMock.location = {};
       OT.$.eventing(windowMock);  // Add event handling to my mock window
       documentMock = {
@@ -57,7 +59,8 @@ describe('OpenTok Meet controllers', function() {
         $timeout: $timeout,
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
-        baseURL: ''
+        baseURL: '',
+        SimulcastService: SimulcastServiceMock,
       });
     }));
 
@@ -107,7 +110,7 @@ describe('OpenTok Meet controllers', function() {
       it('publishes with SD properties', function() {
         scope.togglePublish(false);
         expect(scope.publishing).toBe(true);
-        expect(scope.facePublisherProps.resolution).not.toBeDefined();
+        expect(scope.facePublisherProps.resolution).toBe('640x480');
       });
     });
 
@@ -300,6 +303,9 @@ describe('OpenTok Meet controllers', function() {
             done();
           }, 100);
         });
+        it('calls init on SimulcastService', function () {
+          expect(SimulcastServiceMock.init).toHaveBeenCalledWith(scope.streams, scope.session);
+        });
         it('handles sessionConnected when reconnecting', function (done) {
           scope.reconnecting = true
           mockSession.trigger('sessionConnected');
@@ -364,6 +370,17 @@ describe('OpenTok Meet controllers', function() {
             scope.$emit('otWhiteboardUpdate');
             expect(scope.whiteboardUnread).toBe(false);
             expect(scope.mouseMove).toBe(false);
+          });
+        });
+        describe('reportIssue', function() {
+          beforeEach(function() {
+            scope.reportIssue();
+          });
+          it('calls $window.open with the right values', function() {
+            expect(windowMock.open).toHaveBeenCalled();
+            var url = windowMock.open.calls.mostRecent().args[0];
+            expect(url).toContain('mailto:broken@tokbox.com');
+            expect(url).toContain(scope.session.sessionId);
           });
         });
       });

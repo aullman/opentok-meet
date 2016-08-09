@@ -42,11 +42,18 @@ app.configure(function() {
   app.use(app.router);
 });
 
-var ot = new OpenTok(config.apiKey, config.apiSecret);
+var ot = new OpenTok(config.apiKey, config.apiSecret, 'https://anvil-tbdev.opentok.com');
 var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
 
 require('./server/routes.js')(app, config, redis, ot, useSSL || process.env.HEROKU);
+
+var glob = require('glob'),
+  path = require('path');
+
+glob.sync('./plugins/**/*.js').forEach(function(file) {
+  require(path.resolve(file))(app, config, redis, ot);
+});
 
 if (process.env.HEROKU || !useSSL) {
   app.listen(config.port, function() {

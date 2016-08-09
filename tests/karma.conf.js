@@ -23,6 +23,10 @@ module.exports = function(config) {
       'tests/unit/**/index.js'
     ],
 
+    exclude: [
+      'public/js/opentok.js'
+    ],
+
     autoWatch: true,
 
     frameworks: ['jasmine'],

@@ -6,19 +6,18 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 before_script:
 - npm start > /dev/null &
-- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
+- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh https://tbdev.tokbox.com/v2;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
   code_climate:
-    repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
+    repo_token: 4abde268e416aa3752bccf1311ecfe7cd3d6a445ff4849ee4632bc7f9bbde251
 services:
 - redis-server
 sudo: required
 dist: trusty
 matrix:
   fast_finish: true
-
   allow_failures:
     - env: BROWSER=firefox BVER=beta
     - env: BROWSER=firefox BVER=stable
@@ -35,11 +34,12 @@ env:
   - TRAVIS=true
   - PORT=5000
   - CHROME_EXTENSION_ID=none
-  - OT_API_KEY=1974561
+  - OT_API_KEY=44935341
   - BROWSERSTACK_USERNAME=adamullman1
   - UNIT_CMD='npm run unit'
   - INTEGRATION_CMD='npm run integration'
-  - secure: ATYQg+EY0uo9KRx3su5NwijIMDIpPu8axX9AeATzjz3ree73eDU/jM0pTxV0tTLRtmMoC8b95DIvrhDfKIUXqTA4m2eHiwamv4+7Ocr7twEQJ6tjA3jX2Zv7H6QFZEGC1hIl7CJm4q9vMiS1NfVgG4VHTSsYkWCldwKyQvpfm9g=
-  - secure: gXLtG+aBTQCJ4ovSwexMF38V5f56jBgxhyJaUC/lAzdQuyK5VFWCTubohOohFx4GokfN5A4JETVRiFfn4heRVmBxi5ZAlWwZpbWD6yBBu4l5SN7ST1umwzGEc+1zjZ0LyvaC8LK7GI7gdCVY+XWP1SryS1n9JEytiR1S93giflQ=
-  - secure: UTGPkvGdlise2HWGIDGQvQAItv4zw2PZFOeIHOSvKBn2vuzhN8pX8OVR44n3Ddr28aW7YQkCLWKEsHsBgdsxUmWoFBnUrVX12dPKAjTq3gMeHuPAxkg6nBQJ4/y9r57wenAjGCd79H9n04jQtvDZkfe1+hpTLCMnMPkceIZdxO0=
-  - secure: H8AA0IvOE8HpZgsQdHXUq110NtvheQEy76ZNGZU7mF4bNAfQ0PVWVpJ+HL/1itJFBVlGiu+MqzKJ2MtdhrlrBxYBcyM1yHdfCkoM6Uh2ff4hEGbZsZ65ClzgvnhabUQrzFGn3Qidba9ICKspdl0jXrhRnpbnN22kPGM9w/Izvv0=
+  - PHONE_NUMBER=+15015473587
+  - secure: MhMbegJo5b4kQIJkWwBwmdVMP9Vt16GP4FTz+gvVjsdoBIfR8g7tOLYtHh8pcw1Uy3noAZf54LKgcZ7ZI4G3xhfbw3r4TNN5+sCBDW+Lu3T5uvoxp0gr9E+Z2MVSr31KWapJVcFiTbQgPK6POQf84tIXprgPKTkfVQ+IpCz8pMXkqeyF9A4YUsP/pRE2ASJWoVa4AQYFykchRFWsXNABhQDXnst9137pnrQ91VFS+6pC0HEusxZWy3BowmLeWv2nIQPu8WHwADLdNKcNGnTEAqf5zFmtiUR02OaJSQKfWsfbeqEOy2+ZKzy+LHAOzOxvzktPnPH9eiXdpOkpsUv8QsvOF8Xntx4196ukmDaf73vV1d/sQZzhgIZkFp4fy3jRFrMagM94ctMOSzbz3/8FDBwvo72oCFsxOcS1h+jeMvU9tY23odsFpv9CQ0UowxlOD1N7bG2MSo2TxFSL+u/vzqwhDbWJUQFjMs+feLp+Zn/wDvKEG20lrLC9QY/3P8UhPBEifM9gt85imbNSeG1t8QaB6eMBRIg/SEHZTzaYsZxhx1m4BIXiWKIzCxdanM9wUwUP9KS0mAhgsvY8Y/6ZyIr655KoZrR/Pj99UlidxOacId4j47zaHK5VnbXb9E/MVVPr0s/XDT/3rkObRsMrS+Ye8vF4LJTHm/yphbOqa38=
+  - secure: P8S9S456B2NjkLcqgTsmnXqXYv1TuW6APRRSyArUlKrrSA7V5RLaZQWI8Bot96nEjmUqKOGZ+hzxqminaSmasYkJEGAIXZleCHXi7lSxU6ObzRNhjMdFqTT9q+I4xRZHjOHJnKmH+gf2+sXXI2620omjHMZt+0bzy8mPayEZHALxMHYTHdqIOr2u6EsdvS30bqbQMdRiYe4FcjFk9JIf2bg9oo+m9+boBqLyr5oGG8GAPYqnKjJbjIM6hJYuomO5kWNPCHEYjtfFS2eHKwvVUoO6ncgAecVPs1n6ZS1jqTV7i42Ig8cuLq8JubemYnFdeUpv+8lt1ds6/1xQO1wnmJWjQ0m0p5dlbxu2GkW4jmG9fMudC7+pWxOegmzx7TyGjK20IvqmBMST2Jl9TVpav9tOvyex5sttGzN0rT/vGWuc3xUOfD3dXBVDm7wJFf1DHD5SaKjGQZCKHXCn6D1p21a7j9R5jIKFCzt+cp7W9EJNe9rUSmr20iqaKAg/MavW4a93UsWMctxhW6+GR4XCJDM+a0enPWVZEWKwgyPn6DxSUeIloG0tkL7Ag61nh39d43dHuWqzztxX97Qa9Hwk9VZa7OQEyRo6jGlqjTxNjtbnQ8ZYlpUOT84+Ujn/x2VrpCIy9pKPvxnBqQO3G7St2Ipg4eV04Yyhzz+JmcuLlxU=
+  - secure: n/vRZGj/Aubnj4FqYKrFkHUOOKqE7btgRiLeJSc4r6U70qGAk4xe++4JRt5/FjnVnfeINQk5bX6qDZCDsngn5YfnmHolH6zoenL2+Ms6dGKBpjRBK+hdBW1NpHBSK+14sJ+ATq4tBG5LY1CfP2Gh6Pr9cTtUNcOsqiSGQVBfnaEln+DGF3W44lJsLhmBxLiOYOvu5GvdJPLcPjtBAE1G3VuenYVolAdQvqQn+Rcjnr3GcBjGiHD82VGC3ZU0CDKfsnITsnp4GbKXfCODyjDI4mUfBQUpksZQwTAoCwGstMTx/zH2CKx6XkXI4eYy3W3Ny6RCHj7ypK2Ur8RtVgaoJs/svwhukXj74imWgeIPgv+vOqWdYx8OQN8phC3zGuRotNcTUUoqWqwYYpDS0X8a5id/kkcVbzVB16UIaPEApraMnW4pTQAfcH8h46trGA1BYVQYNHrwma8hLm5q+cUzw5hqnC7PsF+hc+iDEqQJyMWOYjXtA2+ikr8f8ux6xAy9EWY6m4lm3PpqwWlEGmnYkWPVTS+K+4OG5eL6PbuYPyJrVHcaIRGyIUmwP0vY6OJTQVZem6zpfFLBbs7cBg3jwBH47dWl9rqfc2AVYBm5txru3MStw8utYygtSCetbSaAVMHQbCcvfxnPxQZRB9jnpHsf+LhYUj8v0/rw8CtIlJw=
+  - secure: EE/Mn826moSATvMAs11DQ9sre52fKw8DWTY7iZrefR99/9vUMShxMGeHjphqxVxYZ9sq+3bM06D+cGbk4Epshm+y5ToSgztvL4l9Jh4LrOrKmi4GpXS9J7a91UfbbJCkKZQPkRp1Tc361LUPiL7HPxfYS/Mkdzl7CxR/Tpfh1k1HUAdU1zq56kLnRr8mAcJGyhY0PUkW5ESPfzNqJrX9YxXnM/ygjriWnhyOncSh4Iy05Bix4z5Ej+MOU/k/ZraM4OFOGf3htMKn9Q1UcXlXRoBEP5NrF7wMNt6BrIOrQg1iIOqaiyU0LvMRYXB2EvQjgW1DkBnLDBF6ejHl0R2skx6/DfSHLf3BFUaVxl3ZJvaE7NrRPe0+Ce2qgbScHFuUt+KInfW3z0pZKlJXq9QX77P1vjUGruYjpC/L3VvMg9j2hCFcv+ymd8C+2+IM8NXb0mUN2WC1zaToSniU5cK8in+O4FUR70qioUcpHju9TpT6qDiF6hTo2+wUcueJA+sTnK6cVBRuF1EB6iNGUpB8J9cDr0FowOpag+MeApn9qCQoJKxenWgLpO4O/bZpntP/Ijiu+kplVaNHcwRVJy7ORrcw3zHKUyhaWJ5ByK/A6ReXb6LdnXP9kii2tq9lkjEt/jsA1JYRkYWclfGIuKXgShIpiZtN/eC3Fh6D80fnFjU=

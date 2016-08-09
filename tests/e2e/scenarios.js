@@ -588,13 +588,19 @@ describe('OpenTok Meet App', function() {
       it('should display a video element with the right videoWidth and videoHeight', function () {
         var checkVideo = function(browser) {
           var subscriberVideo =
-            browser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
-          expect(subscriberVideo.getAttribute('videoWidth')).toBe(
-            browser.browserName === 'chrome' ? '1280' : '640');
-          expect(subscriberVideo.getAttribute('videoHeight')).toBe(
-            browser.browserName === 'chrome' ? '720' : '480');
-          var connCount = browser.element(by.css('#connCount'));
-          expect(connCount.getInnerHtml()).toContain('2');
+            element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
+          if (browser.browserName === 'chrome') {
+            // With Simulcast your not sure what the dimensions are, but they should be the
+            // right aspect ratio.
+            expect(subscriberVideo.getAttribute('videoWidth').then(function (videoWidth) {
+              return subscriberVideo.getAttribute('videoHeight').then(function (videoHeight) {
+                return parseInt(videoWidth, 10) / parseInt(videoHeight, 10);
+              });
+            })).toEqual(1280/720);
+          } else {
+            expect(subscriberVideo.getAttribute('videoWidth')).toBe('640');
+            expect(subscriberVideo.getAttribute('videoHeight')).toBe('480');
+          }
         };
         checkVideo(browser);
         checkVideo(secondBrowser);
@@ -736,10 +742,37 @@ describe('OpenTok Meet App', function() {
           // Disconnect the second browser
           secondBrowser.element(by.css('#changeRoom')).click();
         });
+
         it('by closing the browser window', function () {
           secondBrowser.quit();
           secondBrowser = null;
         });
+      });
+    });
+  });
+
+  describe('Phone', function () {
+    beforeEach(function () {
+      browser.ignoreSynchronization = true;
+      browser.get(roomName + '/phone');
+    });
+    it('has the right phone number on the page', function () {
+      expect(element(by.css('p')).getInnerHtml()).toContain('Call ' + browser.params.phoneNumber);
+    });
+  });
+
+  describe('Debug button', function() {
+    beforeEach(function() {
+      browser.get(roomURL);
+      browser.wait(function () {
+        return element(by.css('div.session-connected')).isPresent();
+      }, 10000);
+    });
+    it('Opens a new window', function() {
+      element(by.css('.ion-bug')).click();
+      browser.getAllWindowHandles().then(function (handles) {
+        expect(handles.length).toBe(2);
+        // I tried to check that the mailto link is there but getCurrentUrl was timing out
       });
     });
   });
@@ -752,6 +785,12 @@ describe('OpenTok Meet App', function() {
 
       describe('screenshare button', function () {
         var screenShareBtn = element(by.css('#showscreen'));
+
+        beforeEach(function () {
+          browser.wait(function () {
+            return screenShareBtn.isDisplayed();
+          }, 10000);
+        });
 
         it('exists and is green', function () {
           expect(screenShareBtn.isPresent()).toBe(true);

@@ -10,7 +10,7 @@
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
-        <script src="//static.opentok.com/v2/js/opentok.js"></script>
+        <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
 
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.14.2/codemirror.css" media="screen" title="no title" charset="utf-8">
@@ -66,6 +66,10 @@
             ng-if="connected && !streams.length && !reconnecting"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
+            <p>
+            <strong>Disclaimer</strong>: This application is running on a Nightly version of the OpenTok infrastructure and is unstable.
+            You may also use <a href="https://opentok-meet.herokuapp.com/<%=room%>">opentok-meet.herokuapp.com</a> for the production version of this app.
+            </p>
         </div>
         <reconnecting-overlay id="reconnectingOverlay"
             ng-if="reconnecting"
@@ -97,7 +101,7 @@
         </div>
         <div id="footer">
             <a href="https://github.com/aullman/opentok-meet" target="_blank"><i class="ion-social-github" title="View source on GitHub"></i></a>
-            <a href="https://github.com/aullman/opentok-meet/issues/new" target="_blank"><i class="ion-bug" title="Report Issue"></i></a>
+            <a href="#" ng-click="reportIssue()"><i class="ion-bug" title="Report Issue"></i></a>
         </div>
         <i id="connCount" class="ion-ios7-people" title="{{connections.length}} participant in the room"> {{connections.length}}</i>
         <div id="statusMessages">

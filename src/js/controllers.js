@@ -1,6 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL',
-    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService',
+    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
+      SimulcastService) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -24,7 +25,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       nameDisplayMode: 'off'
     },
     resolution: '1280x720',
-    frameRate: 30
+    frameRate: 30,
   },
     facePublisherPropsSD = {
       name: 'face',
@@ -32,7 +33,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       height: '100%',
       style: {
         nameDisplayMode: 'off'
-      }
+      },
+      resolution: '640x480'
     };
   $scope.facePublisherProps = facePublisherPropsHD;
 
@@ -77,6 +79,31 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       console.error('Failed to stop archiving', data);
       $scope.archiving = true;
     });
+  };
+
+  $scope.reportIssue = function() {
+    var url = 'mailto:broken@tokbox.com?subject=Meet%20Issue%20Report&body=' +
+      'room: ' + $scope.room +
+      ' p2p: ' + $scope.p2p +
+      ($scope.session ?
+      ' sessionId: ' + $scope.session.sessionId +
+      ' connectionId: ' + ($scope.session.connection ? $scope.session.connection.connectionId : 'none')
+      : '');
+    OT.publishers.forEach(function(publisher) {
+      if (publisher.stream) {
+        url += ' publisher streamId: ' + publisher.stream.streamId +
+          ' publisher stream type: ' + publisher.stream.videoType;
+      }
+    });
+    OT.subscribers.forEach(function(subscriber) {
+      if (subscriber.stream) {
+        url += ' subscriber streamId: ' + subscriber.stream.streamId +
+          ' subscriber stream type: ' + subscriber.stream.videoType +
+          ' subscriber id: ' + subscriber.id;
+      }
+    });
+    $window.open(url);
+    return false;
   };
 
   $scope.toggleArchiving = function() {
@@ -141,6 +168,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           $scope.archiving = (event.type === 'archiveStarted');
         });
       });
+      SimulcastService.init($scope.streams, $scope.session);
       $scope.session.on('sessionReconnecting', reconnecting.bind($scope.session, true));
       $scope.session.on('sessionReconnected', reconnecting.bind($scope.session, false));
     });

@@ -19,6 +19,16 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
     });
   });
 
+  app.delete('/rooms', function (req, res) {
+    RoomStore.clearRooms(function (err) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send('deleted all rooms');
+      }
+    });
+  });
+
   // Keeping this around for legacy URLs. The new URL format for
   // archives is /:room/archive/:archiveId though
   app.get('/archive/:archiveId', function(req, res) {
@@ -43,7 +53,8 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         var otSDK = ot;
         if (apiKeySecret) {
           apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
+          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret,
+            'https://anvil-tbdev.opentok.com');
         }
         otSDK.getArchive(req.param('archiveId'), function(err, archive) {
           if (err) {
@@ -82,7 +93,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
             });
             var otSDK = ot;
             if (apiKey && secret) {
-              otSDK = new OpenTok(apiKey, secret);
+              otSDK = new OpenTok(apiKey, secret, 'https://anvil-tbdev.opentok.com');
             }
             res.send({
               room: room,
@@ -148,7 +159,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
       }
       var otSDK = ot;
       if (apiKey && secret) {
-        otSDK = new OpenTok(apiKey, secret);
+        otSDK = new OpenTok(apiKey, secret, 'https://anvil-tbdev.opentok.com');
       }
       otSDK.startArchive(sessionId, {
         name: room
@@ -183,7 +194,8 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         var otSDK = ot;
         if (apiKeySecret) {
           apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
+          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret,
+            'https://anvil-tbdev.opentok.com');
         }
 
         otSDK.stopArchive(archiveId, function(err, archive) {
