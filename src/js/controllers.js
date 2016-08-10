@@ -168,7 +168,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           $scope.archiving = (event.type === 'archiveStarted');
         });
       });
-      //SimulcastService.init($scope.streams, $scope.session);
+      SimulcastService.init($scope.streams, $scope.session);
       $scope.session.on('sessionReconnecting', reconnecting.bind($scope.session, true));
       $scope.session.on('sessionReconnected', reconnecting.bind($scope.session, false));
     });
