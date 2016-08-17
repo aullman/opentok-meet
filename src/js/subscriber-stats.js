@@ -9,8 +9,8 @@ function SubscriberStats(subscriber, onStats) {
   this.lastLastStats; // The getStats result before that
 }
 
-angular.module('opentok-meet').factory('StatsService', ['$interval',
-  function($interval) {
+angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'room',
+  function($http, $interval, room) {
     var interval,
       subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
     var updateStats = function () {
@@ -19,6 +19,7 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
         var subscriber = subscriberStats.subscriber,
           lastStats = subscriberStats.lastStats,
           lastLastStats = subscriberStats.lastLastStats;
+
         subscriber.getStats(function(err, stats) {
           if (err) {
             console.error(err);
@@ -60,9 +61,24 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
           if (stats.video) {
             setCurrStats('video');
           }
-          subscriberStats.lastLastStats = subscriberStats.lastStats;
-          subscriberStats.lastStats = currStats;
-          subscriberStats.onStats(currStats);
+
+          var widgetId = subscribers[subscriberId].subscriber.widgetId;
+          $http.get(room + '/subscriber/' + widgetId)
+            .then(function(res) {
+              if (res && res.data && res.data.info) {
+                currStats.info = res.data.info;
+              } else {
+                console.info('received error response  ', res);
+              }
+            })
+            .catch(function(err) {
+              console.trace('failed to retrieve susbcriber info ', err);
+            })
+            .finally(function() {
+              subscriberStats.lastLastStats = subscriberStats.lastStats;
+              subscriberStats.lastStats = currStats;
+              subscriberStats.onStats(currStats);
+            });
         });
       });
     };
@@ -102,7 +118,10 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         '</div><div ng-show="stats.video">' +
         'Video Packet Loss: {{stats.videoPacketLoss}}%<br/>' +
         'Video Bitrate: {{stats.videoBitrate}} kbps' +
-        '</div></div>',
+        '</div><div ng-show="stats.info">' +
+        'Origin server: {{stats.info.originServer}}<br/>' +
+        'Edge server: {{stats.info.edgeServer}}' +
+        '</div>',
       link: function(scope, element) {
         var subscriber, subscriberId;
         var timeout = $timeout(function () {
