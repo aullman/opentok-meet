@@ -41,7 +41,7 @@ describe('OpenTok Meet App', function() {
 
       if (browser.browserName !== 'firefox') {
         // fixme: for some reason Firefox sometimes gives an error about not being able to
-        // sync with the page 
+        // sync with the page
         expect(browser.getCurrentUrl().then(function (url) {
           // For some reason in IE sometimes when you run lots of tests
           // the whole URL isn't there
@@ -264,6 +264,7 @@ describe('OpenTok Meet App', function() {
           browser.wait(function () {
             return startArchiveBtn.isPresent();
           }, 10000);
+          browser.sleep(1000);
         });
 
         it('is present and green', function () {
@@ -271,7 +272,7 @@ describe('OpenTok Meet App', function() {
           expect(startArchiveBtn.getAttribute('class')).toContain('green');
         });
 
-        it('toggles archiving when you click it and adds an archiving status message', function () {
+        fit('toggles archiving when you click it and adds an archiving status message', function () {
           startArchiveBtn.click();
           expect(startArchiveBtn.getAttribute('class')).toContain('red');
           // Wait for the archiving light to show up in the Publisher
