@@ -272,7 +272,7 @@ describe('OpenTok Meet App', function() {
           expect(startArchiveBtn.getAttribute('class')).toContain('green');
         });
 
-        fit('toggles archiving when you click it and adds an archiving status message', function () {
+        it('toggles archiving when you click it and adds an archiving status message', function () {
           startArchiveBtn.click();
           expect(startArchiveBtn.getAttribute('class')).toContain('red');
           // Wait for the archiving light to show up in the Publisher
