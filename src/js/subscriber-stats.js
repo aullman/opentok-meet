@@ -13,83 +13,103 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'r
   function($http, $interval, room) {
     var interval,
       subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
-    var updateStats = function () {
-      Object.keys(subscribers).forEach(function (subscriberId) {
-        var subscriberStats = subscribers[subscriberId];
-        var subscriber = subscriberStats.subscriber,
+
+    var updateSubscriberStats = function(subscriberStats) {
+      var subscriber = subscriberStats.subscriber,
           lastStats = subscriberStats.lastStats,
           lastLastStats = subscriberStats.lastLastStats;
 
-        subscriber.getStats(function(err, stats) {
-          if (err) {
-            console.error(err);
-            return;
+      subscriber.getStats(function(err, stats) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        var currStats = {
+          width: subscriber.videoWidth(),
+          height: subscriber.videoHeight(),
+          timestamp: stats.timestamp
+        };
+        var secondsElapsed;
+        if (lastStats) {
+          secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
+        }
+        var setCurrStats = function(type) {
+          currStats[type] = stats[type];
+          if (stats[type].packetsReceived > 0) {
+            currStats[type + 'PacketLoss'] = ((stats[type].packetsLost /
+                                               stats[type].packetsReceived) * 100).toFixed(2);
           }
-          var currStats = {
-            width: subscriber.videoWidth(),
-            height: subscriber.videoHeight(),
-            timestamp: stats.timestamp
-          };
-          var secondsElapsed;
           if (lastStats) {
-            secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
-          }
-          var setCurrStats = function(type) {
-            currStats[type] = stats[type];
-            if (stats[type].packetsReceived > 0) {
-              currStats[type + 'PacketLoss'] = ((stats[type].packetsLost /
-                stats[type].packetsReceived) * 100).toFixed(2);
-            }
-            if (lastStats) {
-              if (lastLastStats && lastLastStats[type] && lastLastStats[type].packetsReceived &&
+            if (lastLastStats && lastLastStats[type] && lastLastStats[type].packetsReceived &&
                 (stats[type].packetsReceived - lastLastStats[type].packetsReceived > 0)) {
-                currStats[type + 'PacketLoss'] =
-                  (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
-                    (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
-                    .toFixed(2);
-              }
-              var bitsReceived = (stats[type].bytesReceived -
-                (lastStats[type] ? lastStats[type].bytesReceived : 0)) * 8;
-              currStats[type + 'Bitrate'] = ((bitsReceived / secondsElapsed)/1000).toFixed(0);
-            } else {
-              currStats[type + 'Bitrate'] = '0';
+              currStats[type + 'PacketLoss'] =
+                (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
+                  (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
+                .toFixed(2);
             }
-          };
-          if (stats.audio) {
-            setCurrStats('audio');
+            var bitsReceived = (stats[type].bytesReceived -
+                                (lastStats[type] ? lastStats[type].bytesReceived : 0)) * 8;
+            currStats[type + 'Bitrate'] = ((bitsReceived / secondsElapsed)/1000).toFixed(0);
+          } else {
+            currStats[type + 'Bitrate'] = '0';
           }
-          if (stats.video) {
-            setCurrStats('video');
-          }
+        };
+        if (stats.audio) {
+          setCurrStats('audio');
+        }
+        if (stats.video) {
+          setCurrStats('video');
+        }
 
-          var widgetId = subscribers[subscriberId].subscriber.widgetId;
-          $http.get(room + '/subscriber/' + widgetId)
-            .then(function(res) {
-              if (res && res.data && res.data.info) {
-                currStats.info = res.data.info;
-              } else {
-                console.info('received error response  ', res);
-              }
-            })
-            .catch(function(err) {
-              console.trace('failed to retrieve susbcriber info ', err);
-            })
-            .finally(function() {
-              subscriberStats.lastLastStats = subscriberStats.lastStats;
-              subscriberStats.lastStats = currStats;
-              subscriberStats.onStats(currStats);
-            });
-        });
+        subscriberStats.lastLastStats = subscriberStats.lastStats;
+        subscriberStats.lastStats = currStats;
+        subscriberStats.onStats(currStats);
+
+        if (subscriberStats.lastLastStats &&
+            subscriberStats.lastLastStats.info) {
+          // info must be retrieved only once since it does not change
+          // for the lifetime of a subscriber.
+          var info = subscriberStats.lastLastStats.info;
+          subscriberStats.lastStats.info = {
+            originServer: info.originServer,
+            edgeServer: info.edgeServer
+          };
+
+          return;
+        }
+
+        var widgetId = subscriberStats.subscriber.widgetId;
+        var endpoint = room + '/subscriber/' + widgetId;
+        $http.get(room + '/subscriber/' + widgetId)
+          .then(function(res) {
+            if (res && res.data && res.data.info) {
+              currStats.info = res.data.info;
+            } else {
+              console.info('received error response  ', res);
+            }
+          })
+          .catch(function(err) {
+            console.trace('failed to retrieve susbcriber info ', err);
+          });
       });
     };
+
+    var updateStats = function () {
+      Object.keys(subscribers).forEach(function(subscriberId) {
+        updateSubscriberStats(subscribers[subscriberId]);
+      });
+    };
+
     return {
       addSubscriber: function(subscriber, onStats) {
-        subscribers[subscriber.id] = new SubscriberStats(subscriber, onStats);
+        var stats = new SubscriberStats(subscriber, onStats);
+        subscribers[subscriber.id] = stats;
         if (!interval) {
           interval = $interval(updateStats, 2000);
-          updateStats();
+          updateSubscriberStats(stats);
         }
       },
+
       removeSubscriber: function(subscriberId) {
         delete subscribers[subscriberId];
         if (Object.keys(subscribers).length === 0) {
@@ -121,7 +141,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         '</div><div ng-show="stats.info">' +
         'Origin server: {{stats.info.originServer}} <br/>' +
         'Edge server: {{stats.info.edgeServer}}' +
-        '</div>',
+        '</div></div>',
       link: function(scope, element) {
         var subscriber, subscriberId;
         var timeout = $timeout(function () {
