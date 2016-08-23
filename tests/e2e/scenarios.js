@@ -41,7 +41,7 @@ describe('OpenTok Meet App', function() {
 
       if (browser.browserName !== 'firefox') {
         // fixme: for some reason Firefox sometimes gives an error about not being able to
-        // sync with the page 
+        // sync with the page
         expect(browser.getCurrentUrl().then(function (url) {
           // For some reason in IE sometimes when you run lots of tests
           // the whole URL isn't there
@@ -264,6 +264,7 @@ describe('OpenTok Meet App', function() {
           browser.wait(function () {
             return startArchiveBtn.isPresent();
           }, 10000);
+          browser.sleep(1000);
         });
 
         it('is present and green', function () {
@@ -691,8 +692,8 @@ describe('OpenTok Meet App', function() {
                 'Audio Bitrate: \\d+ kbps<br>.*' +
                 'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
                 'Video Bitrate: \\d+ kbps<br>' +
-                'Origin server: \\w+ <br>' +
-                'Edge server: \\w+', 'gi');
+                'Origin server: [\\w.-]+ <br>' +
+                'Edge server: [\\w.-]+', 'gi');
               return statsRegexp.test(innerHTML);
             });
           }, 5000);
