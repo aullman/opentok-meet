@@ -119,7 +119,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         'Video Packet Loss: {{stats.videoPacketLoss}}%<br/>' +
         'Video Bitrate: {{stats.videoBitrate}} kbps' +
         '</div><div ng-show="stats.info">' +
-        'Origin server: {{stats.info.originServer}}<br/>' +
+        'Origin server: {{stats.info.originServer}} <br/>' +
         'Edge server: {{stats.info.edgeServer}}' +
         '</div>',
       link: function(scope, element) {
