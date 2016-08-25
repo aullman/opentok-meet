@@ -61,9 +61,9 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'r
           setCurrStats('video');
         }
 
+
         subscriberStats.lastLastStats = subscriberStats.lastStats;
         subscriberStats.lastStats = currStats;
-        subscriberStats.onStats(currStats);
 
         if (subscriberStats.lastLastStats &&
             subscriberStats.lastLastStats.info) {
@@ -74,7 +74,11 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'r
             originServer: info.originServer,
             edgeServer: info.edgeServer
           };
+        }
 
+        subscriberStats.onStats(currStats);
+
+        if (subscriberStats.lastStats.info) {
           return;
         }
 
