@@ -691,9 +691,9 @@ describe('OpenTok Meet App', function() {
                 'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
                 'Audio Bitrate: \\d+ kbps<br>.*' +
                 'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
-                'Video Bitrate: \\d+ kbps<br>' +
-                'Origin server: [\\w.-]+ <br>' +
-                'Edge server: [\\w.-]+', 'gi');
+                'Video Bitrate: \\d+ kbps.*' +
+                'Origin server:[\\w.-\\s]+<br>' +
+                'Edge server:[\\w.-\\s]+', 'gi');
               return statsRegexp.test(innerHTML);
             });
           }, 5000);
