@@ -14,7 +14,7 @@ module.exports = function(redis, ot) {
       redis.del('rooms', callback);
     },
     getRoom: function(room, apiKey, secret, goToRoom) {
-      console.log('getRoom: ' + room + ' ' + apiKey + ' ' + secret);
+      console.log('getRoom: ' + room);
       goToRoom = arguments[arguments.length - 1];
       // Lookup the mapping of rooms to sessionIds
       redis.hget('rooms', room, function(err, sessionId) {
