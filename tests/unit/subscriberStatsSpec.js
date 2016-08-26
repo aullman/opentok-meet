@@ -80,7 +80,8 @@ describe('subscriber-stats', function() {
       'Audio Packet Loss: 20.00%<br>' +
       'Audio Bitrate: 0 kbps<br>.*' +
       'Video Packet Loss: 20.00%<br>' +
-      'Video Bitrate: 0 kbps', 'g')
+      'Video Bitrate: 0 kbps<br>' +
+      'Frame Rate: 0 fps', 'g')
     );
   });
 });
@@ -107,7 +108,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 200,
         packetsReceived: 1000,
-        bytesReceived: 1000
+        bytesReceived: 1000,
+        frameRate: 30
       },
       timestamp: 1000
     };
@@ -146,7 +148,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
@@ -217,7 +220,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
@@ -257,7 +261,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
