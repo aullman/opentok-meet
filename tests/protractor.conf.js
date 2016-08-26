@@ -1,3 +1,28 @@
+var path = require('path');
+var fs = require('fs');
+
+// Determine the protocol the app is running on
+var protocol = (function() {
+  var useSSL = fs.existsSync(path.join(__dirname, '..', 'server.key')) &&
+    fs.existsSync(path.join(__dirname, '..', 'server.crt'));
+  return process.env.HEROKU || !useSSL ? 'http' : 'https';
+})();
+
+// Determine the port the app is running on
+var port = (function() {
+  var appConfigFilePath = path.join(__dirname, '..', 'config.json');
+  var port = 5000;
+  if (process.env.HEROKU || process.env.TRAVIS) {
+    port = process.env.PORT;
+  } else if (fs.existsSync(appConfigFilePath)) {
+    port = require(appConfigFilePath).port;
+  }
+  return port;
+})();
+
+// Set the base URL based on the above protocol and port
+var baseUrl = protocol + '://localhost:' + port + '/';
+
 function getCapabilitiesFor(browserName, version) {
   var base = {
     'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
@@ -5,7 +30,7 @@ function getCapabilitiesFor(browserName, version) {
       process.env.TRAVIS_PULL_REQUEST,
     'build': process.env.TRAVIS_BUILD_NUMBER,
     'prerun': {
-      'executable': 'http://localhost:5000/SauceLabsInstaller.exe',
+      'executable': baseUrl + 'SauceLabsInstaller.exe',
       'background': false
     }
   };
@@ -30,7 +55,7 @@ switch(process.env.BROWSER) {
 
       capabilities: getCapabilitiesFor(process.env.BROWSER, process.env.BVER),
 
-      baseUrl: 'http://localhost:5000/',
+      baseUrl: baseUrl,
 
       framework: 'jasmine',
 
@@ -56,7 +81,7 @@ switch(process.env.BROWSER) {
 
       keepAlive: true,
 
-      baseUrl: 'http://localhost:5000/',
+      baseUrl: baseUrl,
 
       firefoxPath: process.env.BROWSERBIN,
 
@@ -93,7 +118,7 @@ switch(process.env.BROWSER) {
 
       directConnect: true,
 
-      baseUrl: 'http://localhost:5000/',
+      baseUrl: baseUrl,
 
       params: {
         testScreenSharing: false,
