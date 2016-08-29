@@ -195,7 +195,10 @@ describe('restrictFrameRate', function () {
   beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['restrictFrameRate']);
+    mockSubscriber = jasmine.createSpyObj('Subscriber', [
+      'restrictFrameRate',
+      'setPreferredFrameRate'
+    ]);
     OTSession.session = {};
     OTSession.session.getSubscribersForStream = function () {
       return [mockSubscriber];
@@ -207,13 +210,34 @@ describe('restrictFrameRate', function () {
   }));
 
   it('toggles stream.restrictedFrameRate and calls restrictFrameRate', function () {
-    expect(scope.restrictedFrameRate).toBe(false);
-    element.triggerHandler({type: 'click'});
-    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(true);
-    expect(scope.restrictedFrameRate).toBe(true);
-    element.triggerHandler({type: 'click'});
-    expect(mockSubscriber.restrictFrameRate).toHaveBeenCalledWith(false);
-    expect(scope.restrictedFrameRate).toBe(false);
+    function testFrameRate(options) {
+      mockSubscriber.restrictFrameRate.calls.reset();
+      mockSubscriber.setPreferredFrameRate.calls.reset();
+      element.triggerHandler({type: 'click'});
+      expect(scope.frameRate).toBe(options.frameRate);
+
+      if (options.restrict === undefined) {
+        expect(mockSubscriber.restrictFrameRate).not.toHaveBeenCalled();
+      } else {
+        expect(mockSubscriber.restrictFrameRate)
+          .toHaveBeenCalledWith(options.restrict);
+      }
+
+      if (options.frameRate === 1) {
+        expect(mockSubscriber.setPreferredFrameRate).not.toHaveBeenCalled();
+      } else {
+        expect(mockSubscriber.setPreferredFrameRate)
+          .toHaveBeenCalledWith(options.frameRate);
+      }
+    }
+
+    expect(scope.frameRate).toBe(null);
+    [
+      { frameRate: 15, restrict: undefined },
+      { frameRate: 7, restrict: undefined },
+      { frameRate: 1, restrict: true },
+      { frameRate: null, restrict: false }
+    ].forEach(testFrameRate);
   });
 });
 

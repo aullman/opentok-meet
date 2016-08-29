@@ -16,11 +16,6 @@ angular.module('opentok-meet').factory('SimulcastService', ['debounce', '$rootSc
                 width: pixelWidth,
                 height: pixelHeight
               });
-              if (pixelWidth >= 320 && pixelHeight >= 240) {
-                subscriber.setPreferredFrameRate(null);
-              } else {
-                subscriber.setPreferredFrameRate(15);
-              }
             });
           });
         }, 1000));

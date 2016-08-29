@@ -112,23 +112,48 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
   .directive('restrictFramerate', ['OTSession', function (OTSession) {
     return {
       restrict: 'E',
-      template: '<button class="restrict-framerate-btn" ng-class="' +
-      '{\'ion-ios7-speedometer-outline\': restrictedFrameRate, ' +
-      '\'ion-ios7-speedometer\': !restrictedFrameRate}" title="{{' +
-      'restrictedFrameRate ? \'Unrestrict Framerate\' : \'Restrict Framerate\'}}"></button>',
+      template: '<button class="restrict-framerate-btn" title="Toggle Framerate">' +
+        '<span class="restrict-framerate-btn-text" ng-if="frameRate != null">' +
+          '{{ frameRate }}fps</span>' +
+        '<i class="restrict-framerate-btn-icon" ng-class="' +
+        '{\'ion-ios7-speedometer-outline\': frameRate != null, ' +
+        '\'ion-ios7-speedometer\': frameRate == null}"></i>' +
+      '</button>',
       link: function (scope, element) {
-        var subscriber;
-        scope.restrictedFrameRate = false;
+        var cancelRestrict;
+        var frameRateOptions = [15, 7, 1, null];
+        scope.frameRate = null;
+
         angular.element(element).on('click', function () {
-          if (!subscriber) {
-            subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
-          }
-          if (subscriber) {
-            subscriber.restrictFrameRate(!scope.restrictedFrameRate);
-            scope.restrictedFrameRate = !scope.restrictedFrameRate;
-            scope.$apply();
-          }
+          scope.frameRate = nextFrameRate(scope.frameRate);
+          updateSubscriberFrameRate(scope.stream, scope.frameRate);
+          scope.$apply();
         });
+
+        function nextFrameRate(frameRate) {
+          var frameRateIndex = frameRateOptions.indexOf(frameRate) + 1;
+          if (frameRateIndex >= frameRateOptions.length) {
+            frameRateIndex = 0;
+          }
+          return frameRateOptions[frameRateIndex];
+        }
+
+        function updateSubscriberFrameRate(stream, frameRate) {
+          var subscriber = OTSession.session.getSubscribersForStream(stream)[0];
+
+          if (frameRate === 1) {
+            subscriber.restrictFrameRate(true);
+            cancelRestrict = function(subscriber) {
+              subscriber.restrictFrameRate(false);
+              cancelRestrict = null;
+            };
+          } else {
+            subscriber.setPreferredFrameRate(frameRate);
+            if (cancelRestrict) {
+              cancelRestrict(subscriber);
+            }
+          }
+        }
       }
     };
   }])

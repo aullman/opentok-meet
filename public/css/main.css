@@ -89,13 +89,16 @@ ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout 
 }
 
 ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn {
-    width: 25px;
     height: 25px;
     cursor: pointer;
     background-color: transparent;
     margin-top: 2px;
     right: 38px;
     border: none;
+}
+
+ot-layout button.resize-btn {
+    width: 25px;
 }
 
 ot-layout ot-subscriber button.restrict-framerate-btn {
@@ -110,7 +113,7 @@ ot-layout > .OT_big button.resize-btn:before {
     content: "\f267";
 }
 
-ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
+ot-layout button.restrict-framerate-btn i.ion-ios7-speedometer-outline {
     -moz-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
@@ -124,6 +127,15 @@ ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framera
     ot-layout button.OT_mode-on ~ button.restrict-framerate-btn {
     top: 0;
     opacity: 1;
+}
+
+ot-layout button.restrict-framerate-btn span.restrict-framerate-btn-text {
+    display: inline-block;
+    font-size: 16px;
+    text-align: right;
+    vertical-align: middle;
+    height: 100%;
+    margin-right: 5px;
 }
 
 ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
