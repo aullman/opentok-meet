@@ -663,17 +663,29 @@ describe('OpenTok Meet App', function() {
           expect(secondSubscriber.getAttribute('class')).not.toContain('OT_audio-only');
         });
 
-        it('restrictFramerate button toggles the icon and the title', function () {
+        it('restrictFramerate button toggles the icon and fps text', function () {
           var restrictFramerateBtn = secondSubscriber.element(by.css('.restrict-framerate-btn'));
-          expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
-          expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
-          restrictFramerateBtn.click();
-          expect(restrictFramerateBtn.getAttribute('class')).toContain(
-            'ion-ios7-speedometer-outline');
-          expect(restrictFramerateBtn.getAttribute('title')).toBe('Unrestrict Framerate');
-          restrictFramerateBtn.click();
-          expect(restrictFramerateBtn.getAttribute('class')).toContain('ion-ios7-speedometer');
-          expect(restrictFramerateBtn.getAttribute('title')).toBe('Restrict Framerate');
+          var restrictFramerateIcon = restrictFramerateBtn.element(by.css('.restrict-framerate-btn-icon'));
+
+          function testRestrictFramerateBtn(options) {
+            if (!options.noClick) {
+              restrictFramerateBtn.click();
+            }
+            var restrictFramerateText = restrictFramerateBtn.element(by.css('.restrict-framerate-btn-text'));
+            expect(restrictFramerateText.isPresent()).toBe(options.text !== undefined);
+            if (options.text) {
+              expect(restrictFramerateText.getText()).toEqual(options.text);
+            }
+            expect(restrictFramerateIcon.getAttribute('class')).toContain(options.iconClass);
+          }
+
+          [
+            { text: undefined, iconClass: 'ion-ios7-speedometer', noClick: true},
+            { text: '15fps', iconClass: 'ion-ios7-speedometer-outline'},
+            { text: '7fps', iconClass: 'ion-ios7-speedometer-outline'},
+            { text: '1fps', iconClass: 'ion-ios7-speedometer-outline'},
+            { text: undefined, iconClass: 'ion-ios7-speedometer'}
+          ].forEach(testRestrictFramerateBtn);
         });
 
         it('stats button works', function() {
@@ -691,7 +703,8 @@ describe('OpenTok Meet App', function() {
                 'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
                 'Audio Bitrate: \\d+ kbps<br>.*' +
                 'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
-                'Video Bitrate: \\d+ kbps.*' +
+                'Video Bitrate: \\d+ kbps<br>' +
+                'Frame Rate: \\d+(\\.\\d+)? fps.*' +
                 'Origin server:[\\w.-\\s]+<br>' +
                 'Edge server:[\\w.-\\s]+', 'gi');
               return statsRegexp.test(innerHTML);
