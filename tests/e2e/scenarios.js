@@ -589,7 +589,7 @@ describe('OpenTok Meet App', function() {
       it('should display a video element with the right videoWidth and videoHeight', function () {
         var checkVideo = function(browser) {
           var subscriberVideo =
-            element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
+            browser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
           if (browser.browserName === 'chrome') {
             // With Simulcast your not sure what the dimensions are, but they should be the
             // right aspect ratio.
