@@ -31,6 +31,7 @@ env:
     - BROWSER=ie BVER=10  SAUCELABS=true
     - BROWSER=chrome  BVER=beta
     - BROWSER=firefox BVER=beta
+    - BROWSER=firefox BVER=esr
   global:
   - TRAVIS=true
   - PORT=5000
