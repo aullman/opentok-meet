@@ -3,11 +3,15 @@ var angular = require('angular');
 require('../../src/js/app.js');
 
 describe('subscriber-stats', function() {
-  var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
+    var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
+  var room = 'mockRoom';
+
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(angular.mock.module(function ($provide) {
-      $provide.value('statsInterval', 10);
+    $provide.value('statsInterval', 10);
+    $provide.value('room', room);
   }));
+
   beforeEach(inject(function ($rootScope, $compile, _OTSession_, _StatsService_, _$timeout_) {
     OTSession = _OTSession_;
     OTSession.session = {
@@ -80,23 +84,42 @@ describe('subscriber-stats', function() {
       'Audio Packet Loss: 20.00%<br>' +
       'Audio Bitrate: 0 kbps<br>.*' +
       'Video Packet Loss: 20.00%<br>' +
-      'Video Bitrate: 0 kbps', 'g')
+      'Video Bitrate: 0 kbps<br>' +
+      'Frame Rate: 0 fps', 'g')
     );
   });
 });
 
 describe('StatsService', function () {
-  var StatsService, $interval, onStats, mockSubscriber, mockStats;
+  var StatsService, $interval, onStats, mockSubscriber, mockStats, $httpBackend;
+  var room = 'mockRoom';
+  var mockWidgetId = 'mockWidgetId';
+  var mockInfo = {originServer: 'origin', edgeServer: 'edge'};
+
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function (_StatsService_, _$interval_) {
+
+  beforeEach(angular.mock.module(function ($provide) {
+    $provide.value('statsInterval', 10);
+    $provide.value('room', room);
+  }));
+
+  beforeEach(inject(function (_StatsService_, _$interval_, _$httpBackend_) {
     StatsService = _StatsService_;
     $interval = _$interval_;
+    $httpBackend = _$httpBackend_;
+    var endpoint = room + '/subscriber/' + mockWidgetId;
+    subRequestHandler = $httpBackend.when('GET', endpoint)
+      .respond({info: mockInfo});
+    $httpBackend.expectGET(room + '/subscriber/' + mockWidgetId);
+
     onStats = jasmine.createSpy('onStats');
     mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
     mockSubscriber.id = 'mockId';
+    mockSubscriber.widgetId = mockWidgetId;
     mockSubscriber.videoWidth = mockSubscriber.videoHeight = function () {
       return 200;
     };
+
     StatsService.addSubscriber(mockSubscriber, onStats);
     mockStats = {
       audio: {
@@ -107,7 +130,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 200,
         packetsReceived: 1000,
-        bytesReceived: 1000
+        bytesReceived: 1000,
+        frameRate: 30
       },
       timestamp: 1000
     };
@@ -132,6 +156,7 @@ describe('StatsService', function () {
       timestamp: mockStats.timestamp
     });
 
+
     // After 2 seconds
     $interval.flush(2000);
     // getStats should be called again
@@ -146,7 +171,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
@@ -217,7 +243,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
@@ -257,7 +284,8 @@ describe('StatsService', function () {
       video: {
         packetsLost: 300,
         packetsReceived: 1000,
-        bytesReceived: 2000
+        bytesReceived: 2000,
+        frameRate: 30
       },
       timestamp: 2000
     };
@@ -283,5 +311,32 @@ describe('StatsService', function () {
     spyOn($interval, 'cancel');
     StatsService.removeSubscriber(mockSubscriber.id);
     expect($interval.cancel).toHaveBeenCalled();
+  });
+
+  it('should add origin and edge server', function (done) {
+    // Fire the getStats callback with the mockStats without video
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+
+    // wait for $http.get to be called
+    setTimeout(function() {
+      $httpBackend.flush();
+
+      expect(onStats.calls.mostRecent().args[0]).toEqual({
+        width: 200,
+        height: 200,
+        audio: mockStats.audio,
+        video: mockStats.video,
+        info: mockInfo,
+        audioPacketLoss: '20.00',
+        videoPacketLoss: '20.00',
+        audioBitrate: '0',
+        videoBitrate: '0',
+        timestamp: mockStats.timestamp
+      });
+
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+      done();
+    }, 500);
   });
 });
