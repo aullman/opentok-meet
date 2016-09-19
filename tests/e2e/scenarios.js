@@ -586,7 +586,7 @@ describe('OpenTok Meet App', function() {
         }, 20000);
       });
 
-      it('should display a video element with the right videoWidth and videoHeight', function () {
+      xit('should display a video element with the right videoWidth and videoHeight', function () {
         var checkVideo = function(browser) {
           var subscriberVideo =
             browser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
