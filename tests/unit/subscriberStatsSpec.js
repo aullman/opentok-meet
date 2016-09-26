@@ -5,11 +5,13 @@ require('../../src/js/app.js');
 describe('subscriber-stats', function() {
     var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
   var room = 'mockRoom';
+  var baseURL = 'https://mock.url/';
 
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(angular.mock.module(function ($provide) {
     $provide.value('statsInterval', 10);
     $provide.value('room', room);
+    $provide.value('baseURL', baseURL);
   }));
 
   beforeEach(inject(function ($rootScope, $compile, _OTSession_, _StatsService_, _$timeout_) {
@@ -94,6 +96,7 @@ describe('StatsService', function () {
   var StatsService, $interval, onStats, mockSubscriber, mockStats, $httpBackend;
   var room = 'mockRoom';
   var mockWidgetId = 'mockWidgetId';
+  var baseURL = 'https://mock.url/';
   var mockInfo = {originServer: 'origin', edgeServer: 'edge'};
 
   beforeEach(angular.mock.module('opentok-meet'));
@@ -101,16 +104,17 @@ describe('StatsService', function () {
   beforeEach(angular.mock.module(function ($provide) {
     $provide.value('statsInterval', 10);
     $provide.value('room', room);
+    $provide.value('baseURL', baseURL);
   }));
 
   beforeEach(inject(function (_StatsService_, _$interval_, _$httpBackend_) {
     StatsService = _StatsService_;
     $interval = _$interval_;
     $httpBackend = _$httpBackend_;
-    var endpoint = room + '/subscriber/' + mockWidgetId;
+    var endpoint = baseURL + room + '/subscriber/' + mockWidgetId;
     subRequestHandler = $httpBackend.when('GET', endpoint)
       .respond({info: mockInfo});
-    $httpBackend.expectGET(room + '/subscriber/' + mockWidgetId);
+    $httpBackend.expectGET(baseURL + room + '/subscriber/' + mockWidgetId);
 
     onStats = jasmine.createSpy('onStats');
     mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);

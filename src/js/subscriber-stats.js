@@ -9,8 +9,8 @@ function SubscriberStats(subscriber, onStats) {
   this.lastLastStats; // The getStats result before that
 }
 
-angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'room',
-  function($http, $interval, room) {
+angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'baseURL', 'room',
+  function($http, $interval, baseURL, room) {
     var interval,
       subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
 
@@ -83,8 +83,7 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'r
         }
 
         var widgetId = subscriberStats.subscriber.widgetId;
-        var endpoint = room + '/subscriber/' + widgetId;
-        $http.get(room + '/subscriber/' + widgetId)
+        $http.get(baseURL + room + '/subscriber/' + widgetId)
           .then(function(res) {
             if (res && res.data && res.data.info) {
               currStats.info = res.data.info;
