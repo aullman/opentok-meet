@@ -81,8 +81,10 @@ switch(process.env.BROWSER) {
       ],
 
       capabilities: {
-        'browserName': 'chrome',
-        'chromeOptions': {
+        browserName: 'chrome',
+        shardTestFiles: true,
+        maxInstances: 2,
+        chromeOptions: {
           'args': ['auto-select-desktop-capture-source="Entire screen"',
             'use-fake-device-for-media-stream',
             'use-fake-ui-for-media-stream'],

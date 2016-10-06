@@ -16,6 +16,8 @@ exports.getFirefoxProfile = function() {
   firefoxProfile.encoded(function(encodedProfile) {
     var multiCapabilities = [{
       browserName: 'firefox',
+      shardTestFiles: true,
+      maxInstances: 2,
       acceptSslCert: true,
       'firefox_profile' : encodedProfile
     }];
