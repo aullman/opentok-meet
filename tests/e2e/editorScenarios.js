@@ -4,7 +4,7 @@
 /* global by: false */
 var uuid = require('uuid');
 describe('using the collaborative editor', function() {
-  var roomName, roomURL;
+  var roomName, roomURL, secondBrowser;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -26,8 +26,6 @@ describe('using the collaborative editor', function() {
   });
 
   describe('using the collaborative editor', function () {
-    var secondBrowser;
-
     it('text editing works', function (done) {
       browser.wait(function () {
         return element(by.css('ot-editor')).isPresent();
