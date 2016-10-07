@@ -50,7 +50,7 @@ switch(process.env.BROWSER) {
       sauceKey: process.env.SAUCE_ACCESS_KEY,
 
       specs: [
-        'e2e/iesmoketest.js'
+        'e2e/ie/iesmoketest.js'
       ],
 
       capabilities: getCapabilitiesFor(process.env.BROWSER, process.env.BVER),
@@ -71,7 +71,7 @@ switch(process.env.BROWSER) {
       allScriptsTimeout: 11000,
 
       specs: [
-        'e2e/scenarios.js'
+        'e2e/*.js'
       ],
 
       getMultiCapabilities: helper.getFirefoxProfile,
@@ -103,7 +103,7 @@ switch(process.env.BROWSER) {
       allScriptsTimeout: 11000,
 
       specs: [
-        'e2e/scenarios.js'
+        'e2e/*.js'
       ],
 
       capabilities: {
