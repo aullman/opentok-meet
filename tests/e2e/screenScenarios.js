@@ -1,8 +1,26 @@
-
+/* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
+/* global browser: false */
+/* global element: false */
+/* global by: false */
+var uuid = require('uuid');
 if (browser.params.testScreenSharing) {
   describe('Screen', function () {
+    var roomName, roomURL;
     beforeEach(function () {
-      browser.get(roomName + '/screen');
+      while(!roomName || roomName.indexOf('p2p') > -1) {
+        // Don't want the roomname to have p2p in it or it will be a p2p room
+        roomName = uuid.v1();
+      }
+      browser.getCapabilities().then(function (cap) {
+        browser.browserName = cap.get('browserName');
+        roomURL = roomName;
+        roomURL = '/' + roomURL;
+        browser.get(roomName + '/screen');
+      });
+    });
+
+    afterEach(function () {
+      roomName = roomURL = null;
     });
 
     describe('screenshare button', function () {
