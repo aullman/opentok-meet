@@ -3,7 +3,7 @@
 /* global element: false */
 /* global by: false */
 var uuid = require('uuid');
-fdescribe('Login', function() {
+describe('Login', function() {
   var roomName;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
