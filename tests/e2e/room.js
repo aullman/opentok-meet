@@ -39,7 +39,7 @@ describe('Room', function() {
     }, 10000);
   });
 
-  fdescribe('publisher', function () {
+  describe('publisher', function () {
     var publisher = element(by.css('div#facePublisher'));
     it('is displayed', function () {
       expect(publisher.isPresent()).toBe(true);
