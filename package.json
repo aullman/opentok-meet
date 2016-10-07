@@ -30,7 +30,7 @@
     "start": "node app.js",
     "unit": "karma start tests/karma.conf.js --single-run",
     "preintegration": "npm run update-webdriver",
-    "integration": "protractor tests/protractor.conf.js",
+    "integration": "protractor-flake -- tests/protractor.conf.js",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
     "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js"
@@ -50,6 +50,7 @@
     "karma-webpack": "^1.7.0",
     "opentok-test-scripts": "^3.0.3",
     "protractor": "3.2.2",
+    "protractor-flake": "^2.1.2",
     "q": "^1.2.0",
     "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
