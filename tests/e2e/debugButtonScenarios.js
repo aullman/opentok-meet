@@ -3,24 +3,13 @@
 /* global element: false */
 /* global by: false */
 var uuid = require('uuid');
-describe('Phone', function () {
+describe('Debug button', function() {
   var roomName, roomURL;
-  beforeEach(function () {
+  beforeEach(function() {
     while(!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
       roomName = uuid.v1();
     }
-    roomURL = '/' + roomURL;
-    browser.ignoreSynchronization = true;
-    browser.get(roomName + '/phone');
-  });
-  it('has the right phone number on the page', function () {
-    expect(element(by.css('p')).getInnerHtml()).toContain('Call ' + browser.params.phoneNumber);
-  });
-});
-
-describe('Debug button', function() {
-  beforeEach(function() {
     browser.get(roomURL);
     browser.wait(function () {
       return element(by.css('div.session-connected')).isPresent();

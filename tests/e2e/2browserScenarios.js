@@ -33,7 +33,8 @@ describe('2 browsers in the same room', function() {
         return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
       }, 20000);
       secondBrowser.wait(function () {
-        return secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
+        return secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'))
+        .isPresent();
       }, 20000);
     });
 
@@ -116,13 +117,15 @@ describe('2 browsers in the same room', function() {
 
       it('restrictFramerate button toggles the icon and fps text', function () {
         var restrictFramerateBtn = secondSubscriber.element(by.css('.restrict-framerate-btn'));
-        var restrictFramerateIcon = restrictFramerateBtn.element(by.css('.restrict-framerate-btn-icon'));
+        var restrictFramerateIcon =
+          restrictFramerateBtn.element(by.css('.restrict-framerate-btn-icon'));
 
         function testRestrictFramerateBtn(options) {
           if (!options.noClick) {
             restrictFramerateBtn.click();
           }
-          var restrictFramerateText = restrictFramerateBtn.element(by.css('.restrict-framerate-btn-text'));
+          var restrictFramerateText =
+            restrictFramerateBtn.element(by.css('.restrict-framerate-btn-text'));
           expect(restrictFramerateText.isPresent()).toBe(options.text !== undefined);
           if (options.text) {
             expect(restrictFramerateText.getText()).toEqual(options.text);
