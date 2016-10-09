@@ -10,6 +10,7 @@ describe('Debug button', function() {
       // Don't want the roomname to have p2p in it or it will be a p2p room
       roomName = uuid.v1();
     }
+    roomURL = '/' + roomURL;
     browser.get(roomURL);
     browser.wait(function () {
       return element(by.css('div.session-connected')).isPresent();

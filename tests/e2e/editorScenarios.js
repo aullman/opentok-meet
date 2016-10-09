@@ -10,12 +10,9 @@ describe('using the collaborative editor', function() {
       // Don't want the roomname to have p2p in it or it will be a p2p room
       roomName = uuid.v1();
     }
-    browser.getCapabilities().then(function (cap) {
-      browser.browserName = cap.get('browserName');
-      roomURL = roomName;
-      roomURL = '/' + roomURL;
-      browser.get(roomURL);
-    });
+    roomURL = roomName;
+    roomURL = '/' + roomURL;
+    browser.get(roomURL);
   });
 
   afterEach(function () {

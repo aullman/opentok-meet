@@ -13,8 +13,7 @@ if (browser.params.testScreenSharing) {
       }
       browser.getCapabilities().then(function (cap) {
         browser.browserName = cap.get('browserName');
-        roomURL = roomName;
-        roomURL = '/' + roomURL;
+        roomURL = '/' + roomName;
         browser.get(roomName + '/screen');
       });
     });

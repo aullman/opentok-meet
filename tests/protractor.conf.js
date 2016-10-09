@@ -89,7 +89,7 @@ switch(process.env.BROWSER) {
 
       params: {
         testScreenSharing: true,
-        phoneNumber: process.env.PHONE_NUMBER
+        phoneNumber: process.env.PHONE_NUMBER || ""
       },
 
       jasmineNodeOpts: {
@@ -122,7 +122,7 @@ switch(process.env.BROWSER) {
 
       params: {
         testScreenSharing: false,
-        phoneNumber: process.env.PHONE_NUMBER
+        phoneNumber: process.env.PHONE_NUMBER || ""
       },
 
       framework: 'jasmine',
