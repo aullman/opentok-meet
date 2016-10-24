@@ -1,4 +1,5 @@
-angular.module('opentok-meet').directive('draggable', ['$document', function($document) {
+angular.module('opentok-meet').directive('draggable', ['$document', '$window',
+function($document, $window) {
   var getEventProp = function(event, prop) {
     if (event[prop] === 0) return 0;
     return event[prop] || (event.touches && event.touches[0][prop]) ||
@@ -7,6 +8,12 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
   };
 
   return function(scope, element) {
+    var position = element.css('position'),
+      startX = 0,
+      startY = 0,
+      x = 0,
+      y = 0;
+
     var mouseMoveHandler = function mouseMoveHandler(event) {
       y = getEventProp(event, 'pageY') - startY;
       x = getEventProp(event, 'pageX') - startX;
@@ -16,16 +23,35 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
       });
     };
 
+    var resizeHandler = function resizeHandler() {
+      // Always make sure that the element is on the page when it is resized
+      var winHeight = angular.element($window).height();
+      var winWidth = angular.element($window).width();
+      if (winHeight - element.height() < parseInt(element.css('top'), 10)) {
+        // We're too short switch to being bottom aligned
+        element.css({
+          top: 'auto',
+          bottom: '10px'
+        });
+      }
+      if (winWidth - element.width() < parseInt(element.css('left'), 10)) {
+        // We're too narrow, switch to being right aligned
+        element.css({
+          left: 'auto',
+          right: '10px'
+        });
+      }
+    };
+
     var mouseUpHandler = function mouseUpHandler() {
       $document.unbind('mousemove touchmove', mouseMoveHandler);
       $document.unbind('mouseup touchend', mouseUpHandler);
+      // We only want to add this event once so we remove it in case we already
+      // added it previously
+      // angular.element($window).unbind('resize', resizeHandler);
+      // angular.element($window).on('resize', resizeHandler);
     };
 
-    var position = element.css('position'),
-      startX = 0,
-      startY = 0,
-      x = 0,
-      y = 0;
     if (position !== 'relative' && position !== 'absolute') {
       element.css('positon', 'relative');
       position = 'relative';
@@ -136,7 +162,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', function($do
     return {
       restrict: 'E',
       template: '<p>Reconnecting{{ dots }}</p>',
-      link: function (scope, element) {
+      link: function (scope) {
         var intervalPromise;
 
         scope.dots = '';
