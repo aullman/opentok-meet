@@ -4,11 +4,12 @@ require('angular-mocks');
 require('../../src/js/app.js');
 
 describe('draggable', function () {
-  var scope, element, $document;
+  var scope, element, $document, $window;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _$document_) {
+  beforeEach(inject(function ($rootScope, $compile, _$document_, _$window_) {
     scope = $rootScope.$new();
     $document = _$document_;
+    $window = _$window_;
     element = '<div draggable="true"></div>';
     element = $compile(element)(scope);
     scope.$digest();
@@ -75,6 +76,27 @@ describe('draggable', function () {
     });
     expect(element.css('top')).toBe('10px');
     expect(element.css('left')).toBe('10px');
+  });
+
+  it('realigns to the bottom right if you resize too small', function() {
+    element.triggerHandler({
+      type: 'mousedown',
+      pageX: 0,
+      pageY: 0
+    });
+    $document.triggerHandler({
+      type: 'mousemove',
+      pageX: 10000,
+      pageY: 10000
+    });
+    $document.triggerHandler({
+      type: 'mouseup'
+    });
+    $window.dispatchEvent(new Event('resize'));
+    expect(element.css('bottom')).toBe('10px');
+    expect(element.css('right')).toBe('10px');
+    expect(element.css('top')).toBe('auto');
+    expect(element.css('left')).toBe('auto');
   });
 });
 
