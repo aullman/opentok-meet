@@ -68,6 +68,17 @@ describe('Room', function() {
       expect(newLocation).not.toEqual(oldLocation);
     });
 
+    // Note this does not actually work in Chrome because drag and drop doesn't
+    // work properly in webdriver https://github.com/angular/protractor/issues/583
+    it('stays on the screen if you resize too small', function() {
+      expect(publisher.isDisplayed()).toBe(true);
+      browser.manage().window().setSize(800, 800);
+      browser.actions().mouseDown(publisher)
+           .mouseMove({x: 700, y:700}).mouseUp().perform();
+      browser.manage().window().setSize(500, 500);
+      expect(publisher.isDisplayed()).toBe(true);
+    });
+
     // This isn't passing in browserstack for some reason need to figure out why
     xit('mutes video when you click the mute-video icon', function () {
       browser.wait(function () {
