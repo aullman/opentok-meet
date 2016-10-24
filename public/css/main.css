@@ -184,7 +184,7 @@ ot-editor > div.opentok-editor-mode-select {
   pointer-events: none;
   position: absolute;
   text-align: center;
-  z-index: 97;
+  z-index: 98;
 }
 
 button.icon-left:before {
@@ -280,7 +280,7 @@ button:disabled {
     left: 50%;
     margin-left: -285px;
     transition: width 200ms, height 200ms ease;
-    z-index: 98;
+    z-index: 97;
 }
 
 #loader {
