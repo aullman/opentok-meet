@@ -92,7 +92,9 @@ describe('draggable', function () {
     $document.triggerHandler({
       type: 'mouseup'
     });
-    $window.dispatchEvent(new Event('resize'));
+    var event = document.createEvent('Event');
+    event.initEvent('resize', false, true);
+    $window.dispatchEvent(event);
     expect(element.css('bottom')).toBe('10px');
     expect(element.css('right')).toBe('10px');
     expect(element.css('top')).toBe('auto');

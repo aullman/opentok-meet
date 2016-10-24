@@ -48,8 +48,8 @@ function($document, $window) {
       $document.unbind('mouseup touchend', mouseUpHandler);
       // We only want to add this event once so we remove it in case we already
       // added it previously
-      // angular.element($window).unbind('resize', resizeHandler);
-      // angular.element($window).on('resize', resizeHandler);
+      angular.element($window).unbind('resize', resizeHandler);
+      angular.element($window).on('resize', resizeHandler);
     };
 
     if (position !== 'relative' && position !== 'absolute') {
