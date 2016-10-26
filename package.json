@@ -16,7 +16,7 @@
     "ng-debounce": "^1.0.1",
     "opentok": "^2.2.3",
     "opentok-angular": "^1.1.0",
-    "opentok-editor": "^0.3.0",
+    "opentok-editor": "^0.3.3",
     "opentok-whiteboard": "^1.1.0",
     "path": "^0.12.7",
     "redis": "~0.10.1",
