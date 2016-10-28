@@ -20,7 +20,7 @@
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
             <ot-layout props="{animate:true,bigFixedRatio:true}">
-                <ot-subscriber ng-repeat="stream in streams | filter:notMine"
+                <ot-subscriber ng-repeat="stream in streams track by stream.streamId | filter:notMine"
                     stream="stream"
                     props="{style: {nameDisplayMode: 'off'}}"
                     ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
