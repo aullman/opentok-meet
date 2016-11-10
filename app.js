@@ -3,7 +3,6 @@ var express = require('express'),
   OpenTok = require('opentok'),
   https = require('https'),
   app = express(),
-  Anvil = require('./server/anvil'),
   config;
 
 if (process.env.HEROKU || process.env.TRAVIS) {
@@ -43,12 +42,18 @@ app.configure(function() {
   app.use(app.router);
 });
 
-var anvil = Anvil('https://anvil-tbdev.opentok.com');
 var ot = new OpenTok(config.apiKey, config.apiSecret, 'https://anvil-tbdev.opentok.com');
 var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
 
-require('./server/routes.js')(app, config, redis, ot, anvil, useSSL || process.env.HEROKU);
+require('./server/routes.js')(app, config, redis, ot, useSSL || process.env.HEROKU);
+
+var glob = require('glob'),
+  path = require('path');
+
+glob.sync('./plugins/**/*.js').forEach(function(file) {
+  require(path.resolve(file))(app, config, redis, ot);
+});
 
 var glob = require('glob'),
   path = require('path');
