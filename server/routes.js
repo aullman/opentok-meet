@@ -76,12 +76,6 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
     });
   });
 
-  app.get('/:room/whiteboard', function(req, res) {
-    res.render('whiteboard', {
-      room: req.param('room')
-    });
-  });
-
   app.get('/:room/screen', function(req, res) {
     res.render('screen', {
       room: req.param('room'),
