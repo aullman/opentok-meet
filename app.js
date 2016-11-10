@@ -57,6 +57,13 @@ glob.sync('./plugins/**/*.js').forEach(function(file) {
   require(path.resolve(file))(app, config, redis, ot);
 });
 
+var glob = require('glob'),
+  path = require('path');
+
+glob.sync('./plugins/**/*.js').forEach(function(file) {
+  require(path.resolve(file))(app, config, redis, ot);
+});
+
 if (process.env.HEROKU || !useSSL) {
   app.listen(config.port, function() {
     console.log('Listening on ' + config.port);
