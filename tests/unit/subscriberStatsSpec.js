@@ -3,7 +3,8 @@ var angular = require('angular');
 require('../../src/js/app.js');
 
 describe('subscriber-stats', function() {
-    var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout, StatsService;
+  var scope, element, mockStream = {}, OTSession, mockSubscriber, mockStats, $timeout,
+    StatsService;
   var room = 'mockRoom';
   var baseURL = 'https://mock.url/';
 
@@ -112,7 +113,7 @@ describe('StatsService', function () {
     $interval = _$interval_;
     $httpBackend = _$httpBackend_;
     var endpoint = baseURL + room + '/subscriber/' + mockWidgetId;
-    subRequestHandler = $httpBackend.when('GET', endpoint)
+    $httpBackend.when('GET', endpoint)
       .respond({info: mockInfo});
     $httpBackend.expectGET(baseURL + room + '/subscriber/' + mockWidgetId);
 

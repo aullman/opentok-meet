@@ -79,8 +79,7 @@ describe('Room', function() {
       expect(publisher.isDisplayed()).toBe(true);
     });
 
-    // This isn't passing in browserstack for some reason need to figure out why
-    xit('mutes video when you click the mute-video icon', function () {
+    it('mutes video when you click the mute-video icon', function () {
       browser.wait(function () {
         return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
       }, 10000);
@@ -100,6 +99,23 @@ describe('Room', function() {
       expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
       expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
         .not.toContain('OT_audio-only');
+    });
+
+    it('shows a warning icon and an alert when we get an audioAcquisitionProblem', function() {
+      browser.wait(function () {
+        return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
+      }, 10000);
+      var audioAcquisitionProblem = element(by.css('#facePublisher audio-acquisition-problem'));
+      expect(audioAcquisitionProblem.isDisplayed()).toBe(false);
+      browser.driver.executeScript('OT.publishers.find().trigger(\'audioAcquisitionProblem\');')
+      .then(function () {
+        var alertDialog = browser.switchTo().alert();
+        expect(alertDialog.getText()).toEqual('Warning: audio acquisition problem you may need ' +
+          'to quit and restart your browser. If you are seeing this message please contact ' +
+          'broken@tokbox.com.');
+        alertDialog.accept();
+        expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
+      });
     });
   });
 

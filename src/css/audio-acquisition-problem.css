@@ -1,0 +1,8 @@
+#facePublisher audio-acquisition-problem {
+  display: block;
+  color: white;
+  position: absolute;
+  top: 14px;
+  left: -7px;
+  z-index: 100;
+}
