@@ -24,7 +24,7 @@ function Anvil(url) {
     return {'X-OPENTOK-AUTH': token};
   };
 
-  var getSubscriberInfo = function(payload, done) {
+  this.getSubscriberInfo = function(payload, done) {
     payload = payload || {};
 
     if (!payload.apiSecret) {
@@ -32,9 +32,8 @@ function Anvil(url) {
       return;
     }
 
-    var endpoint = url + '/v2/project/' + payload.apiKey
-          + '/session/' + payload.sessionId
-          + '/subscriber/all/' + payload.subscriberId;
+    var endpoint = url + '/v2/project/' + payload.apiKey +
+      '/session/' + payload.sessionId + '/subscriber/all/' + payload.subscriberId;
 
     var props = {
       issuer: payload.apiKey,
@@ -62,10 +61,6 @@ function Anvil(url) {
 
       done(null, res.body);
     });
-  };
-
-  return {
-    getSubscriberInfo: getSubscriberInfo
   };
 }
 

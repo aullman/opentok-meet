@@ -1,6 +1,6 @@
 var OpenTok = require('opentok');
 
-module.exports = function (app, config, redis, ot, anvil, redirectSSL) {
+module.exports = function (app, config, redis, ot, redirectSSL) {
   var RoomStore = require('./roomstore.js')(redis, ot);
   app.get('*', function(req, res, next) {
     if (req.host === 'hangout.tokbox.com') {
@@ -25,48 +25,6 @@ module.exports = function (app, config, redis, ot, anvil, redirectSSL) {
         res.send(err);
       } else {
         res.send('deleted all rooms');
-      }
-    });
-  });
-
-  // Keeping this around for legacy URLs. The new URL format for
-  // archives is /:room/archive/:archiveId though
-  app.get('/archive/:archiveId', function(req, res) {
-    ot.getArchive(req.param('archiveId'), function(err, archive) {
-      if (err) {
-        res.send(404, err.message);
-      } else {
-        res.render('archive', {
-          name: archive.name,
-          url: archive.url
-        });
-      }
-    });
-  });
-
-  app.get('/:room/archive/:archiveId', function(req, res) {
-    var room = req.param('room');
-    redis.hget('apiKeys', room, function(err, apiKeySecret) {
-      if (err) {
-        res.send(404, err.message);
-      } else {
-        var otSDK = ot;
-        if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret,
-            'https://anvil-tbdev.opentok.com');
-        }
-        otSDK.getArchive(req.param('archiveId'), function(err, archive) {
-          if (err) {
-            res.send(404, err.message);
-          } else {
-            res.render('archive', {
-              name: archive.name,
-              url: archive.url,
-              status: archive.status
-            });
-          }
-        });
       }
     });
   });
@@ -125,125 +83,6 @@ module.exports = function (app, config, redis, ot, anvil, redirectSSL) {
           chromeExtensionId: config.chromeExtensionId
         });
       }
-    });
-  });
-
-  app.get('/:room/whiteboard', function(req, res) {
-    res.render('whiteboard', {
-      room: req.param('room')
-    });
-  });
-
-  app.get('/:room/screen', function(req, res) {
-    res.render('screen', {
-      room: req.param('room'),
-      chromeExtensionId: config.chromeExtensionId
-    });
-  });
-
-  app.get('/:room/archives', function(req, res) {
-    redis.smembers('archive_' + req.param('room'), function(err, members) {
-      res.send(members);
-    });
-  });
-
-  app.post('/:room/startArchive', function(req, res) {
-    var room = req.param('room');
-
-    RoomStore.getRoom(room, function(err, sessionId, apiKey, secret) {
-      if (err) {
-        console.error('Error getting room: ', err);
-        res.send({
-          error: err.message
-        });
-      }
-      var otSDK = ot;
-      if (apiKey && secret) {
-        otSDK = new OpenTok(apiKey, secret, 'https://anvil-tbdev.opentok.com');
-      }
-      otSDK.startArchive(sessionId, {
-        name: room
-      }, function(err, archive) {
-        if (err) {
-          console.error('Error starting archive: ', err);
-          res.send({
-            error: err.message
-          });
-        } else {
-          redis.sadd('archive_' + room, archive.id);
-          res.send({
-            archiveId: archive.id
-          });
-        }
-      });
-    });
-  });
-
-  app.post('/:room/stopArchive', function(req, res) {
-    var archiveId = req.param('archiveId'),
-      room = req.param('room');
-
-    // Lookup if there's a custom apiKey for this room
-    redis.hget('apiKeys', room, function(err, apiKeySecret) {
-      if (err) {
-        console.error('Error getting apiKeys: ', err);
-        res.send({
-          error: err.message
-        });
-      } else {
-        var otSDK = ot;
-        if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret,
-            'https://anvil-tbdev.opentok.com');
-        }
-
-        otSDK.stopArchive(archiveId, function(err, archive) {
-          if (err) {
-            console.error('Error stopping archive: ', err);
-            res.send({
-              error: err.message
-            });
-          } else {
-            res.send({
-              archiveId: archive.id
-            });
-          }
-        });
-      }
-    });
-  });
-
-  app.get('/:room/subscriber/:subscriberId', function(req, res) {
-    var room = req.param('room');
-    var subscriberId = req.param('subscriberId');
-
-    RoomStore.getRoom(room, function(err, sessionId, apiKey, secret) {
-      if (err) {
-        console.error('Error getting room: ', err);
-        res.send({ error: err.message });
-        return;
-      } else if(!apiKey || !secret) {
-        apiKey = ot.apiKey;
-        secret = ot.apiSecret;
-      }
-
-      var payload = {
-        apiKey: apiKey,
-        apiSecret: secret,
-        sessionId: sessionId,
-        subscriberId: subscriberId
-      };
-
-      anvil.getSubscriberInfo(payload, function(err, info) {
-        if (err) {
-          console.error('Error retrieving subscriber information: ', err);
-          res.send({ error: err.message });
-          return;
-        }
-
-        res.send({info: info});
-      });
     });
   });
 
