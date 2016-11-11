@@ -3,18 +3,16 @@ require('angular-mocks');
 require('../../src/js/app.js');
 
 describe('audioAcquisitionProblem', function () {
-  var scope, element, mockPublisher, OTSession, $timeout, $window;
+  var scope, element, mockPublisher, OTSession, $window;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _OTSession_, _$timeout_, _$window_) {
+  beforeEach(inject(function ($rootScope, $compile, _OTSession_, _$window_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
-    $timeout = _$timeout_;
     $window = _$window_;
     spyOn($window, 'alert');
     mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
     OT.$.eventing(mockPublisher);
     mockPublisher.id = 'mockPublisher';
-    OTSession.publishers = [mockPublisher];
 
     element = '<audio-acquisition-problem publisher-id="mockPublisher">' +
       '</audio-acquisition-problem>';
@@ -25,13 +23,15 @@ describe('audioAcquisitionProblem', function () {
   it('shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
     function (done) {
       expect(scope.showAlert).toBe(false);
-      $timeout.flush();
       expect($window.alert).not.toHaveBeenCalled();
-      mockPublisher.trigger('audioAcquisitionProblem');
+      OTSession.addPublisher(mockPublisher);
       setTimeout(function() {
-        expect(scope.showAlert).toBe(true);
-        expect($window.alert).toHaveBeenCalled();
-        done();
+        mockPublisher.trigger('audioAcquisitionProblem');
+        setTimeout(function() {
+          expect(scope.showAlert).toBe(true);
+          expect($window.alert).toHaveBeenCalled();
+          done();
+        });
       });
     }
   );
