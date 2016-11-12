@@ -17,6 +17,33 @@ describe('OpenTok Login Page', function() {
     it('initializes correctly', function () {
       expect(scope.p2p).toBe(false);
       expect(scope.room).toBe('');
+      expect(scope.roomType).toBe('normal');
+    });
+
+    describe('joinRoom', function() {
+      beforeEach(function() {
+        scope.room = 'foo';
+        windowMock.location = {
+          href: 'mockURL/'
+        };
+      });
+
+      it('sets the url correctly for normal roomType', function() {
+        scope.joinRoom();
+        expect(windowMock.location.href).toEqual('mockURL/foo');
+      });
+
+      it('sets the url correctly for whiteboard roomType', function() {
+        scope.roomType = 'whiteboard';
+        scope.joinRoom();
+        expect(windowMock.location.href).toEqual('mockURL/foo/whiteboard');
+      });
+
+      it('sets the url correctly for screen roomType', function() {
+        scope.roomType = 'screen';
+        scope.joinRoom();
+        expect(windowMock.location.href).toEqual('mockURL/foo/screen');
+      });
     });
 
     it('watches the room and updates p2p', function () {

@@ -20,3 +20,4 @@ require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');
 require('./simulcast-service.js');
+require('./notifications.js');
