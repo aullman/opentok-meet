@@ -40,11 +40,9 @@ There are a few different mobile applications that have been built to interopera
 
 ##Running Tests
 
-You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Browserstack](browserstack.com/) and for [Sauce Labs](https://saucelabs.com/). Both of these services offer free options for Open Source. You will need the following environment variables set.
+You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Sauce Labs](https://saucelabs.com/). This service offers [free options for Open Source](https://saucelabs.com/open-source). You will need the following environment variables set.
 
 ```
-export BROWSERSTACK_USERNAME=<YOUR_BROWSERSTACK_USERNAME>
-export BROWSERSTACK_KEY=<YOUR_BROWSERSTACK_KEY>
 export SAUCE_USERNAME=<YOUR_SAUCE_USERNAME>
 export SAUCE_ACCESS_KEY=<YOUR_SAUCE_KEY>
 export TRAVIS_JOB_NUMBER=<ANYTHING>
