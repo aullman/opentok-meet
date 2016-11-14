@@ -20,4 +20,5 @@ require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');
 require('./simulcast-service.js');
+require('./audio-acquisition-problem.js');
 require('./notifications.js');
