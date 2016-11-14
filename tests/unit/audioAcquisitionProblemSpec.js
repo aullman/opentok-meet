@@ -35,4 +35,18 @@ describe('audioAcquisitionProblem', function () {
       });
     }
   );
+
+  it('only triggers an alert once even if you have multiple publishers', function(done) {
+    OTSession.addPublisher(mockPublisher);
+    OTSession.addPublisher(OT.$.eventing({}));
+    OTSession.addPublisher(OT.$.eventing({}));
+    setTimeout(function() {
+      mockPublisher.trigger('audioAcquisitionProblem');
+      setTimeout(function() {
+        expect($window.alert.calls.count()).toBe(1);
+        done();
+      });
+    });
+
+  });
 });
