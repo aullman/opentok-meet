@@ -2,7 +2,7 @@ var angular = require('angular');
 require('angular-mocks');
 require('../../src/js/app.js');
 
-describe('audioAcquisitionProblem', function () {
+fdescribe('audioAcquisitionProblem', function () {
   var scope, element, mockPublisher, OTSession, $window;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_, _$window_) {
@@ -35,4 +35,18 @@ describe('audioAcquisitionProblem', function () {
       });
     }
   );
+
+  it('only triggers an alert once even if you have multiple publishers', function(done) {
+    OTSession.addPublisher(mockPublisher);
+    OTSession.addPublisher(OT.$.eventing({}));
+    OTSession.addPublisher(OT.$.eventing({}));
+    setTimeout(function() {
+      mockPublisher.trigger('audioAcquisitionProblem');
+      setTimeout(function() {
+        expect($window.alert.calls.count()).toBe(1);
+        done();
+      });
+    });
+
+  });
 });
