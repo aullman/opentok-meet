@@ -54,4 +54,4 @@ By default `npm test` will run the tests in Chrome Stable. If you want to run in
 * chrome (stable, beta, unstable)
 * firefox (stable, beta, unstable)
 
-These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org), [BrowserStack Automate](browserstack.com/automate) and [Sauce Labs](https://saucelabs.com/).
+These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [Sauce Labs](https://saucelabs.com/).
