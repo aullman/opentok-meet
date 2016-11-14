@@ -2,7 +2,7 @@ var angular = require('angular');
 require('angular-mocks');
 require('../../src/js/app.js');
 
-describe('audioAcquisitionProblem', function () {
+fdescribe('audioAcquisitionProblem', function () {
   var scope, element, mockPublisher, OTSession, $window;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile, _OTSession_, _$window_) {
