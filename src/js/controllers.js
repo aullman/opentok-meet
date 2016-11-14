@@ -1,7 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService',
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService', 'NotificationService',
     function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-      SimulcastService) {
+      SimulcastService, NotificationService) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -130,6 +130,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.$broadcast('otEditorRefresh');
     }, 10);
   };
+
+  NotificationService.init();
 
   // Fetch the room info
   RoomService.getRoom().then(function(roomData) {
