@@ -117,6 +117,17 @@ describe('Room', function() {
         expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
       });
     });
+
+    it('displays an error if there is a publish error', function() {
+      var publishErrors = element(by.css('publish-errors'));
+      expect(publishErrors.isDisplayed()).toBe(false);
+      expect(publisher.isPresent()).toBe(true);
+      browser.driver.executeScript('angular.element("ot-publisher").scope().$emit' +
+        '("otPublisherError", {message:"whatever"}, {id:"facePublisher"})').then(function () {
+          expect(publishErrors.isDisplayed()).toBe(true);
+          expect(publisher.isPresent()).toBe(false);
+      });
+    });
   });
 
   describe('footer', function () {

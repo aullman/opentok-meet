@@ -7,3 +7,4 @@ require('./servicesSpec.js');
 require('./subscriberStatsSpec.js');
 require('./audioAcquisitionProblemSpec.js');
 require('./notificationsSpec.js');
+require('./publishErrorsSpec.js');

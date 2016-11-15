@@ -22,3 +22,4 @@ require('./screen/directive.js');
 require('./simulcast-service.js');
 require('./audio-acquisition-problem.js');
 require('./notifications.js');
+require('./publish-errors.js');
