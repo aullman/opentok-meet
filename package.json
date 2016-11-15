@@ -29,9 +29,10 @@
     "npm": "2.14.7"
   },
   "scripts": {
+    "postinstall": "webpack",
     "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
-    "start": "webpack -w & node app.js",
+    "start": "node app.js",
     "unit": "karma start tests/karma.conf.js --single-run",
     "preintegration": "npm run update-webdriver",
     "integration": "protractor-flake -- tests/protractor.conf.js",
