@@ -6,3 +6,4 @@ require('./directivesSpec.js');
 require('./servicesSpec.js');
 require('./subscriberStatsSpec.js');
 require('./notificationsSpec.js');
+require('./publishErrorsSpec.js');
