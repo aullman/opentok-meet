@@ -1,5 +1,11 @@
-angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSession',
-  function($window, OTSession) {
+var Push = require('push.js');
+
+angular.module('opentok-meet').factory('Push', function() {
+  return Push;
+});
+
+angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSession', 'Push',
+  function($window, OTSession, Push) {
     var focused = true;
 
     $window.addEventListener('blur', function() {
@@ -14,11 +20,18 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
       if (!OTSession.session) {
         OTSession.on('init', notifyOnConnectionCreated);
       } else {
-        OTSession.session.on('connectionCreated', function() {
-          if (!focused) {
-            new $window.Notification('New Participant', {
+        OTSession.session.on('connectionCreated', function(event) {
+          if (!focused &&
+              event.connection.connectionId !== OTSession.session.connection.connectionId) {
+            Push.create('New Participant', {
               body: 'Someone joined your meeting',
-              icon: '/icon.png'
+              icon: '/icon.png',
+              tag: 'new-participant',
+              timeout: 5000,
+              onClick: function () {
+                $window.focus();
+                this.close();
+              }
             });
           }
         });
@@ -26,17 +39,14 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
     };
     return {
       init: function() {
-        if ($window.hasOwnProperty('Notification')) {
-          var Notification = $window.Notification;
-          if (Notification.permission === 'granted') {
-            notifyOnConnectionCreated();
-          } else if (Notification.permission !== 'denied') {
-            Notification.requestPermission(function(permission) {
-              if (permission === 'granted') {
-                notifyOnConnectionCreated();
-              }
-            });
-          }
+        if (Push.Permission.has()) {
+          notifyOnConnectionCreated();
+        } else {
+          Push.Permission.request(function() {
+              notifyOnConnectionCreated();
+          }, function(err) {
+            console.warn('Failed to get permission to send notifications', err);
+          });
         }
       }
     };
