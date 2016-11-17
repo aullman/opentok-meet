@@ -21,6 +21,7 @@
     "path": "^0.12.7",
     "redis": "~0.10.1",
     "request": "^2.74.0",
+    "push.js": "0.0.11",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"
   },
@@ -35,7 +36,7 @@
     "start": "node app.js",
     "unit": "karma start tests/karma.conf.js --single-run",
     "preintegration": "npm run update-webdriver",
-    "integration": "protractor-flake -- tests/protractor.conf.js",
+    "integration": "protractor-flake -- tests/protractor.conf.js --max-attempts=5",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
     "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js"
