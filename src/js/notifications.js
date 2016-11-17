@@ -42,11 +42,15 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
         if (Push.Permission.has()) {
           notifyOnConnectionCreated();
         } else {
-          Push.Permission.request(function() {
-              notifyOnConnectionCreated();
-          }, function(err) {
-            console.warn('Failed to get permission to send notifications', err);
-          });
+          try {
+            Push.Permission.request(function() {
+                notifyOnConnectionCreated();
+            }, function(err) {
+              console.warn(err);
+            });
+          } catch(err) {
+            console.warn(err);
+          }
         }
       }
     };
