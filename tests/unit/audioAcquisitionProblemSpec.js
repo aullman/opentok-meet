@@ -23,30 +23,14 @@ describe('audioAcquisitionProblem', function () {
   it('shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
     function (done) {
       expect(scope.showAlert).toBe(false);
-      expect($window.alert).not.toHaveBeenCalled();
       OTSession.addPublisher(mockPublisher);
       setTimeout(function() {
         mockPublisher.trigger('audioAcquisitionProblem');
         setTimeout(function() {
           expect(scope.showAlert).toBe(true);
-          expect($window.alert).toHaveBeenCalled();
           done();
         });
       });
     }
   );
-
-  it('only triggers an alert once even if you have multiple publishers', function(done) {
-    OTSession.addPublisher(mockPublisher);
-    OTSession.addPublisher(OT.$.eventing({}));
-    OTSession.addPublisher(OT.$.eventing({}));
-    setTimeout(function() {
-      mockPublisher.trigger('audioAcquisitionProblem');
-      setTimeout(function() {
-        expect($window.alert.calls.count()).toBe(1);
-        done();
-      });
-    });
-
-  });
 });

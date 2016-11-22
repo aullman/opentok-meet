@@ -109,11 +109,6 @@ describe('Room', function() {
       expect(audioAcquisitionProblem.isDisplayed()).toBe(false);
       browser.driver.executeScript('OT.publishers.find().trigger(\'audioAcquisitionProblem\');')
       .then(function () {
-        var alertDialog = browser.switchTo().alert();
-        expect(alertDialog.getText()).toEqual('Warning: audio acquisition problem you may need ' +
-          'to quit and restart your browser. If you are seeing this message please contact ' +
-          'broken@tokbox.com.');
-        alertDialog.accept();
         expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
       });
     });
