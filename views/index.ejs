@@ -29,7 +29,7 @@
                   <div id="advancedLink">
                     <a href="#" ng-click="advanced = true" ng-show="!advanced">Advanced</a>
                   </div>
-                  <div id="advanced" ng-show="advanced">
+                  <div id="advanced" ng-show="advanced" ng-cloak>
                     <div id="p2pCheckbox">
                       <input type="checkbox" name="p2p" id="p2p" ng-model="p2p" ng-change="p2pChanged()">
                         <label for="p2p">
