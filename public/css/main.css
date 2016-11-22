@@ -437,3 +437,7 @@ ot-subscriber mute-video .cross-icon {
     top: 7px;
     left: 2px;
 }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
