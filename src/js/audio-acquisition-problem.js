@@ -17,8 +17,6 @@ angular.module('opentok-meet').directive('audioAcquisitionProblem',
             publisher.on('audioAcquisitionProblem', function() {
               scope.showAlert = true;
               scope.$apply();
-              $window.alert('Warning: audio acquisition problem you may need to quit and restart ' +
-              'your browser. If you are seeing this message please contact broken@tokbox.com.');
             });
             OTSession.off('otPublisherAdded', listenForIssue);
           } else {

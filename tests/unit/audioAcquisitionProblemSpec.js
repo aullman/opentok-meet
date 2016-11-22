@@ -23,13 +23,11 @@ describe('audioAcquisitionProblem', function () {
   it('shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
     function (done) {
       expect(scope.showAlert).toBe(false);
-      expect($window.alert).not.toHaveBeenCalled();
       OTSession.addPublisher(mockPublisher);
       setTimeout(function() {
         mockPublisher.trigger('audioAcquisitionProblem');
         setTimeout(function() {
           expect(scope.showAlert).toBe(true);
-          expect($window.alert).toHaveBeenCalled();
           done();
         });
       });
