@@ -53,15 +53,15 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   var startArchiving = function() {
     $scope.archiving = true;
-    $http.post(baseURL + $scope.room + '/startArchive').success(function(response) {
-      if (response.error) {
+    $http.post(baseURL + $scope.room + '/startArchive').then(function(response) {
+      if (response.data.error) {
         $scope.archiving = false;
-        console.error('Failed to start archive', response.error);
+        console.error('Failed to start archive', response.data.error);
       } else {
-        $scope.archiveId = response.archiveId;
+        $scope.archiveId = response.data.archiveId;
       }
-    }).error(function(data) {
-      console.error('Failed to start archiving', data);
+    }).catch(function(response) {
+      console.error('Failed to start archiving', response);
       $scope.archiving = false;
     });
   };
@@ -70,15 +70,15 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.archiving = false;
     $http.post(baseURL + $scope.room + '/stopArchive', {
       archiveId: $scope.archiveId
-    }).success(function(response) {
-      if (response.error) {
-        console.error('Failed to stop archiving', response.error);
+    }).then(function(response) {
+      if (response.data.error) {
+        console.error('Failed to stop archiving', response.data.error);
         $scope.archiving = true;
       } else {
-        $scope.archiveId = response.archiveId;
+        $scope.archiveId = response.data.archiveId;
       }
-    }).error(function(data) {
-      console.error('Failed to stop archiving', data);
+    }).catch(function(response) {
+      console.error('Failed to stop archiving', response);
       $scope.archiving = true;
     });
   };
