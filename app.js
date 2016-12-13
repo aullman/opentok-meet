@@ -2,6 +2,7 @@ var express = require('express'),
   fs = require('fs'),
   OpenTok = require('opentok'),
   https = require('https'),
+  compression = require('compression'),
   app = express(),
   config;
 
@@ -31,6 +32,7 @@ if (process.env.REDISTOGO_URL) {
 }
 
 
+app.use(compression());
 app.use(express.logger());
 
 app.configure(function() {
