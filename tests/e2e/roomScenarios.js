@@ -114,7 +114,7 @@ describe('Room', function() {
     });
 
     it('displays an error if there is a publish error', function() {
-      var publishErrors = element(by.css('publish-errors'));
+      var publishErrors = element(by.css('ot-errors'));
       expect(publishErrors.isDisplayed()).toBe(false);
       expect(publisher.isPresent()).toBe(true);
       browser.driver.executeScript('angular.element("ot-publisher").scope().$emit' +
