@@ -51,6 +51,7 @@
     "karma-sauce-launcher": "^0.2.14",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "null-loader": "^0.1.1",
     "opentok-test-scripts": "^3.0.3",
     "protractor": "^4.0.9",
     "protractor-flake": "^2.1.2",
