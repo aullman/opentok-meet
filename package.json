@@ -14,7 +14,7 @@
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
     "opentok": "^2.2.3",
-    "opentok-angular": "^1.1.0",
+    "opentok-angular": "^1.2.3",
     "opentok-editor": "^0.3.3",
     "opentok-whiteboard": "^1.1.0",
     "path": "^0.12.7",

@@ -117,6 +117,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
 
     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function(err, session) {
+      if (err) {
+        $scope.$broadcast('otError', {message: 'foo'});
+        return;
+      }
       $scope.session = session;
       var connectDisconnect = function(connected) {
         $scope.$apply(function() {

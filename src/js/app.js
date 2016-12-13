@@ -19,4 +19,4 @@ require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');
 require('./notifications.js');
-require('./publish-errors.js');
+require('./ot-errors.js');
