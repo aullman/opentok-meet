@@ -4,7 +4,7 @@ module.exports = function(config) {
     basePath: '../',
 
     files: [
-      'https://static.opentok.com/v2/js/opentok.js',
+      'https://tbdev.tokbox.com/v2/js/opentok.js',
       'public/js/lib/angular/angular.js',
       'public/js/lib/jquery/dist/jquery.js',
       'bower_components/angular-mocks/angular-mocks.js',
