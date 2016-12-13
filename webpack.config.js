@@ -16,7 +16,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: 'style!css' },
-            { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
+            // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
         ]
     },
     plugins: [
