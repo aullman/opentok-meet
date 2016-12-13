@@ -25,6 +25,7 @@ describe('OpenTok Meet controllers', function() {
         // Override checkSystemRequirements so that IE works without a plugin
         return true;
       };
+      spyOn(OT._, 'enableExperimentalErrorReporting');
       scope.session = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       scope.session.connection = {
         connectionId: 'mockConnectionId'
@@ -70,6 +71,10 @@ describe('OpenTok Meet controllers', function() {
 
     it('should define connections', function () {
       expect(scope.connections).toBe(MockOTSession.connections);
+    });
+
+    it('should enable OpenTok.js error reporting', function () {
+      expect(OT._.enableExperimentalErrorReporting).toHaveBeenCalled();
     });
 
     it('should define facePublisherProps', function() {
