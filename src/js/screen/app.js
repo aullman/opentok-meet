@@ -1,3 +1,6 @@
+var errorReporting = require('../lib/error-reporting.js');
+errorReporting();
+
 window.$ = window.jQuery = require('jquery');
 var angular = require('angular');
 
