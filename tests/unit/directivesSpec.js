@@ -191,26 +191,52 @@ describe('muteSubscriber', function () {
 describe('mutePublisher', function () {
   var scope, element, mockPublisher, OTSession;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+  beforeEach(inject(function ($rootScope, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
-    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
+    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo', 'publishAudio']);
     mockPublisher.id = 'mockPublisher';
     OTSession.publishers = [mockPublisher];
-
-    element = '<div publisher-id="mockPublisher" mute-publisher></div>';
-    element = $compile(element)(scope);
-    scope.$digest();
   }));
 
-  it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
-    expect(scope.mutedVideo).toBe(false);
-    element.triggerHandler({type: 'click'});
-    expect(scope.mutedVideo).toBe(true);
-    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
-    element.triggerHandler({type: 'click'});
-    expect(scope.mutedVideo).toBe(false);
-    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+  describe('Video type', function() {
+    beforeEach(function() {
+      inject(function ($compile) {
+        element = '<div publisher-id="mockPublisher" mute-publisher></div>';
+        element = $compile(element)(scope);
+        scope.$digest();
+      });
+    });
+
+    it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
+      expect(scope.mutedVideo).toBe(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedVideo).toBe(true);
+      expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedVideo).toBe(false);
+      expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('Audio type', function() {
+    beforeEach(function() {
+      inject(function ($compile) {
+        element = '<div publisher-id="mockPublisher" muted-type="Audio" mute-publisher></div>';
+        element = $compile(element)(scope);
+        scope.$digest();
+      });
+    });
+
+    it('toggles mutedAudio and calls publishAudio on the facePublisher', function () {
+      expect(scope.mutedAudio).toBe(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedAudio).toBe(true);
+      expect(mockPublisher.publishAudio).toHaveBeenCalledWith(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedAudio).toBe(false);
+      expect(mockPublisher.publishAudio).toHaveBeenCalledWith(true);
+    });
   });
 });
 
