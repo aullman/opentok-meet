@@ -77,7 +77,7 @@ ot-layout {
     height: 100%;
 }
 
-ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout subscriber-stats {
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout subscriber-stats, ot-layout subscriber-report {
     transition-property: top,bottom,opacity;
     transition-duration: .5s;
     transition-timing-function: ease-in;
@@ -106,6 +106,10 @@ ot-layout ot-subscriber subscriber-stats {
     left: 0px;
 }
 
+ot-layout ot-subscriber subscriber-report {
+    left: 38px;
+}
+
 ot-layout > .OT_big button.resize-btn:before {
     content: "\f267";
 }
@@ -120,6 +124,7 @@ ot-layout button.restrict-framerate-btn.ion-ios7-speedometer-outline {
 
 ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn,
     ot-layout > :hover subscriber-stats, ot-layout button.OT_mode-on ~ subscriber-stats,
+    ot-layout > :hover subscriber-report, ot-layout button.OT_mode-on ~ subscriber-report,
     ot-layout button.OT_mode-on ~ button.resize-btn,
     ot-layout button.OT_mode-on ~ button.restrict-framerate-btn {
     top: 0;
