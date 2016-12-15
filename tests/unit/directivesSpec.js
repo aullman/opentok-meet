@@ -125,7 +125,7 @@ describe('muteVideo', function () {
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope.$new();
-    scope.muted = false;
+    scope.mutedVideo = false;
     element = '<mute-video muted="muted"></mute-video>';
     element = $compile(element)(scope);
     scope.$digest();
@@ -146,14 +146,14 @@ describe('muteVideo', function () {
     });
     it('changes title when muted changes', function () {
       expect(firstI.getAttribute('title')).toBe('Mute Video');
-      scope.muted = true;
+      scope.mutedVideo = true;
       scope.$digest();
       expect(firstI.getAttribute('title')).toBe('Unmute Video');
     });
     it('changes classes when muted changes', function () {
-      expect(scope.muted).toBe(false);
+      expect(scope.mutedVideo).toBe(false);
       expect(secondI.className).toContain('ion-ios7-close');
-      scope.muted = true;
+      scope.mutedVideo = true;
       scope.$digest();
       expect(secondI.className).toContain('ion-ios7-checkmark');
     });
@@ -204,12 +204,12 @@ describe('mutePublisher', function () {
   }));
 
   it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(true);
+    expect(scope.mutedVideo).toBe(true);
     expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
   });
 });
