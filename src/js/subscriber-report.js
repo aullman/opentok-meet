@@ -9,7 +9,7 @@ angular.module('opentok-meet').factory('ReportService', [
     return {
       report: function(subscriber, report) {
         console.log(subscriber);
-        TB.analytics.logEvent({
+        OT.analytics.logEvent({
           action: 'SubscriberQuality',
           sessionId: subscriber.session.id,
           connectionId: subscriber.session.connection.id,

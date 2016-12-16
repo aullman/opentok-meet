@@ -14,7 +14,8 @@ subscriber-report button.show-report-btn {
 
 subscriber-report button.send-report-btn {
     cursor: pointer;
-    border: 1px solid white;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 subscriber-report p {
