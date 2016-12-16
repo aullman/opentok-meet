@@ -1,0 +1,37 @@
+subscriber-report {
+    color: white;
+}
+subscriber-report button.show-report-btn {
+    width: 25px;
+    height: 25px;
+    font-size: 27px;
+    cursor: pointer;
+    background-color: transparent;
+    margin-top: 2px;
+    border: none;
+    z-index: 99;
+}
+
+subscriber-report button.send-report-btn {
+    cursor: pointer;
+    border: 1px solid white;
+}
+
+subscriber-report p {
+    margin-bottom: 20px !important;
+}
+
+subscriber-report div.show-report-info {
+    background: rgba(0,0,0,.4);
+    padding: 10px;
+    margin-top: 4px;
+}
+
+subscriber-report select, subscriber-report textarea {
+    color: grey !important;
+    width: 100%;
+}
+
+subscriber-report button.show-report {
+  text-shadow: 0px 0px 8px #fff;
+}
