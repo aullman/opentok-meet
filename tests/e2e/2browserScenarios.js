@@ -165,6 +165,17 @@ describe('2 browsers in the same room', function() {
           });
         }, 5000);
       });
+
+      it('report button works', function() {
+        var showReportInfo = secondSubscriber.element(by.css('.show-report-info'));
+        var reportButton = secondSubscriber.element(by.css('.show-report-btn'));
+        expect(showReportInfo.isDisplayed()).toBe(false);
+        reportButton.click();
+        secondBrowser.wait(function() {
+          return showReportInfo.isDisplayed();
+        }, 2000);
+        expect(showReportInfo.isDisplayed()).toBe(true);
+      });
     });
 
     if (browser.params.testScreenSharing) {
