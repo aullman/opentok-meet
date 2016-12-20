@@ -8,3 +8,4 @@ require('./subscriberStatsSpec.js');
 require('./audioAcquisitionProblemSpec.js');
 require('./notificationsSpec.js');
 require('./otErrorsSpec.js');
+require('./subscriberReportSpec.js');
