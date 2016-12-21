@@ -1,4 +1,6 @@
 var webpack = require('webpack');
+var GitRevisionPlugin = require('git-revision-webpack-plugin');
+var gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = function(config) {
   var sauceLaunchers = {
@@ -70,7 +72,13 @@ module.exports = function(config) {
               { test: /\.css$/, loader: 'style!css' }
           ]
       },
-      devtool: 'inline-source-map'
+      devtool: 'inline-source-map',
+      plugins: [
+        new webpack.DefinePlugin({
+            VERSION: JSON.stringify(gitRevisionPlugin.version()),
+            COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+        }),
+      ],
     },
 
     webpackMiddleware: {
