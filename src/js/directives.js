@@ -94,14 +94,14 @@ function($document, $window) {
       restrict: 'A',
       link : function(scope, element) {
         var subscriber;
-        scope.muted = false;
+        scope.mutedVideo = false;
         angular.element(element).on('click', function () {
           if (!subscriber) {
             subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
           }
           if (subscriber) {
-            subscriber.subscribeToVideo(scope.muted);
-            scope.muted = !scope.muted;
+            subscriber.subscribeToVideo(scope.mutedVideo);
+            scope.mutedVideo = !scope.mutedVideo;
             scope.$apply();
           }
         });
