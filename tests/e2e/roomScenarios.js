@@ -79,8 +79,7 @@ describe('Room', function() {
       expect(publisher.isDisplayed()).toBe(true);
     });
 
-    // This isn't passing in browserstack for some reason need to figure out why
-    xit('mutes video when you click the mute-video icon', function () {
+    it('mutes video when you click the mute-video icon', function () {
       browser.wait(function () {
         return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
       }, 10000);
@@ -91,15 +90,35 @@ describe('Room', function() {
       browser.wait(function () {
         return muteVideo.isDisplayed();
       }, 10000);
-      expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
+      var muteCameraButton = element(by.css('button[name="muteCamera"]'));
+      expect(muteCameraButton.isPresent()).toBe(true);
+      expect(muteCameraButton.isDisplayed()).toBe(true);
+
+      var verifyMuted = function(muted) {
+        // muted button has a checkmark or a cross in it
+        expect(muteVideo.element(by.css(muted ? '.ion-ios7-checkmark' : '.ion-ios7-close'))
+          .isPresent()).toBe(true);
+        // bottom bar camera button is green or red
+        expect(muteCameraButton.getAttribute('class')).toContain(muted ? 'green' : 'red');
+        if (muted) {
+          // Publisher is in audio only mode
+          expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+            .toContain('OT_audio-only');
+        } else {
+          // Publisher is not in audio only mode
+          expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+            .not.toContain('OT_audio-only');
+        }
+      };
+      verifyMuted(false);
       muteVideo.click();
-      expect(muteVideo.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
-      expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
-        .toContain('OT_audio-only');
+      verifyMuted(true);
       muteVideo.click();
-      expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
-      expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
-        .not.toContain('OT_audio-only');
+      verifyMuted(false);
+      muteCameraButton.click();
+      verifyMuted(true);
+      muteCameraButton.click();
+      verifyMuted(false);
     });
 
     it('displays an error if there is a publish error', function() {
