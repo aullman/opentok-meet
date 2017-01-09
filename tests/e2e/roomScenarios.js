@@ -79,27 +79,77 @@ describe('Room', function() {
       expect(publisher.isDisplayed()).toBe(true);
     });
 
-    // This isn't passing in browserstack for some reason need to figure out why
-    xit('mutes video when you click the mute-video icon', function () {
-      browser.wait(function () {
-        return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
-      }, 10000);
-      var muteVideo = publisher.element(by.css('mute-video'));
-      expect(muteVideo.isPresent()).toBe(true);
-      expect(muteVideo.isDisplayed()).toBe(false);
-      browser.actions().mouseMove(muteVideo).perform();
-      browser.wait(function () {
-        return muteVideo.isDisplayed();
-      }, 10000);
-      expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
-      muteVideo.click();
-      expect(muteVideo.element(by.css('.ion-ios7-checkmark')).isPresent()).toBe(true);
-      expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
-        .toContain('OT_audio-only');
-      muteVideo.click();
-      expect(muteVideo.element(by.css('.ion-ios7-close')).isPresent()).toBe(true);
-      expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
-        .not.toContain('OT_audio-only');
+    describe('mute buttons', function() {
+      beforeEach(function() {
+        browser.wait(function () {
+          return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
+        }, 10000);
+      });
+
+      it('mutes video when you click the mute-video icon', function () {
+        var muteVideo = publisher.element(by.css('mute-video'));
+        expect(muteVideo.isPresent()).toBe(true);
+        expect(muteVideo.isDisplayed()).toBe(false);
+        browser.actions().mouseMove(muteVideo).perform();
+        browser.wait(function () {
+          return muteVideo.isDisplayed();
+        }, 10000);
+        var muteCameraButton = element(by.css('button[name="muteCamera"]'));
+        expect(muteCameraButton.isPresent()).toBe(true);
+        expect(muteCameraButton.isDisplayed()).toBe(true);
+
+        var verifyMuted = function(muted) {
+          // muted button has a checkmark or a cross in it
+          expect(muteVideo.element(by.css(muted ? '.ion-ios7-checkmark' : '.ion-ios7-close'))
+            .isPresent()).toBe(true);
+          // bottom bar camera button is green or red
+          expect(muteCameraButton.getAttribute('class')).toContain(muted ? 'green' : 'red');
+          if (muted) {
+            // Publisher is in audio only mode
+            expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+              .toContain('OT_audio-only');
+          } else {
+            // Publisher is not in audio only mode
+            expect(publisher.element(by.css('ot-publisher')).getAttribute('class'))
+              .not.toContain('OT_audio-only');
+          }
+        };
+        verifyMuted(false);
+        muteVideo.click();
+        verifyMuted(true);
+        muteVideo.click();
+        verifyMuted(false);
+        muteCameraButton.click();
+        verifyMuted(true);
+        muteCameraButton.click();
+        verifyMuted(false);
+      });
+
+      it('toggles mic when you click the mic button', function() {
+        var muteMicButton = element(by.css('button[name="muteMicrophone"]'));
+        expect(muteMicButton.isPresent()).toBe(true);
+        var publisherMuteBtn = publisher.element(by.css('.OT_mute'));
+
+        var verifyMuted = function(muted) {
+          expect(muteMicButton.getAttribute('class')).toContain(muted ? 'green' : 'red');
+          expect(muteMicButton.getAttribute('class')).toContain(
+            muted ? 'ion-ios7-mic-off' : 'ion-ios7-mic');
+          if (muted) {
+            expect(publisherMuteBtn.getAttribute('class')).toContain('OT_active');
+          } else {
+            expect(publisherMuteBtn.getAttribute('class')).not.toContain('OT_active');
+          }
+        };
+        verifyMuted(false);
+        muteMicButton.click();
+        verifyMuted(true);
+        muteMicButton.click();
+        verifyMuted(false);
+        publisherMuteBtn.click();
+        verifyMuted(true);
+        publisherMuteBtn.click();
+        verifyMuted(false);
+      });
     });
 
     it('displays an error if there is a publish error', function() {
@@ -160,15 +210,23 @@ describe('Room', function() {
         }
       });
 
-      it('publishSDBtn shows up when you unpublish and can publish', function () {
+      it('publishSDBtn shows up when you unpublish and mute buttons go away', function () {
         var publisher = element(by.css('div#facePublisher'));
+        var muteMicButton = element(by.css('button[name="muteMicrophone"]'));
+        var muteCameraButton = element(by.css('button[name="muteCamera"]'));
+        expect(muteMicButton.isPresent()).toBe(true);
+        expect(muteCameraButton.isPresent()).toBe(true);
         publishBtn.click();
         // You have to wait for the hardware to clean up properly before acquiring the camera
         // again, otherwise you end up with the same resolution.
         browser.sleep(1000);
         expect(publishSDBtn.isPresent()).toBe(true);
+        expect(muteMicButton.isPresent()).toBe(false);
+        expect(muteCameraButton.isPresent()).toBe(false);
         publishSDBtn.click();
         expect(publisher.isPresent()).toBe(true);
+        expect(muteMicButton.isPresent()).toBe(true);
+        expect(muteCameraButton.isPresent()).toBe(true);
         browser.wait(function () {
           return element(by.css('.OT_publisher:not(.OT_loading)')).isPresent();
         }, 10000);
