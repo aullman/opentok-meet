@@ -178,12 +178,12 @@ describe('muteSubscriber', function () {
   }));
 
   it('toggles subscribeToVideo on click', function () {
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(true);
+    expect(scope.mutedVideo).toBe(true);
     expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
   });
 });
