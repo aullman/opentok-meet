@@ -14,7 +14,6 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 
 >If you wish to fork this project, please fork the [parent project](https://github.com/aullman/opentok-meet).
 
-
 ## Deploying to meet.tokbox.com
 
 If you push to the master branch of this repo [Travis](https://travis-ci.org/opentok/opentok-meet) and [BrowserStack](https://browserstack.com/automate) tests will run and when they pass meet.tokbox.com will be updated.
