@@ -17,10 +17,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.editorUnread = false;
   $scope.leaving = false;
 
-  if (OT._ && OT._.enableExperimentalErrorReporting) {
-    OT._.enableExperimentalErrorReporting();
-  }
-
   var facePublisherPropsHD = {
     name: 'face',
     width: '100%',
