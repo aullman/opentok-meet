@@ -10,15 +10,15 @@ describe('publishErrors', function() {
     };
     scope = $rootScope.$new();
     scope.togglePublish = jasmine.createSpy('togglePublish');
-    element = '<publish-errors></publish-errors>';
+    element = '<ot-errors></ot-errors>';
     element = $compile(element)(scope);
     scope.$digest();
   }));
 
   it('should display an error when there is an otPublisherError event', function() {
-    expect(scope.publishError).not.toBeDefined();
+    expect(scope.errorMessage).not.toBeDefined();
     scope.$emit('otPublisherError', mockError, mockPublisher);
-    expect(scope.publishError).toEqual(mockError.message);
+    expect(scope.errorMessage).toEqual('Publish Error: ' + mockError.message);
     expect(element.html()).toContain(mockError.message);
   });
 
@@ -39,5 +39,12 @@ describe('publishErrors', function() {
     expect(scope.publishError).not.toBeDefined();
     expect(scope.togglePublish).not.toHaveBeenCalled();
     expect(scope.mouseMove).not.toBeDefined();
+  });
+
+  it('should show an error for connect errors too', function() {
+    expect(scope.errorMessage).not.toBeDefined();
+    scope.$emit('otError', mockError);
+    expect(scope.errorMessage).toEqual('Connect Error: ' + mockError.message);
+    expect(element.html()).toContain(mockError.message);
   });
 });

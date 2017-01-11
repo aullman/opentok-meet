@@ -256,125 +256,135 @@ describe('OpenTok Meet controllers', function() {
       describe('OTSession.init', function () {
         var callback,
           mockSession;
-        beforeEach(function () {
-          callback = MockOTSession.init.calls.mostRecent().args[3];
 
-          mockSession = OT.initSession('mockSessionId');
-          spyOn(mockSession, 'on').and.callThrough();
-          callback(null, mockSession);
+        it('handles errors', function(done) {
+          callback = MockOTSession.init.calls.mostRecent().args[3];
+          var fakeError = { message: 'fakeMessage' };
+          scope.$on('otError', done);
+          callback(fakeError);
         });
-        it('sets the session', function () {
-          expect(scope.session).toBe(mockSession);
-        });
-        it('listens for events on the session', function () {
-          expect(mockSession.on).toHaveBeenCalledWith('sessionConnected', jasmine.any(Function));
-          expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
-          expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped',
-            jasmine.any(Function));
-          expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
-          expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
-        });
-        it('handles archiveStarted', function (done) {
-          mockSession.trigger('archiveStarted', {type: 'archiveStarted', id: 'mockArchiveId'});
-          setTimeout(function () {
-            expect(scope.archiveId).toBe('mockArchiveId');
-            expect(scope.archiving).toBe(true);
-            done();
-          }, 100);
-        });
-        it('handles archiveStopped', function (done) {
-          scope.archiving = true;
-          mockSession.trigger('archiveStopped', {type: 'archiveStopped', id: 'mockArchiveId'});
-          setTimeout(function () {
-            expect(scope.archiveId).toBe('mockArchiveId');
-            expect(scope.archiving).toBe(false);
-            done();
-          },100);
-        });
-        it('handles sessionConnected', function (done) {
-          expect(scope.connected).toBe(false);
-          mockSession.trigger('sessionConnected');
-          setTimeout(function () {
-            expect(scope.connected).toBe(true);
-            done();
-          }, 100);
-        });
-        it('handles sessionDisconnected', function (done) {
-          scope.connected = true;
-          mockSession.trigger('sessionDisconnected');
-          setTimeout(function () {
+
+        describe('success', function() {
+          beforeEach(function () {
+            callback = MockOTSession.init.calls.mostRecent().args[3];
+
+            mockSession = OT.initSession('mockSessionId');
+            spyOn(mockSession, 'on').and.callThrough();
+            callback(null, mockSession);
+          });
+          it('sets the session', function () {
+            expect(scope.session).toBe(mockSession);
+          });
+          it('listens for events on the session', function () {
+            expect(mockSession.on).toHaveBeenCalledWith('sessionConnected', jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped',
+              jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
+          });
+          it('handles archiveStarted', function (done) {
+            mockSession.trigger('archiveStarted', {type: 'archiveStarted', id: 'mockArchiveId'});
+            setTimeout(function () {
+              expect(scope.archiveId).toBe('mockArchiveId');
+              expect(scope.archiving).toBe(true);
+              done();
+            }, 100);
+          });
+          it('handles archiveStopped', function (done) {
+            scope.archiving = true;
+            mockSession.trigger('archiveStopped', {type: 'archiveStopped', id: 'mockArchiveId'});
+            setTimeout(function () {
+              expect(scope.archiveId).toBe('mockArchiveId');
+              expect(scope.archiving).toBe(false);
+              done();
+            },100);
+          });
+          it('calls init on SimulcastService', function () {
+            expect(SimulcastServiceMock.init).toHaveBeenCalledWith(scope.streams, scope.session);
+          });
+          it('handles sessionConnected', function (done) {
             expect(scope.connected).toBe(false);
-            expect(scope.publishing).toBe(false);
-            done();
-          }, 100);
-        });
-        it('calls init on SimulcastService', function () {
-          expect(SimulcastServiceMock.init).toHaveBeenCalledWith(scope.streams, scope.session);
-        });
-        it('handles sessionConnected when reconnecting', function (done) {
-          scope.reconnecting = true
-          mockSession.trigger('sessionConnected');
-          setTimeout(function () {
-            expect(scope.reconnecting).toBe(false);
-            done();
-          }, 100);
-        });
-        it('handles sessionDisconnected when reconnecting', function (done) {
-          scope.reconnecting = true;
-          mockSession.trigger('sessionDisconnected');
-          setTimeout(function () {
-            expect(scope.reconnecting).toBe(false);
-            done();
-          }, 100);
-        });
-        it('handles sessionReconnecting', function (done) {
-          expect(scope.reconnecting).toBe(false);
-          mockSession.trigger('sessionReconnecting');
-          setTimeout(function () {
-            expect(scope.reconnecting).toBe(true);
-            done();
-          }, 100);
-        });
-        it('handles sessionReconnected', function (done) {
-          scope.reconnecting = true;
-          mockSession.trigger('sessionReconnected');
-          setTimeout(function () {
-            expect(scope.reconnecting).toBe(false);
-            done();
-          }, 100);
-        });
-        describe('otEditorUpdate', function () {
-          it('updates unread when not looking at editor', function () {
-            expect(scope.editorUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
-            scope.$emit('otEditorUpdate');
-            expect(scope.editorUnread).toBe(true);
-            expect(scope.mouseMove).toBe(true);
+            mockSession.trigger('sessionConnected');
+            setTimeout(function () {
+              expect(scope.connected).toBe(true);
+              done();
+            }, 100);
           });
-          it('does not update unread when already looking at editor', function () {
-            scope.showEditor = true;
-            expect(scope.editorUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
-            scope.$emit('otEditorUpdate');
-            expect(scope.editorUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
+          it('handles sessionDisconnected', function (done) {
+            scope.connected = true;
+            mockSession.trigger('sessionDisconnected');
+            setTimeout(function () {
+              expect(scope.connected).toBe(false);
+              expect(scope.publishing).toBe(false);
+              done();
+            }, 100);
           });
-        });
-        describe('otWhiteboardUpdate', function () {
-          it('updates unread when not looking at whiteboard', function () {
-            expect(scope.whiteboardUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
-            scope.$emit('otWhiteboardUpdate');
-            expect(scope.whiteboardUnread).toBe(true);
-            expect(scope.mouseMove).toBe(true);
+          it('handles sessionConnected when reconnecting', function (done) {
+            scope.reconnecting = true
+            mockSession.trigger('sessionConnected');
+            setTimeout(function () {
+              expect(scope.reconnecting).toBe(false);
+              done();
+            }, 100);
           });
-          it('does not update unread when already looking at whiteboard', function () {
-            scope.showWhiteboard = true;
-            expect(scope.whiteboardUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
-            scope.$emit('otWhiteboardUpdate');
-            expect(scope.whiteboardUnread).toBe(false);
-            expect(scope.mouseMove).toBe(false);
+          it('handles sessionDisconnected when reconnecting', function (done) {
+            scope.reconnecting = true;
+            mockSession.trigger('sessionDisconnected');
+            setTimeout(function () {
+              expect(scope.reconnecting).toBe(false);
+              done();
+            }, 100);
+          });
+          it('handles sessionReconnecting', function (done) {
+            expect(scope.reconnecting).toBe(false);
+            mockSession.trigger('sessionReconnecting');
+            setTimeout(function () {
+              expect(scope.reconnecting).toBe(true);
+              done();
+            }, 100);
+          });
+          it('handles sessionReconnected', function (done) {
+            scope.reconnecting = true;
+            mockSession.trigger('sessionReconnected');
+            setTimeout(function () {
+              expect(scope.reconnecting).toBe(false);
+              done();
+            }, 100);
+          });
+          describe('otEditorUpdate', function () {
+            it('updates unread when not looking at editor', function () {
+              expect(scope.editorUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+              scope.$emit('otEditorUpdate');
+              expect(scope.editorUnread).toBe(true);
+              expect(scope.mouseMove).toBe(true);
+            });
+            it('does not update unread when already looking at editor', function () {
+              scope.showEditor = true;
+              expect(scope.editorUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+              scope.$emit('otEditorUpdate');
+              expect(scope.editorUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+            });
+          });
+          describe('otWhiteboardUpdate', function () {
+            it('updates unread when not looking at whiteboard', function () {
+              expect(scope.whiteboardUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+              scope.$emit('otWhiteboardUpdate');
+              expect(scope.whiteboardUnread).toBe(true);
+              expect(scope.mouseMove).toBe(true);
+            });
+            it('does not update unread when already looking at whiteboard', function () {
+              scope.showWhiteboard = true;
+              expect(scope.whiteboardUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+              scope.$emit('otWhiteboardUpdate');
+              expect(scope.whiteboardUnread).toBe(false);
+              expect(scope.mouseMove).toBe(false);
+            });
           });
         });
         describe('reportIssue', function() {

@@ -19,10 +19,11 @@ angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
 require('./directives.js');
 require('./sync-click.js');
 require('./subscriber-stats.js');
+require('./subscriber-report.js');
 require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');
 require('./simulcast-service.js');
 require('./audio-acquisition-problem.js');
 require('./notifications.js');
-require('./publish-errors.js');
+require('./ot-errors.js');

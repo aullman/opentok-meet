@@ -29,6 +29,7 @@
                     ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
+                        <subscriber-report stream="stream"></subscriber-report>
                         <restrict-framerate></restrict-framerate>
                         <mute-video mute-subscriber></mute-video>
                         <expand-button></expand-button>
@@ -113,7 +114,7 @@
                 Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
             </div>
             <screen-share-dialogs></screen-share-dialogs>
-            <publish-errors></publish-errors>
+            <ot-errors></ot-errors>
         </div>
         <script type="text/javascript" charset="utf-8">
             angular.module('opentok-meet').value({

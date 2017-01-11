@@ -17,7 +17,9 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.editorUnread = false;
   $scope.leaving = false;
 
-  OT._.enableExperimentalErrorReporting();
+  if (OT._ && OT._.enableExperimentalErrorReporting) {
+    OT._.enableExperimentalErrorReporting();
+  }
 
   var facePublisherPropsHD = {
     name: 'face',
@@ -145,6 +147,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
 
     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function(err, session) {
+      if (err) {
+        $scope.$broadcast('otError', {message: 'foo'});
+        return;
+      }
       $scope.session = session;
       var connectDisconnect = function(connected) {
         $scope.$apply(function() {
