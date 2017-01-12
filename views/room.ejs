@@ -12,6 +12,9 @@
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
+        <script type="text/javascript">
+          window.OTProperties = { enableErrorReporting: true };
+        </script>
         <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
         <script src="https://d3brof7fu9hlhe.cloudfront.net/static/rtcstats.min.js" type="text/javascript" charset="utf-8"></script>
 
@@ -29,6 +32,7 @@
                     ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
+                        <subscriber-report stream="stream"></subscriber-report>
                         <restrict-framerate></restrict-framerate>
                         <mute-video mute-subscriber></mute-video>
                         <expand-button></expand-button>
