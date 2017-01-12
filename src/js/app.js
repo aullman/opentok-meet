@@ -1,10 +1,10 @@
 /*jshint unused:false*/
 
+window.$ = window.jQuery = require('jquery');
+
 var angular = require('angular');
 var errorReporting = require('./lib/error-reporting.js');
 errorReporting(angular);
-
-window.$ = window.jQuery = require('jquery');
 
 require('opentok-angular');
 require('opentok-whiteboard');
