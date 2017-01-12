@@ -1,4 +1,5 @@
 var Raven = require('raven-js');
+var RavenAngular = require('raven-js/plugins/angular');
 
 module.exports = function installErrorReporting(angular) {
   Raven
@@ -12,6 +13,6 @@ module.exports = function installErrorReporting(angular) {
         debug: true
       }
     )
-    .addPlugin(require('raven-js/plugins/angular'), angular)
+    .addPlugin(RavenAngular, angular)
     .install();
 };
