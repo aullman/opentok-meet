@@ -1,4 +1,6 @@
 var webpack = require('webpack');
+var GitRevisionPlugin = require('git-revision-webpack-plugin');
+var gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
     entry: {
@@ -20,6 +22,10 @@ module.exports = {
         ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+          VERSION: JSON.stringify(gitRevisionPlugin.version()),
+          COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+      }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.CommonsChunkPlugin({
