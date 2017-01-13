@@ -232,13 +232,14 @@ button.icon-left:before {
     border: none;
     border-radius: 5px;
     color: #DCD9B5;
-    font-size: 22px;
+    font-size: 18px;
     -webkit-appearance: none;
     font-family: 'Ropa Sans', sans-serif;
     transition: width 200ms, height 200ms ease;
     padding-left: 14px;
     padding-top: 5px;
     pointer-events: auto;
+    margin: 0;
 }
 
 #bottomBar #publishHDCheck {
@@ -304,7 +305,7 @@ button:disabled {
 
 #bottomBar #publishBtn.green {
     text-align: left;
-    width: 85px;
+    width: 142px;
 }
 
 .statusMessage {
@@ -359,6 +360,20 @@ button:disabled {
         width: 50px;
         height: 75px;
     }
+}
+
+@media screen and (max-width: 900px) {
+  #bottomBar {
+    width: 100px;
+    bottom: 40px;
+    text-align: left;
+    left: 10px;
+  }
+  #bottomBar button {
+    margin-top: 5px;
+    width: 150px;
+    text-align: left;
+  }
 }
 
 #footer {
