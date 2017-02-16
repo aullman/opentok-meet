@@ -34,3 +34,5 @@ opentok-ios-sdk-*
 sauce-connect.log
 
 .tern-project
+
+/.vscode
