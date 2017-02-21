@@ -42,7 +42,9 @@
     "integration": "protractor-flake -- tests/protractor.conf.js --max-attempts=5",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
-    "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js"
+    "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js",
+    "electron-build": "./electron/build.sh",
+    "electron": "electron ./electron/app"
   },
   "devDependencies": {
     "angular-mocks": "1.6.0",
