@@ -31,3 +31,5 @@ And a dmg for installation can be created with
 ```sh
 npm run electron-build
 ```
+
+To create a signed build (so the user is not warned when starting the app), you will need an appropriate certificate available on your machine (getting one is beyond the scope of this guide). If the certificate is available, it can be used by adding `-- --osx-sign` to the command above.
