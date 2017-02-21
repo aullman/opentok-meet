@@ -17,3 +17,17 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 ## Deploying to meet.tokbox.com
 
 If you push to the master branch of this repo [Travis](https://travis-ci.org/opentok/opentok-meet) and [BrowserStack](https://browserstack.com/automate) tests will run and when they pass meet.tokbox.com will be updated.
+
+## Electron
+
+During development the electron version can be quickly started by running
+
+```sh
+npm run electron
+```
+
+And a dmg for installation can be created with
+
+```sh
+npm run electron-build
+```
