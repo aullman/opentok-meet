@@ -1,6 +1,6 @@
 {
   "title": "meet-electron",
-  "icon": "../../../public/images/opentok-meet-logo.png.icns",
+  "icon": "./logo.icns",
   "background": "./dmg-bg.png",
   "background-color": "#262422",
   "contents": [
@@ -8,7 +8,7 @@
       "x": 192,
       "y": 332,
       "type": "file",
-      "path": "../../../build/meet-electron-darwin-x64/meet-electron.app"
+      "path": "./build/meet-electron-darwin-x64/meet-electron.app"
     },
     {
       "x": 448,
