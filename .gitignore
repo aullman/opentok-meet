@@ -36,3 +36,5 @@ sauce-connect.log
 .tern-project
 
 /.vscode
+
+/build

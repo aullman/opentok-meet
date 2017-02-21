@@ -4,13 +4,18 @@ pushd src/js/electron
   npm install
 popd
 
-./node_modules/.bin/electron-packager src/js/electron meet-electron \
-  --icon public/images/opentok-meet-logo.png.icns \
-  --protocol meet \
-  --protocol-name 'Meet Protocol' \
-  --overwrite \
-  # --osx-sign
+mkdir -p build
+pushd build
+  rm -rf meet-electron*
 
-BUILD_DIRNAME=$(echo meet-electron* | cut -d' ' -f1)
+  ../node_modules/.bin/electron-packager ../src/js/electron meet-electron \
+    --icon ../public/images/opentok-meet-logo.png.icns \
+    --protocol meet \
+    --protocol-name 'Meet Protocol'
+    # --osx-sign
 
-tar czf $BUILD_DIRNAME.tgz $BUILD_DIRNAME
+  ../node_modules/.bin/appdmg ../src/js/electron/appdmg.json meet-electron.dmg
+popd
+
+echo
+echo "Build complete at build/meet-electron.dmg"
