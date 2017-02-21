@@ -48,6 +48,7 @@
     "angular-mocks": "1.6.0",
     "codeclimate-test-reporter": "0.0.4",
     "electron": "1.4.15",
+    "electron-packager": "^8.5.1",
     "firefox-profile": "^0.3.9",
     "jasmine-core": "^2.2.0",
     "karma": "^0.13.3",
