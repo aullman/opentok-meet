@@ -1,7 +1,7 @@
 'use strict';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { app, BrowserWindow, protocol } = require('electron');
+const { app, BrowserWindow, globalShortcut, protocol } = require('electron');
 
 const clone = require('lodash/clone');
 
@@ -25,38 +25,54 @@ function registerProtocol() {
   });
 }
 
-function createWindow(url = 'meet://home') {
-  // Create the browser window.
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: false,
-  });
-
-  windows.add(win);
-
-  win.once('ready-to-show', () => win.show());
-
-  // and load the index.html of the app.
-  win.loadURL(url);
-
-  // Emitted when the window is closed.
-  win.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    windows.delete(win);
-  });
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', registerProtocol);
-app.on('ready', () => createWindow());
+const readyPromise = new Promise(resolve => app.on('ready', resolve));
+
+let createWindowCalled = false;
+
+function createWindow(url = 'meet://home') {
+  createWindowCalled = true;
+
+  readyPromise.then(() => {
+    // Create the browser window.
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      show: false,
+    });
+
+    windows.add(win);
+
+    win.once('ready-to-show', () => win.show());
+
+    // and load the index.html of the app.
+    win.loadURL(url);
+
+    // Emitted when the window is closed.
+    win.on('closed', () => {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      windows.delete(win);
+    });
+  });
+}
+
+readyPromise.then(() => {
+  globalShortcut.register('CommandOrControl+N', () => createWindow());
+});
+
+readyPromise.then(() => {
+  if (!createWindowCalled) {
+    createWindow();
+  }
+});
 
 app.on('open-url', (ev, url) => {
-  // winPromise.then(win => win.loadUrl(url));
+  createWindow(url);
 });
 
 // Quit when all windows are closed.
