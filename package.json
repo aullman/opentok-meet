@@ -43,8 +43,9 @@
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
     "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js",
+    "electron": "electron ./electron/app",
     "electron-build": "./electron/build.sh",
-    "electron": "electron ./electron/app"
+    "electron-build-install": "rm -rf /Applications/meet-electron.app && npm run electron-build && cp -a ./electron/build/meet-electron-darwin-x64/meet-electron.app /Applications/."
   },
   "devDependencies": {
     "angular-mocks": "1.6.0",
