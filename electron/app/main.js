@@ -25,7 +25,7 @@ function registerProtocol() {
   });
 }
 
-function createWindow() {
+function createWindow(url = 'meet://home') {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
@@ -38,7 +38,7 @@ function createWindow() {
   winResolve(win);
 
   // and load the index.html of the app.
-  win.loadURL('meet://home/');
+  win.loadURL(url);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -53,7 +53,7 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', registerProtocol);
-app.on('ready', createWindow);
+app.on('ready', () => createWindow());
 
 app.on('open-url', (ev, url) => {
   winPromise.then(win => win.loadUrl(url));
