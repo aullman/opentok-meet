@@ -30,7 +30,10 @@ function createWindow() {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    show: false,
   });
+
+  win.once('ready-to-show', () => win.show());
 
   winResolve(win);
 
