@@ -1,7 +1,12 @@
 'use strict';
 
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  protocol,
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { app, BrowserWindow, globalShortcut, protocol } = require('electron');
+} = require('electron');
 
 const clone = require('lodash/clone');
 
