@@ -1,11 +1,13 @@
 'use strict';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { app, BrowserWindow, protocol } = require('electron');
+
 const clone = require('lodash/clone');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+const windows = new Set();
 
 protocol.registerStandardSchemes(['meet'], { secure: true });
 
@@ -25,11 +27,13 @@ function registerProtocol() {
 
 function createWindow(url = 'meet://home') {
   // Create the browser window.
-  win = new BrowserWindow({
+  const win = new BrowserWindow({
     width: 800,
     height: 600,
     show: false,
   });
+
+  windows.add(win);
 
   win.once('ready-to-show', () => win.show());
 
@@ -41,7 +45,7 @@ function createWindow(url = 'meet://home') {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null;
+    windows.delete(win);
   });
 }
 
@@ -67,7 +71,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (win === null) {
+  if (windows.size === 0) {
     createWindow();
   }
 });
