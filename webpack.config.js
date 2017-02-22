@@ -5,7 +5,9 @@ module.exports = {
         login: "./src/js/login/app.js",
         room: './src/js/app.js',
         screen: './src/js/screen/app.js',
-        whiteboard: './src/js/whiteboard/app.js'
+        whiteboard: './src/js/whiteboard/app.js',
+        'webrtc-intercept': './src/js/webrtc-intercept.js',
+        'ot-intercept': './src/js/ot-intercept.js'
     },
     output: {
         path: './public/js/',
