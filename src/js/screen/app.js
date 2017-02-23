@@ -12,3 +12,5 @@ require('./controller.js');
 require('./directive.js');
 require('../sync-click.js');
 require('../services.js');
+
+require('../safari-electron-redirect.js');
