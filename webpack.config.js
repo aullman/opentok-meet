@@ -10,8 +10,8 @@ try {
   commitHash = JSON.stringify(gitRevisionPlugin.commithash());
 } catch(e) {
   // In Heroku we're not running from a git repo and the commit hash is in the path
-  version = 'unknown';
-  commitHash = process.env.PWD;
+  version = JSON.stringify('unknown');
+  commitHash = JSON.stringify(process.env.PWD);
 }
 
 module.exports = {
