@@ -1,10 +1,4 @@
-(function() {
-
-  require('./common.js');
-
-  var dtx = getParameterByName('dtx') !== null;
-  var h264 = getParameterByName('h264') !== null;
-
+module.exports = function(h264, dtx) {
   console.log('Intercept settings', dtx, h264);
 
   var origPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
@@ -41,4 +35,4 @@
         }
     });
   }
-})();
+}

@@ -20,8 +20,7 @@ module.exports = {
         room: './src/js/app.js',
         screen: './src/js/screen/app.js',
         whiteboard: './src/js/whiteboard/app.js',
-        'webrtc-intercept': './src/js/webrtc-intercept.js',
-        'ot-intercept': './src/js/ot-intercept.js'
+        h264: './src/js/h264'
     },
     output: {
         path: './public/js/',

@@ -1,4 +1,5 @@
 /*jshint unused:false*/
+require('./h264/add-regeneration-capability.js');
 
 window.$ = window.jQuery = require('jquery');
 
