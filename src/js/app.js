@@ -1,7 +1,10 @@
 /*jshint unused:false*/
 
 window.$ = window.jQuery = require('jquery');
+
 var angular = require('angular');
+var errorReporting = require('./lib/error-reporting.js');
+errorReporting(angular);
 
 require('opentok-angular');
 require('opentok-whiteboard');
@@ -10,7 +13,7 @@ require('opentok-editor');
 require('opentok-editor/opentok-editor.css');
 require('ng-debounce/dist/ng-debounce.js');
 
-angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
+angular.module('opentok-meet', ['ngRaven', 'opentok', 'opentok-whiteboard',
   'opentok-editor', 'debounce']);
 
 require('./directives.js');

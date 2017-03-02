@@ -1,4 +1,18 @@
 var webpack = require('webpack');
+var GitRevisionPlugin = require('git-revision-webpack-plugin');
+var gitRevisionPlugin = new GitRevisionPlugin();
+
+var version;
+var commitHash;
+
+try {
+  version = JSON.stringify(gitRevisionPlugin.version());
+  commitHash = JSON.stringify(gitRevisionPlugin.commithash());
+} catch(e) {
+  // In Heroku we're not running from a git repo and the commit hash is in the path
+  version = JSON.stringify('unknown');
+  commitHash = JSON.stringify(process.env.PWD);
+}
 
 module.exports = {
     entry: {
@@ -22,6 +36,10 @@ module.exports = {
         ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+          VERSION: version,
+          COMMITHASH: commitHash,
+      }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.CommonsChunkPlugin({

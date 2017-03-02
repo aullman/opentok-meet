@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "~1.6.0",
+    "angular": "1.6.0",
     "compression": "^1.6.2",
     "css-loader": "^0.23.1",
     "ejs": ">= 0.0.1",
@@ -20,10 +20,12 @@
     "opentok-editor": "^0.3.3",
     "opentok-whiteboard": "^1.1.0",
     "path": "^0.12.7",
+    "push.js": "0.0.11",
+    "raven-js": "^3.9.1",
     "redis": "~0.10.1",
     "request": "^2.74.0",
-    "push.js": "0.0.11",
     "style-loader": "^0.13.1",
+    "git-revision-webpack-plugin": "^2.4.0",
     "webpack": "^1.13.0"
   },
   "engines": {
@@ -43,7 +45,7 @@
     "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js"
   },
   "devDependencies": {
-    "angular-mocks": "~1.6.0",
+    "angular-mocks": "1.6.0",
     "codeclimate-test-reporter": "0.0.4",
     "firefox-profile": "^0.3.9",
     "jasmine-core": "^2.2.0",
