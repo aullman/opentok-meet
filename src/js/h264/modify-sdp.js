@@ -20,8 +20,9 @@ module.exports = function(h264, dtx) {
         pc.setLocalDescription = function(sdp, success, failure) {
           console.log('Intercept setLocalDescription');
           if (h264) {
-            sdp.sdp = sdp.sdp.replace('120 121', '121 120'); // FF
-            sdp.sdp = sdp.sdp.replace('96 98 100', '100 96 98'); // Chrome
+            sdp.sdp = sdp.sdp.replace('120 121 126 97', '126 97 120 121'); // FF
+            sdp.sdp = sdp.sdp.replace('100 101 107', '107 100 101'); // Chrome
+            sdp.sdp = sdp.sdp.replace('96 98 100', '100 96 98'); // Chrome Canary
           }
           return origSetLocalDescription(sdp, success, failure);
         };
