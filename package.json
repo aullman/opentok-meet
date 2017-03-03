@@ -42,11 +42,17 @@
     "integration": "protractor-flake -- tests/protractor.conf.js --max-attempts=5",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
-    "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js"
+    "protractor": "node_modules/.bin/protractor tests/protractor-chrome.conf.js",
+    "electron": "electron ./electron/app",
+    "electron-build": "./electron/build.sh",
+    "electron-build-install": "rm -rf /Applications/meet-electron.app && npm run electron-build && cp -a ./electron/build/meet-electron-darwin-x64/meet-electron.app /Applications/."
   },
   "devDependencies": {
     "angular-mocks": "1.6.0",
     "codeclimate-test-reporter": "0.0.4",
+    "eslint": "^3.16.0",
+    "eslint-config-airbnb-base": "^11.1.0",
+    "eslint-plugin-import": "^2.2.0",
     "firefox-profile": "^0.3.9",
     "jasmine-core": "^2.2.0",
     "karma": "^0.13.3",
@@ -64,5 +70,10 @@
     "q": "^1.2.0",
     "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.4.5",
+    "electron": "1.4.15",
+    "electron-packager": "^8.5.1"
   }
 }
