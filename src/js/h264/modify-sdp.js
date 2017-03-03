@@ -1,17 +1,18 @@
 module.exports = function(h264, dtx) {
   console.log('Intercept settings', dtx, h264);
 
-  var origPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-  if (origPeerConnection) {
+  var OrigPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection ||
+    window.mozRTCPeerConnection;
+  if (OrigPeerConnection) {
     var newPeerConnection = function(config, constraints) {
         console.log('PeerConnection created with config', config);
 
-        var pc = new origPeerConnection(config, constraints);
+        var pc = new OrigPeerConnection(config, constraints);
         var origSetRemoteDescription = pc.setRemoteDescription.bind(pc);
         pc.setRemoteDescription = function(sdp, success, failure) {
           console.log('Intercept setRemoteDescription');
           if (dtx) {
-            sdp.sdp = sdp.sdp.replace("useinbandfec=1", "useinbandfec=1;usedtx=1");
+            sdp.sdp = sdp.sdp.replace('useinbandfec=1', 'useinbandfec=1;usedtx=1');
           }
           return origSetRemoteDescription(sdp, success, failure);
         };
@@ -19,8 +20,8 @@ module.exports = function(h264, dtx) {
         pc.setLocalDescription = function(sdp, success, failure) {
           console.log('Intercept setLocalDescription');
           if (h264) {
-            sdp.sdp = sdp.sdp.replace("120 121", "121 120"); // FF
-            sdp.sdp = sdp.sdp.replace("96 98 100", "100 96 98"); // Chrome
+            sdp.sdp = sdp.sdp.replace('120 121', '121 120'); // FF
+            sdp.sdp = sdp.sdp.replace('96 98 100', '100 96 98'); // Chrome
           }
           return origSetLocalDescription(sdp, success, failure);
         };
@@ -35,4 +36,4 @@ module.exports = function(h264, dtx) {
         }
     });
   }
-}
+};
