@@ -49,10 +49,7 @@
   },
   "devDependencies": {
     "angular-mocks": "1.6.0",
-    "appdmg": "^0.4.5",
     "codeclimate-test-reporter": "0.0.4",
-    "electron": "1.4.15",
-    "electron-packager": "^8.5.1",
     "eslint": "^3.16.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
@@ -73,5 +70,10 @@
     "q": "^1.2.0",
     "travis-multirunner": "^3.0.0",
     "uuid": "^2.0.1"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.4.5",
+    "electron": "1.4.15",
+    "electron-packager": "^8.5.1"
   }
 }

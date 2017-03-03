@@ -20,6 +20,14 @@ If you push to the master branch of this repo [Travis](https://travis-ci.org/ope
 
 ## Electron
 
+Electron is an optional dependency because it requires Cairo on your system and isn't necessary for the rest of opentok-meet. If you run into problems below, try this:
+
+```sh
+brew update
+brew install cairo
+npm install
+```
+
 During development the electron version can be quickly started by running
 
 ```sh
