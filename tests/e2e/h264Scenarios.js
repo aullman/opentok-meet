@@ -3,7 +3,7 @@
 /* global element: false */
 /* global by: false */
 var uuid = require('uuid');
-describe('Login', function() {
+describe('H264', function() {
   var roomName;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
@@ -13,13 +13,13 @@ describe('Login', function() {
     browser.getCapabilities().then(function (cap) {
       browser.browserName = cap.get('browserName');
     });
-    browser.get('');
   });
 
-  describe('h264 and dtx checkbox', function () {
+  describe('h264 and dtx checkbox in login screen', function () {
     var h264, dtx, roomField, submit;
 
     beforeEach(function() {
+      browser.get('');
       element(by.css('#advancedLink a')).click();
       roomField = element(by.model('room'));
       submit = element(by.css('#joinRoomBtn'));
@@ -47,6 +47,25 @@ describe('Login', function() {
       h264.click();
       submit.click();
       expect(browser.getCurrentUrl()).toBe(browser.baseUrl + roomName + '?h264=true&dtx=true');
+    });
+  });
+
+  describe('with 2 participants', function() {
+    var secondBrowser;
+    beforeEach(function() {
+      browser.get('/' + roomName + '?h264=true');
+      secondBrowser = browser.forkNewDriverInstance(true);
+      secondBrowser.browserName = browser.browserName;
+    });
+
+    it('connects and subscribes successfully', function() {
+      browser.wait(function () {
+        return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
+      }, 20000);
+      secondBrowser.wait(function () {
+        return secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'))
+        .isPresent();
+      }, 20000);
     });
   });
 });
