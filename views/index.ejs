@@ -27,7 +27,7 @@
                 <div id="inputs">
                   <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
                   <div id="advancedLink">
-                    <a href="#" ng-click="advanced = true" ng-show="!advanced">Advanced</a>
+                    <a href="" ng-click="advanced = true" ng-show="!advanced">Advanced</a>
                   </div>
                   <div id="advanced" ng-show="advanced" ng-cloak>
                     <div id="p2pCheckbox">
@@ -35,6 +35,14 @@
                         <label for="p2p">
                           p2p <a href="https://support.tokbox.com/hc/en-us/articles/202997234-What-is-the-difference-between-a-Routed-vs-Relayed-Session-" target="_blank">?</a>
                         </label>
+                        <input type="checkbox" name="h264" id="p2p" ng-model="h264">
+                          <label for="h264">
+                            H.264
+                          </label>
+                        <input type="checkbox" name="dtx" id="p2p" ng-model="dtx">
+                          <label for="dtx">
+                            DTX
+                          </label>
                     </div>
                     <br>
                     <div id="roomTypeRadio">
