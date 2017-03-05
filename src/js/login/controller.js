@@ -5,8 +5,14 @@ var isp2p = function (room) {
 angular.module('opentok-meet-login', [])
   .controller('MainCtrl', ['$scope', '$window', function($scope, $window) {
     $scope.room = '';
+    $scope.roomType = 'normal';
+    $scope.advanced = false;
     $scope.joinRoom = function() {
-      $window.location.href = $window.location.href + encodeURIComponent($scope.room);
+      var url = $window.location.href + encodeURIComponent($scope.room);
+      if ($scope.roomType !== 'normal') {
+        url += '/' + $scope.roomType;
+      }
+      $window.location.href = url;
     };
     $scope.p2p = false;
     $scope.$watch('room', function(room) {

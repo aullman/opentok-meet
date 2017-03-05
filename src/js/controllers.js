@@ -1,6 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
-    '$timeout', 'OTSession', 'RoomService', 'baseURL',
-    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL) {
+    '$timeout', 'OTSession', 'RoomService', 'baseURL', 'NotificationService',
+    function($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
+      NotificationService) {
   $scope.streams = OTSession.streams;
   $scope.connections = OTSession.connections;
   $scope.publishing = false;
@@ -49,15 +50,15 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   var startArchiving = function() {
     $scope.archiving = true;
-    $http.post(baseURL + $scope.room + '/startArchive').success(function(response) {
-      if (response.error) {
+    $http.post(baseURL + $scope.room + '/startArchive').then(function(response) {
+      if (response.data.error) {
         $scope.archiving = false;
-        console.error('Failed to start archive', response.error);
+        console.error('Failed to start archive', response.data.error);
       } else {
-        $scope.archiveId = response.archiveId;
+        $scope.archiveId = response.data.archiveId;
       }
-    }).error(function(data) {
-      console.error('Failed to start archiving', data);
+    }).catch(function(response) {
+      console.error('Failed to start archiving', response);
       $scope.archiving = false;
     });
   };
@@ -66,15 +67,15 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.archiving = false;
     $http.post(baseURL + $scope.room + '/stopArchive', {
       archiveId: $scope.archiveId
-    }).success(function(response) {
-      if (response.error) {
-        console.error('Failed to stop archiving', response.error);
+    }).then(function(response) {
+      if (response.data.error) {
+        console.error('Failed to stop archiving', response.data.error);
         $scope.archiving = true;
       } else {
-        $scope.archiveId = response.archiveId;
+        $scope.archiveId = response.data.archiveId;
       }
-    }).error(function(data) {
-      console.error('Failed to stop archiving', data);
+    }).catch(function(response) {
+      console.error('Failed to stop archiving', response);
       $scope.archiving = true;
     });
   };
@@ -104,6 +105,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }, 10);
   };
 
+  NotificationService.init();
+
   // Fetch the room info
   RoomService.getRoom().then(function(roomData) {
     if ($scope.session) {
@@ -114,6 +117,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.shareURL = baseURL === '/' ? $window.location.href : baseURL + roomData.room;
 
     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function(err, session) {
+      if (err) {
+        $scope.$broadcast('otError', {message: 'foo'});
+        return;
+      }
       $scope.session = session;
       var connectDisconnect = function(connected) {
         $scope.$apply(function() {

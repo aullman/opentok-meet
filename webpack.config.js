@@ -15,7 +15,8 @@ module.exports = {
     devtool: 'source-map',
     module: {
         loaders: [
-            { test: /\.css$/, loader: 'style!css' }
+            { test: /\.css$/, loader: 'style!css' },
+            // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
         ]
     },
     plugins: [

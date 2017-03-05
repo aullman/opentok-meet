@@ -18,3 +18,5 @@ require('./subscriber-stats.js');
 require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');
+require('./notifications.js');
+require('./ot-errors.js');

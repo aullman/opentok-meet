@@ -26,12 +26,12 @@ matrix:
 env:
   matrix:
     - BROWSER=chrome  BVER=stable
-    - BROWSER=firefox BVER=stable
+    - BROWSER=firefox BVER=esr
     - BROWSER=ie BVER=11  SAUCELABS=true
     - BROWSER=ie BVER=10  SAUCELABS=true
+    - BROWSER=firefox BVER=stable
     - BROWSER=chrome  BVER=beta
     - BROWSER=firefox BVER=beta
-    - BROWSER=firefox BVER=esr
   global:
   - TRAVIS=true
   - PORT=5000

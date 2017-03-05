@@ -21,8 +21,8 @@ There are a few different mobile applications that have been built to interopera
 2. `cp config.json.sample config.json`
 3. Add your OpenTok apikey and secret to config.json
 4. Create your screensharing extensions by following the instructions at https://github.com/opentok/screensharing-extensions and put your Chrome Extension ID in config.json.
-4. Run [redis](http://redis.io/)
-5. `npm install`
+4. Run redis. You can find instructions for doing this [here](https://redis.io/topics/quickstart).
+5. `npm install` (you will need at least 1GB memory for this step)
 6. If you want to use SSL you will need to generate a key and make sure the server.key and server.crt files are in the main directory. You can find instructions for generating a self-signed certificate [here](https://devcenter.heroku.com/articles/ssl-certificate-self). SSL is recommended so that screen-sharing works and so that you don't have to keep clicking the allow button to allow access to your camera. If you still don't want to use SSL then just update [app.js](app.js) to use `http.createServer` instead of `https.createServer`.
 7. `npm start`
 8. Go to https://localhost:3000
@@ -40,11 +40,9 @@ There are a few different mobile applications that have been built to interopera
 
 ##Running Tests
 
-You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Browserstack](browserstack.com/) and for [Sauce Labs](https://saucelabs.com/). Both of these services offer free options for Open Source. You will need the following environment variables set.
+You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Sauce Labs](https://saucelabs.com/). This service offers [free options for Open Source](https://saucelabs.com/open-source). You will need the following environment variables set.
 
 ```
-export BROWSERSTACK_USERNAME=<YOUR_BROWSERSTACK_USERNAME>
-export BROWSERSTACK_KEY=<YOUR_BROWSERSTACK_KEY>
 export SAUCE_USERNAME=<YOUR_SAUCE_USERNAME>
 export SAUCE_ACCESS_KEY=<YOUR_SAUCE_KEY>
 export TRAVIS_JOB_NUMBER=<ANYTHING>
@@ -56,4 +54,4 @@ By default `npm test` will run the tests in Chrome Stable. If you want to run in
 * chrome (stable, beta, unstable)
 * firefox (stable, beta, unstable)
 
-These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org), [BrowserStack Automate](browserstack.com/automate) and [Sauce Labs](https://saucelabs.com/).
+These tests are also run in the cloud with every commit and every pull request using [Travis-CI](travis-ci.org) and [Sauce Labs](https://saucelabs.com/).

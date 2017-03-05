@@ -101,7 +101,8 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         'Audio Bitrate: {{stats.audioBitrate}} kbps<br/>' +
         '</div><div ng-show="stats.video">' +
         'Video Packet Loss: {{stats.videoPacketLoss}}%<br/>' +
-        'Video Bitrate: {{stats.videoBitrate}} kbps' +
+        'Video Bitrate: {{stats.videoBitrate}} kbps<br/>' +
+        'Frame Rate: {{stats.video.frameRate || 0}} fps' +
         '</div></div>',
       link: function(scope, element) {
         var subscriber, subscriberId;

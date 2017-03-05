@@ -26,12 +26,24 @@
             <form id="joinRoom" ng-submit="joinRoom()">
                 <div id="inputs">
                   <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
-                  <div id="p2pCheckbox">
-                    <input type="checkbox" name="p2p" id="p2p" ng-model="p2p" ng-change="p2pChanged()">
-                      <label for="p2p">
-                        p2p <a href="https://support.tokbox.com/hc/en-us/articles/202997234-What-is-the-difference-between-a-Routed-vs-Relayed-Session-" target="_blank">?</a>
-                      </label>
+                  <div id="advancedLink">
+                    <a href="#" ng-click="advanced = true" ng-show="!advanced">Advanced</a>
                   </div>
+                  <div id="advanced" ng-show="advanced" ng-cloak>
+                    <div id="p2pCheckbox">
+                      <input type="checkbox" name="p2p" id="p2p" ng-model="p2p" ng-change="p2pChanged()">
+                        <label for="p2p">
+                          p2p <a href="https://support.tokbox.com/hc/en-us/articles/202997234-What-is-the-difference-between-a-Routed-vs-Relayed-Session-" target="_blank">?</a>
+                        </label>
+                    </div>
+                    <br>
+                    <div id="roomTypeRadio">
+                      <label>Normal<input type="radio" name="roomType" ng-model="roomType" value="normal"><br></label>
+                      <label title="just use the whiteboard">Whiteboard only<input type="radio" name="roomType" ng-model="roomType" value="whiteboard"><br></label>
+                      <label title="just share your screen with the room">Screenshare only<input type="radio" name="roomType" ng-model="roomType" value="screen"><br></label>
+                    </div>
+                  </div>
+
                 </div>
                 <input type="submit" name="joinRoom" value="Join" id="joinRoomBtn">
             </form>

@@ -4,11 +4,12 @@ require('angular-mocks');
 require('../../src/js/app.js');
 
 describe('draggable', function () {
-  var scope, element, $document;
+  var scope, element, $document, $window;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _$document_) {
+  beforeEach(inject(function ($rootScope, $compile, _$document_, _$window_) {
     scope = $rootScope.$new();
     $document = _$document_;
+    $window = _$window_;
     element = '<div draggable="true"></div>';
     element = $compile(element)(scope);
     scope.$digest();
@@ -76,6 +77,30 @@ describe('draggable', function () {
     expect(element.css('top')).toBe('10px');
     expect(element.css('left')).toBe('10px');
   });
+
+  it('realigns to the bottom right if you resize too small', function() {
+    element.triggerHandler({
+      type: 'mousedown',
+      pageX: 0,
+      pageY: 0
+    });
+    $document.triggerHandler({
+      type: 'mousemove',
+      pageX: 10000,
+      pageY: 10000
+    });
+    $document.triggerHandler({
+      type: 'mouseup'
+    });
+    var event = document.createEvent('Event');
+    event.initEvent('resize', false, true);
+    $window.dispatchEvent(event);
+    expect(element.css('bottom')).toBe('10px');
+    expect(element.css('right')).toBe('10px');
+    // In IE 10 for some reason it gets set to 0px even though we set it to auto
+    expect(element.css('top') === '0px' || element.css('top') === 'auto').toBe(true);
+    expect(element.css('left') === '0px' || element.css('left') === 'auto').toBe(true);
+  });
 });
 
 describe('syncClick', function () {
@@ -100,7 +125,7 @@ describe('muteVideo', function () {
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(function ($rootScope, $compile) {
     scope = $rootScope.$new();
-    scope.muted = false;
+    scope.mutedVideo = false;
     element = '<mute-video muted="muted"></mute-video>';
     element = $compile(element)(scope);
     scope.$digest();
@@ -121,14 +146,14 @@ describe('muteVideo', function () {
     });
     it('changes title when muted changes', function () {
       expect(firstI.getAttribute('title')).toBe('Mute Video');
-      scope.muted = true;
+      scope.mutedVideo = true;
       scope.$digest();
       expect(firstI.getAttribute('title')).toBe('Unmute Video');
     });
     it('changes classes when muted changes', function () {
-      expect(scope.muted).toBe(false);
+      expect(scope.mutedVideo).toBe(false);
       expect(secondI.className).toContain('ion-ios7-close');
-      scope.muted = true;
+      scope.mutedVideo = true;
       scope.$digest();
       expect(secondI.className).toContain('ion-ios7-checkmark');
     });
@@ -153,12 +178,12 @@ describe('muteSubscriber', function () {
   }));
 
   it('toggles subscribeToVideo on click', function () {
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(true);
+    expect(scope.mutedVideo).toBe(true);
     expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(false);
     element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(false);
+    expect(scope.mutedVideo).toBe(false);
     expect(mockSubscriber.subscribeToVideo).toHaveBeenCalledWith(true);
   });
 });
@@ -166,26 +191,52 @@ describe('muteSubscriber', function () {
 describe('mutePublisher', function () {
   var scope, element, mockPublisher, OTSession;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _OTSession_) {
+  beforeEach(inject(function ($rootScope, _OTSession_) {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
-    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
+    mockPublisher = jasmine.createSpyObj('Publisher', ['publishVideo', 'publishAudio']);
     mockPublisher.id = 'mockPublisher';
     OTSession.publishers = [mockPublisher];
-
-    element = '<div publisher-id="mockPublisher" mute-publisher></div>';
-    element = $compile(element)(scope);
-    scope.$digest();
   }));
 
-  it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
-    expect(scope.muted).toBe(false);
-    element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(true);
-    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
-    element.triggerHandler({type: 'click'});
-    expect(scope.muted).toBe(false);
-    expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+  describe('Video type', function() {
+    beforeEach(function() {
+      inject(function ($compile) {
+        element = '<div publisher-id="mockPublisher" mute-publisher></div>';
+        element = $compile(element)(scope);
+        scope.$digest();
+      });
+    });
+
+    it('toggles publisherVideoMuted and calls publishVideo on the facePublisher', function () {
+      expect(scope.mutedVideo).toBe(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedVideo).toBe(true);
+      expect(mockPublisher.publishVideo).toHaveBeenCalledWith(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedVideo).toBe(false);
+      expect(mockPublisher.publishVideo).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('Audio type', function() {
+    beforeEach(function() {
+      inject(function ($compile) {
+        element = '<div publisher-id="mockPublisher" muted-type="Audio" mute-publisher></div>';
+        element = $compile(element)(scope);
+        scope.$digest();
+      });
+    });
+
+    it('toggles mutedAudio and calls publishAudio on the facePublisher', function () {
+      expect(scope.mutedAudio).toBe(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedAudio).toBe(true);
+      expect(mockPublisher.publishAudio).toHaveBeenCalledWith(false);
+      element.triggerHandler({type: 'click'});
+      expect(scope.mutedAudio).toBe(false);
+      expect(mockPublisher.publishAudio).toHaveBeenCalledWith(true);
+    });
   });
 });
 
