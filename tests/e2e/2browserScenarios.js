@@ -144,7 +144,8 @@ describe('2 browsers in the same room', function() {
               'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
               'Audio Bitrate: \\d+ kbps<br>.*' +
               'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
-              'Video Bitrate: \\d+ kbps', 'gi');
+              'Video Bitrate: \\d+ kbps<br>' +
+              'Frame Rate: \\d+(\\.\\d+)? fps.*', 'gi');
             return statsRegexp.test(innerHTML);
           });
         }, 5000);
