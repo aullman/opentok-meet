@@ -1,4 +1,5 @@
 /*jshint unused:false*/
+require('./h264/add-regeneration-capability.js');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -27,3 +28,5 @@ require('./simulcast-service.js');
 require('./audio-acquisition-problem.js');
 require('./notifications.js');
 require('./ot-errors.js');
+
+require('./safari-electron-redirect.js');

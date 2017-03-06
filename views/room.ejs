@@ -17,10 +17,11 @@
         </script>
         <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
         <script src="https://d3brof7fu9hlhe.cloudfront.net/static/rtcstats.min.js" type="text/javascript" charset="utf-8"></script>
-
+        <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/js/h264.bundle.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://tbdev.tokbox.com/v2/js/opentok.js"></script>
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.14.2/codemirror.css" media="screen" title="no title" charset="utf-8">
-        <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/room.bundle.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
@@ -113,7 +114,7 @@
         </div>
         <div id="footer">
             <a href="https://github.com/aullman/opentok-meet" target="_blank"><i class="ion-social-github" title="View source on GitHub"></i></a>
-            <a href="#" ng-click="reportIssue()"><i class="ion-bug" title="Report Issue"></i></a>
+            <a href="" ng-click="reportIssue()"><i class="ion-bug" title="Report Issue"></i></a>
         </div>
         <i id="connCount" class="ion-ios7-people" title="{{connections.length}} participant in the room"> {{connections.length}}</i>
         <div id="statusMessages">
