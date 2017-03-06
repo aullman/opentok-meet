@@ -96,7 +96,9 @@ describe('Room', function() {
         }, 10000);
         var muteCameraButton = element(by.css('button[name="muteCamera"]'));
         expect(muteCameraButton.isPresent()).toBe(true);
-        expect(muteCameraButton.isDisplayed()).toBe(true);
+        browser.wait(function() {
+          return muteCameraButton.isDisplayed();
+        }, 10000);
 
         var verifyMuted = function(muted) {
           // muted button has a checkmark or a cross in it
