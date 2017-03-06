@@ -58,7 +58,7 @@ describe('H264', function() {
       secondBrowser.browserName = browser.browserName;
     });
 
-    it('connects and subscribes successfully', function() {
+    it('connects and subscribes successfully using H264 codec', function() {
       browser.wait(function () {
         return element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent();
       }, 20000);
@@ -66,6 +66,26 @@ describe('H264', function() {
         return secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'))
         .isPresent();
       }, 20000);
+
+      if (browser.browserName !== 'chrome') {
+        // getting videoCodec from stats only works in Chrome right now
+        return;
+      }
+      var secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
+      secondBrowser.actions().mouseDown(secondSubscriber).mouseUp().perform();
+      var showStatsInfo = secondSubscriber.element(by.css('.show-stats-info'));
+      var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
+      statsButton.click();
+      secondBrowser.wait(function() {
+        return showStatsInfo.isDisplayed();
+      }, 2000);
+      expect(showStatsInfo.isDisplayed()).toBe(true);
+      secondBrowser.wait(function() {
+        return showStatsInfo.getInnerHtml().then(function(innerHTML) {
+          var statsRegexp = new RegExp('Video Codec: H264 <br>', 'gi');
+          return statsRegexp.test(innerHTML);
+        });
+      }, 30000);  // Wait 30 seconds because that's how long QOS takes
     });
   });
 });

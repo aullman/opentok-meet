@@ -76,6 +76,11 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           };
         }
 
+        if (subscriberStats.audioCodec && subscriberStats.videoCodec) {
+          currStats.videoCodec = subscriberStats.videoCodec;
+          currStats.audioCodec = subscriberStats.audioCodec;
+        }
+
         subscriberStats.onStats(currStats);
 
         if (subscriberStats.lastStats.info) {
@@ -94,6 +99,16 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           .catch(function(err) {
             console.trace('failed to retrieve susbcriber info ', err);
           });
+
+        // Listen to internal qos events to figure out the audio and video codecs
+        var qosHandler = function(qos) {
+          if (qos.videoCodec && qos.audioCodec) {
+            subscriberStats.videoCodec = qos.videoCodec;
+            subscriberStats.audioCodec = qos.audioCodec;
+            subscriber.off('qos', qosHandler);
+          }
+        };
+        subscriber.on('qos', qosHandler);
       });
     };
 
@@ -144,7 +159,10 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         'Frame Rate: {{stats.video.frameRate || 0}} fps' +
         '</div><div ng-show="stats.info">' +
         'Origin server: {{stats.info.originServer}} <br/>' +
-        'Edge server: {{stats.info.edgeServer}}' +
+        'Edge server: {{stats.info.edgeServer}} <br/>' +
+        '</div><div ng-show="stats.videoCodec && stats.audioCodec">' +
+        'Video Codec: {{stats.videoCodec}} <br/>' +
+        'Audio Codec: {{stats.audioCodec}}' +
         '</div></div>',
       link: function(scope, element) {
         var subscriber, subscriberId;

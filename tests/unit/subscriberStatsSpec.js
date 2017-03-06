@@ -118,7 +118,7 @@ describe('StatsService', function () {
     $httpBackend.expectGET(baseURL + room + '/subscriber/' + mockWidgetId);
 
     onStats = jasmine.createSpy('onStats');
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on']);
     mockSubscriber.id = 'mockId';
     mockSubscriber.widgetId = mockWidgetId;
     mockSubscriber.videoWidth = mockSubscriber.videoHeight = function () {
