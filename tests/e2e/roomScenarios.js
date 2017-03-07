@@ -95,6 +95,7 @@ describe('Room', function() {
           return muteVideo.isDisplayed();
         }, 10000);
         var muteCameraButton = element(by.css('button[name="muteCamera"]'));
+        browser.actions().mouseMove(muteCameraButton).perform();
         expect(muteCameraButton.isPresent()).toBe(true);
         browser.wait(function() {
           return muteCameraButton.isDisplayed();
