@@ -63,6 +63,11 @@
                 draggable="true">
             </ot-publisher>
         </div>
+        <opentok-textchat ng-show="showTextchat"
+          ng-if="connected"
+          class="OT_big">
+        </opentok-textchat>
+        <i id="closeTextchat" ng-show="showTextchat" class="ion-close-circled" ng-click="toggleTextchat()"></i>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
         <div id="shareInfo"
             ng-if="connected && connections.length < 2 && !reconnecting"
@@ -83,6 +88,11 @@
 
             <span class="unread-indicator" ng-class="{unread: editorUnread}">
                 <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor">Editor</button>
+                <span class="indicator"></span>
+            </span>
+
+            <span class="unread-indicator" ng-class="{unread: textChatUnread}">
+                <button name="textchat" id="showTextchatButton" ng-click="toggleTextchat()" ng-class="{green: !showTextchat, red: showTextchat}" class="textchat-btn icon-left ion-chatbubble" title="Text Chat">Text Chat</button>
                 <span class="indicator"></span>
             </span>
 
