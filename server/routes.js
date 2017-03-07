@@ -66,6 +66,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
             res.render('roomiOS', {
               room: room
             });
+            return;
           }
         }
         res.render('room', {
