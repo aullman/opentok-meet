@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-<<<<<<< HEAD
+var path = require('path');
 var GitRevisionPlugin = require('git-revision-webpack-plugin');
 var gitRevisionPlugin = new GitRevisionPlugin();
 
@@ -14,9 +14,6 @@ try {
   version = JSON.stringify('unknown');
   commitHash = JSON.stringify(process.env.PWD);
 }
-=======
-var path = require('path');
->>>>>>> master
 
 var production = process.env.HEROKU || process.env.TRAVIS;
 
