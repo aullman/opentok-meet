@@ -126,7 +126,7 @@ ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framera
     opacity: 1;
 }
 
-ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
+ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide), opentok-textchat:not(.ng-hide) {
   display: block;
 }
 
@@ -166,7 +166,7 @@ ot-editor > div.opentok-editor-mode-select {
 
 opentok-textchat {
   padding: 10px;
-  display: block;
+  display: none;
   background-color: #DCD9CD;
   position: absolute;
   top: 125px;
