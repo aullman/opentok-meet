@@ -12,9 +12,11 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.reconnecting = false;
   $scope.mouseMove = false;
   $scope.showWhiteboard = false;
-  $scope.showEditor = false;
   $scope.whiteboardUnread = false;
+  $scope.showEditor = false;
   $scope.editorUnread = false;
+  $scope.showTextchat = false;
+  $scope.textChatUnread = false;
   $scope.leaving = false;
 
   var facePublisherPropsHD = {
@@ -131,6 +133,11 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     }, 10);
   };
 
+  $scope.toggleTextchat = function() {
+    $scope.showTextchat = !$scope.showTextchat;
+    $scope.textChatUnread = false;
+  };
+
   NotificationService.init();
 
   // Fetch the room info
@@ -196,8 +203,16 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
         });
       }
     };
+    var textChatMessage = function() {
+      if (!$scope.showTextchat) {
+        $scope.textChatUnread = true;
+        $scope.mouseMove = true; // Show the bottom bar
+        $scope.$apply();
+      }
+    };
     $scope.$on('otEditorUpdate', editorUpdated);
     $scope.$on('otWhiteboardUpdate', whiteboardUpdated);
+    $scope.$on('otTextchatMessage', textChatMessage);
     $scope.publishing = true;
   });
 

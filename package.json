@@ -18,6 +18,7 @@
     "opentok": "^2.2.3",
     "opentok-angular": "^1.2.3",
     "opentok-editor": "^0.3.3",
+    "opentok-textchat": "^1.2.0",
     "opentok-whiteboard": "^1.1.0",
     "path": "^0.12.7",
     "push.js": "0.0.11",
@@ -49,6 +50,9 @@
   },
   "devDependencies": {
     "angular-mocks": "1.6.0",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.4.0",
+    "babel-preset-env": "^1.2.1",
     "codeclimate-test-reporter": "0.0.4",
     "eslint": "^3.16.0",
     "eslint-config-airbnb-base": "^11.1.0",
