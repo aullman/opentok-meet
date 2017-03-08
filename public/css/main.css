@@ -126,7 +126,7 @@ ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framera
     opacity: 1;
 }
 
-ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
+ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide), opentok-textchat:not(.ng-hide) {
   display: block;
 }
 
@@ -143,6 +143,7 @@ ot-editor {
 
 ot-editor .CodeMirror {
     background-color: #DCD9CD;
+    padding: 10px;
 }
 
 ot-editor > div.opentok-editor-connected {
@@ -163,13 +164,56 @@ ot-editor > div.opentok-editor-mode-select {
   z-index: 10;
 }
 
+opentok-textchat {
+  padding: 10px;
+  display: none;
+  background-color: #DCD9CD;
+  position: absolute;
+  top: 125px;
+  bottom: 70px;
+  right: 0;
+  left: calc(100% - 300px);
+  border-radius: 5px;
+  border: 1px solid #555;
+  z-index: 99;
+  opacity: 0.9;
+}
+
+opentok-textchat #otTextChat .time{
+  color: #555;
+}
+
+opentok-textchat #otTextChat form input {
+  width: calc(100% - 25px);
+}
+
+opentok-textchat #otTextChat form {
+  height: 20px;
+  padding: 0;
+}
+
+opentok-textchat a {
+  color: rgb(67, 130, 181);
+}
+
+opentok-textchat #otTextChatMessages {
+  height: calc(100% - 40px);
+}
+
+#closeTextchat {
+  position: absolute;
+  top: 130px;
+  right: 5px;
+  z-index: 99;
+  cursor: pointer;
+}
+
 #bottomBar {
   transition: opacity 200ms ease;
   opacity: 0;
   width: 100%;
   left: 0;
   bottom: 20px;
-  pointer-events: none;
   position: absolute;
   text-align: center;
   z-index: 98;
