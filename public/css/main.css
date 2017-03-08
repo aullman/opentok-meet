@@ -214,7 +214,6 @@ opentok-textchat #otTextChatMessages {
   width: 100%;
   left: 0;
   bottom: 20px;
-  pointer-events: none;
   position: absolute;
   text-align: center;
   z-index: 98;
