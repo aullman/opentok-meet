@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 var GitRevisionPlugin = require('git-revision-webpack-plugin');
 var gitRevisionPlugin = new GitRevisionPlugin();
 
@@ -14,7 +15,9 @@ try {
   commitHash = JSON.stringify(process.env.PWD);
 }
 
-module.exports = {
+var production = process.env.HEROKU || process.env.TRAVIS;
+
+var config = {
     entry: {
         login: './src/js/login/app.js',
         room: './src/js/app.js',
@@ -34,16 +37,37 @@ module.exports = {
             // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
         ]
     },
+    resolveLoader: {
+      root: path.join(__dirname, 'node_modules')
+    },
     plugins: [
       new webpack.DefinePlugin({
           VERSION: version,
           COMMITHASH: commitHash,
       }),
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.CommonsChunkPlugin({
           filename: 'commons.min.js',
           name: 'commons'
       })
     ]
 };
+
+if (production) {
+  // Add in dedupe, uglify and babel for production
+  config.plugins = config.plugins.concat([
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin()
+  ]);
+  config.module.loaders = config.module.loaders.concat([
+    {
+      test: /\.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules(?!\/opentok-textchat)/,
+      query: {
+        presets: ['babel-preset-env'].map(require.resolve)
+      }
+    }
+  ]);
+}
+
+module.exports = config;
