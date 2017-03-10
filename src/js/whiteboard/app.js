@@ -31,4 +31,4 @@ angular.module('opentok-meet', ['opentok', 'opentok-whiteboard'])
 require('../services.js');
 require('../../css/whiteboard.css');
 
-require('./safari-electron-redirect.js');
+require('../safari-electron-redirect.js');
