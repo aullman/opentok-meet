@@ -183,13 +183,8 @@ opentok-textchat #otTextChat .time{
   color: #555;
 }
 
-opentok-textchat #otTextChat form input {
-  width: calc(100% - 25px);
-}
-
 opentok-textchat #otTextChat form {
-  height: 20px;
-  padding: 0;
+  height: 50px;
 }
 
 opentok-textchat a {
