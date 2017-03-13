@@ -9,22 +9,23 @@ module.exports = function(h264, dtx) {
 
         var pc = new OrigPeerConnection(config, constraints);
         var origSetRemoteDescription = pc.setRemoteDescription.bind(pc);
-        pc.setRemoteDescription = function(sdp, success, failure) {
+        pc.setRemoteDescription = function(sdp) {
           console.log('Intercept setRemoteDescription');
           if (dtx) {
             sdp.sdp = sdp.sdp.replace('useinbandfec=1', 'useinbandfec=1;usedtx=1');
           }
-          return origSetRemoteDescription(sdp, success, failure);
+          return origSetRemoteDescription.apply(this, arguments);
         };
         var origSetLocalDescription = pc.setLocalDescription.bind(pc);
-        pc.setLocalDescription = function(sdp, success, failure) {
+        pc.setLocalDescription = function(sdp) {
           console.log('Intercept setLocalDescription');
           if (h264) {
             sdp.sdp = sdp.sdp.replace('120 121 126 97', '126 97 120 121'); // FF
-            sdp.sdp = sdp.sdp.replace('100 101 107', '107 100 101'); // Chrome
-            sdp.sdp = sdp.sdp.replace('96 98 100', '100 96 98'); // Chrome Canary
+            sdp.sdp = sdp.sdp.replace('100 101 107', '107 100 101'); // Chrome 56
+            sdp.sdp = sdp.sdp.replace(/(.*?m=video )(.*?) 96 98 (.*?)100(.*?)/gi,
+              '$1$2 100 96 98 $3$4'); // Chrome Canary
           }
-          return origSetLocalDescription(sdp, success, failure);
+          return origSetLocalDescription.apply(this, arguments);
         };
         return pc;
     };
