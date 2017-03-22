@@ -4,41 +4,25 @@ const {
   app,
   BrowserWindow,
   globalShortcut,
-  protocol,
+  // protocol,
 // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
 
-const clone = require('lodash/clone');
+// const clone = require('lodash/clone');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 const windows = new Set();
 
-protocol.registerStandardSchemes(['meet'], { secure: true });
-
-function registerProtocol() {
-  protocol.registerHttpProtocol('meet', (req, callback) => {
-    const redirectReq = clone(req);
-
-    if (redirectReq.url.indexOf('meet://home') === 0) {
-      redirectReq.url = redirectReq.url.replace('meet://home', 'https://meet.tokbox.com');
-    } else {
-      redirectReq.url = redirectReq.url.replace('meet://', 'https://');
-    }
-
-    callback(redirectReq);
-  });
-}
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', registerProtocol);
+// app.on('ready', registerProtocol);
 const readyPromise = new Promise(resolve => app.on('ready', resolve));
 
 let createWindowCalled = false;
 
-function createWindow(url = 'meet://home') {
+function createWindow(url = 'https://meet.tokbox.com/') {
   createWindowCalled = true;
 
   readyPromise.then(() => {
@@ -76,7 +60,15 @@ readyPromise.then(() => {
   }
 });
 
-app.on('open-url', (ev, url) => {
+app.on('open-url', (ev, urlParam) => {
+  let url = urlParam;
+
+  if (url.indexOf('meet://home') === 0) {
+    url = url.replace('meet://home', 'https://meet.tokbox.com');
+  } else {
+    url = url.replace('meet://', 'https://');
+  }
+
   createWindow(url);
 });
 
