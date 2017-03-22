@@ -4,11 +4,8 @@ const {
   app,
   BrowserWindow,
   globalShortcut,
-  // protocol,
 // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('electron');
-
-// const clone = require('lodash/clone');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,7 +14,6 @@ const windows = new Set();
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-// app.on('ready', registerProtocol);
 const readyPromise = new Promise(resolve => app.on('ready', resolve));
 
 let createWindowCalled = false;
