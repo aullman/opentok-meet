@@ -63,7 +63,15 @@ module.exports = function(config) {
     webpack: {
       module: {
           loaders: [
-              { test: /\.css$/, loader: 'style!css' }
+              { test: /\.css$/, loader: 'style!css' },
+              {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules(?!\/opentok-textchat)/,
+                query: {
+                  presets: ['babel-preset-env'].map(require.resolve)
+                }
+              }
           ]
       },
       devtool: 'inline-source-map'

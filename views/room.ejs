@@ -2,6 +2,8 @@
     "http://www.w3.org/TR/html4/strict.dtd">
 <html ng-app="opentok-meet">
     <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
@@ -10,6 +12,7 @@
         <title>OpenTok Meet : <%=room%></title>
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/css/ng-embed.min.css" media="screen" title="no title" charset="utf-8">
         <script src="//static.opentok.com/v2/js/opentok.js"></script>
 
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -61,9 +64,14 @@
                 draggable="true">
             </ot-publisher>
         </div>
+        <opentok-textchat ng-show="showTextchat"
+          ng-if="connected"
+          class="OT_big">
+        </opentok-textchat>
+        <i id="closeTextchat" ng-show="showTextchat" class="ion-close-circled" ng-click="toggleTextchat()"></i>
         <i id="loader" ng-if="!connected" class="ion-loading-c"></i>
         <div id="shareInfo"
-            ng-if="connected && !streams.length && !reconnecting"
+            ng-if="connected && connections.length < 2 && !reconnecting"
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
         </div>
@@ -72,28 +80,37 @@
             ng-cloak>
         </reconnecting-overlay>
         <div id="bottomBar">
-            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" ng-if="!isAndroid" title="Share Screen"></button>
+            <button name="screenshare" id="showscreen" ng-click="toggleShareScreen()" ng-class="{green: !sharingMyScreen, red: sharingMyScreen}" class="screen-btn icon-left ion-monitor" ng-disabled="!screenShareSupported || selectingScreenSource || promptToInstall" ng-if="!isAndroid" title="Share Screen">Screen</button>
 
             <span class="unread-indicator" ng-class="{unread: whiteboardUnread}">
-                <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard"></button>
+                <button name="whiteboard" id="showWhiteboardBtn" ng-click="toggleWhiteboard()" ng-class="{green: !showWhiteboard, red: showWhiteboard}" class="whiteboard-btn icon-left ion-edit" title="Collaborative Whiteboard">Whiteboard</button>
                 <span class="indicator"></span>
             </span>
 
             <span class="unread-indicator" ng-class="{unread: editorUnread}">
-                <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor"></button>
+                <button name="editor" id="showEditorBtn" ng-click="toggleEditor()" ng-class="{green: !showEditor, red: showEditor}" class="editor-btn icon-left ion-document-text" title="Collaborative Editor">Editor</button>
+                <span class="indicator"></span>
+            </span>
+
+            <span class="unread-indicator" ng-class="{unread: textChatUnread}">
+                <button name="textchat" id="showTextchatButton" ng-click="toggleTextchat()" ng-class="{green: !showTextchat, red: showTextchat}" class="textchat-btn icon-left ion-chatbubble" title="Text Chat">Text Chat</button>
                 <span class="indicator"></span>
             </span>
 
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"
-                ng-click="toggleArchiving()" title="Record"></button>
+                ng-click="toggleArchiving()" title="Record">Record</button>
+
+            <button type="button" name="muteCamera" mute-publisher ng-if="publishing" ng-class="{green: mutedVideo, red: !mutedVideo}" publisher-id="facePublisher" class="icon-left ion ion-person">Camera</button>
+
+            <button type="button" name="muteMicrophone" muted-type="Audio" ng-if="publishing" mute-publisher ng-class="{green: mutedAudio, red: !mutedAudio, 'ion-ios7-mic-off': mutedAudio, 'ion-ios7-mic': !mutedAudio}" publisher-id="facePublisher" class="icon-left ion">Mic</button>
 
             <span id="publishUI">
-                <button name="publish" id="publishBtn" ng-click="togglePublish(true)" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam"><span ng-if="!publishing">HD</span></button>
-                <button name="publishSD" id="publishSDBtn" ng-if="!publishing" ng-click="togglePublish(false)" class="publish-btn green icon-left ion ion-ios7-videocam" title="WebCam"><span ng-if="!publishing">SD</span></button>
+                <button name="publish" id="publishBtn" ng-click="togglePublish(true)" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam">{{ publishing ? 'Unpublish' : 'Publish HD'}}</button>
+                <button name="publishSD" id="publishSDBtn" ng-if="!publishing" ng-click="togglePublish(false)" class="publish-btn green icon-left ion ion-ios7-videocam" title="WebCam">Publish SD</button>
               </span>
             </span>
-            <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave"></button>
+            <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave">Leave</button>
         </div>
         <div id="footer">
             <a href="https://github.com/aullman/opentok-meet" target="_blank"><i class="ion-social-github" title="View source on GitHub"></i></a>
@@ -105,6 +122,7 @@
                 Recording: When recording is ready it will be available <a href="/{{room}}/archive/{{archiveId}}" target="_blank">here</a>
             </div>
             <screen-share-dialogs></screen-share-dialogs>
+            <ot-errors></ot-errors>
         </div>
         <script type="text/javascript" charset="utf-8">
             angular.module('opentok-meet').value({

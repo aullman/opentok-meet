@@ -1,14 +1,14 @@
 // Asynchronous fetching of the room. This is so that the mobile app can use the
 // same controller. It doesn't know the room straight away
-angular.module('opentok-meet').factory('RoomService', ['$q', '$http', 'baseURL', '$window', 'room',
-  function($q, $http, baseURL, $window, room) {
+angular.module('opentok-meet').factory('RoomService', ['$http', 'baseURL', '$window', 'room',
+  function($http, baseURL, $window, room) {
     return {
       getRoom: function() {
-        var deferred = $q.defer();
-        $http.get(baseURL + room).success(function(roomData) {
-          deferred.resolve(roomData);
+        return $http.get(baseURL + room).then(function(response) {
+          return response.data;
+        }).catch(function(response) {
+          return response.data;
         });
-        return deferred.promise;
       },
       changeRoom: function() {
         $window.location.href = baseURL;

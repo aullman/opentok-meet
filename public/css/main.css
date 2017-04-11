@@ -126,7 +126,7 @@ ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framera
     opacity: 1;
 }
 
-ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide) {
+ot-whiteboard:not(.ng-hide), ot-editor:not(.ng-hide), opentok-textchat:not(.ng-hide) {
   display: block;
 }
 
@@ -143,6 +143,7 @@ ot-editor {
 
 ot-editor .CodeMirror {
     background-color: #DCD9CD;
+    padding: 10px;
 }
 
 ot-editor > div.opentok-editor-connected {
@@ -163,13 +164,51 @@ ot-editor > div.opentok-editor-mode-select {
   z-index: 10;
 }
 
+opentok-textchat {
+  padding: 10px;
+  display: none;
+  background-color: #DCD9CD;
+  position: absolute;
+  top: 125px;
+  bottom: 70px;
+  right: 0;
+  left: calc(100% - 300px);
+  border-radius: 5px;
+  border: 1px solid #555;
+  z-index: 99;
+  opacity: 0.9;
+}
+
+opentok-textchat #otTextChat .time{
+  color: #555;
+}
+
+opentok-textchat #otTextChat form {
+  height: 50px;
+}
+
+opentok-textchat a {
+  color: rgb(67, 130, 181);
+}
+
+opentok-textchat #otTextChatMessages {
+  height: calc(100% - 40px);
+}
+
+#closeTextchat {
+  position: absolute;
+  top: 130px;
+  right: 5px;
+  z-index: 99;
+  cursor: pointer;
+}
+
 #bottomBar {
   transition: opacity 200ms ease;
   opacity: 0;
   width: 100%;
   left: 0;
   bottom: 20px;
-  pointer-events: none;
   position: absolute;
   text-align: center;
   z-index: 98;
@@ -215,13 +254,14 @@ button.icon-left:before {
     border: none;
     border-radius: 5px;
     color: #DCD9B5;
-    font-size: 22px;
+    font-size: 18px;
     -webkit-appearance: none;
     font-family: 'Ropa Sans', sans-serif;
     transition: width 200ms, height 200ms ease;
     padding-left: 14px;
     padding-top: 5px;
     pointer-events: auto;
+    margin: 0;
 }
 
 #bottomBar #publishHDCheck {
@@ -287,7 +327,7 @@ button:disabled {
 
 #bottomBar #publishBtn.green {
     text-align: left;
-    width: 85px;
+    width: 142px;
 }
 
 .statusMessage {
@@ -342,6 +382,20 @@ button:disabled {
         width: 50px;
         height: 75px;
     }
+}
+
+@media screen and (max-width: 900px) {
+  #bottomBar {
+    width: 100px;
+    bottom: 40px;
+    text-align: left;
+    left: 10px;
+  }
+  #bottomBar button {
+    margin-top: 5px;
+    width: 150px;
+    text-align: left;
+  }
 }
 
 #footer {
@@ -436,4 +490,8 @@ ot-subscriber mute-video .cross-icon {
     font-size: 17px;
     top: 7px;
     left: 2px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

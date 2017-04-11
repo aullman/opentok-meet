@@ -82,10 +82,10 @@ function($document, $window) {
     return {
       restrict: 'E',
       template: '<i class="video-icon ion-ios7-videocam" ' +
-      'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"></i>' +
+      'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"></i>' +
       '<i class="cross-icon" ng-class="' +
-      '{\'ion-ios7-checkmark\': muted, \'ion-ios7-close\': !muted}" ' +
-      'title="{{muted ? \'Unmute Video\' : \'Mute Video\'}}"' +
+      '{\'ion-ios7-checkmark\': mutedVideo, \'ion-ios7-close\': !mutedVideo}" ' +
+      'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"' +
       '</i>'
     };
   })
@@ -94,14 +94,14 @@ function($document, $window) {
       restrict: 'A',
       link : function(scope, element) {
         var subscriber;
-        scope.muted = false;
+        scope.mutedVideo = false;
         angular.element(element).on('click', function () {
           if (!subscriber) {
             subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
           }
           if (subscriber) {
-            subscriber.subscribeToVideo(scope.muted);
-            scope.muted = !scope.muted;
+            subscriber.subscribeToVideo(scope.mutedVideo);
+            scope.mutedVideo = !scope.mutedVideo;
             scope.$apply();
           }
         });
@@ -115,23 +115,38 @@ function($document, $window) {
     return {
       restrict: 'A',
       link : function(scope, element, attrs) {
-        var publisher;
-        scope.muted = false;
+        var type = attrs.mutedType || 'Video';
+        scope['muted' + type] = false;
+
+        var getPublisher = function() {
+          return OTSession.publishers.filter(function (el) {
+            return el.id === attrs.publisherId;
+          })[0];
+        };
+
         angular.element(element).on('click', function () {
-          if (!publisher) {
-            publisher = OTSession.publishers.filter(function (el) {
-              return el.id === attrs.publisherId;
-            })[0];
-          }
+          var publisher = getPublisher();
           if (publisher) {
-            publisher.publishVideo(scope.muted);
-            scope.muted = !scope.muted;
+            publisher['publish' + type](scope['muted' + type]);
+            scope['muted' + type] = !scope['muted' + type];
             scope.$apply();
           }
         });
-        scope.$on('$destroy', function () {
-          publisher = null;
-        });
+        var listenForStreamChanges = function() {
+          OTSession.session.addEventListener('streamPropertyChanged', function(event) {
+            var publisher = getPublisher();
+            if (publisher && publisher.stream &&
+            publisher.stream.streamId === event.stream.streamId) {
+              scope['muted' + type] = !event.stream['has' + type];
+              scope.$apply();
+            }
+          });
+        };
+        if (OTSession.session) {
+          listenForStreamChanges();
+        } else {
+          OTSession.on('init', listenForStreamChanges);
+        }
       }
     };
   }])

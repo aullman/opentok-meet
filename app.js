@@ -2,6 +2,7 @@ var express = require('express'),
   fs = require('fs'),
   OpenTok = require('opentok'),
   https = require('https'),
+  compression = require('compression'),
   app = express(),
   config;
 
@@ -31,6 +32,7 @@ if (process.env.REDISTOGO_URL) {
 }
 
 
+app.use(compression());
 app.use(express.logger());
 
 app.configure(function() {
@@ -47,6 +49,13 @@ var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
 
 require('./server/routes.js')(app, config, redis, ot, useSSL || process.env.HEROKU);
+
+var glob = require('glob'),
+  path = require('path');
+
+glob.sync('./plugins/**/*.js').forEach(function(file) {
+  require(path.resolve(file))(app, config, redis, ot);
+});
 
 if (process.env.HEROKU || !useSSL) {
   app.listen(config.port, function() {
