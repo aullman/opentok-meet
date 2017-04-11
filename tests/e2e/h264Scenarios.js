@@ -53,7 +53,7 @@ describe('H264', function() {
   describe('with 2 participants', function() {
     var secondBrowser;
     beforeEach(function() {
-      browser.get('/' + roomName + '?h264=true');
+      browser.get('/' + roomName + 'p2p?h264=true');
       secondBrowser = browser.forkNewDriverInstance(true);
       secondBrowser.browserName = browser.browserName;
     });
