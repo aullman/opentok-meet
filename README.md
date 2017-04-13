@@ -12,7 +12,7 @@ Opentok app with screen sharing using the WebRTC screen sharing and Archiving fe
 There are a few different mobile applications that have been built to interoperate with this application. 
 
 * [meet-swift](https://github.com/robjperez/meet-swift) An iOS app built in Swift.
-* [opentok-meet-android](https://github.com/marinaserranomontes/opentok-meet-android) and Android application.
+* [opentok-meet-android](https://github.com/opentok/opentok-meet-android) and Android application.
 
 ## Running locally
 
@@ -38,7 +38,7 @@ There are a few different mobile applications that have been built to interopera
 6. `git push heroku master`
 7. Visit your heroku URL
 
-##Running Tests
+## Running Tests
 
 You can run the unit tests using `npm test`. This command is setup to work correctly in the Travis CI system as well as when running locally. But if you want it to run locally you need to setup a few things. You will need to sign up for [Sauce Labs](https://saucelabs.com/). This service offers [free options for Open Source](https://saucelabs.com/open-source). You will need the following environment variables set.
 
