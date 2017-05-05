@@ -16,7 +16,7 @@ describe('subscriber-stats', function() {
     $timeout = _$timeout_;
     StatsService = _StatsService_;
     spyOn(StatsService, 'addSubscriber');
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on']);
     mockSubscriber.id = 'mockId';
     spyOn(OTSession.session, 'getSubscribersForStream').and.callFake(function() {
       return [mockSubscriber];
@@ -34,55 +34,65 @@ describe('subscriber-stats', function() {
     expect(OTSession.session.getSubscribersForStream).toHaveBeenCalledWith(mockStream);
   });
 
-  it('adds a subscriber to StatsService', function () {
-    expect(StatsService.addSubscriber).toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
+  it('does not add a subscriber to StatsService if we are not conected', function () {
+    expect(StatsService.addSubscriber).not.toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
   });
 
-  it('sets stats on the scope', function () {
-    StatsService.addSubscriber.calls.mostRecent().args[1](mockStats);
-    expect(scope.$$childHead.stats).toBe(mockStats);
-  });
+  describe('with a connected subscriber', function() {
+    beforeEach(function() {
+      mockSubscriber.on.calls.mostRecent().args[1]();
+    });
 
-  it('handles $destroy', function () {
-    spyOn(StatsService, 'removeSubscriber');
-    spyOn($timeout, 'cancel');
-    scope.$destroy();
-    expect(StatsService.removeSubscriber).toHaveBeenCalledWith(mockSubscriber.id);
-    expect($timeout.cancel).toHaveBeenCalled();
-  });
+    it('adds a subscriber to StatsService', function () {
+      expect(StatsService.addSubscriber).toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
+    });
 
-  it('toggles showStats and buttonDisplayMode on click', function () {
-    expect(scope.$$childHead.showStats).toBeFalsy();
-    var statsBtn = element.find('button');
-    statsBtn.triggerHandler({type: 'click'});
-    expect(scope.$$childHead.showStats).toBe(true);
-    expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'on'});
-    statsBtn.triggerHandler({type: 'click'});
-    expect(scope.$$childHead.showStats).toBe(false);
-    expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'auto'});
-  });
+    it('sets stats on the scope', function () {
+      StatsService.addSubscriber.calls.mostRecent().args[1](mockStats);
+      expect(scope.$$childHead.stats).toBe(mockStats);
+    });
 
-  it('displays the stats correctly', function() {
-    scope.$$childHead.stats = {
-      width: 200,
-      height: 200,
-      audio: mockStats.audio,
-      video: mockStats.video,
-      audioPacketLoss: '20.00',
-      videoPacketLoss: '20.00',
-      audioBitrate: '0',
-      videoBitrate: '0',
-      timestamp: mockStats.timestamp
-    };
-    scope.$digest();
-    expect(element.find('div').html()).toMatch(
-      new RegExp('Resolution: 200x200<br>.*' +
-      'Audio Packet Loss: 20.00%<br>' +
-      'Audio Bitrate: 0 kbps<br>.*' +
-      'Video Packet Loss: 20.00%<br>' +
-      'Video Bitrate: 0 kbps<br>' +
-      'Frame Rate: 0 fps', 'g')
-    );
+    it('handles $destroy', function () {
+      spyOn(StatsService, 'removeSubscriber');
+      spyOn($timeout, 'cancel');
+      scope.$destroy();
+      expect(StatsService.removeSubscriber).toHaveBeenCalledWith(mockSubscriber.id);
+      expect($timeout.cancel).toHaveBeenCalled();
+    });
+
+    it('toggles showStats and buttonDisplayMode on click', function () {
+      expect(scope.$$childHead.showStats).toBeFalsy();
+      var statsBtn = element.find('button');
+      statsBtn.triggerHandler({type: 'click'});
+      expect(scope.$$childHead.showStats).toBe(true);
+      expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'on'});
+      statsBtn.triggerHandler({type: 'click'});
+      expect(scope.$$childHead.showStats).toBe(false);
+      expect(mockSubscriber.setStyle).toHaveBeenCalledWith({buttonDisplayMode: 'auto'});
+    });
+
+    it('displays the stats correctly', function() {
+      scope.$$childHead.stats = {
+        width: 200,
+        height: 200,
+        audio: mockStats.audio,
+        video: mockStats.video,
+        audioPacketLoss: '20.00',
+        videoPacketLoss: '20.00',
+        audioBitrate: '0',
+        videoBitrate: '0',
+        timestamp: mockStats.timestamp
+      };
+      scope.$digest();
+      expect(element.find('div').html()).toMatch(
+        new RegExp('Resolution: 200x200<br>.*' +
+        'Audio Packet Loss: 20.00%<br>' +
+        'Audio Bitrate: 0 kbps<br>.*' +
+        'Video Packet Loss: 20.00%<br>' +
+        'Video Bitrate: 0 kbps<br>' +
+        'Frame Rate: 0 fps', 'g')
+      );
+    });
   });
 });
 
