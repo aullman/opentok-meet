@@ -1,3 +1,5 @@
+var useH264Only = require('./useH264Only.js');
+
 module.exports = function(h264, dtx) {
   console.log('Intercept settings', dtx, h264);
 
@@ -19,13 +21,9 @@ module.exports = function(h264, dtx) {
         var origSetLocalDescription = pc.setLocalDescription.bind(pc);
         pc.setLocalDescription = function(sdp) {
           console.log('Intercept setLocalDescription');
-          if (h264) {
+          if (h264 && sdp.type === 'offer') {
             var oldSDP = sdp.sdp;
-            sdp.sdp = sdp.sdp.replace('120 121 126 97', '126 97 120 121'); // FF
-            sdp.sdp = sdp.sdp.replace(/(.*?m=video )(.*?) 100 101 (.*?)107(.*?)/gi,
-              '$1$2 107 100 101 $3$4'); // Chrome 56
-            sdp.sdp = sdp.sdp.replace(/(.*?m=video )(.*?) 96 98 (.*?)100(.*?)/gi,
-              '$1$2 100 96 98 $3$4'); // Chrome Canary
+            sdp.sdp = useH264Only(sdp.sdp);
             if (oldSDP === sdp.sdp) {
               console.warn('Could not modify SDP to turn on H.264', oldSDP);
             }
