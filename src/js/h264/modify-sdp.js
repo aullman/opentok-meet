@@ -21,7 +21,7 @@ module.exports = function(h264, dtx) {
         var origSetLocalDescription = pc.setLocalDescription.bind(pc);
         pc.setLocalDescription = function(sdp) {
           console.log('Intercept setLocalDescription');
-          if (h264) {
+          if (h264 && sdp.type === 'offer') {
             var oldSDP = sdp.sdp;
             sdp.sdp = useH264Only(sdp.sdp);
             if (oldSDP === sdp.sdp) {
