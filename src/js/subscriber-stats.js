@@ -169,11 +169,13 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         var timeout = $timeout(function () {
           // subscribe hasn't been called yet so we wait a few milliseconds
           subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
-          subscriberId = subscriber.id;
+          subscriber.on('connected', function() {
+            subscriberId = subscriber.id;
 
-          StatsService.addSubscriber(subscriber, function (stats) {
-            scope.stats = stats;
-            scope.$apply();
+            StatsService.addSubscriber(subscriber, function (stats) {
+              scope.stats = stats;
+              scope.$apply();
+            });            
           });
         }, 100);
 
