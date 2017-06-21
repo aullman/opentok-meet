@@ -32,12 +32,12 @@ module.exports = function(h264, dtx) {
         };
         return pc;
     };
+    newPeerConnection.prototype = OrigPeerConnection.prototype;
 
     ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach(function(obj) {
         // Override objects if they exist in the window object
         if (window.hasOwnProperty(obj)) {
-            window[obj] = newPeerConnection;
-            window[obj].prototype =  newPeerConnection.prototype;
+          window[obj] = newPeerConnection;
         }
     });
   }
