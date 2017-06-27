@@ -26,6 +26,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     style: {
       nameDisplayMode: 'off'
     },
+    usePreviousDeviceSelection: true,
     resolution: '1280x720',
     frameRate: 30
   },
@@ -45,6 +46,8 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
   $scope.togglePublish = function(publishHD) {
     if (!$scope.publishing) {
+      // If they unpublish and publish again then prompt them to change their devices
+      facePublisherPropsHD.usePreviousDeviceSelection = false;
       $scope.facePublisherProps = publishHD ? facePublisherPropsHD : facePublisherPropsSD;
     }
     $scope.publishing = !$scope.publishing;

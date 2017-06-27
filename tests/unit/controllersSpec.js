@@ -77,6 +77,7 @@ describe('OpenTok Meet controllers', function() {
         style: {
           nameDisplayMode: 'off'
         },
+        usePreviousDeviceSelection: true,
         resolution: '1280x720',
         frameRate: 30
       });
@@ -101,6 +102,7 @@ describe('OpenTok Meet controllers', function() {
         scope.togglePublish(true);
         expect(scope.publishing).toBe(true);
         expect(scope.facePublisherProps.resolution).toBe('1280x720');
+        expect(scope.facePublisherProps.usePreviousDeviceSelection).toBe(false);
         scope.togglePublish(true);
         expect(scope.publishing).toBe(false);
       });
@@ -266,6 +268,11 @@ describe('OpenTok Meet controllers', function() {
           });
           it('sets the session', function () {
             expect(scope.session).toBe(mockSession);
+          });
+          it('sets publishing to true', function() {
+            expect(scope.publishing).toBe(true);
+            expect(scope.facePublisherProps.resolution).toBe('1280x720');
+            expect(scope.facePublisherProps.usePreviousDeviceSelection).toBe(true);
           });
           it('listens for events on the session', function () {
             expect(mockSession.on).toHaveBeenCalledWith('sessionConnected', jasmine.any(Function));
