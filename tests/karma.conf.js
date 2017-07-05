@@ -13,6 +13,9 @@ module.exports = function(config) {
         executable: 'http://localhost:5000/SauceLabsInstaller.exe',
         background: false
       }
+    },
+    Safari: {
+      base: 'SafariTechPreview'
     }
   };
   var browser = process.env.BROWSER || 'chrome';
@@ -44,7 +47,8 @@ module.exports = function(config) {
       'karma-coverage',
       'karma-sauce-launcher',
       'karma-webpack',
-      'karma-sourcemap-loader'
+      'karma-sourcemap-loader',
+      'karma-safaritechpreview-launcher'
     ],
 
     junitReporter: {
