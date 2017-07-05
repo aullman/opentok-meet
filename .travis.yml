@@ -4,7 +4,7 @@ node_js:
 cache: yarn
 before_install:
 - export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
+- if [ -f /etc/init.d/xvfb ];then sh -e /etc/init.d/xvfb start; fi
 before_script:
 - npm start > /dev/null &
 - if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
