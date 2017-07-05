@@ -12,7 +12,7 @@ module.exports = function(config) {
         background: false
       }
     },
-    safari: {
+    Safari: {
       base: 'SafariTechPreview'
     }
   };
