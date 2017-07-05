@@ -20,19 +20,31 @@ dist: trusty
 matrix:
   fast_finish: true
 
+  include:
+    - os: linux
+      env: BROWSER=chrome  BVER=stable
+    - os: linux
+      env: BROWSER=firefox BVER=45.0.2
+    - os: linux
+      env: BROWSER=ie BVER=11 SAUCELABS=true
+    - os: linux
+      env: BROWSER=ie BVER=10 SAUCELABS=true
+    - os: linux
+      env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=chrome  BVER=beta
+    - os: osx
+      osx_image: xcode8.3
+      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
+
   allow_failures:
-    - env: BROWSER=firefox BVER=beta
-    - env: BROWSER=firefox BVER=stable
-    - env: BROWSER=chrome  BVER=beta
-env:
-  matrix:
-    - BROWSER=chrome  BVER=stable
-    - BROWSER=firefox BVER=45.0.2
-    - BROWSER=ie BVER=11  SAUCELABS=true
-    - BROWSER=ie BVER=10  SAUCELABS=true
-    - BROWSER=firefox BVER=stable
-    - BROWSER=chrome  BVER=beta
-    - BROWSER=firefox BVER=beta
+    - os: linux
+      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=chrome  BVER=beta
+
   global:
   - TRAVIS=true
   - PORT=5000
