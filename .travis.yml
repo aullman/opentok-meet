@@ -45,6 +45,7 @@ matrix:
     - os: linux
       env: BROWSER=chrome  BVER=beta
 
+env:
   global:
   - TRAVIS=true
   - PORT=5000
