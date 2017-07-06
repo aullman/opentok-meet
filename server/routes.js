@@ -80,6 +80,7 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
           }
         }
         res.render('room', {
+          opentokJs: config.opentokJs,
           room: room,
           chromeExtensionId: config.chromeExtensionId
         });
