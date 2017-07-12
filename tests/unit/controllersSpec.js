@@ -254,7 +254,10 @@ describe('OpenTok Meet controllers', function() {
         it('handles errors', function(done) {
           callback = MockOTSession.init.calls.mostRecent().args[3];
           var fakeError = { message: 'fakeMessage' };
-          scope.$on('otError', done);
+          scope.$on('otError', function(event, err) {
+            expect(err.message).toEqual('fakeMessage');
+            done();
+          });
           callback(fakeError);
         });
 
