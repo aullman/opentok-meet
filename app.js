@@ -11,7 +11,9 @@ if (process.env.HEROKU || process.env.TRAVIS) {
     'port': process.env.PORT,
     'apiKey': process.env.OT_API_KEY,
     'apiSecret': process.env.OT_API_SECRET,
-    'chromeExtensionId': process.env.CHROME_EXTENSION_ID
+    'chromeExtensionId': process.env.CHROME_EXTENSION_ID,
+    'apiUrl': process.env.OT_API_URL || 'https://anvil-tbdev.opentok.com',
+    'opentokJs': process.env.OT_JS_URL || 'https://tbdev.tokbox.com/v2/js/opentok.js'
   };
 } else {
   try {
@@ -44,7 +46,7 @@ app.configure(function() {
   app.use(app.router);
 });
 
-var ot = new OpenTok(config.apiKey, config.apiSecret, 'https://anvil-tbdev.opentok.com');
+var ot = new OpenTok(config.apiKey, config.apiSecret, config.apiUrl);
 var useSSL = fs.existsSync(__dirname + '/server.key') &&
   fs.existsSync(__dirname + '/server.crt');
 
