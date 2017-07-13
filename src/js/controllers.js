@@ -154,7 +154,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
     OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, function(err, session) {
       if (err) {
-        $scope.$broadcast('otError', {message: 'foo'});
+        $scope.$broadcast('otError', {message: err.message});
         return;
       }
       $scope.session = session;
