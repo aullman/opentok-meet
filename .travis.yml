@@ -15,7 +15,7 @@ addons:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
 services:
 - redis-server
-sudo: false
+sudo: required
 dist: trusty
 matrix:
   fast_finish: true
@@ -37,7 +37,6 @@ matrix:
       env: BROWSER=chrome  BVER=beta
     - os: osx
       osx_image: xcode8.3
-      sudo: required
       env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
 
   allow_failures:
