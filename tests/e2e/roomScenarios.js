@@ -161,7 +161,7 @@ describe('Room', function() {
       }, 10000);
       var audioAcquisitionProblem = element(by.css('#facePublisher audio-acquisition-problem'));
       expect(audioAcquisitionProblem.isDisplayed()).toBe(false);
-      browser.driver.executeScript('OT.publishers.find().trigger(\'audioAcquisitionProblem\');')
+      browser.driver.executeScript('OT.publishers.find().trigger(\'audioAcquisitionProblem\', { method: \'mock\' });')
       .then(function () {
         expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
       });

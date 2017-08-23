@@ -25,7 +25,7 @@ describe('audioAcquisitionProblem', function () {
       expect(scope.showAlert).toBe(false);
       OTSession.addPublisher(mockPublisher);
       setTimeout(function() {
-        mockPublisher.trigger('audioAcquisitionProblem');
+        mockPublisher.trigger('audioAcquisitionProblem', { method: 'mock' });
         setTimeout(function() {
           expect(scope.showAlert).toBe(true);
           done();
