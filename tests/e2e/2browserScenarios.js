@@ -74,8 +74,9 @@ describe('2 browsers in the same room', function() {
       beforeEach(function (done) {
         secondSubscriber = secondBrowser.element(by.css('ot-subscriber'));
         // Move the publisher out of the way
-        secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
-          .then(function () {
+        secondBrowser.driver.executeScript(function() {
+          $('#facePublisher').css({top:200, left:0});
+        }).then(function () {
           secondBrowser.actions().mouseDown(secondSubscriber).mouseUp().perform();
           // Have to wait for the buttons to show up
           secondBrowser.sleep(1000).then(function () {

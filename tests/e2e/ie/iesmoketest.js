@@ -22,7 +22,9 @@ describe('IE Smoke Test', function() {
     expect(element(by.css('#showEditorBtn')).isPresent()).toBe(true);
     // expect(element(by.css('#startArchiveBtn')).isPresent()).toBe(true);
     // Open a new window
-    browser.driver.executeScript('window.open("' + browser.baseUrl + roomName + '");');
+    browser.driver.executeScript(function() {
+      window.open(browser.baseUrl + roomName);
+    });
     // Wait for subscriber to show up
     browser.wait(function () {
       return element(by.css('ot-subscriber')).isPresent();

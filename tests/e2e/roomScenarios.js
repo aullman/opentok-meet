@@ -159,8 +159,10 @@ describe('Room', function() {
       var publishErrors = element(by.css('ot-errors'));
       expect(publishErrors.isDisplayed()).toBe(false);
       expect(publisher.isPresent()).toBe(true);
-      browser.driver.executeScript('angular.element("ot-publisher").scope().$emit' +
-        '("otPublisherError", {message:"whatever"}, {id:"facePublisher"})').then(function () {
+      browser.driver.executeScript(function() {
+        angular.element("ot-publisher").scope().$emit("otPublisherError",
+          {message:"whatever"}, {id:"facePublisher"});
+      }).then(function () {
           expect(publishErrors.isDisplayed()).toBe(true);
           expect(publisher.isPresent()).toBe(false);
       });
@@ -351,8 +353,9 @@ describe('Room', function() {
         it('shows an install prompt when you click it and the extension is not installed',
             function (done) {
           if (browser.browserName === 'chrome') {
-            browser.driver.executeScript(
-              'OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(function () {
+            browser.driver.executeScript(function() {
+              OT.registerScreenSharingExtension('chrome', 'foo');
+            }).then(function () {
               expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
               expect(screenShareBtn.getAttribute('class')).toContain('green');
               screenShareBtn.click();
