@@ -67,18 +67,6 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
         RoomStore.getRoom(room, apiKey, secret, goToRoom);
       },
       html: function() {
-        var ua = req.headers['user-agent'];
-        // If we're on iOS forward them to the iOS App
-        if (/like Mac OS X/.test(ua)) {
-          var iOSRegex = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua),
-            iOS = iOSRegex && iOSRegex.length > 2 && iOSRegex[2].replace(/_/g, '.');
-          if (iOS) {
-            res.render('roomiOS', {
-              room: room
-            });
-            return;
-          }
-        }
         res.render('room', {
           opentokJs: config.opentokJs,
           room: room,
