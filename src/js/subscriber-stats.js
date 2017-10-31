@@ -6,7 +6,6 @@ function SubscriberStats(subscriber, onStats) {
   this.subscriber = subscriber;
   this.onStats = onStats;
   this.lastStats; // The previous getStats result
-  this.lastLastStats; // The getStats result before that
 }
 
 angular.module('opentok-meet').factory('StatsService', ['$interval',
@@ -18,7 +17,6 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
         var subscriberStats = subscribers[subscriberId];
         var subscriber = subscriberStats.subscriber,
           lastStats = subscriberStats.lastStats,
-          lastLastStats = subscriberStats.lastLastStats;
         subscriber.getStats(function(err, stats) {
           if (err) {
             console.error(err);
@@ -40,12 +38,14 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
                 stats[type].packetsReceived) * 100).toFixed(2);
             }
             if (lastStats) {
-              if (lastLastStats && lastLastStats[type] && lastLastStats[type].packetsReceived &&
-                (stats[type].packetsReceived - lastLastStats[type].packetsReceived > 0)) {
+              if (lastStats[type] && lastStats[type].packetsReceived &&
+                (stats[type].packetsReceived - lastStats[type].packetsReceived > 0)) {
                 currStats[type + 'PacketLoss'] =
-                  (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
-                    (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
+                  (((stats[type].packetsLost - lastStats[type].packetsLost) /
+                    (stats[type].packetsReceived - lastStats[type].packetsReceived)))
                     .toFixed(2);
+              } else {
+                currStats[type + 'PacketLoss'] = 0;
               }
               var bitsReceived = (stats[type].bytesReceived -
                 (lastStats[type] ? lastStats[type].bytesReceived : 0)) * 8;
@@ -60,7 +60,6 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
           if (stats.video) {
             setCurrStats('video');
           }
-          subscriberStats.lastLastStats = subscriberStats.lastStats;
           subscriberStats.lastStats = currStats;
           subscriberStats.onStats(currStats);
         });
