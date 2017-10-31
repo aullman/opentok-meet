@@ -44,6 +44,12 @@ matrix:
       env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=chrome  BVER=beta
+    - os: linux
+      env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
 
 env:
   global:
