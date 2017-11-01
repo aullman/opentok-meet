@@ -123,7 +123,11 @@ describe('using the whiteboard', function() {
     beforeEach(function () {
       browser.get(roomURL);
     });
-    it('drawing works', whiteboardTests(true));
+    it('drawing works', function() {
+      if (browser.browserName !== 'firefox') {
+        whiteboardTests(true)();
+      }
+    });
   });
 
   describe('standalone', function() {
