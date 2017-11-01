@@ -21,7 +21,7 @@ matrix:
 
   include:
     - os: linux
-      env: BROWSER=chrome  BVER=stable
+      env: BROWSER=chrome  BVER=59.0.3071.86
     - os: linux
       env: BROWSER=firefox BVER=45.0.2
     - os: linux
