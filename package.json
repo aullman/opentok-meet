@@ -59,7 +59,7 @@
     "karma-webpack": "^1.7.0",
     "null-loader": "^0.1.1",
     "opentok-test-scripts": "^3.6.0",
-    "protractor": "^4.0.9",
+    "protractor": "^5.2.0",
     "protractor-flake": "^2.1.2",
     "q": "^1.2.0",
     "travis-multirunner": "^4.2.0",
