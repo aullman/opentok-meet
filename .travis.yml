@@ -23,7 +23,7 @@ matrix:
     - os: linux
       env: BROWSER=chrome  BVER=59.0.3071.86
     - os: linux
-      env: BROWSER=firefox BVER=45.0.2
+      env: BROWSER=firefox BVER=45.0.2 UNIT_CMD=''
     - os: linux
       env: BROWSER=ie BVER=11 SAUCELABS=true
     - os: linux
