@@ -3,7 +3,7 @@
 /* global element: false */
 /* global by: false */
 var uuid = require('uuid');
-describe('using the whiteboard', function() {
+xdescribe('using the whiteboard', function() {
   var roomName, roomURL, secondBrowser, thirdBrowser;
   beforeEach(function () {
     while(!roomName || roomName.indexOf('p2p') > -1) {
@@ -123,11 +123,7 @@ describe('using the whiteboard', function() {
     beforeEach(function () {
       browser.get(roomURL);
     });
-    it('drawing works', function() {
-      if (browser.browserName !== 'firefox') {
-        whiteboardTests(true)();
-      }
-    });
+    it('drawing works', whiteboardTests(true));
   });
 
   describe('standalone', function() {
