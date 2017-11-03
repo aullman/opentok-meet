@@ -18,6 +18,12 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.showTextchat = false;
   $scope.textChatUnread = false;
   $scope.leaving = false;
+  $scope.zoomed = false;
+  $scope.layoutProps = {
+    animate:true,
+    bigFixedRatio:true,
+    fixedRatio:!$scope.zoomed
+  };
 
   var facePublisherPropsHD = {
     name: 'face',
@@ -97,7 +103,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.showWhiteboard = !$scope.showWhiteboard;
     $scope.whiteboardUnread = false;
     setTimeout(function() {
-      $scope.$emit('otLayout');
+      $scope.$broadcast('otLayout');
     }, 10);
   };
 
@@ -105,7 +111,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.showEditor = !$scope.showEditor;
     $scope.editorUnread = false;
     setTimeout(function() {
-      $scope.$emit('otLayout');
+      $scope.$broadcast('otLayout');
       $scope.$broadcast('otEditorRefresh');
     }, 10);
   };
@@ -192,6 +198,16 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.publishing = true;
   });
 
+  $scope.zoom = function() {
+    $scope.zoomed = !$scope.zoomed;
+    $scope.layoutProps = {
+      animate:true,
+      bigFixedRatio:true,
+      fixedRatio:!$scope.zoomed
+    };
+    $scope.$broadcast('otLayout');
+  };
+
   $scope.changeRoom = function() {
     if (!$scope.leaving) {
       $scope.leaving = true;
@@ -227,7 +243,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $window.addEventListener('mousemove', mouseMoved);
   $window.addEventListener('touchstart', mouseMoved);
   $document.context.body.addEventListener('orientationchange', function() {
-    $scope.$emit('otLayout');
+    $scope.$broadcast('otLayout');
   });
 
   $scope.$on('$destroy', function() {
