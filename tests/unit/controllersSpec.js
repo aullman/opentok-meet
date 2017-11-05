@@ -421,6 +421,19 @@ describe('OpenTok Meet controllers', function() {
       });
     });
 
+    describe('zoom', function() {
+      it('toggles zoomed and the fixedRatio property', function() {
+        expect(scope.zoomed).toBe(false);
+        expect(scope.layoutProps.fixedRatio).toBe(true);
+        scope.zoom();
+        expect(scope.zoomed).toBe(true);
+        expect(scope.layoutProps.fixedRatio).toBe(false);
+        scope.zoom();
+        expect(scope.zoomed).toBe(false);
+        expect(scope.layoutProps.fixedRatio).toBe(true);
+      });
+    });
+
     describe('sendEmail', function () {
       it('sets $window.location.url properly', function () {
         scope.shareURL = 'http://mockURL';

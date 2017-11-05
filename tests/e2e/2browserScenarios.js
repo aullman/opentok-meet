@@ -68,6 +68,35 @@ describe('2 browsers in the same room', function() {
       expect(subscriber.getAttribute('class')).not.toContain('OT_big');
     });
 
+    it('zoom button should work', function() {
+      var checkZoomed = function(zoomed) {
+        // Check whether the aspect ratio matches the videoWidth and videoHeight
+        if (browser.browserName === 'chrome') {
+          // We set the browser dimensions in Chrome but not other browsers so zooming
+          // doesn't work there
+          secondBrowser.wait(function() {
+            return subscriber.getSize().then(function(size) {
+              if (zoomed) {
+                return size.width / size.height !== 1280 / 720;
+              } else {
+                return size.width / size.height == 1280 / 720;
+              }
+            });
+          });
+        }
+      };
+      var subscriber = secondBrowser.element(by.css('ot-subscriber'));
+      var zoomBtn = secondBrowser.element(by.css('#zoom'));
+      checkZoomed(false);
+      expect(zoomBtn.getAttribute('class')).toContain('green');
+      zoomBtn.click();
+      checkZoomed(true);
+      expect(zoomBtn.getAttribute('class')).toContain('red');
+      zoomBtn.click();
+      checkZoomed(false);
+      expect(zoomBtn.getAttribute('class')).toContain('green');
+    });
+
     describe('subscriber buttons', function () {
       var secondSubscriber;
       beforeEach(function (done) {

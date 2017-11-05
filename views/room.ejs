@@ -27,7 +27,7 @@
     </head>
     <body ng-controller="RoomCtrl" ng-class="{'mouse-move': mouseMove}">
         <div id='session' ng-class="{'session-connected': connected}">
-            <ot-layout props="{animate:true,bigFixedRatio:true}">
+            <ot-layout props="layoutProps">
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine"
                     stream="stream"
                     props="{style: {nameDisplayMode: 'off'}}"
@@ -121,6 +121,9 @@
                 <button name="publishSD" id="publishSDBtn" ng-if="!publishing" ng-click="togglePublish(false)" class="publish-btn green icon-left ion ion-ios7-videocam" title="WebCam">Publish SD</button>
               </span>
             </span>
+
+            <button name="zoom" id="zoom" ng-click="zoom()" ng-class="{green: !zoomed, red: zoomed, 'ion-plus-circled': !zoomed, 'ion-minus-circled': zoomed}" class="icon-left" title="Zoom">Zoom {{ zoomed ? 'Out' : 'In' }}</button>
+
             <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave">Leave</button>
         </div>
         <div id="footer">

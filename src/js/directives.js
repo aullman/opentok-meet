@@ -235,7 +235,7 @@ function($document, $window) {
             scope.expanded = !scope.expanded;
           }
           scope.$apply();
-          scope.$emit('otLayout');
+          scope.$broadcast('otLayout');
         };
         angular.element(element).on('click', toggleExpand);
         angular.element(element).parent().on('dblclick', toggleExpand);

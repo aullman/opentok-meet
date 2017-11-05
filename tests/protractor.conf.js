@@ -111,7 +111,7 @@ switch(process.env.BROWSER) {
         'chromeOptions': {
           'args': ['auto-select-desktop-capture-source="Entire screen"',
             'use-fake-device-for-media-stream',
-            'use-fake-ui-for-media-stream', 'disable-popup-blocking'],
+            'use-fake-ui-for-media-stream', 'disable-popup-blocking', '--window-size=800,600'],
           'binary': process.env.BROWSERBIN
         }
       },
@@ -132,5 +132,6 @@ switch(process.env.BROWSER) {
       }
     };
   break;
-}
+};
+
 exports.config = config;
