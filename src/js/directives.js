@@ -221,7 +221,7 @@ function($document, $window) {
       }
     };
   }])
-  .directive('expandButton', function () {
+  .directive('expandButton', ['$rootScope', function ($rootScope) {
     return {
       restrict: 'E',
       template: '<button class="resize-btn ion-arrow-expand" ng-click="$emit(\'changeSize\');"' +
@@ -235,10 +235,10 @@ function($document, $window) {
             scope.expanded = !scope.expanded;
           }
           scope.$apply();
-          scope.$broadcast('otLayout');
+          $rootScope.$broadcast('otLayout');
         };
         angular.element(element).on('click', toggleExpand);
         angular.element(element).parent().on('dblclick', toggleExpand);
       }
     };
-  });
+  }]);

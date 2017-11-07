@@ -319,9 +319,10 @@ describe('reconnectingOverlay', function () {
 
 // This is the double click to enlarge functionality
 describe('changeSize', function () {
-  var scope, parent, expandButton;
+  var scope, parent, expandButton, $rootScope;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile) {
+  beforeEach(inject(function (_$rootScope_, $compile) {
+    $rootScope = _$rootScope_;
     scope = $rootScope.$new();
     scope.stream = {name: 'face'};
     expandButton = angular.element('<expand-button></expand-button>');
@@ -341,9 +342,7 @@ describe('changeSize', function () {
     expect(scope.expanded).toBe(true);
   });
   it('emits otLayout', function (done) {
-    scope.$on('otLayout', function () {
-      done();
-    });
+    $rootScope.$on('otLayout', done);
     expandButton.triggerHandler({type: 'click'});
   });
   it('works when you double click the parent', function () {
