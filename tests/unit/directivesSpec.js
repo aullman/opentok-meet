@@ -295,33 +295,40 @@ describe('reconnectingOverlay', function () {
 
 // This is the double click to enlarge functionality
 describe('changeSize', function () {
-  var scope, parent, expandButton, $rootScope;
+  var scope, parent, expandButton, $rootScope, $compile;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function (_$rootScope_, $compile) {
+  beforeEach(inject(function (_$rootScope_, _$compile_) {
     $rootScope = _$rootScope_;
+    $compile = _$compile_;
     scope = $rootScope.$new();
     scope.stream = {name: 'face'};
     expandButton = angular.element('<expand-button></expand-button>');
     parent = angular.element('<div></div>');
     parent.append(expandButton);
-    expandButton = $compile(expandButton)(scope);
-    scope.$digest();
   }));
   it('defaults screens to large', function () {
-    expect(scope.expanded).toBeFalsy();
     scope.stream.name = 'screen';
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
+    expect(scope.expanded).toBe(true);
     expandButton.triggerHandler({type: 'click'});
     expect(scope.expanded).toBe(false);
   });
   it('defaults other screens to small', function () {
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
     expandButton.triggerHandler({type: 'click'});
     expect(scope.expanded).toBe(true);
   });
   it('emits otLayout', function (done) {
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
     $rootScope.$on('otLayout', done);
     expandButton.triggerHandler({type: 'click'});
   });
   it('works when you double click the parent', function () {
+    expandButton = $compile(expandButton)(scope);
+    scope.$digest();
     parent.triggerHandler({type: 'dblclick'});
     expect(scope.expanded).toBe(true);
     parent.triggerHandler({type: 'dblclick'});

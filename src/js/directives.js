@@ -202,18 +202,27 @@ function($document, $window) {
       template: '<button class="resize-btn ion-arrow-expand" ng-click="$emit(\'changeSize\');"' +
         ' title="{{expanded ? \'Shrink\' : \'Enlarge\'}}"></button>',
       link: function (scope, element) {
+        if (scope.expanded === undefined) {
+          // If we're a screen we default to large otherwise we default to small
+          scope.expanded = scope.stream.name === 'screen';
+        }
         var toggleExpand = function () {
-          if (scope.expanded === undefined) {
-            // If we're a screen we default to large otherwise we default to small
-            scope.expanded = scope.stream.name !== 'screen';
-          } else {
-            scope.expanded = !scope.expanded;
-          }
+          scope.expanded = !scope.expanded;
           scope.$apply();
           $rootScope.$broadcast('otLayout');
         };
         angular.element(element).on('click', toggleExpand);
         angular.element(element).parent().on('dblclick', toggleExpand);
       }
+    };
+  }]).directive('zoomButton', ['$rootScope', function ($rootScope) {
+    return {
+      restrict: 'E',
+      scope: {
+        zoomed: '='
+      },
+      template: '<button class="zoom-btn" ng-class="{\'ion-plus-circled\': !zoomed,' +
+        ' \'ion-minus-circled\': zoomed}" ' +
+        'title="{{zoomed ? \'Zoom Out\' : \'Zoom In\'}}"></button>',
     };
   }]);

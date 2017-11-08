@@ -26,12 +26,14 @@
                 <ot-subscriber ng-repeat="stream in streams | filter:notMine"
                     stream="stream"
                     props="{style: {nameDisplayMode: 'off'}}"
-                    ng-class="{OT_big: (expanded == undefined && stream.name == 'screen') || expanded}"
+                    ng-class="{OT_big: expanded}"
                     ng-dblclick="$emit('changeSize')">
                         <subscriber-stats stream="stream"></subscriber-stats>
                         <restrict-framerate></restrict-framerate>
                         <mute-video mute-subscriber></mute-video>
                         <expand-button></expand-button>
+                        <zoom-button zoomed="expanded ? bigZoomed : zoomed"
+                          ng-click="$emit('changeZoom', expanded);"></zoom-button>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
@@ -110,8 +112,6 @@
                 <button name="publishSD" id="publishSDBtn" ng-if="!publishing" ng-click="togglePublish(false)" class="publish-btn green icon-left ion ion-ios7-videocam" title="WebCam">Publish SD</button>
               </span>
             </span>
-
-            <button name="zoom" id="zoom" ng-click="zoom()" ng-class="{green: !zoomed, red: zoomed, 'ion-plus-circled': !zoomed, 'ion-minus-circled': zoomed}" class="icon-left" title="Zoom">Zoom {{ zoomed ? 'Out' : 'In' }}</button>
 
             <button name="changeRoom" id="changeRoom" ng-click="changeRoom()" class="icon-left ion-log-out red" title="Leave">Leave</button>
         </div>

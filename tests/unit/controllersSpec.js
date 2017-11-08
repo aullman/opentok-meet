@@ -406,14 +406,20 @@ describe('OpenTok Meet controllers', function() {
 
     describe('zoom', function() {
       it('toggles zoomed and the fixedRatio property', function() {
-        expect(scope.zoomed).toBe(false);
-        expect(scope.layoutProps.fixedRatio).toBe(true);
-        scope.zoom();
         expect(scope.zoomed).toBe(true);
         expect(scope.layoutProps.fixedRatio).toBe(false);
-        scope.zoom();
+        expect(scope.layoutProps.bigFixedRatio).toBe(true);
+        scope.$emit('changeZoom', false);
         expect(scope.zoomed).toBe(false);
         expect(scope.layoutProps.fixedRatio).toBe(true);
+        expect(scope.layoutProps.bigFixedRatio).toBe(true);
+        scope.$emit('changeZoom', false);
+        expect(scope.zoomed).toBe(true);
+        expect(scope.layoutProps.fixedRatio).toBe(false);
+        expect(scope.layoutProps.bigFixedRatio).toBe(true);
+        scope.$emit('changeZoom', true);
+        expect(scope.layoutProps.fixedRatio).toBe(false);
+        expect(scope.layoutProps.bigFixedRatio).toBe(false);
       });
     });
 
