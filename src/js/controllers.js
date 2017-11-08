@@ -18,10 +18,11 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
   $scope.showTextchat = false;
   $scope.textChatUnread = false;
   $scope.leaving = false;
-  $scope.zoomed = false;
+  $scope.zoomed = true;
+  $scope.bigZoomed = false;
   $scope.layoutProps = {
     animate:true,
-    bigFixedRatio:true,
+    bigFixedRatio:!$scope.bigZoomed,
     fixedRatio:!$scope.zoomed
   };
 
@@ -225,15 +226,19 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.publishing = true;
   });
 
-  $scope.zoom = function() {
-    $scope.zoomed = !$scope.zoomed;
+  $scope.$on('changeZoom', function(event, expanded) {
+    if (expanded) {
+      $scope.bigZoomed = !$scope.bigZoomed;
+    } else {
+      $scope.zoomed = !$scope.zoomed;
+    }
     $scope.layoutProps = {
       animate:true,
-      bigFixedRatio:true,
+      bigFixedRatio:!$scope.bigZoomed,
       fixedRatio:!$scope.zoomed
     };
     $scope.$broadcast('otLayout');
-  };
+  });
 
   $scope.changeRoom = function() {
     if (!$scope.leaving) {

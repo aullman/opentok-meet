@@ -77,7 +77,7 @@ ot-layout {
     height: 100%;
 }
 
-ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout subscriber-stats, ot-layout subscriber-report {
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout subscriber-stats, ot-layout button.zoom-btn, ot-layout subscriber-report {
     transition-property: top,bottom,opacity;
     transition-duration: .5s;
     transition-timing-function: ease-in;
@@ -88,7 +88,8 @@ ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout 
     font-size: 27px;
 }
 
-ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn {
+ot-layout button.resize-btn, ot-layout button.restrict-framerate-btn, ot-layout button.zoom-btn {
+    width: 25px;
     height: 25px;
     cursor: pointer;
     background-color: transparent;
@@ -103,6 +104,10 @@ ot-layout button.resize-btn {
 
 ot-layout ot-subscriber button.restrict-framerate-btn {
     right: 95px;
+}
+
+ot-layout ot-subscriber button.zoom-btn {
+  right: 123px;
 }
 
 ot-layout ot-subscriber subscriber-stats {
@@ -127,9 +132,11 @@ ot-layout button.restrict-framerate-btn i.ion-ios7-speedometer-outline {
 
 ot-layout > :hover button.resize-btn, ot-layout > :hover button.restrict-framerate-btn,
     ot-layout > :hover subscriber-stats, ot-layout button.OT_mode-on ~ subscriber-stats,
+    ot-layout > :hover button.zoom-btn,
     ot-layout > :hover subscriber-report, ot-layout button.OT_mode-on ~ subscriber-report,
-    ot-layout button.OT_mode-on ~ button.resize-btn,
-    ot-layout button.OT_mode-on ~ button.restrict-framerate-btn {
+    ot-layout button.OT_mode-on ~ expand-button button.resize-btn,
+    ot-layout button.OT_mode-on ~ restrict-framerate button.restrict-framerate-btn,
+    ot-layout button.OT_mode-on ~ zoom-button button.zoom-btn {
     top: 0;
     opacity: 1;
 }
@@ -401,7 +408,7 @@ button:disabled {
     }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 900px) {
   #bottomBar {
     width: 100px;
     bottom: 40px;
