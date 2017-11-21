@@ -3475,9 +3475,9 @@ opentok-angular@^1.0.0:
     angular "^1.4.8"
     opentok-layout-js "^1.0.0"
 
-opentok-angular@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/opentok-angular/-/opentok-angular-2.0.1.tgz#45ae17afc1c851cae58f2f4faa32ad9c7842e01c"
+opentok-angular@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/opentok-angular/-/opentok-angular-2.1.0.tgz#16dfffc7af5ba4190521c2c1958572a54ea403cb"
   dependencies:
     angular "^1.4.8"
     opentok-layout-js "^1.0.0"
