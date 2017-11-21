@@ -16,7 +16,7 @@
     "jwt-simple": "^0.5.0",
     "ng-debounce": "^1.0.1",
     "opentok": "^2.2.3",
-    "opentok-angular": "^2.0.1",
+    "opentok-angular": "^2.1.0",
     "opentok-editor": "^0.3.3",
     "opentok-textchat": "^1.2.0",
     "opentok-whiteboard": "^1.1.2",
