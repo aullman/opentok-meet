@@ -30,5 +30,6 @@ require('./simulcast-service.js');
 require('./audio-acquisition-problem.js');
 require('./notifications.js');
 require('./ot-errors.js');
+require('./filtered-publisher.js');
 
 require('./safari-electron-redirect.js');

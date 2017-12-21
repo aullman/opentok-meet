@@ -17,7 +17,6 @@
         <script type="text/javascript">
           window.OTProperties = { enableErrorReporting: true };
         </script>
-        <script src="https://rtcstats.tokbox.com/static/rtcstats.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/h264.bundle.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="<%=opentokJs%>"></script>
@@ -62,10 +61,16 @@
                 ng-if="publishing"
                 draggable="true">
                 <ot-publisher id="facePublisher"
+                    ng-if="!filteredPublisher"
                     props="facePublisherProps">
                 </ot-publisher>
+                <filtered-publisher id="facePublisher"
+                    ng-if="filteredPublisher"
+                    props="facePublisherProps">
+                </filtered-publisher>
                 <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
                 <audio-acquisition-problem publisher-id="facePublisher"></audio-acquisition-problem>
+                <i id="filterBtn" ng-show="!filteredPublisher" class="ion-ios7-snowy" ng-click="filteredPublisher = !filteredPublisher"></i>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"

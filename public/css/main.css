@@ -475,6 +475,16 @@ mute-video {
     opacity: 1;
 }
 
+#facePublisher #filterBtn {
+  position: absolute;
+  font-size: 40px;
+  bottom: -15px;
+  right: 12px;
+  color: white;
+  z-index: 100;
+  cursor: pointer;
+}
+
 mute-video .video-icon {
     font-size: 20px;
     padding: 0;
