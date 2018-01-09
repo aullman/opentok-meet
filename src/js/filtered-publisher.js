@@ -66,7 +66,7 @@ const getCanvasStream = () => {
   filterVideo = document.createElement('video');
   filterVideo.setAttribute('loop', true);
   filterCanvas = document.createElement('canvas');
-  filterVideo.src = '/videos/snowflake-greenscreen.mp4';
+  filterVideo.src = '/videos/fireworks-greenscreen.mp4';
   filterCanvas.width = filterVideo.width = 640;
   filterCanvas.height = filterVideo.height = 480;
   filterVideo.play();

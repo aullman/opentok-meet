@@ -20,7 +20,7 @@
         <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/js/h264.bundle.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="<%=opentokJs%>"></script>
-        <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.14.2/codemirror.css" media="screen" title="no title" charset="utf-8">
         <script src="/js/room.bundle.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
@@ -70,7 +70,7 @@
                 </filtered-publisher>
                 <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
                 <audio-acquisition-problem publisher-id="facePublisher"></audio-acquisition-problem>
-                <i id="filterBtn" ng-show="!filteredPublisher" class="ion-ios7-snowy" ng-click="filteredPublisher = !filteredPublisher"></i>
+                <i id="filterBtn" ng-show="!filteredPublisher" class="ion-fireball" ng-click="filteredPublisher = !filteredPublisher"></i>
             </div>
             <ot-publisher id="screenPublisher"
                 ng-if="sharingMyScreen"
