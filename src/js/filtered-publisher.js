@@ -39,6 +39,12 @@ const getCanvasStream = () => {
       requestAnimationFrame(drawFrame);
     } else {
       ctx = null;
+      filterVideo = null;
+      filterCtx = null;
+      filterCanvas = null;
+      cameraVideo = null;
+      cameraCtx = null;
+      cameraCanvas = null;
     }
   };
 
@@ -65,6 +71,7 @@ const getCanvasStream = () => {
   // Get the filter video
   filterVideo = document.createElement('video');
   filterVideo.setAttribute('loop', true);
+  filterVideo.setAttribute('muted', true);
   filterCanvas = document.createElement('canvas');
   filterVideo.src = '/videos/fireworks-greenscreen.mp4';
   filterCanvas.width = filterVideo.width = 640;
@@ -76,6 +83,12 @@ const getCanvasStream = () => {
     canvas,
     stop: () => {
       stopped = true;
+      if (filterVideo) {
+        filterVideo.pause();
+      }
+      if (cameraVideo) {
+        cameraVideo.pause();
+      }
     }
   };
 };
