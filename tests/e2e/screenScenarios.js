@@ -63,8 +63,9 @@ if (browser.params.testScreenSharing) {
       it('shows an install prompt when you click it and the extension is not installed',
           function (done) {
         if (browser.browserName === 'chrome') {
-          browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
-              .then(function () {
+          browser.driver.executeScript(function() {
+            OT.registerScreenSharingExtension('chrome', 'foo');
+          }).then(function () {
             expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
             expect(screenShareBtn.getAttribute('class')).toContain('green');
             screenShareBtn.click();
