@@ -1,0 +1,55 @@
+.publisher-container .statsBtn {
+  background-color: transparent;
+  font-size: 24px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 100;
+  transition: opacity 500ms ease-in;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.publisher-container:hover .statsBtn {
+  opacity: 1;
+}
+
+.publisher-container .show-stats-info {
+  background: rgba(0,0,0,.4);
+  padding: 10px;
+
+  color: #ddd;
+  width: 300px;
+  position: absolute;
+  right: 0px;
+  top: 110px;
+}
+
+.publisher-container.left .show-stats-info {
+  left: 0;
+}
+
+.show-stats-info h5 {
+  margin: 0.2rem 0;
+  color: white;
+}
+
+.show-stats-info h4 {
+  color: white;
+  margin: 0.5rem 0;
+}
+
+.padding-left-1rem {
+  padding-left: 1rem;
+}
+
+.show-stats-info label {
+  width: 100px;
+  display: inline-block;
+}
+
+.show-stats-info .mono {
+  font-family: Courier New, Courier, monospace;
+}
