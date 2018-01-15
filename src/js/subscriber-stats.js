@@ -1,5 +1,5 @@
 require('../css/subscriber-stats.css');
-var subscriberStatsHTML = require('./templates/subscriber-stats.html');
+var subscriberStatsHTML = require('../templates/subscriber-stats.html');
 
 // StatsService runs on a particular interval and updates the stats for all
 // of the subscribers

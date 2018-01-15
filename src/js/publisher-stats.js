@@ -1,4 +1,4 @@
-var publisherStatsHTML = require('./templates/publisher-stats.html');
+var publisherStatsHTML = require('../templates/publisher-stats.html');
 require('../css/publisher-stats.css');
 
 function PublisherStatsDirective(OTSession, $interval) {
