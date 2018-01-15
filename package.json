@@ -20,6 +20,7 @@
     "opentok-whiteboard": "^1.1.2",
     "path": "^0.12.7",
     "push.js": "0.0.11",
+    "raw-loader": "^0.5.1",
     "redis": "~0.10.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0",

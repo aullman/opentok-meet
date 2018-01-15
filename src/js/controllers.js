@@ -51,6 +51,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     return stream.connection.connectionId !== $scope.session.connection.connectionId;
   };
 
+  $scope.getPublisher = function(id) {
+    return OTSession.publishers.filter(x => x.id === id)[0];
+  }
+
   $scope.togglePublish = function(publishHD) {
     if (!$scope.publishing) {
       // If they unpublish and publish again then prompt them to change their devices
