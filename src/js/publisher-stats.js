@@ -8,6 +8,18 @@ function PublisherStatsDirective(OTSession, $interval) {
     var currentInterval;
 
     function updateStats() {
+      var hasPublisher = currentPublisher != null;
+      var hasGetStats = currentPublisher && typeof currentPublisher.getStats === 'function';
+
+      if (!hasPublisher || !hasGetStats) {
+        // no publisher
+        $interval.cancel(currentInterval);
+        if (!hasGetStats) {
+          console.error('Publisher does not have getStats method, use OpenTok JS SDK >= 2.13');
+        }
+        return;
+      }
+
       currentPublisher.getStats(function(err, allStats) {
         if (err) {
           console.error('Error collecting stats', err);
@@ -79,6 +91,7 @@ function PublisherStatsDirective(OTSession, $interval) {
       }
 
       scope.isShowingStats = !scope.isShowingStats;
+
       if (scope.isShowingStats) {
         currentInterval = $interval(updateStats, 1000);
       }

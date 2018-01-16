@@ -157,25 +157,27 @@ describe('2 browsers in the same room', function() {
       });
 
       it('stats button works', function() {
-        var showStatsInfo = secondSubscriber.element(by.css('.show-stats-info'));
-        var statsButton = secondSubscriber.element(by.css('.show-stats-btn'));
+        var showStatsInfo = secondSubscriber.element(by.css('ot-subscriber .show-stats-info'));
+        var statsButton = secondSubscriber.element(by.css('ot-subscriber .show-stats-btn'));
         expect(showStatsInfo.isDisplayed()).toBe(false);
         statsButton.click();
         secondBrowser.wait(function() {
           return showStatsInfo.isDisplayed();
         }, 2000);
+
         expect(showStatsInfo.isDisplayed()).toBe(true);
-        secondBrowser.wait(function() {
-          return showStatsInfo.getInnerHtml().then(function(innerHTML) {
-            var statsRegexp = new RegExp('Resolution: \\d+x\\d+<br>.*' +
-              'Audio Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
-              'Audio Bitrate: \\d+ kbps<br>.*' +
-              'Video Packet Loss: \\d\\d?\\.\\d\\d%<br>' +
-              'Video Bitrate: \\d+ kbps<br>' +
-              'Frame Rate: \\d+(\\.\\d+)? fps.*', 'gi');
-            return statsRegexp.test(innerHTML);
-          });
-        }, 5000);
+
+        const resolutionRegex = /^\d+x\d+$/;
+        const packetLossRegex = /^(\d{1,3}[.,])+\d{2}%$/
+        const bitrateRegex = /^(\d{1,3}[.,])+\d{2} kbps$/;
+        const framerateRegex = /^(\d{1,3}[.,])+\d{2} fps$/
+
+        expect(secondBrowser.element(by.css('[data-for="resolution"]')).getText()).toMatch(resolutionRegex);
+        expect(secondBrowser.element(by.css('[data-for="audioPacketLoss"]')).getText()).toMatch(packetLossRegex);
+        expect(secondBrowser.element(by.css('[data-for="audioBitrate"]')).getText()).toMatch(bitrateRegex);
+        expect(secondBrowser.element(by.css('[data-for="videoPacketLoss"]')).getText()).toMatch(packetLossRegex);
+        expect(secondBrowser.element(by.css('[data-for="videoBitrate"]')).getText()).toMatch(bitrateRegex);
+        expect(secondBrowser.element(by.css('[data-for="videoFramerate"]')).getText()).toMatch(framerateRegex);
       });
     });
 

@@ -1,23 +1,23 @@
 <button class="show-stats-btn ion-stats-bars" ng-class="{'show-stats': showStats}"></button>
 <div class="show-stats-info" ng-show="showStats">
   <label>Resolution</label>
-  <span class="mono" style="padding-left: 1rem">{{ stats.width }}x{{ stats.height }}</span>
+  <span data-for="resolution" class="mono" style="padding-left: 1rem">{{ stats.width }}x{{ stats.height }}</span>
 
   <br/>
 
   <div ng-show="stats.audio">
     <h5>Audio</h5>
     <div class="padding-left-1rem">
-      <label>Packet loss</label> <span class="mono">{{ stats.audioPacketLoss | number: 2 }}%</span><br />
-      <label>Bitrate</label> <span class="mono">{{ stats.audioBitrate | number: 2 }} kbps</span>
+      <label>Packet loss</label> <span data-for="audioPacketLoss" class="mono">{{ stats.audioPacketLoss | number: 2 }}%</span><br />
+      <label>Bitrate</label> <span data-for="audioBitrate" class="mono">{{ stats.audioBitrate | number: 2 }} kbps</span>
     </div>
   </div>
   <div ng-show="stats.video">
     <h5>Video</h5>
     <div class="padding-left-1rem">
-      <label>Packet loss</label> <span class="mono">{{ stats.videoPacketLoss | number: 2 }}%</span><br />
-      <label>Bitrate</label> <span class="mono">{{ stats.videoBitrate | number: 2 }} kbps</span><br />
-      <label>Frame rate</label> <span class="mono">{{ stats.video.frameRate || 0 | number: 2 }} kbps</span>
+      <label>Packet loss</label> <span data-for="videoPacketLoss" class="mono">{{ stats.videoPacketLoss | number: 2 }}%</span><br />
+      <label>Bitrate</label> <span data-for="videoBitrate" class="mono">{{ stats.videoBitrate | number: 2 }} kbps</span><br />
+      <label>Frame rate</label> <span data-for="videoFramerate" class="mono">{{ stats.video.frameRate || 0 | number: 2 }} fps</span>
     </div>
   </div>
 </div>
