@@ -15,8 +15,8 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
     var updateStats = function () {
       Object.keys(subscribers).forEach(function (subscriberId) {
         var subscriberStats = subscribers[subscriberId];
-        var subscriber = subscriberStats.subscriber,
-          lastStats = subscriberStats.lastStats,
+        var subscriber = subscriberStats.subscriber;
+        var lastStats = subscriberStats.lastStats;
         subscriber.getStats(function(err, stats) {
           if (err) {
             console.error(err);
