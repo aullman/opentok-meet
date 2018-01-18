@@ -6,7 +6,6 @@ function SubscriberStats(subscriber, onStats) {
   this.subscriber = subscriber;
   this.onStats = onStats;
   this.lastStats; // The previous getStats result
-  this.lastLastStats; // The getStats result before that
 }
 
 angular.module('opentok-meet').factory('StatsService', ['$interval',
@@ -16,9 +15,8 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
     var updateStats = function () {
       Object.keys(subscribers).forEach(function (subscriberId) {
         var subscriberStats = subscribers[subscriberId];
-        var subscriber = subscriberStats.subscriber,
-          lastStats = subscriberStats.lastStats,
-          lastLastStats = subscriberStats.lastLastStats;
+        var subscriber = subscriberStats.subscriber;
+        var lastStats = subscriberStats.lastStats;
         subscriber.getStats(function(err, stats) {
           if (err) {
             console.error(err);
@@ -40,12 +38,14 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
                 stats[type].packetsReceived) * 100).toFixed(2);
             }
             if (lastStats) {
-              if (lastLastStats && lastLastStats[type] && lastLastStats[type].packetsReceived &&
-                (stats[type].packetsReceived - lastLastStats[type].packetsReceived > 0)) {
+              if (lastStats[type] && lastStats[type].packetsReceived &&
+                (stats[type].packetsReceived - lastStats[type].packetsReceived > 0)) {
                 currStats[type + 'PacketLoss'] =
-                  (((stats[type].packetsLost - lastLastStats[type].packetsLost)/
-                    (stats[type].packetsReceived - lastLastStats[type].packetsReceived)))
+                  (((stats[type].packetsLost - lastStats[type].packetsLost) /
+                    (stats[type].packetsReceived - lastStats[type].packetsReceived)))
                     .toFixed(2);
+              } else {
+                currStats[type + 'PacketLoss'] = 0;
               }
               var bitsReceived = (stats[type].bytesReceived -
                 (lastStats[type] ? lastStats[type].bytesReceived : 0)) * 8;
@@ -60,7 +60,6 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
           if (stats.video) {
             setCurrStats('video');
           }
-          subscriberStats.lastLastStats = subscriberStats.lastStats;
           subscriberStats.lastStats = currStats;
           subscriberStats.onStats(currStats);
         });
@@ -97,12 +96,12 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         '<div class="show-stats-info" ng-show="showStats">' +
         'Resolution: {{stats.width}}x{{stats.height}}<br/>' +
         '<div ng-show="stats.audio">' +
-        'Audio Packet Loss: {{stats.audioPacketLoss}}%<br/>' +
-        'Audio Bitrate: {{stats.audioBitrate}} kbps<br/>' +
+        'Audio Packet Loss: {{ stats.audioPacketLoss | number : 2}}%<br/>' +
+        'Audio Bitrate: {{ stats.audioBitrate | number : 0 }} kbps<br/>' +
         '</div><div ng-show="stats.video">' +
-        'Video Packet Loss: {{stats.videoPacketLoss}}%<br/>' +
-        'Video Bitrate: {{stats.videoBitrate}} kbps<br/>' +
-        'Frame Rate: {{stats.video.frameRate || 0}} fps' +
+        'Video Packet Loss: {{ stats.videoPacketLoss | number : 2}}%<br/>' +
+        'Video Bitrate: {{ stats.videoBitrate | number : 0 }} kbps<br/>' +
+        'Frame Rate: {{ stats.video.frameRate | number: 0 }} fps' +
         '</div></div>',
       link: function(scope, element) {
         var subscriber, subscriberId;
@@ -115,7 +114,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
             StatsService.addSubscriber(subscriber, function (stats) {
               scope.stats = stats;
               scope.$apply();
-            });            
+            });
           });
         }, 100);
 
