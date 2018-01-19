@@ -2,7 +2,7 @@
 
 <div class="show-stats-info" ng-show="isShowingStats">
   <label>Resolution</label>
-  <span class="mono" style="padding-left: 2rem">{{ generalStats.width }}x{{ generalStats.height }}</span>
+  <span data-for="resolution" class="mono" style="padding-left: 2rem">{{ generalStats.width }}x{{ generalStats.height }}</span>
 
   <div ng-repeat="stats in generalStats.stats track by stats.subscriberId">
     <h4>{{ stats.subscriberId }}</h4>
@@ -10,16 +10,16 @@
       <div ng-show="stats.audio">
         <h5>Audio</h5>
         <div class="padding-left-1rem">
-          <label>Packet loss</label> <span class="mono">{{ stats.audio.packetLoss | number: 2 }}%</span><br />
-          <label>Bitrate</label> <span class="mono">{{ stats.audio.bitrate / 1000 | number: 2 }} kbps</span>
+          <label>Packet loss</label> <span class="mono" data-for="audioPacketLoss">{{ stats.audio.packetLoss | number: 2 }}%</span><br />
+          <label>Bitrate</label> <span class="mono" data-for="audioBitrate">{{ stats.audio.bitrate / 1000 | number: 2 }} kbps</span>
         </div>
       </div>
       <div ng-show="stats.video">
         <h5>Video</h5>
         <div class="padding-left-1rem">
-          <label>Packet loss</label> <span class="mono">{{ stats.video.packetLoss | number: 2 }}%</span><br />
-          <label>Bitrate</label> <span class="mono">{{ stats.video.bitrate / 1000 | number: 2 }} kbps</span><br />
-          <label>Frame rate</label> <span class="mono">{{ stats.video.frameRate || 0 | number: 2}} fps</span>
+          <label>Packet loss</label> <span class="mono" data-for="videoPacketLoss">{{ stats.video.packetLoss | number: 2 }}%</span><br />
+          <label>Bitrate</label> <span class="mono" data-for="videoBitrate">{{ stats.video.bitrate / 1000 | number: 2 }} kbps</span><br />
+          <label>Frame rate</label> <span class="mono" data-for="videoFramerate">{{ stats.video.frameRate || 0 | number: 2}} fps</span>
         </div>
       </div>
     </div>
