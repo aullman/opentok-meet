@@ -28,8 +28,6 @@ matrix:
     - os: linux
       env: BROWSER=ie BVER=11 SAUCELABS=true
     - os: linux
-      env: BROWSER=ie BVER=10 SAUCELABS=true
-    - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
