@@ -22,7 +22,7 @@ matrix:
 
   include:
     - os: linux
-      env: BROWSER=chrome  BVER=59.0.3071.86
+      env: BROWSER=chrome  BVER=stable
     - os: linux
       env: BROWSER=firefox BVER=45.0.2
     - os: linux
@@ -42,15 +42,11 @@ matrix:
 
   allow_failures:
     - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=45.0.2
     - os: linux
       env: BROWSER=chrome  BVER=beta
     - os: linux
-      env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
-    - os: osx
-      osx_image: xcode8.3
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
 
 env:
   global:
