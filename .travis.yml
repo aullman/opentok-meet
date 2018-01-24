@@ -23,8 +23,6 @@ matrix:
     - os: linux
       env: BROWSER=chrome  BVER=stable
     - os: linux
-      env: BROWSER=firefox BVER=45.0.2 UNIT_CMD=''
-    - os: linux
       env: BROWSER=ie BVER=11 SAUCELABS=true
     - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
@@ -38,8 +36,6 @@ matrix:
       env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
 
   allow_failures:
-    - os: linux
-      env: BROWSER=firefox BVER=45.0.2
     - os: linux
       env: BROWSER=chrome  BVER=beta
     - os: linux
