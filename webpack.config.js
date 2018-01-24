@@ -19,6 +19,7 @@ var config = {
     module: {
         loaders: [
             { test: /\.css$/, loader: 'style!css' },
+            { test: /\.html$/, loader: 'raw' },
             // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
         ]
     },

@@ -1581,8 +1581,8 @@ di@^0.0.1:
   resolved "https://registry.yarnpkg.com/di/-/di-0.0.1.tgz#806649326ceaa7caa3306d75d985ea2748ba913c"
 
 djo-shell@^1.0.0:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/djo-shell/-/djo-shell-1.5.2.tgz#55aabdb19deaae33bec014bde8eb899c35442642"
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/djo-shell/-/djo-shell-1.6.0.tgz#f4329cfbe73a9bf0f56010ad3b2c8f14f873167a"
 
 dom-serialize@^2.2.0:
   version "2.2.1"
@@ -2351,8 +2351,8 @@ hooker@~0.2.3:
   resolved "https://registry.yarnpkg.com/hooker/-/hooker-0.2.3.tgz#b834f723cc4a242aa65963459df6d984c5d3d959"
 
 hosted-git-info@^2.1.4:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.3.1.tgz#ac439421605f0beb0ea1349de7d8bb28e50be1dd"
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.5.0.tgz#6d60e34b3abbc8313062c3b798ef8d901a07af3c"
 
 html-comment-regex@^1.1.0:
   version "1.1.1"
@@ -4086,6 +4086,10 @@ raw-body@~2.2.0:
     iconv-lite "0.4.15"
     unpipe "1.0.0"
 
+raw-loader@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/raw-loader/-/raw-loader-0.5.1.tgz#0c3d0beaed8a01c966d9787bf778281252a979aa"
+
 rc@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.1.7.tgz#c5ea564bb07aff9fd3a5b32e906c1d3a65940fea"
@@ -4408,7 +4412,11 @@ selenium-webdriver@2.53.3:
     ws "^1.0.1"
     xml2js "0.4.4"
 
-"semver@2 || 3 || 4 || 5", semver@^5.3.0:
+"semver@2 || 3 || 4 || 5":
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.4.1.tgz#e059c09d8571f0540823733433505d3a2f00b18e"
+
+semver@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.3.0.tgz#9b2ce5d3de02d17c6012ad326aa6b4d0cf54f94f"
 
@@ -4781,8 +4789,8 @@ tr46@~0.0.3:
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
 
 travis-multirunner@^4.2.0:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/travis-multirunner/-/travis-multirunner-4.2.4.tgz#ea1309f113cd186c4d780b0f64786716c7ab0616"
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/travis-multirunner/-/travis-multirunner-4.3.0.tgz#a0e961f625b7e69b89a06491dd980132bd04e0bb"
   dependencies:
     djo-shell "^1.0.0"
     formatter "^0.4.1"

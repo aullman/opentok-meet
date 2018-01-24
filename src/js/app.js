@@ -17,6 +17,7 @@ angular.module('opentok-meet', ['opentok', 'opentok-whiteboard',
 require('./directives.js');
 require('./sync-click.js');
 require('./subscriber-stats.js');
+require('./publisher-stats.js');
 require('./controllers.js');
 require('./services.js');
 require('./screen/directive.js');

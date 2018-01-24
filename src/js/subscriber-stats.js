@@ -1,4 +1,5 @@
 require('../css/subscriber-stats.css');
+var subscriberStatsHTML = require('../templates/subscriber-stats.html');
 
 // StatsService runs on a particular interval and updates the stats for all
 // of the subscribers
@@ -92,18 +93,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
       scope: {
         stream: '='
       },
-      template: '<button class="show-stats-btn ion-stats-bars" ' +
-        'ng-class="{\'show-stats\': showStats}"></button>' +
-        '<div class="show-stats-info" ng-show="showStats">' +
-        'Resolution: {{stats.width}}x{{stats.height}}<br/>' +
-        '<div ng-show="stats.audio">' +
-        'Audio Packet Loss: {{stats.audioPacketLoss}}%<br/>' +
-        'Audio Bitrate: {{stats.audioBitrate}} kbps<br/>' +
-        '</div><div ng-show="stats.video">' +
-        'Video Packet Loss: {{stats.videoPacketLoss}}%<br/>' +
-        'Video Bitrate: {{stats.videoBitrate}} kbps<br/>' +
-        'Frame Rate: {{stats.video.frameRate || 0}} fps' +
-        '</div></div>',
+      template: subscriberStatsHTML,
       link: function(scope, element) {
         var subscriber, subscriberId;
         var timeout = $timeout(function () {
@@ -115,7 +105,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
             StatsService.addSubscriber(subscriber, function (stats) {
               scope.stats = stats;
               scope.$apply();
-            });            
+            });
           });
         }, 100);
 

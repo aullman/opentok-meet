@@ -68,6 +68,7 @@ module.exports = function(config) {
       module: {
           loaders: [
               { test: /\.css$/, loader: 'style!css' },
+              { test: /\.html$/, loader: 'raw' },
               {
                 test: /\.js$/,
                 loader: 'babel-loader',
