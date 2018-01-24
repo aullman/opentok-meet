@@ -57,7 +57,7 @@
                 </ot-editor>
             </ot-layout>
 
-            <div id="facePublisher"
+            <div id="facePublisher" class="publisher-container"
                 ng-if="publishing"
                 draggable="true">
                 <ot-publisher id="facePublisher"
@@ -68,15 +68,18 @@
                     ng-if="filteredPublisher"
                     props="facePublisherProps">
                 </filtered-publisher>
+                <publisher-stats publisher="getPublisher('facePublisher')"></publisher-stats>
                 <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
                 <audio-acquisition-problem publisher-id="facePublisher"></audio-acquisition-problem>
                 <i id="filterBtn" ng-show="!filteredPublisher" class="ion-fireball" ng-click="filteredPublisher = !filteredPublisher"></i>
             </div>
-            <ot-publisher id="screenPublisher"
-                ng-if="sharingMyScreen"
-                props='screenPublisherProps'
-                draggable="true">
-            </ot-publisher>
+            <div class="publisher-container left" draggable="true" ng-if="sharingMyScreen">
+                <ot-publisher id="screenPublisher"
+                    ng-if="sharingMyScreen"
+                    props='screenPublisherProps'>
+                </ot-publisher>
+                <publisher-stats publisher="getPublisher('screenPublisher')"></publisher-stats>
+            </div>
         </div>
         <opentok-textchat ng-show="showTextchat"
           ng-if="connected"

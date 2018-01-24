@@ -23,6 +23,7 @@
     "path": "^0.12.7",
     "push.js": "0.0.11",
     "raven-js": "^3.9.1",
+    "raw-loader": "^0.5.1",
     "redis": "~0.10.1",
     "request": "^2.74.0",
     "style-loader": "^0.13.1",

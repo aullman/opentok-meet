@@ -14,20 +14,18 @@ addons:
     repo_token: 4abde268e416aa3752bccf1311ecfe7cd3d6a445ff4849ee4632bc7f9bbde251
 services:
 - redis-server
-sudo: false
+sudo: required
 dist: trusty
 matrix:
   fast_finish: true
 
   include:
     - os: linux
-      env: BROWSER=chrome  BVER=59.0.3071.86
+      env: BROWSER=chrome  BVER=stable
     - os: linux
       env: BROWSER=firefox BVER=45.0.2 UNIT_CMD=''
     - os: linux
       env: BROWSER=ie BVER=11 SAUCELABS=true
-    - os: linux
-      env: BROWSER=ie BVER=10 SAUCELABS=true
     - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
@@ -41,15 +39,11 @@ matrix:
 
   allow_failures:
     - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=45.0.2
     - os: linux
       env: BROWSER=chrome  BVER=beta
     - os: linux
-      env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
-    - os: osx
-      osx_image: xcode8.3
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
 
 env:
   global:
