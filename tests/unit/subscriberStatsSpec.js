@@ -91,14 +91,13 @@ describe('subscriber-stats', function() {
         timestamp: mockStats.timestamp
       };
       scope.$digest();
-      expect(element.find('div').html()).toMatch(
-        new RegExp('Resolution: 200x200<br>.*' +
-        'Audio Packet Loss: 20.00%<br>' +
-        'Audio Bitrate: 0 kbps<br>.*' +
-        'Video Packet Loss: 20.00%<br>' +
-        'Video Bitrate: 0 kbps<br>' +
-        'Frame Rate: 0 fps', 'g')
-      );
+
+      expect(element.find('[data-for="resolution"]').html()).toEqual('200x200');
+      expect(element.find('[data-for="audioPacketLoss"]').html()).toEqual('20.00%');
+      expect(element.find('[data-for="audioBitrate"]').html()).toEqual('0.00 kbps');
+      expect(element.find('[data-for="videoPacketLoss"]').html()).toEqual('20.00%');
+      expect(element.find('[data-for="videoBitrate"]').html()).toEqual('0.00 kbps');
+      expect(element.find('[data-for="videoFramerate"]').html()).toEqual('0.00 fps');
     });
   });
 });
