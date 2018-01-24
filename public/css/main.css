@@ -481,8 +481,8 @@ mute-video {
 #facePublisher #filterBtn {
   position: absolute;
   font-size: 25px;
-  bottom: -15px;
-  right: 12px;
+  bottom: -3px;
+  right: 3px;
   color: white;
   z-index: 100;
   cursor: pointer;
