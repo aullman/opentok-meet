@@ -53,3 +53,21 @@
 .show-stats-info .mono {
   font-family: Courier New, Courier, monospace;
 }
+
+@media screen and (max-width: 650px) {
+  .publisher-container .show-stats-info {
+    top: 55px;
+  }
+}
+
+@media only screen and (orientation: portrait) {
+  .publisher-container .show-stats-info {
+    top: 155px;
+  }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 650px) {
+  .publisher-container .show-stats-info {
+    top: 80px;
+  }
+}
