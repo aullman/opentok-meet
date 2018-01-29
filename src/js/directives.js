@@ -58,6 +58,10 @@ function($document, $window) {
     }
 
     element.on('mousedown touchstart', function(event) {
+      if (event.target instanceof HTMLButtonElement) {
+        // If they're trying to click on a button then don't drag
+        return;
+      }
       event.preventDefault();
       var pageX = getEventProp(event, 'pageX');
       var pageY = getEventProp(event, 'pageY');

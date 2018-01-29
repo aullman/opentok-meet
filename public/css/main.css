@@ -376,7 +376,7 @@ button:disabled {
     width: 465px;
     left: calc(50% - 242.5px);
     bottom: 80px;
-    z-index: 98;
+    z-index: 97;
 }
 
 @media screen and (max-width: 650px) {
