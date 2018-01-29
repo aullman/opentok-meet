@@ -63,7 +63,13 @@ describe('Room', function() {
 
     it('moves when it is dragged', function () {
       var oldLocation = publisher.getLocation();
-      browser.actions().dragAndDrop(publisher, element(by.css('body'))).perform();
+      // Offset the mouse click position so we're not clicking on the mute button
+      browser.actions().mouseMove(publisher)
+        .mouseMove({x: 25, y: -25})
+        .mouseDown()
+        .mouseMove(element(by.css('body')))
+        .mouseUp()
+        .perform();
       var newLocation = publisher.getLocation();
       expect(newLocation).not.toEqual(oldLocation);
     });
