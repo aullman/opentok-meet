@@ -1,7 +1,7 @@
-/*jshint unused:false*/
+/* jshint unused:false */
 
 window.$ = window.jQuery = require('jquery');
-var angular = require('angular');
+const angular = require('angular');
 
 require('opentok-angular');
 require('opentok-whiteboard');

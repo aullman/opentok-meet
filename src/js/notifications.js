@@ -1,26 +1,24 @@
-var Push = require('push.js');
+const Push = require('push.js');
 
-angular.module('opentok-meet').factory('Push', function() {
-  return Push;
-});
+angular.module('opentok-meet').factory('Push', () => Push);
 
 angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSession', 'Push',
-  function($window, OTSession, Push) {
-    var focused = true;
+  function ($window, OTSession, Push) {
+    let focused = true;
 
-    $window.addEventListener('blur', function() {
+    $window.addEventListener('blur', () => {
       focused = false;
     });
 
-    $window.addEventListener('focus', function() {
+    $window.addEventListener('focus', () => {
       focused = true;
     });
 
-    var notifyOnConnectionCreated = function() {
+    var notifyOnConnectionCreated = function () {
       if (!OTSession.session) {
         OTSession.on('init', notifyOnConnectionCreated);
       } else {
-        OTSession.session.on('connectionCreated', function(event) {
+        OTSession.session.on('connectionCreated', (event) => {
           if (!focused &&
               event.connection.connectionId !== OTSession.session.connection.connectionId) {
             Push.create('New Participant', {
@@ -28,31 +26,31 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
               icon: '/icon.png',
               tag: 'new-participant',
               timeout: 5000,
-              onClick: function () {
+              onClick() {
                 $window.focus();
                 this.close();
-              }
+              },
             });
           }
         });
       }
     };
     return {
-      init: function() {
+      init() {
         if (Push.Permission.has()) {
           notifyOnConnectionCreated();
         } else {
           try {
-            Push.Permission.request(function() {
-                notifyOnConnectionCreated();
-            }, function(err) {
+            Push.Permission.request(() => {
+              notifyOnConnectionCreated();
+            }, (err) => {
               console.warn(err);
             });
-          } catch(err) {
+          } catch (err) {
             console.warn(err);
           }
         }
-      }
+      },
     };
-  }
+  },
 ]);

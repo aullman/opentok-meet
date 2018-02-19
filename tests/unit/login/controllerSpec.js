@@ -1,52 +1,53 @@
 /* jasmine specs for controllers go here */
-describe('OpenTok Login Page', function() {
-
-  describe('MainCtrl', function() {
-    var scope, ctrl, windowMock;
+describe('OpenTok Login Page', () => {
+  describe('MainCtrl', () => {
+    let scope,
+      ctrl,
+      windowMock;
     beforeEach(angular.mock.module('opentok-meet-login'));
 
-    beforeEach(inject(function($controller, $rootScope) {
+    beforeEach(inject(($controller, $rootScope) => {
       scope = $rootScope.$new();
       windowMock = jasmine.createSpy('$window');
       ctrl = $controller('MainCtrl', {
         $scope: scope,
-        $window: windowMock
+        $window: windowMock,
       });
     }));
 
-    it('initializes correctly', function () {
+    it('initializes correctly', () => {
       expect(scope.p2p).toBe(false);
       expect(scope.room).toBe('');
       expect(scope.roomType).toBe('normal');
     });
 
-    describe('joinRoom', function() {
-      beforeEach(function() {
+    describe('joinRoom', () => {
+      beforeEach(() => {
         scope.room = 'foo';
         windowMock.location = {
-          href: 'mockURL/'
+          href: 'mockURL/',
         };
       });
 
-      it('sets the url correctly for normal roomType', function() {
+      it('sets the url correctly for normal roomType', () => {
         scope.joinRoom();
         expect(windowMock.location.href).toEqual('mockURL/foo');
       });
 
-      it('sets the url correctly for whiteboard roomType', function() {
+      it('sets the url correctly for whiteboard roomType', () => {
         scope.roomType = 'whiteboard';
         scope.joinRoom();
         expect(windowMock.location.href).toEqual('mockURL/foo/whiteboard');
       });
 
-      it('sets the url correctly for screen roomType', function() {
+      it('sets the url correctly for screen roomType', () => {
         scope.roomType = 'screen';
         scope.joinRoom();
         expect(windowMock.location.href).toEqual('mockURL/foo/screen');
       });
     });
 
-    it('watches the room and updates p2p', function () {
+    it('watches the room and updates p2p', () => {
       scope.room = 'test';
       scope.$apply();
       expect(scope.p2p).toBe(false);
@@ -55,7 +56,7 @@ describe('OpenTok Login Page', function() {
       expect(scope.p2p).toBe(true);
     });
 
-    it('updates the room when p2p changes', function () {
+    it('updates the room when p2p changes', () => {
       scope.room = 'test';
       scope.p2p = true;
       scope.p2pChanged();

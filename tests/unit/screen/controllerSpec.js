@@ -1,9 +1,7 @@
 /* jasmine specs for controllers go here */
-describe('OpenTok Meet Screenshare Only Page', function() {
-
-  describe('ScreenCtrl', function() {
-
-    var ctrl,
+describe('OpenTok Meet Screenshare Only Page', () => {
+  describe('ScreenCtrl', () => {
+    let ctrl,
       scope,
       RoomServiceMock,
       roomDefer,
@@ -11,7 +9,7 @@ describe('OpenTok Meet Screenshare Only Page', function() {
 
     beforeEach(angular.mock.module('opentok-meet'));
 
-    beforeEach(inject(function($controller, $rootScope, $q) {
+    beforeEach(inject(($controller, $rootScope, $q) => {
       scope = $rootScope.$new();
       OT.checkSystemRequirements = function () {
         // Override checkSystemRequirements so that IE works without a plugin
@@ -19,14 +17,14 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       };
       scope.session = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       scope.session.connection = {
-        connectionId: 'mockConnectionId'
+        connectionId: 'mockConnectionId',
       };
       RoomServiceMock = {
         changeRoom: jasmine.createSpy('changeRoom'),
-        getRoom: function() {
+        getRoom() {
           roomDefer = $q.defer();
           return roomDefer.promise;
-        }
+        },
       };
       MockOTSession = jasmine.createSpyObj('OTSession', ['init']);
       MockOTSession.streams = [];
@@ -34,37 +32,38 @@ describe('OpenTok Meet Screenshare Only Page', function() {
       ctrl = $controller('ScreenCtrl', {
         $scope: scope,
         RoomService: RoomServiceMock,
-        OTSession: MockOTSession
+        OTSession: MockOTSession,
       });
     }));
 
-    it('defines scope.screenPublisherProps', function () {
+    it('defines scope.screenPublisherProps', () => {
       expect(scope.screenPublisherProps).toEqual({
         name: 'screen',
         style: {
-          nameDisplayMode: 'off'
+          nameDisplayMode: 'off',
         },
         publishAudio: false,
-        videoSource: 'screen'
+        videoSource: 'screen',
       });
     });
 
-    describe('RoomService.getRoom()', function() {
-      beforeEach(function() {
+    describe('RoomService.getRoom()', () => {
+      beforeEach(() => {
         roomDefer.resolve({
           p2p: true,
           room: 'testRoom',
           apiKey: 'mockAPIKey',
           sessionId: 'mockSessionId',
-          token: 'mockToken'
+          token: 'mockToken',
         });
         scope.$apply();
       });
-      it('calls OTSession.init', function() {
-        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId',
-          'mockToken');
+      it('calls OTSession.init', () => {
+        expect(MockOTSession.init).toHaveBeenCalledWith(
+          'mockAPIKey', 'mockSessionId',
+          'mockToken',
+        );
       });
-
     });
   });
 });
