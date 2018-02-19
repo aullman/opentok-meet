@@ -1,6 +1,3 @@
-/* global angular HTMLButtonElement $ */
-/* eslint-disable no-param-reassign */
-
 angular.module('opentok-meet').directive('draggable', ['$document', '$window',
   function draggable($document, $window) {
     const getEventProp = (event, prop) => {

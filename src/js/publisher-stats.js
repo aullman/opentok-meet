@@ -2,7 +2,7 @@ const publisherStatsHTML = require('../templates/publisher-stats.html');
 require('../css/publisher-stats.css');
 
 function PublisherStatsDirective(OTSession, $interval) {
-  function link(scope, element, attrs) {
+  function link(scope) {
     let currentPublisher;
     const allLastStats = {};
     let currentInterval;
@@ -26,8 +26,8 @@ function PublisherStatsDirective(OTSession, $interval) {
           return;
         }
 
-        const stats = allStats.map((statsContainer) => {
-          const stats = statsContainer.stats;
+        const mappedStats = allStats.map((statsContainer) => {
+          const { stats } = statsContainer;
           const key = statsContainer.subscriberId || 'Mantis';
 
           if (!allLastStats[key]) {
@@ -36,7 +36,6 @@ function PublisherStatsDirective(OTSession, $interval) {
 
           const lastStats = allLastStats[key];
           let secondsElapsed;
-          const currStats = {};
 
           if (lastStats) {
             secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
@@ -76,14 +75,14 @@ function PublisherStatsDirective(OTSession, $interval) {
         const generalStats = {
           width: currentPublisher.videoWidth(),
           height: currentPublisher.videoHeight(),
-          stats,
+          mappedStats,
         };
 
         scope.generalStats = generalStats;
       });
     }
 
-    scope.toggleShowStats = function () {
+    scope.toggleShowStats = () => {
       if (currentInterval) {
         $interval.cancel(currentInterval);
       }

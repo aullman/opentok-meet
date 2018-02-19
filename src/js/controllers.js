@@ -1,5 +1,3 @@
-/* global angular navigator */
-
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
   '$timeout', 'OTSession', 'RoomService', 'baseURL', 'NotificationService',
   (
@@ -231,7 +229,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     };
 
     $scope.sendEmail = () => {
-      $window.location.href = `mailto:?subject=Let's Meet&body=${$scope.shareURL}`; // eslint-disable-line no-param-reassign
+      $window.location.href = `mailto:?subject=Let's Meet&body=${$scope.shareURL}`;
     };
 
     let mouseMoveTimeout;

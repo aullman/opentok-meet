@@ -2,7 +2,7 @@
 angular.module('opentok-meet').controller(
   'ScreenCtrl',
   ['$scope', 'RoomService', 'OTSession',
-    function ($scope, RoomService, OTSession) {
+    function ScreenCtrl($scope, RoomService, OTSession) {
       RoomService.getRoom().then((roomData) => {
         OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token);
       });

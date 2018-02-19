@@ -1,9 +1,9 @@
-const Push = require('push.js');
+const push = require('push.js');
 
-angular.module('opentok-meet').factory('Push', () => Push);
+angular.module('opentok-meet').factory('Push', () => push);
 
 angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSession', 'Push',
-  function ($window, OTSession, Push) {
+  function NotificationService($window, OTSession, Push) {
     let focused = true;
 
     $window.addEventListener('blur', () => {
@@ -14,7 +14,7 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
       focused = true;
     });
 
-    var notifyOnConnectionCreated = function () {
+    const notifyOnConnectionCreated = () => {
       if (!OTSession.session) {
         OTSession.on('init', notifyOnConnectionCreated);
       } else {

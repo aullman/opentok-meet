@@ -1,3 +1,4 @@
+/* global chrome */
 // Shared directive between room.ejs and screen.ejs
 // This handles OpenTok screensharing and sets `$scope.sharingMyScreen` to true
 // when you are ready to share your screen. Then you need to include an ot-publisher
@@ -14,7 +15,7 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
     '<div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">' +
         'Screen Sharing currently requires Google Chrome or Firefox on Desktop.' +
     '</div>',
-  controller: ['$scope', 'chromeExtensionId', function ($scope, chromeExtensionId) {
+  controller: ['$scope', 'chromeExtensionId', function controller($scope, chromeExtensionId) {
     $scope.promptToInstall = false;
     $scope.selectingScreenSource = false;
     $scope.sharingMyScreen = false;
@@ -57,7 +58,7 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
       }
     });
 
-    $scope.toggleShareScreen = function () {
+    $scope.toggleShareScreen = () => {
       if (!$scope.sharingMyScreen && !$scope.selectingScreenSource) {
         $scope.selectingScreenSource = true;
         $scope.screenShareFailed = null;
@@ -80,13 +81,13 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
       }
     };
 
-    $scope.installScreenshareExtension = function () {
+    $scope.installScreenshareExtension = () => {
       chrome.webstore.install(
         `https://chrome.google.com/webstore/detail/${chromeExtensionId}`,
         () => {
           console.log('successfully installed');
-        }, function () {
-          console.error('failed to install', arguments);
+        }, (err) => {
+          console.error('failed to install', err);
         },
       );
     };

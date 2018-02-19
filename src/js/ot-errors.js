@@ -2,7 +2,7 @@ angular.module('opentok-meet').directive('otErrors', () => ({
   restrict: 'E',
   template: '<div id="otError" class="statusMessage" ng-if="errorMessage">' +
     '{{errorMessage}}</div>',
-  controller: ['$scope', function ($scope) {
+  controller: ['$scope', function controller($scope) {
     const handleErrors = function handleErrors(event, err, publisher) {
       if (publisher && publisher.id !== 'facePublisher') {
         return;

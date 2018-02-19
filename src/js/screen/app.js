@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 window.$ = window.jQuery = require('jquery');
 const angular = require('angular');
 
