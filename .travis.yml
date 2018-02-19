@@ -22,6 +22,8 @@ matrix:
 
   include:
     - os: linux
+      env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
+    - os: linux
       env: BROWSER=chrome  BVER=stable
     - os: linux
       env: BROWSER=firefox BVER=45.0.2
