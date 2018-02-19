@@ -75,7 +75,7 @@ function PublisherStatsDirective(OTSession, $interval) {
         const generalStats = {
           width: currentPublisher.videoWidth(),
           height: currentPublisher.videoHeight(),
-          mappedStats,
+          stats: mappedStats,
         };
 
         scope.generalStats = generalStats;
