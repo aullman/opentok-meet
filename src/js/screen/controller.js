@@ -15,5 +15,5 @@ angular.module('opentok-meet').controller(
         videoSource: 'screen',
       };
     },
-  ],
+  ] // eslint-disable-line comma-dangle
 );

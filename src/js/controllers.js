@@ -1,9 +1,7 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
   '$timeout', 'OTSession', 'RoomService', 'baseURL', 'NotificationService',
-  (
-    $scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-    NotificationService,
-  ) => {
+  // eslint-disable-next-line
+  function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL, NotificationService) {
     $scope.streams = OTSession.streams;
     $scope.connections = OTSession.connections;
     $scope.publishing = false;
