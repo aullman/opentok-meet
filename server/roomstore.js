@@ -1,18 +1,19 @@
 const OpenTok = require('opentok');
 
-module.exports = function (redis, ot) {
-  var roomStore = {
+module.exports = (redis, ot) => {
+  const roomStore = {
     isP2P(room) {
       return room.toLowerCase().indexOf('p2p') >= 0;
     },
     getRooms(callback) {
       redis.hkeys('rooms', callback);
     },
-    getRoom(room, apiKey, secret, goToRoom) {
+    getRoom(room, apiKey, secret) {
       console.log(`getRoom: ${room} ${apiKey} ${secret}`);
-      goToRoom = arguments[arguments.length - 1];
+      const goToRoom = arguments[arguments.length - 1]; // eslint-disable-line
       // Lookup the mapping of rooms to sessionIds
-      redis.hget('rooms', room, (err, sessionId) => {
+      redis.hget('rooms', room, (err, sid) => {
+        let sessionId = sid;
         if (!sessionId) {
           const props = {
             mediaMode: 'routed',
@@ -26,16 +27,16 @@ module.exports = function (redis, ot) {
             otSDK = new OpenTok(apiKey, secret);
           }
           // Create the session
-          otSDK.createSession(props, (err, session) => {
-            if (err) {
-              goToRoom(err);
+          otSDK.createSession(props, (createErr, session) => {
+            if (createErr) {
+              goToRoom(createErr);
             } else {
-              const sessionId = session.sessionId;
+              ({ sessionId } = session);
               // Store the room to sessionId mapping
-              redis.hset('rooms', room, sessionId, (err) => {
-                if (err) {
-                  console.error('Failed to set room', err);
-                  goToRoom(err);
+              redis.hset('rooms', room, sessionId, (setErr) => {
+                if (setErr) {
+                  console.error('Failed to set room', setErr);
+                  goToRoom(setErr);
                 } else if (apiKey && secret) {
                   // If there's a custom apiKey and secret store that
                   redis.hset(
@@ -43,10 +44,10 @@ module.exports = function (redis, ot) {
                       apiKey,
                       secret,
                     }),
-                    (err) => {
-                      if (err) {
-                        console.error('Failed to set apiKey', err);
-                        goToRoom(err);
+                    (apiKeyErr) => {
+                      if (apiKeyErr) {
+                        console.error('Failed to set apiKey', apiKeyErr);
+                        goToRoom(apiKeyErr);
                       } else {
                         goToRoom(null, sessionId, apiKey, secret);
                       }
@@ -60,12 +61,12 @@ module.exports = function (redis, ot) {
           });
         } else {
           // Lookup if there's a custom apiKey for this room
-          redis.hget('apiKeys', room, (err, apiKeySecret) => {
-            if (err || !apiKeySecret) {
+          redis.hget('apiKeys', room, (getErr, apiKeySecret) => {
+            if (getErr || !apiKeySecret) {
               goToRoom(null, sessionId);
             } else {
-              apiKeySecret = JSON.parse(apiKeySecret);
-              goToRoom(null, sessionId, apiKeySecret.apiKey, apiKeySecret.secret);
+              const parsedApiKeySecret = JSON.parse(apiKeySecret);
+              goToRoom(null, sessionId, parsedApiKeySecret.apiKey, parsedApiKeySecret.secret);
             }
           });
         }
