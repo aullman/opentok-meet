@@ -140,7 +140,10 @@ describe('muteVideo', () => {
     let firstI;
     let secondI;
     beforeEach(() => {
-      [firstI, secondI] = element.find('i');
+      const iElements = element.find('i');
+      // Don't use destructuring here because then we require babel-polyfill for IE11
+      firstI = iElements[0];  // eslint-disable-line
+      secondI = iElements[1]; // eslint-disable-line
     });
     it('creates two i elements with the right classes', () => {
       expect(element.find('i').length).toBe(2);
