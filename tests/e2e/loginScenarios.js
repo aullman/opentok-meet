@@ -17,7 +17,7 @@ describe('Login', () => {
     browser.get('');
   });
 
-  const verifyURL = function (expectedURL) {
+  const verifyURL = (expectedURL) => {
     if (browser.browserName !== 'firefox') {
       // fixme: for some reason Firefox sometimes gives an error about not being able to
       // sync with the page
@@ -28,8 +28,8 @@ describe('Login', () => {
     }
   };
 
-  let roomField = element(by.model('room')),
-    submit = element(by.css('#joinRoomBtn'));
+  const roomField = element(by.model('room'));
+  const submit = element(by.css('#joinRoomBtn'));
 
   xit('should go to a room when you click the join button', () => {
     roomField.sendKeys(roomName);
@@ -70,8 +70,8 @@ describe('Login', () => {
     });
 
     describe('room type options', () => {
-      let whiteboard,
-        screenshare;
+      let whiteboard;
+      let screenshare;
 
       beforeEach(() => {
         whiteboard = element(by.css('input[value="whiteboard"]'));

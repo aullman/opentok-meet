@@ -5,8 +5,8 @@
 const uuid = require('uuid');
 
 describe('Room', () => {
-  let roomName,
-    roomURL;
+  let roomName;
+  let roomURL;
   beforeEach(() => {
     while (!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -21,7 +21,8 @@ describe('Room', () => {
   });
 
   afterEach(() => {
-    roomName = roomURL = null;
+    roomName = null;
+    roomURL = null;
   });
 
   it('should have the right title', () => {
@@ -96,7 +97,7 @@ describe('Room', () => {
         expect(muteCameraButton.isPresent()).toBe(true);
         browser.wait(() => muteCameraButton.isDisplayed(), 10000);
 
-        const verifyMuted = function (muted) {
+        const verifyMuted = (muted) => {
           // muted button has a checkmark or a cross in it
           expect(muteVideo.element(by.css(muted ? '.ion-ios7-checkmark' : '.ion-ios7-close'))
             .isPresent()).toBe(true);
@@ -128,7 +129,7 @@ describe('Room', () => {
         expect(muteMicButton.isPresent()).toBe(true);
         const publisherMuteBtn = publisher.element(by.css('.OT_mute'));
 
-        const verifyMuted = function (muted) {
+        const verifyMuted = (muted) => {
           expect(muteMicButton.getAttribute('class')).toContain(muted ? 'green' : 'red');
           expect(muteMicButton.getAttribute('class')).toContain(muted ? 'ion-ios7-mic-off' : 'ion-ios7-mic');
           if (muted) {
@@ -194,8 +195,8 @@ describe('Room', () => {
 
   describe('bottomBar', () => {
     describe('publish buttons', () => {
-      let publishBtn = element(by.css('#publishBtn')),
-        publishSDBtn = element(by.css('#publishSDBtn'));
+      const publishBtn = element(by.css('#publishBtn'));
+      const publishSDBtn = element(by.css('#publishSDBtn'));
 
       it('publishBtn is red and being displayed publishSDBtn is not present', () => {
         expect(publishBtn.isPresent()).toBe(true);

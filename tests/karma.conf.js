@@ -1,6 +1,4 @@
-const webpack = require('webpack');
-
-module.exports = function (config) {
+module.exports = (config) => {
   const sauceLaunchers = {
     Ie: {
       base: 'SauceLabs',

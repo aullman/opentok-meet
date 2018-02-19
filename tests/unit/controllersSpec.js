@@ -2,26 +2,23 @@
 
 describe('OpenTok Meet controllers', () => {
   describe('RoomCtrl', () => {
-    let ctrl,
-      scope,
-      RoomServiceMock,
-      windowMock,
-      $httpBackend,
-      roomDefer,
-      MockOTSession,
-      documentMock,
-      facePublisher,
-      $timeout;
+    let scope;
+    let RoomServiceMock;
+    let windowMock;
+    let $httpBackend;
+    let roomDefer;
+    let facePublisher;
+    let $timeout;
+    let MockOTSession;
+    let documentMock;
 
     beforeEach(angular.mock.module('opentok-meet'));
 
     beforeEach(inject(($controller, $rootScope, $q, $injector, _$timeout_) => {
       $timeout = _$timeout_;
       scope = $rootScope.$new();
-      OT.checkSystemRequirements = function () {
-        // Override checkSystemRequirements so that IE works without a plugin
-        return true;
-      };
+      // Override checkSystemRequirements so that IE works without a plugin
+      OT.checkSystemRequirements = () => true;
       scope.session = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       scope.session.connection = {
         connectionId: 'mockConnectionId',
@@ -48,7 +45,7 @@ describe('OpenTok Meet controllers', () => {
       facePublisher = jasmine.createSpyObj('Publisher', ['publishVideo']);
       facePublisher.id = 'facePublisher';
       MockOTSession.publishers = [{}, facePublisher, {}];
-      ctrl = $controller('RoomCtrl', {
+      $controller('RoomCtrl', {
         $scope: scope,
         $window: windowMock,
         $document: documentMock,
@@ -248,11 +245,11 @@ describe('OpenTok Meet controllers', () => {
       });
 
       describe('OTSession.init', () => {
-        let callback,
-          mockSession;
+        let callback;
+        let mockSession;
 
         it('handles errors', (done) => {
-          callback = MockOTSession.init.calls.mostRecent().args[3];
+          [,,, callback] = MockOTSession.init.calls.mostRecent().args;
           const fakeError = { message: 'fakeMessage' };
           scope.$on('otError', (event, err) => {
             expect(err.message).toEqual('fakeMessage');
@@ -263,7 +260,7 @@ describe('OpenTok Meet controllers', () => {
 
         describe('success', () => {
           beforeEach(() => {
-            callback = MockOTSession.init.calls.mostRecent().args[3];
+            [,,, callback] = MockOTSession.init.calls.mostRecent().args;
 
             mockSession = OT.initSession('mockSessionId');
             spyOn(mockSession, 'on').and.callThrough();
@@ -479,7 +476,7 @@ describe('OpenTok Meet controllers', () => {
       it('cleans up', () => {
         scope.connected = true;
         expect(scope.session).toBeDefined();
-        const session = scope.session;
+        const { session } = scope;
         scope.$emit('$destroy');
         expect(scope.session).toBe(null);
         expect(scope.connected).toBe(false);

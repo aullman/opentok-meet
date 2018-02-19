@@ -5,9 +5,9 @@
 const uuid = require('uuid');
 
 describe('using textchat', () => {
-  let roomName,
-    roomURL,
-    textchat;
+  let roomName;
+  let roomURL;
+  let textchat;
   beforeEach(() => {
     while (!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -24,7 +24,8 @@ describe('using textchat', () => {
   });
 
   afterEach(() => {
-    roomName = roomURL = null;
+    roomName = null;
+    roomURL = null;
   });
 
   it('shows and hides when you click the button', () => {
@@ -44,8 +45,8 @@ describe('using textchat', () => {
   });
 
   describe('with 2 browsers', () => {
-    let secondBrowser,
-      secondTextchat;
+    let secondBrowser;
+    let secondTextchat;
 
     beforeEach(() => {
       secondBrowser = browser.forkNewDriverInstance(true);

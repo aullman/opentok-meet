@@ -3,11 +3,11 @@ const angular = require('angular');
 require('../../src/js/app.js');
 
 describe('RoomService', () => {
-  let RoomService,
-    windowMock,
-    baseURL,
-    $httpBackend,
-    room;
+  let RoomService;
+  let windowMock;
+  let baseURL;
+  let $httpBackend;
+  let room;
 
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(() => {

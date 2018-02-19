@@ -6,20 +6,16 @@ const subscriberStatsHTML = require('../templates/subscriber-stats.html');
 function SubscriberStats(subscriber, onStats) {
   this.subscriber = subscriber;
   this.onStats = onStats;
-  this.lastStats; // The previous getStats result
-  this.lastLastStats; // The getStats result before that
 }
 
 angular.module('opentok-meet').factory('StatsService', ['$interval',
-  function ($interval) {
-    let interval,
-      subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
-    const updateStats = function () {
+  function StatsService($interval) {
+    let interval;
+    const subscribers = {}; // A collection of SubscriberStats objects keyed by subscriber.id
+    const updateStats = () => {
       Object.keys(subscribers).forEach((subscriberId) => {
         const subscriberStats = subscribers[subscriberId];
-        let subscriber = subscriberStats.subscriber,
-          lastStats = subscriberStats.lastStats,
-          lastLastStats = subscriberStats.lastLastStats;
+        const { subscriber, lastStats, lastLastStats } = subscriberStats;
         subscriber.getStats((err, stats) => {
           if (err) {
             console.error(err);
@@ -34,7 +30,7 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
           if (lastStats) {
             secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
           }
-          const setCurrStats = function (type) {
+          const setCurrStats = (type) => {
             currStats[type] = stats[type];
             if (stats[type].packetsReceived > 0) {
               currStats[`${type}PacketLoss`] = ((stats[type].packetsLost /
@@ -87,7 +83,7 @@ angular.module('opentok-meet').factory('StatsService', ['$interval',
 ]);
 
 angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'StatsService',
-  '$timeout', function (OTSession, StatsService, $timeout) {
+  '$timeout', function subscriberStats(OTSession, StatsService, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -95,11 +91,11 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
       },
       template: subscriberStatsHTML,
       link(scope, element) {
-        let subscriber,
-          subscriberId;
+        let subscriber;
+        let subscriberId;
         const timeout = $timeout(() => {
           // subscribe hasn't been called yet so we wait a few milliseconds
-          subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+          [subscriber] = OTSession.session.getSubscribersForStream(scope.stream);
           subscriber.on('connected', () => {
             subscriberId = subscriber.id;
 

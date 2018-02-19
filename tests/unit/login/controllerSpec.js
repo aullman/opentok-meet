@@ -1,15 +1,14 @@
 /* jasmine specs for controllers go here */
 describe('OpenTok Login Page', () => {
   describe('MainCtrl', () => {
-    let scope,
-      ctrl,
-      windowMock;
+    let scope;
+    let windowMock;
     beforeEach(angular.mock.module('opentok-meet-login'));
 
     beforeEach(inject(($controller, $rootScope) => {
       scope = $rootScope.$new();
       windowMock = jasmine.createSpy('$window');
-      ctrl = $controller('MainCtrl', {
+      $controller('MainCtrl', {
         $scope: scope,
         $window: windowMock,
       });

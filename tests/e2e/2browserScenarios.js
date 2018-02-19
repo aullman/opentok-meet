@@ -1,13 +1,10 @@
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
-/* global browser: false */
-/* global element: false */
-/* global by: false */
 const uuid = require('uuid');
 
 describe('2 browsers in the same room', () => {
-  let roomName,
-    roomURL,
-    secondBrowser;
+  let roomName;
+  let roomURL;
+  let secondBrowser;
   beforeEach(() => {
     while (!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room
@@ -24,7 +21,8 @@ describe('2 browsers in the same room', () => {
   });
 
   afterEach(() => {
-    roomName = roomURL = null;
+    roomName = null;
+    roomURL = null;
     if (secondBrowser) {
       secondBrowser.quit();
     }
@@ -37,7 +35,7 @@ describe('2 browsers in the same room', () => {
     });
 
     it('should display a video element with the right videoWidth and videoHeight', () => {
-      const checkVideo = function (browser) {
+      const checkVideo = (browser) => {
         const subscriberVideo =
           browser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'));
         if (browser.browserName === 'chrome') {
@@ -80,7 +78,9 @@ describe('2 browsers in the same room', () => {
       });
 
       it('zoom button should work', () => {
-        const checkZoomed = function (zoomed) {
+        const subscriber = secondBrowser.element(by.css('ot-subscriber'));
+        const zoomBtn = secondBrowser.element(by.css('button.zoom-btn'));
+        const checkZoomed = (zoomed) => {
           // Check whether the aspect ratio matches the videoWidth and videoHeight
           if (browser.browserName === 'chrome') {
             // We set the browser dimensions in Chrome but not other browsers so zooming
@@ -89,12 +89,10 @@ describe('2 browsers in the same room', () => {
               if (zoomed) {
                 return size.width / size.height !== 1280 / 720;
               }
-              return size.width / size.height == 1280 / 720;
+              return size.width / size.height === 1280 / 720;
             }));
           }
         };
-        var subscriber = secondBrowser.element(by.css('ot-subscriber'));
-        const zoomBtn = secondBrowser.element(by.css('button.zoom-btn'));
         checkZoomed(true);
         zoomBtn.click();
         checkZoomed(false);
@@ -178,8 +176,8 @@ describe('2 browsers in the same room', () => {
     }
 
     describe('disconnecting', () => {
-      let connCount,
-        firstSubscriber;
+      let connCount;
+      let firstSubscriber;
       beforeEach(() => {
         firstSubscriber = element(by.css('ot-subscriber'));
         connCount = element(by.css('#connCount'));

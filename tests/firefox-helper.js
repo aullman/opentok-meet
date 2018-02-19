@@ -5,7 +5,7 @@
 const q = require('q');
 const FirefoxProfile = require('firefox-profile');
 
-exports.getFirefoxProfile = function () {
+exports.getFirefoxProfile = () => {
   const deferred = q.defer();
 
   const firefoxProfile = new FirefoxProfile();

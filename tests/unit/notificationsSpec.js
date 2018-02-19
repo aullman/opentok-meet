@@ -2,11 +2,11 @@ const angular = require('angular');
 require('../../src/js/app.js');
 
 describe('NotificationService', () => {
-  let NotificationService,
-    OTSession,
-    windowMock,
-    mockSession,
-    Push;
+  let NotificationService;
+  let OTSession;
+  let windowMock;
+  let mockSession;
+  let Push;
 
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(() => {

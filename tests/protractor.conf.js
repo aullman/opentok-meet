@@ -1,3 +1,5 @@
+const helper = require('./firefox-helper.js');
+
 function getCapabilitiesFor(browserName, version) {
   const base = {
     'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
@@ -40,8 +42,6 @@ switch (process.env.BROWSER) {
     };
     break;
   case 'firefox':
-    var helper = require('./firefox-helper.js');
-
     config = {
       allScriptsTimeout: 11000,
 

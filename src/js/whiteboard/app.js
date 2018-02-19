@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-assign */
 window.$ = window.jQuery = require('jquery');
 const angular = require('angular');
 
@@ -7,12 +8,10 @@ require('opentok-whiteboard/opentok-whiteboard.css');
 
 
 angular.module('opentok-meet', ['opentok', 'opentok-whiteboard'])
-  .controller('WhiteboardCtrl', ['$scope', 'RoomService', 'OTSession', function ($scope, RoomService, OTSession) {
+  .controller('WhiteboardCtrl', ['$scope', 'RoomService', 'OTSession', function WhiteboardCtrl($scope, RoomService, OTSession) {
     $scope.connected = false;
     // A bit cheeky: Forcing checkSystemRequirements to pass so that this works on mobile
-    TB.checkSystemRequirements = function () {
-      return true;
-    };
+    OT.checkSystemRequirements = () => true;
 
     RoomService.getRoom().then((roomData) => {
       OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, (err) => {

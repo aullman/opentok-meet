@@ -1,6 +1,6 @@
 describe('screenShareDialogs', () => {
-  let scope,
-    element;
+  let scope;
+  let element;
   beforeEach(angular.mock.module('opentok-meet', ($provide) => {
     $provide.value('chromeExtensionId', 'mockExtensionId');
   }));

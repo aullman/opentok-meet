@@ -1,8 +1,8 @@
 describe('publishErrors', () => {
-  let scope,
-    element,
-    mockError,
-    mockPublisher;
+  let scope;
+  let element;
+  let mockError;
+  let mockPublisher;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile) => {
     mockError = {
