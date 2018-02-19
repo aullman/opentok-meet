@@ -1,7 +1,8 @@
 const OpenTok = require('opentok');
+const roomstore = require('./roomstore.js');
 
-module.exports = function (app, config, redis, ot, redirectSSL) {
-  const RoomStore = require('./roomstore.js')(redis, ot);
+module.exports = (app, config, redis, ot, redirectSSL) => {
+  const RoomStore = roomstore(redis, ot);
   app.get('*', (req, res, next) => {
     if (req.host === 'hangout.tokbox.com') {
       res.redirect(`https://meet.tokbox.com${req.url}`);
@@ -24,12 +25,12 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
   // curl -k https://localhost:5000/customKey -d "apiKey=APIKEY&secret=SECRET" -X "GET"
   // This room has to not already exist though.
   app.get('/:room', (req, res) => {
-    let room = req.param('room'),
-      apiKey = req.param('apiKey'),
-      secret = req.param('secret');
+    const room = req.param('room');
+    const apiKey = req.param('apiKey');
+    const secret = req.param('secret');
     res.format({
       json() {
-        const goToRoom = function (err, sessionId, apiKey, secret) {
+        const goToRoom = (err, sessionId, pApiKey, pSecret) => {
           if (err) {
             console.error('Error getting room: ', err);
             res.send({
@@ -40,13 +41,13 @@ module.exports = function (app, config, redis, ot, redirectSSL) {
               'Access-Control-Allow-Origin': '*',
             });
             let otSDK = ot;
-            if (apiKey && secret) {
-              otSDK = new OpenTok(apiKey, secret);
+            if (pApiKey && pSecret) {
+              otSDK = new OpenTok(pApiKey, pSecret);
             }
             res.send({
               room,
               sessionId,
-              apiKey: (apiKey && secret) ? apiKey : config.apiKey,
+              apiKey: (pApiKey && pSecret) ? pApiKey : config.apiKey,
               p2p: RoomStore.isP2P(room),
               token: otSDK.generateToken(sessionId, {
                 role: 'publisher',
