@@ -1,18 +1,18 @@
 angular.module('opentok-meet').directive('draggable', ['$document', '$window',
-  function ($document, $window) {
-    const getEventProp = function (event, prop) {
+  function draggable($document, $window) {
+    const getEventProp = (event, prop) => {
       if (event[prop] === 0) return 0;
       return event[prop] || (event.touches && event.touches[0][prop]) ||
       (event.originalEvent && event.originalEvent.touches &&
       event.originalEvent.touches[0][prop]);
     };
 
-    return function (scope, element) {
-      let position = element.css('position'),
-        startX = 0,
-        startY = 0,
-        x = 0,
-        y = 0;
+    return (scope, element) => {
+      let position = element.css('position');
+      let startX = 0;
+      let startY = 0;
+      let x = 0;
+      let y = 0;
 
       const mouseMoveHandler = function mouseMoveHandler(event) {
         y = getEventProp(event, 'pageY') - startY;
@@ -72,6 +72,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
             startY = pageY - y;
             break;
           case 'absolute':
+          default:
             startX = pageX - element.context.offsetLeft;
             startY = pageY - element.context.offsetTop;
             break;
@@ -91,7 +92,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"' +
       '</i>',
   }))
-  .directive('muteSubscriber', ['OTSession', function (OTSession) {
+  .directive('muteSubscriber', ['OTSession', function muteSubscriber(OTSession) {
     return {
       restrict: 'A',
       link(scope, element) {
@@ -113,16 +114,15 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       },
     };
   }])
-  .directive('mutePublisher', ['OTSession', function (OTSession) {
+  .directive('mutePublisher', ['OTSession', function mutePublisher(OTSession) {
     return {
       restrict: 'A',
       link(scope, element, attrs) {
         const type = attrs.mutedType || 'Video';
         scope[`muted${type}`] = false;
 
-        const getPublisher = function () {
-          return OTSession.publishers.filter(el => el.id === attrs.publisherId)[0];
-        };
+        const getPublisher = () =>
+          OTSession.publishers.filter(el => el.id === attrs.publisherId)[0];
 
         angular.element(element).on('click', () => {
           const publisher = getPublisher();
@@ -132,7 +132,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
             scope.$apply();
           }
         });
-        const listenForStreamChanges = function () {
+        const listenForStreamChanges = () => {
           OTSession.session.addEventListener('streamPropertyChanged', (event) => {
             const publisher = getPublisher();
             if (publisher && publisher.stream &&
@@ -150,7 +150,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       },
     };
   }])
-  .directive('restrictFramerate', ['OTSession', function (OTSession) {
+  .directive('restrictFramerate', ['OTSession', function restrictFramerate(OTSession) {
     return {
       restrict: 'E',
       template: '<button class="restrict-framerate-btn" title="Toggle Framerate">' +
@@ -165,12 +165,6 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         const frameRateOptions = [15, 7, 1, null];
         scope.frameRate = null;
 
-        angular.element(element).on('click', () => {
-          scope.frameRate = nextFrameRate(scope.frameRate);
-          updateSubscriberFrameRate(scope.stream, scope.frameRate);
-          scope.$apply();
-        });
-
         function nextFrameRate(frameRate) {
           let frameRateIndex = frameRateOptions.indexOf(frameRate) + 1;
           if (frameRateIndex >= frameRateOptions.length) {
@@ -184,8 +178,8 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
 
           if (frameRate === 1) {
             subscriber.restrictFrameRate(true);
-            cancelRestrict = function (subscriber) {
-              subscriber.restrictFrameRate(false);
+            cancelRestrict = (sub) => {
+              sub.restrictFrameRate(false);
               cancelRestrict = null;
             };
           } else {
@@ -195,19 +189,23 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
             }
           }
         }
+
+        angular.element(element).on('click', () => {
+          scope.frameRate = nextFrameRate(scope.frameRate);
+          updateSubscriberFrameRate(scope.stream, scope.frameRate);
+          scope.$apply();
+        });
       },
     };
   }])
-  .directive('reconnectingOverlay', ['$interval', function ($interval) {
+  .directive('reconnectingOverlay', ['$interval', function reconnectingOverlay($interval) {
     return {
       restrict: 'E',
       template: '<p>Reconnecting{{ dots }}</p>',
       link(scope) {
-        let intervalPromise;
-
         scope.dots = '';
 
-        intervalPromise = $interval(() => {
+        const intervalPromise = $interval(() => {
           scope.dots += '.';
 
           if (scope.dots.length > 3) {
@@ -221,7 +219,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       },
     };
   }])
-  .directive('expandButton', ['$rootScope', function ($rootScope) {
+  .directive('expandButton', ['$rootScope', function expandButton($rootScope) {
     return {
       restrict: 'E',
       template: '<button class="resize-btn ion-arrow-expand" ng-click="$emit(\'changeSize\');"' +
@@ -231,7 +229,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
           // If we're a screen we default to large otherwise we default to small
           scope.expanded = scope.stream.name === 'screen';
         }
-        const toggleExpand = function () {
+        const toggleExpand = () => {
           scope.expanded = !scope.expanded;
           scope.$apply();
           $rootScope.$broadcast('otLayout');
@@ -240,7 +238,8 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         angular.element(element).parent().on('dblclick', toggleExpand);
       },
     };
-  }]).directive('zoomButton', ['$rootScope', function ($rootScope) {
+  }])
+  .directive('zoomButton', ['$rootScope', function zoomButton() {
     return {
       restrict: 'E',
       scope: {

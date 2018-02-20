@@ -3,14 +3,14 @@ const angular = require('angular');
 require('../../src/js/app.js');
 
 describe('subscriber-stats', () => {
-  let scope,
-    element,
-    mockStream = {},
-    OTSession,
-    mockSubscriber,
-    mockStats,
-    $timeout,
-    StatsService;
+  let scope;
+  let element;
+  const mockStream = {};
+  let OTSession;
+  let mockSubscriber;
+  let mockStats;
+  let $timeout;
+  let StatsService;
   const room = 'mockRoom';
   const baseURL = 'https://mock.url/';
 
@@ -46,7 +46,8 @@ describe('subscriber-stats', () => {
   });
 
   it('does not add a subscriber to StatsService if we are not conected', () => {
-    expect(StatsService.addSubscriber).not.toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
+    expect(StatsService.addSubscriber)
+      .not.toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
   });
 
   describe('with a connected subscriber', () => {
@@ -55,7 +56,8 @@ describe('subscriber-stats', () => {
     });
 
     it('adds a subscriber to StatsService', () => {
-      expect(StatsService.addSubscriber).toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
+      expect(StatsService.addSubscriber)
+        .toHaveBeenCalledWith(mockSubscriber, jasmine.any(Function));
     });
 
     it('sets stats on the scope', () => {
@@ -107,12 +109,12 @@ describe('subscriber-stats', () => {
 });
 
 describe('StatsService', () => {
-  let StatsService,
-    $interval,
-    onStats,
-    mockSubscriber,
-    mockStats,
-    $httpBackend;
+  let StatsService;
+  let $interval;
+  let onStats;
+  let mockSubscriber;
+  let mockStats;
+  let $httpBackend;
   const room = 'mockRoom';
   const mockWidgetId = 'mockWidgetId';
   const baseURL = 'https://mock.url/';
@@ -139,9 +141,8 @@ describe('StatsService', () => {
     mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on']);
     mockSubscriber.id = 'mockId';
     mockSubscriber.widgetId = mockWidgetId;
-    mockSubscriber.videoWidth = mockSubscriber.videoHeight = function () {
-      return 200;
-    };
+    mockSubscriber.videoWidth = () => 200;
+    mockSubscriber.videoHeight = () => 200;
 
     StatsService.addSubscriber(mockSubscriber, onStats);
     mockStats = {

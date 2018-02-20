@@ -3,13 +3,12 @@ const angular = require('angular');
 require('../../src/js/app.js');
 
 describe('subscriber-report', () => {
-  let scope,
-    element,
-    mockStream = {},
-    OTSession,
-    mockSubscriber,
-    $timeout,
-    ReportService;
+  let scope;
+  let element;
+  const mockStream = {};
+  let OTSession;
+  let mockSubscriber;
+  let $timeout;
   const room = 'mockRoom';
   const baseURL = 'https://mock.url/';
 
@@ -27,7 +26,6 @@ describe('subscriber-report', () => {
       getSubscribersForStream() {},
     };
     $timeout = _$timeout_;
-    ReportService = _ReportService_;
     mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle']);
     mockSubscriber.session = OTSession.session;
     mockSubscriber.id = 'mockId';

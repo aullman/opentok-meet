@@ -1,4 +1,4 @@
-module.exports = function (app, config) {
+module.exports = (app, config) => {
   app.get('/:room/screen', (req, res) => {
     res.render('screen', {
       room: req.param('room'),

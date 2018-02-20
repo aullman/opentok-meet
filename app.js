@@ -1,10 +1,15 @@
-let express = require('express'),
-  fs = require('fs'),
-  OpenTok = require('opentok'),
-  https = require('https'),
-  compression = require('compression'),
-  app = express(),
-  config;
+const express = require('express');
+const fs = require('fs');
+const OpenTok = require('opentok');
+const https = require('https');
+const compression = require('compression');
+const url = require('url');
+const redis = require('redis');
+const glob = require('glob');
+const path = require('path');
+
+const app = express();
+let config;
 
 if (process.env.HEROKU || process.env.TRAVIS) {
   config = {
@@ -25,12 +30,13 @@ if (process.env.HEROKU || process.env.TRAVIS) {
   }
 }
 
+let redisClient;
 if (process.env.REDISTOGO_URL) {
-  const rtg = require('url').parse(process.env.REDISTOGO_URL);
-  var redis = require('redis').createClient(rtg.port, rtg.hostname);
-  redis.auth(rtg.auth.split(':')[1]);
+  const rtg = url.parse(process.env.REDISTOGO_URL);
+  redisClient = redis.createClient(rtg.port, rtg.hostname);
+  redisClient.auth(rtg.auth.split(':')[1]);
 } else {
-  var redis = require('redis').createClient();
+  redisClient = redis.createClient();
 }
 
 
@@ -50,20 +56,11 @@ const ot = new OpenTok(config.apiKey, config.apiSecret, config.apiUrl);
 const useSSL = fs.existsSync(`${__dirname}/server.key`) &&
   fs.existsSync(`${__dirname}/server.crt`);
 
-require('./server/routes.js')(app, config, redis, ot, useSSL || process.env.HEROKU);
-
-var glob = require('glob'),
-  path = require('path');
+require('./server/routes.js')(app, config, redisClient, ot, useSSL || process.env.HEROKU);
 
 glob.sync('./plugins/**/*.js').forEach((file) => {
-  require(path.resolve(file))(app, config, redis, ot);
-});
-
-var glob = require('glob'),
-  path = require('path');
-
-glob.sync('./plugins/**/*.js').forEach((file) => {
-  require(path.resolve(file))(app, config, redis, ot);
+  // eslint-disable-next-line
+  require(path.resolve(file))(app, config, redisClient, ot);
 });
 
 if (process.env.HEROKU || !useSSL) {

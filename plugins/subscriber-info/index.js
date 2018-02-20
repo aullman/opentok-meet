@@ -1,7 +1,8 @@
 const Anvil = require('./anvil');
+const roomstore = require('../../server/roomstore.js');
 
-module.exports = function (app, config, redis, ot) {
-  const RoomStore = require('../../server/roomstore.js')(redis, ot);
+module.exports = (app, config, redis, ot) => {
+  const RoomStore = roomstore(redis, ot);
   const anvil = new Anvil('https://anvil-tbdev.opentok.com');
 
 
@@ -26,10 +27,10 @@ module.exports = function (app, config, redis, ot) {
         subscriberId,
       };
 
-      anvil.getSubscriberInfo(payload, (err, info) => {
-        if (err) {
-          console.error('Error retrieving subscriber information: ', err);
-          res.send({ error: err.message });
+      anvil.getSubscriberInfo(payload, (getErr, info) => {
+        if (getErr) {
+          console.error('Error retrieving subscriber information: ', getErr);
+          res.send({ error: getErr.message });
           return;
         }
 

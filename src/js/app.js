@@ -1,6 +1,6 @@
-/* jshint unused:false */
 require('./h264/add-regeneration-capability.js');
 
+// eslint-disable-next-line
 window.$ = window.jQuery = require('jquery');
 
 const angular = require('angular');

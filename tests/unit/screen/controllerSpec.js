@@ -1,21 +1,18 @@
 /* jasmine specs for controllers go here */
 describe('OpenTok Meet Screenshare Only Page', () => {
   describe('ScreenCtrl', () => {
-    let ctrl,
-      scope,
-      RoomServiceMock,
-      roomDefer,
-      MockOTSession,
-      mockSession;
+    let scope;
+    let RoomServiceMock;
+    let roomDefer;
+    let MockOTSession;
+    let mockSession;
 
     beforeEach(angular.mock.module('opentok-meet'));
 
     beforeEach(inject(($controller, $rootScope, $q) => {
       scope = $rootScope.$new();
-      OT.checkSystemRequirements = function () {
-        // Override checkSystemRequirements so that IE works without a plugin
-        return true;
-      };
+      // Override checkSystemRequirements so that IE works without a plugin
+      OT.checkSystemRequirements = () => true;
       mockSession = jasmine.createSpyObj('Session', ['disconnect', 'on', 'trigger']);
       mockSession.connection = {
         connectionId: 'mockConnectionId',
@@ -30,7 +27,7 @@ describe('OpenTok Meet Screenshare Only Page', () => {
       MockOTSession = jasmine.createSpyObj('OTSession', ['init']);
       MockOTSession.streams = [];
       MockOTSession.connections = [];
-      ctrl = $controller('ScreenCtrl', {
+      $controller('ScreenCtrl', {
         $scope: scope,
         RoomService: RoomServiceMock,
         OTSession: MockOTSession,

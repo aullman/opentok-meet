@@ -1,24 +1,26 @@
 const path = require('path');
 const fs = require('fs');
+const helper = require('./firefox-helper.js');
 
 // Determine the protocol the app is running on
-const protocol = (function () {
+const protocol = (() => {
   const useSSL = fs.existsSync(path.join(__dirname, '..', 'server.key')) &&
     fs.existsSync(path.join(__dirname, '..', 'server.crt'));
   return process.env.HEROKU || !useSSL ? 'http' : 'https';
-}());
+})();
 
 // Determine the port the app is running on
-const port = (function () {
+const port = (() => {
   const appConfigFilePath = path.join(__dirname, '..', 'config.json');
-  let port = 5000;
+  let p = 5000;
   if (process.env.HEROKU || process.env.TRAVIS) {
-    port = process.env.PORT;
+    p = process.env.PORT;
   } else if (fs.existsSync(appConfigFilePath)) {
-    port = require(appConfigFilePath).port;
+    // eslint-disable-next-line
+    p = require(appConfigFilePath).port;
   }
-  return port;
-}());
+  return p;
+})();
 
 // Set the base URL based on the above protocol and port
 const baseUrl = `${protocol}://localhost:${port}/`;
@@ -65,8 +67,6 @@ switch (process.env.BROWSER) {
     };
     break;
   case 'firefox':
-    var helper = require('./firefox-helper.js');
-
     config = {
       allScriptsTimeout: 11000,
 

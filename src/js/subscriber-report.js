@@ -1,11 +1,7 @@
 require('../css/subscriber-report.css');
 
-function SubscriberReport(subscriber) {
-  this.subscriber = subscriber;
-}
-
 angular.module('opentok-meet').factory('ReportService', [
-  function () {
+  function ReportService() {
     return {
       report(subscriber, report) {
         console.log(subscriber);
@@ -26,7 +22,7 @@ angular.module('opentok-meet').factory('ReportService', [
 //
 
 angular.module('opentok-meet').directive('subscriberReport', ['OTSession', 'ReportService',
-  '$timeout', function (OTSession, ReportService, $timeout) {
+  '$timeout', function subscriberReport(OTSession, ReportService, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -53,12 +49,10 @@ angular.module('opentok-meet').directive('subscriberReport', ['OTSession', 'Repo
         '<button class="send-report-btn">Send</button>' +
         '</div>',
       link(scope, element) {
-        let subscriber,
-          subscriberId;
-        const timeout = $timeout(() => {
+        let subscriber;
+        $timeout(() => {
           // subscribe hasn't been called yet so we wait a few milliseconds
           subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
-          subscriberId = subscriber.id;
         }, 100);
 
         angular.element(element).find('button.show-report-btn').on('click', () => {

@@ -7,7 +7,7 @@ module.exports = function useH264Only(sdp) {
 
   const mLine = lines[mLineIndex];
 
-  const payloadTypes = (function () {
+  const payloadTypes = (() => {
     const match = mLine.match(/[0-9][0-9 ]*$/);
 
     if (!match) {
@@ -15,7 +15,7 @@ module.exports = function useH264Only(sdp) {
     }
 
     return match[0].split(' ');
-  }());
+  })();
 
   const h264Lines = lines.filter(line => /^a=rtpmap.* H264/.test(line));
 

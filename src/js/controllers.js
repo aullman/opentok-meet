@@ -1,6 +1,6 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
   '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService', 'NotificationService',
-  function ($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
+  function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
     SimulcastService, NotificationService) {
     $scope.streams = OTSession.streams;
     $scope.connections = OTSession.connections;
@@ -26,37 +26,34 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       fixedRatio: !$scope.zoomed,
     };
 
-    let facePublisherPropsHD = {
-        name: 'face',
-        width: '100%',
-        height: '100%',
-        style: {
-          nameDisplayMode: 'off',
-        },
-        usePreviousDeviceSelection: true,
-        resolution: '1280x720',
-        frameRate: 30,
+    const facePublisherPropsHD = {
+      name: 'face',
+      width: '100%',
+      height: '100%',
+      style: {
+        nameDisplayMode: 'off',
       },
-      facePublisherPropsSD = {
-        name: 'face',
-        width: '100%',
-        height: '100%',
-        style: {
-          nameDisplayMode: 'off',
-        },
-        resolution: '640x480',
-      };
+      usePreviousDeviceSelection: true,
+      resolution: '1280x720',
+      frameRate: 30,
+    };
+    const facePublisherPropsSD = {
+      name: 'face',
+      width: '100%',
+      height: '100%',
+      style: {
+        nameDisplayMode: 'off',
+      },
+      resolution: '640x480',
+    };
     $scope.facePublisherProps = facePublisherPropsHD;
 
-    $scope.notMine = function (stream) {
-      return stream.connection.connectionId !== $scope.session.connection.connectionId;
-    };
+    $scope.notMine = stream =>
+      stream.connection.connectionId !== $scope.session.connection.connectionId;
 
-    $scope.getPublisher = function (id) {
-      return OTSession.publishers.filter(x => x.id === id)[0];
-    };
+    $scope.getPublisher = id => OTSession.publishers.filter(x => x.id === id)[0];
 
-    $scope.togglePublish = function (publishHD) {
+    $scope.togglePublish = (publishHD) => {
       if (!$scope.publishing) {
       // If they unpublish and publish again then prompt them to change their devices
         facePublisherPropsHD.usePreviousDeviceSelection = false;
@@ -65,7 +62,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.publishing = !$scope.publishing;
     };
 
-    const startArchiving = function () {
+    const startArchiving = () => {
       $scope.archiving = true;
       $http.post(`${baseURL + $scope.room}/startArchive`).then((response) => {
         if (response.data.error) {
@@ -80,7 +77,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       });
     };
 
-    const stopArchiving = function () {
+    const stopArchiving = () => {
       $scope.archiving = false;
       $http.post(`${baseURL + $scope.room}/stopArchive`, {
         archiveId: $scope.archiveId,
@@ -97,7 +94,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       });
     };
 
-    $scope.reportIssue = function () {
+    $scope.reportIssue = () => {
       let url = `${'mailto:broken@tokbox.com?subject=Meet%20Issue%20Report&body=' +
       'room: '}${$scope.room
       } p2p: ${$scope.p2p
@@ -122,7 +119,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       return false;
     };
 
-    $scope.toggleArchiving = function () {
+    $scope.toggleArchiving = () => {
       if ($scope.archiving) {
         stopArchiving();
       } else {
@@ -130,7 +127,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       }
     };
 
-    $scope.toggleWhiteboard = function () {
+    $scope.toggleWhiteboard = () => {
       $scope.showWhiteboard = !$scope.showWhiteboard;
       $scope.whiteboardUnread = false;
       setTimeout(() => {
@@ -138,7 +135,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       }, 10);
     };
 
-    $scope.toggleEditor = function () {
+    $scope.toggleEditor = () => {
       $scope.showEditor = !$scope.showEditor;
       $scope.editorUnread = false;
       setTimeout(() => {
@@ -147,7 +144,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       }, 10);
     };
 
-    $scope.toggleTextchat = function () {
+    $scope.toggleTextchat = () => {
       $scope.showTextchat = !$scope.showTextchat;
       $scope.textChatUnread = false;
     };
@@ -169,7 +166,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           return;
         }
         $scope.session = session;
-        const connectDisconnect = function (connected) {
+        const connectDisconnect = (connected) => {
           $scope.$apply(() => {
             $scope.connected = connected;
             $scope.reconnecting = false;
@@ -178,7 +175,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
             }
           });
         };
-        const reconnecting = function (isReconnecting) {
+        const reconnecting = (isReconnecting) => {
           $scope.$apply(() => {
             $scope.reconnecting = isReconnecting;
           });
@@ -199,7 +196,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
         $scope.session.on('sessionReconnecting', reconnecting.bind($scope.session, true));
         $scope.session.on('sessionReconnected', reconnecting.bind($scope.session, false));
       });
-      const whiteboardUpdated = function () {
+      const whiteboardUpdated = () => {
         if (!$scope.showWhiteboard && !$scope.whiteboardUnread) {
         // Someone did something to the whiteboard while we weren't looking
           $scope.$apply(() => {
@@ -208,7 +205,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           });
         }
       };
-      const editorUpdated = function () {
+      const editorUpdated = () => {
         if (!$scope.showEditor && !$scope.editorUnread) {
         // Someone did something to the editor while we weren't looking
           $scope.$apply(() => {
@@ -217,7 +214,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
           });
         }
       };
-      const textChatMessage = function () {
+      const textChatMessage = () => {
         if (!$scope.showTextchat) {
           $scope.textChatUnread = true;
           $scope.mouseMove = true; // Show the bottom bar
@@ -244,7 +241,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.$broadcast('otLayout');
     });
 
-    $scope.changeRoom = function () {
+    $scope.changeRoom = () => {
       if (!$scope.leaving) {
         $scope.leaving = true;
         $scope.session.disconnect();
@@ -256,12 +253,12 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       }
     };
 
-    $scope.sendEmail = function () {
+    $scope.sendEmail = () => {
       $window.location.href = `mailto:?subject=Let's Meet&body=${$scope.shareURL}`;
     };
 
     let mouseMoveTimeout;
-    const mouseMoved = function () {
+    const mouseMoved = () => {
       if (!$scope.mouseMove) {
         $scope.$apply(() => {
           $scope.mouseMove = true;

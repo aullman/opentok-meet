@@ -3,7 +3,7 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 const gitRevisionPlugin = new GitRevisionPlugin();
 
-module.exports = function (config) {
+module.exports = (config) => {
   const sauceLaunchers = {
     Ie: {
       base: 'SauceLabs',

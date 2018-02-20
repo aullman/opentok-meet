@@ -1,3 +1,5 @@
+/* global VERSION COMMITHASH */
+
 const Raven = require('raven-js');
 const RavenAngular = require('raven-js/plugins/angular');
 

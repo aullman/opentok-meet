@@ -5,8 +5,8 @@
 const uuid = require('uuid');
 
 describe('Debug button', () => {
-  let roomName,
-    roomURL;
+  let roomName;
+  let roomURL;
   beforeEach(() => {
     while (!roomName || roomName.indexOf('p2p') > -1) {
       // Don't want the roomname to have p2p in it or it will be a p2p room

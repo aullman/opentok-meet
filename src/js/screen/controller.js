@@ -1,14 +1,14 @@
 // Controller for the standalone screen application /:room/screen
 angular.module('opentok-meet').controller('ScreenCtrl',
   ['$scope', 'RoomService', 'OTSession',
-    function ($scope, RoomService, OTSession) {
+    function ScreenCtrl($scope, RoomService, OTSession) {
       $scope.connected = false;
       RoomService.getRoom().then((roomData) => {
         OTSession.init(roomData.apiKey, roomData.sessionId, roomData.token, (err, session) => {
           if (err) {
             throw new Error(err);
           }
-          const connectDisconnect = function (connected) {
+          const connectDisconnect = (connected) => {
             $scope.connected = connected;
             $scope.$apply();
           };

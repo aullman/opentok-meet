@@ -2,7 +2,7 @@ const errorReporting = require('../lib/error-reporting.js');
 
 errorReporting();
 
-window.$ = window.jQuery = require('jquery');
+window.$ = window.jQuery = require('jquery'); //eslint-disable-line
 const angular = require('angular');
 
 require('opentok-angular');

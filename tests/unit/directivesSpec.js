@@ -4,10 +4,10 @@ require('angular-mocks');
 require('../../src/js/app.js');
 
 describe('draggable', () => {
-  let scope,
-    element,
-    $document,
-    $window;
+  let scope;
+  let element;
+  let $document;
+  let $window;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile, _$document_, _$window_) => {
     scope = $rootScope.$new();
@@ -107,8 +107,8 @@ describe('draggable', () => {
 });
 
 describe('syncClick', () => {
-  let scope,
-    element;
+  let scope;
+  let element;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile) => {
     scope = $rootScope.$new();
@@ -125,8 +125,8 @@ describe('syncClick', () => {
 });
 
 describe('muteVideo', () => {
-  let scope,
-    element;
+  let scope;
+  let element;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile) => {
     scope = $rootScope.$new();
@@ -137,8 +137,8 @@ describe('muteVideo', () => {
   }));
 
   describe('two i elements', () => {
-    let firstI,
-      secondI;
+    let firstI;
+    let secondI;
     beforeEach(() => {
       firstI = element.find('i')[0];
       secondI = element.find('i')[1];
@@ -167,19 +167,17 @@ describe('muteVideo', () => {
 });
 
 describe('muteSubscriber', () => {
-  let scope,
-    element,
-    mockSubscriber,
-    OTSession;
+  let scope;
+  let element;
+  let mockSubscriber;
+  let OTSession;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile, _OTSession_) => {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
     mockSubscriber = jasmine.createSpyObj('Subscriber', ['subscribeToVideo']);
     OTSession.session = {};
-    OTSession.session.getSubscribersForStream = function () {
-      return [mockSubscriber];
-    };
+    OTSession.session.getSubscribersForStream = () => [mockSubscriber];
 
     element = '<div mute-subscriber></div>';
     element = $compile(element)(scope);
@@ -198,10 +196,10 @@ describe('muteSubscriber', () => {
 });
 
 describe('mutePublisher', () => {
-  let scope,
-    element,
-    mockPublisher,
-    OTSession;
+  let scope;
+  let element;
+  let mockPublisher;
+  let OTSession;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, _OTSession_) => {
     scope = $rootScope.$new();
@@ -253,10 +251,10 @@ describe('mutePublisher', () => {
 });
 
 describe('restrictFrameRate', () => {
-  let scope,
-    element,
-    mockSubscriber,
-    OTSession;
+  let scope;
+  let element;
+  let mockSubscriber;
+  let OTSession;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile, _OTSession_) => {
     scope = $rootScope.$new();
@@ -266,9 +264,7 @@ describe('restrictFrameRate', () => {
       'setPreferredFrameRate',
     ]);
     OTSession.session = {};
-    OTSession.session.getSubscribersForStream = function () {
-      return [mockSubscriber];
-    };
+    OTSession.session.getSubscribersForStream = () => [mockSubscriber];
 
     element = '<restrict-framerate></restrict-framerate>';
     element = $compile(element)(scope);
@@ -308,9 +304,9 @@ describe('restrictFrameRate', () => {
 });
 
 describe('reconnectingOverlay', () => {
-  let scope,
-    element,
-    $interval;
+  let scope;
+  let element;
+  let $interval;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile, _$interval_) => {
     scope = $rootScope.$new();
@@ -336,11 +332,11 @@ describe('reconnectingOverlay', () => {
 
 // This is the double click to enlarge functionality
 describe('changeSize', () => {
-  let scope,
-    parent,
-    expandButton,
-    $rootScope,
-    $compile;
+  let scope;
+  let parent;
+  let expandButton;
+  let $rootScope;
+  let $compile;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject((_$rootScope_, _$compile_) => {
     $rootScope = _$rootScope_;

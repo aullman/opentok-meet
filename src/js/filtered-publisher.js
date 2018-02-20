@@ -1,3 +1,5 @@
+/* eslint no-multi-assign:0 */
+
 const closeToGreen = (r, g, b) => {
   // 86, 246, 61
   if (g > (b * 1.4) && g > (r * 1.4)) {
@@ -39,6 +41,7 @@ const getCanvasStream = () => {
       requestAnimationFrame(drawFrame);
     } else {
       ctx = null;
+      canvas = null;
       filterVideo = null;
       filterCtx = null;
       filterCanvas = null;
@@ -94,7 +97,7 @@ const getCanvasStream = () => {
 };
 
 angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$rootScope',
-  function (OTSession, $rootScope) {
+  function filteredPublisher(OTSession, $rootScope) {
     return {
       restrict: 'E',
       scope: {
@@ -155,7 +158,8 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
           if (scope.canvasStream) {
             scope.canvasStream.stop();
           }
-          OTSession.publishers = OTSession.publishers.filter(publisher => publisher !== scope.publisher);
+          OTSession.publishers =
+            OTSession.publishers.filter(publisher => publisher !== scope.publisher);
           scope.publisher = null;
         });
         if (OTSession.session && (OTSession.session.connected ||

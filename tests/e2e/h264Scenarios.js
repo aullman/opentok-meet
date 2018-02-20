@@ -1,7 +1,4 @@
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
-/* global browser: false */
-/* global element: false */
-/* global by: false */
 const uuid = require('uuid');
 
 xdescribe('H264', () => {
@@ -17,10 +14,10 @@ xdescribe('H264', () => {
   });
 
   describe('h264 and dtx checkbox in login screen', () => {
-    let h264,
-      dtx,
-      roomField,
-      submit;
+    let h264;
+    let dtx;
+    let roomField;
+    let submit;
 
     beforeEach(() => {
       browser.get('');

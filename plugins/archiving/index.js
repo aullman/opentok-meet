@@ -1,7 +1,8 @@
 const OpenTok = require('opentok');
+const roomstore = require('../../server/roomstore.js');
 
-module.exports = function (app, config, redis, ot) {
-  const RoomStore = require('../../server/roomstore.js')(redis, ot);
+module.exports = (app, config, redis, ot) => {
+  const RoomStore = roomstore(redis, ot);
 
   // Keeping this around for legacy URLs. The new URL format for
   // archives is /:room/archive/:archiveId though
@@ -30,9 +31,9 @@ module.exports = function (app, config, redis, ot) {
           otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret,
             'https://anvil-tbdev.opentok.com');
         }
-        otSDK.getArchive(req.param('archiveId'), (err, archive) => {
-          if (err) {
-            res.send(404, err.message);
+        otSDK.getArchive(req.param('archiveId'), (archiveErr, archive) => {
+          if (archiveErr) {
+            res.send(404, archiveErr.message);
           } else {
             res.render('archive', {
               name: archive.name,
@@ -67,11 +68,11 @@ module.exports = function (app, config, redis, ot) {
       }
       otSDK.startArchive(sessionId, {
         name: room,
-      }, (err, archive) => {
-        if (err) {
-          console.error('Error starting archive: ', err);
+      }, (startErr, archive) => {
+        if (startErr) {
+          console.error('Error starting archive: ', startErr);
           res.send({
-            error: err.message,
+            error: startErr.message,
           });
         } else {
           redis.sadd(`archive_${room}`, archive.id);
@@ -84,8 +85,8 @@ module.exports = function (app, config, redis, ot) {
   });
 
   app.post('/:room/stopArchive', (req, res) => {
-    let archiveId = req.param('archiveId'),
-      room = req.param('room');
+    const archiveId = req.param('archiveId');
+    const room = req.param('room');
 
     // Lookup if there's a custom apiKey for this room
     redis.hget('apiKeys', room, (err, apiKeySecret) => {
@@ -102,11 +103,11 @@ module.exports = function (app, config, redis, ot) {
             'https://anvil-tbdev.opentok.com');
         }
 
-        otSDK.stopArchive(archiveId, (err, archive) => {
-          if (err) {
-            console.error('Error stopping archive: ', err);
+        otSDK.stopArchive(archiveId, (stopErr, archive) => {
+          if (stopErr) {
+            console.error('Error stopping archive: ', stopErr);
             res.send({
-              error: err.message,
+              error: stopErr.message,
             });
           } else {
             res.send({

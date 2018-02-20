@@ -1,17 +1,17 @@
 const useH264Only = require('./useH264Only.js');
 
-module.exports = function (h264, dtx) {
+module.exports = (h264, dtx) => {
   console.log('Intercept settings', dtx, h264);
 
   const OrigPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection ||
     window.mozRTCPeerConnection;
   if (OrigPeerConnection) {
-    const newPeerConnection = function (config, constraints) {
+    const newPeerConnection = (config, constraints) => {
       console.log('PeerConnection created with config', config);
 
       const pc = new OrigPeerConnection(config, constraints);
       const origSetRemoteDescription = pc.setRemoteDescription.bind(pc);
-      pc.setRemoteDescription = function (sdp) {
+      pc.setRemoteDescription = (sdp) => {
         console.log('Intercept setRemoteDescription');
         if (dtx) {
           sdp.sdp = sdp.sdp.replace('useinbandfec=1', 'useinbandfec=1;usedtx=1');
@@ -19,7 +19,7 @@ module.exports = function (h264, dtx) {
         return origSetRemoteDescription.apply(this, arguments);
       };
       const origSetLocalDescription = pc.setLocalDescription.bind(pc);
-      pc.setLocalDescription = function (sdp) {
+      pc.setLocalDescription = (sdp) => {
         console.log('Intercept setLocalDescription');
         if (h264 && sdp.type === 'offer') {
           const oldSDP = sdp.sdp;
@@ -36,7 +36,7 @@ module.exports = function (h264, dtx) {
 
     ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach((obj) => {
         // Override objects if they exist in the window object
-      if (window.hasOwnProperty(obj)) {
+      if (window.hasOwnProperty(obj)) { // eslint-disable-line
         window[obj] = newPeerConnection;
       }
     });

@@ -3,11 +3,11 @@ require('angular-mocks');
 require('../../src/js/app.js');
 
 describe('audioAcquisitionProblem', () => {
-  let scope,
-    element,
-    mockPublisher,
-    OTSession,
-    $window;
+  let scope;
+  let element;
+  let mockPublisher;
+  let OTSession;
+  let $window;
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(inject(($rootScope, $compile, _OTSession_, _$window_) => {
     scope = $rootScope.$new();

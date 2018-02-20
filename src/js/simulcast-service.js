@@ -1,7 +1,7 @@
 // Asynchronous fetching of the room. This is so that the mobile app can use the
 // same controller. It doesn't know the room straight away
 angular.module('opentok-meet').factory('SimulcastService', ['debounce', '$rootScope',
-  function (debounce, $rootScope) {
+  function SimulcastService(debounce, $rootScope) {
     return {
       init(streams, session) {
         $rootScope.$on('otLayoutComplete', debounce(() => {
@@ -9,9 +9,9 @@ angular.module('opentok-meet').factory('SimulcastService', ['debounce', '$rootSc
           streams.forEach((stream) => {
             const subscribers = session.getSubscribersForStream(stream);
             subscribers.forEach((subscriber) => {
-              let $subscriber = $(`#${subscriber.id}`),
-                pixelWidth = $subscriber.width() * window.devicePixelRatio,
-                pixelHeight = $subscriber.height() * window.devicePixelRatio;
+              const $subscriber = $(`#${subscriber.id}`);
+              const pixelWidth = $subscriber.width() * window.devicePixelRatio;
+              const pixelHeight = $subscriber.height() * window.devicePixelRatio;
               subscriber.setPreferredResolution({
                 width: pixelWidth,
                 height: pixelHeight,

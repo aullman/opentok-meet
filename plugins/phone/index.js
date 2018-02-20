@@ -1,18 +1,20 @@
-module.exports = function (app, config, redis, ot) {
-  const RoomStore = require('../../server/roomstore.js')(redis, ot);
+const roomstore = require('../../server/roomstore.js');
+
+module.exports = (app, config, redis, ot) => {
+  const RoomStore = roomstore(redis, ot);
 
   function createPinCode(room, callback) {
     const max = 99999;
     const min = 0;
-    const pinCode = Math.floor(Math.random() * (max - min + 1)) + min;
+    const pinCode = Math.floor(Math.random() * ((max - min) + 1)) + min;
 
     redis.hset('phone_rooms', room, pinCode, (err) => {
       if (err) {
         callback(err);
       }
-      redis.hset('phone_pinCodes', pinCode, room, (err) => {
-        if (err) {
-          callback(err);
+      redis.hset('phone_pinCodes', pinCode, room, (setErr) => {
+        if (setErr) {
+          callback(setErr);
         }
         callback(null, pinCode);
       });
@@ -22,8 +24,8 @@ module.exports = function (app, config, redis, ot) {
   function getPinCode(room, callback) {
     redis.hget('phone_rooms', room, (err, pinCode) => {
       if (err || !pinCode) {
-        createPinCode(room, (err, pinCode) => {
-          callback(err, pinCode);
+        createPinCode(room, (createErr, newPinCode) => {
+          callback(createErr, newPinCode);
         });
       } else {
         callback(null, pinCode);

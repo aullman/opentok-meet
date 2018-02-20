@@ -2,7 +2,7 @@ const request = require('request');
 const jwt = require('jwt-simple');
 
 function Anvil(url) {
-  const createJwtToken = function (props) {
+  const createJwtToken = (props) => {
     props = props || {};
 
     const claims = {
@@ -18,13 +18,13 @@ function Anvil(url) {
     return token;
   };
 
-  const generateJwtHeader = function (props) {
+  const generateJwtHeader = (props) => {
     const token = createJwtToken(props);
 
     return { 'X-OPENTOK-AUTH': token };
   };
 
-  this.getSubscriberInfo = function (payload, done) {
+  this.getSubscriberInfo = function getSubscriberInfo(payload, done) {
     payload = payload || {};
 
     if (!payload.apiSecret) {
