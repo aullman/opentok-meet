@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = (config) => {
   config.set({
 
     basePath: '../',
@@ -14,7 +14,7 @@ module.exports = function(config) {
       'public/js/*.js',
       'public/js/screen/*.js',
       'public/js/login/*.js',
-      'tests/unit/**/*.js'
+      'tests/unit/**/*.js',
     ],
 
     autoWatch: true,
@@ -27,20 +27,20 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-firefox-launcher',
       'karma-jasmine',
-      'karma-coverage'
+      'karma-coverage',
     ],
 
     junitReporter: {
       outputFile: 'test_out/unit.xml',
-      suite: 'unit'
+      suite: 'unit',
     },
 
     reporters: ['progress'],
 
     coverageReporter: {
       type: 'lcov',
-      dir: 'coverage/'
-    }
+      dir: 'coverage/',
+    },
 
   });
 };

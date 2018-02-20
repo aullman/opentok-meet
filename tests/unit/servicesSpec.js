@@ -1,52 +1,56 @@
-var angular = require('angular');
+const angular = require('angular');
 // require('angular-mocks');
 require('../../src/js/app.js');
 
-describe('RoomService', function() {
-  var RoomService, windowMock, baseURL, $httpBackend, room;
+describe('RoomService', () => {
+  let RoomService;
+  let windowMock;
+  let baseURL;
+  let $httpBackend;
+  let room;
 
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(function() {
+  beforeEach(() => {
     baseURL = 'https://mock.url/';
     windowMock = {
-      location: {}
+      location: {},
     };
     room = 'mockRoom';
-    angular.mock.module(function($provide) {
+    angular.mock.module(($provide) => {
       $provide.value('baseURL', baseURL);
       $provide.value('room', room);
       $provide.value('$window', windowMock);
     });
-    inject(function(_RoomService_, $injector) {
+    inject((_RoomService_, $injector) => {
       RoomService = _RoomService_;
       $httpBackend = $injector.get('$httpBackend');
     });
   });
 
-  it('defines getRoom and changeRoom', function () {
+  it('defines getRoom and changeRoom', () => {
     expect(RoomService.getRoom).toBeDefined();
     expect(RoomService.changeRoom).toBeDefined();
   });
 
-  describe('changeRoom', function () {
-    it('sets takes you back to the login screen', function () {
+  describe('changeRoom', () => {
+    it('sets takes you back to the login screen', () => {
       RoomService.changeRoom();
       expect(windowMock.location.href).toBe(baseURL);
     });
   });
 
-  describe('getRoom', function () {
-    var mockRoomData;
-    beforeEach(function () {
+  describe('getRoom', () => {
+    let mockRoomData;
+    beforeEach(() => {
       mockRoomData = {
-        room: 'mock'
+        room: 'mock',
       };
     });
 
-    it('gets the room info and passes it along', function (done) {
+    it('gets the room info and passes it along', (done) => {
       $httpBackend.expectGET(baseURL + room)
         .respond(200, JSON.stringify(mockRoomData));
-      RoomService.getRoom().then(function (roomData) {
+      RoomService.getRoom().then((roomData) => {
         expect(roomData).toEqual(mockRoomData);
         done();
       });

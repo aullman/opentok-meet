@@ -1,7 +1,7 @@
-module.exports = function (app) {
-  app.get('/:room/whiteboard', function(req, res) {
+module.exports = (app) => {
+  app.get('/:room/whiteboard', (req, res) => {
     res.render('whiteboard', {
-      room: req.param('room')
+      room: req.param('room'),
     });
   });
 };

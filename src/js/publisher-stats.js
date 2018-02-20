@@ -1,15 +1,15 @@
-var publisherStatsHTML = require('../templates/publisher-stats.html');
+const publisherStatsHTML = require('../templates/publisher-stats.html');
 require('../css/publisher-stats.css');
 
 function PublisherStatsDirective(OTSession, $interval) {
-  function link(scope, element, attrs) {
-    var currentPublisher = undefined;
-    var allLastStats = {};
-    var currentInterval;
+  function link(scope) {
+    let currentPublisher;
+    const allLastStats = {};
+    let currentInterval;
 
     function updateStats() {
-      var hasPublisher = currentPublisher != null;
-      var hasGetStats = currentPublisher && typeof currentPublisher.getStats === 'function';
+      const hasPublisher = currentPublisher != null;
+      const hasGetStats = currentPublisher && typeof currentPublisher.getStats === 'function';
 
       if (!hasPublisher || !hasGetStats) {
         // no publisher
@@ -20,38 +20,37 @@ function PublisherStatsDirective(OTSession, $interval) {
         return;
       }
 
-      currentPublisher.getStats(function(err, allStats) {
+      currentPublisher.getStats((err, allStats) => {
         if (err) {
           console.error('Error collecting stats', err);
           return;
         }
 
-        const stats = allStats.map(function(statsContainer) {
-          var stats = statsContainer.stats;
-          var key = statsContainer.subscriberId || 'Mantis';
+        const mappedStats = allStats.map((statsContainer) => {
+          const { stats } = statsContainer;
+          const key = statsContainer.subscriberId || 'Mantis';
 
           if (!allLastStats[key]) {
             allLastStats[key] = {};
           }
 
-          var lastStats = allLastStats[key];
-          var secondsElapsed;
-          var currStats = {};
+          const lastStats = allLastStats[key];
+          let secondsElapsed;
 
           if (lastStats) {
             secondsElapsed = (stats.timestamp - lastStats.timestamp) / 1000;
           }
 
-          var prettyStats = ['audio', 'video'].reduce(function(accum, type) {
+          const prettyStats = ['audio', 'video'].reduce((accum, type) => {
             if (!stats[type]) {
               return accum;
             }
-            var moving = ['packetsSent', 'bytesSent', 'packetsLost'].reduce(function(prev, current) {
+            const moving = ['packetsSent', 'bytesSent', 'packetsLost'].reduce((prev, current) => {
               if (stats[type][current] === undefined) {
                 return prev;
               }
-              prev[current] = stats[type][current] - (lastStats[type + ':' + current] || 0);
-              lastStats[type + ':' + current] = stats[type][current] || 0;
+              prev[current] = stats[type][current] - (lastStats[`${type}:${current}`] || 0);
+              lastStats[`${type}:${current}`] = stats[type][current] || 0;
               return prev;
             }, {});
 
@@ -71,21 +70,19 @@ function PublisherStatsDirective(OTSession, $interval) {
           }
 
           return prettyStats;
-        }).sort(function(a, b) {
-          return a.subscriberId < b.subscriberId;
-        });
+        }).sort((a, b) => a.subscriberId < b.subscriberId);
 
-        var generalStats = {
+        const generalStats = {
           width: currentPublisher.videoWidth(),
           height: currentPublisher.videoHeight(),
-          stats: stats,
+          stats: mappedStats,
         };
 
         scope.generalStats = generalStats;
       });
     }
 
-    scope.toggleShowStats = function() {
+    scope.toggleShowStats = () => {
       if (currentInterval) {
         $interval.cancel(currentInterval);
       }
@@ -104,7 +101,7 @@ function PublisherStatsDirective(OTSession, $interval) {
 
       currentPublisher = newValue;
     });
-  };
+  }
 
   return {
     restrict: 'E',
@@ -112,7 +109,7 @@ function PublisherStatsDirective(OTSession, $interval) {
       publisher: '=',
     },
     template: publisherStatsHTML,
-    link: link,
+    link,
   };
 }
 

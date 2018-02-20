@@ -1,42 +1,43 @@
-var OpenTok = require('opentok');
+const OpenTok = require('opentok');
+const roomstore = require('../../server/roomstore.js');
 
-module.exports = function (app, config, redis, ot) {
-  var RoomStore = require('../../server/roomstore.js')(redis, ot);
+module.exports = (app, config, redis, ot) => {
+  const RoomStore = roomstore(redis, ot);
 
   // Keeping this around for legacy URLs. The new URL format for
   // archives is /:room/archive/:archiveId though
-  app.get('/archive/:archiveId', function(req, res) {
-    ot.getArchive(req.param('archiveId'), function(err, archive) {
+  app.get('/archive/:archiveId', (req, res) => {
+    ot.getArchive(req.param('archiveId'), (err, archive) => {
       if (err) {
         res.send(404, err.message);
       } else {
         res.render('archive', {
           name: archive.name,
-          url: archive.url
+          url: archive.url,
         });
       }
     });
   });
 
-  app.get('/:room/archive/:archiveId', function(req, res) {
-    var room = req.param('room');
-    redis.hget('apiKeys', room, function(err, apiKeySecret) {
+  app.get('/:room/archive/:archiveId', (req, res) => {
+    const room = req.param('room');
+    redis.hget('apiKeys', room, (err, apiKeySecret) => {
       if (err) {
         res.send(404, err.message);
       } else {
-        var otSDK = ot;
+        let otSDK = ot;
         if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
+          const parsedApiKeySecret = JSON.parse(apiKeySecret);
+          otSDK = new OpenTok(parsedApiKeySecret.apiKey, parsedApiKeySecret.secret);
         }
-        otSDK.getArchive(req.param('archiveId'), function(err, archive) {
-          if (err) {
-            res.send(404, err.message);
+        otSDK.getArchive(req.param('archiveId'), (archiveErr, archive) => {
+          if (archiveErr) {
+            res.send(404, archiveErr.message);
           } else {
             res.render('archive', {
               name: archive.name,
               url: archive.url,
-              status: archive.status
+              status: archive.status,
             });
           }
         });
@@ -44,71 +45,71 @@ module.exports = function (app, config, redis, ot) {
     });
   });
 
-  app.get('/:room/archives', function(req, res) {
-    redis.smembers('archive_' + req.param('room'), function(err, members) {
+  app.get('/:room/archives', (req, res) => {
+    redis.smembers(`archive_${req.param('room')}`, (err, members) => {
       res.send(members);
     });
   });
 
-  app.post('/:room/startArchive', function(req, res) {
-    var room = req.param('room');
+  app.post('/:room/startArchive', (req, res) => {
+    const room = req.param('room');
 
-    RoomStore.getRoom(room, function(err, sessionId, apiKey, secret) {
+    RoomStore.getRoom(room, (err, sessionId, apiKey, secret) => {
       if (err) {
         console.error('Error getting room: ', err);
         res.send({
-          error: err.message
+          error: err.message,
         });
       }
-      var otSDK = ot;
+      let otSDK = ot;
       if (apiKey && secret) {
         otSDK = new OpenTok(apiKey, secret);
       }
       otSDK.startArchive(sessionId, {
-        name: room
-      }, function(err, archive) {
-        if (err) {
-          console.error('Error starting archive: ', err);
+        name: room,
+      }, (startErr, archive) => {
+        if (startErr) {
+          console.error('Error starting archive: ', startErr);
           res.send({
-            error: err.message
+            error: startErr.message,
           });
         } else {
-          redis.sadd('archive_' + room, archive.id);
+          redis.sadd(`archive_${room}`, archive.id);
           res.send({
-            archiveId: archive.id
+            archiveId: archive.id,
           });
         }
       });
     });
   });
 
-  app.post('/:room/stopArchive', function(req, res) {
-    var archiveId = req.param('archiveId'),
-      room = req.param('room');
+  app.post('/:room/stopArchive', (req, res) => {
+    const archiveId = req.param('archiveId');
+    const room = req.param('room');
 
     // Lookup if there's a custom apiKey for this room
-    redis.hget('apiKeys', room, function(err, apiKeySecret) {
+    redis.hget('apiKeys', room, (err, apiKeySecret) => {
       if (err) {
         console.error('Error getting apiKeys: ', err);
         res.send({
-          error: err.message
+          error: err.message,
         });
       } else {
-        var otSDK = ot;
+        let otSDK = ot;
         if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret);
+          const parsedApiKeySecret = JSON.parse(apiKeySecret);
+          otSDK = new OpenTok(parsedApiKeySecret.apiKey, parsedApiKeySecret.secret);
         }
 
-        otSDK.stopArchive(archiveId, function(err, archive) {
-          if (err) {
-            console.error('Error stopping archive: ', err);
+        otSDK.stopArchive(archiveId, (stopErr, archive) => {
+          if (stopErr) {
+            console.error('Error stopping archive: ', stopErr);
             res.send({
-              error: err.message
+              error: stopErr.message,
             });
           } else {
             res.send({
-              archiveId: archive.id
+              archiveId: archive.id,
             });
           }
         });

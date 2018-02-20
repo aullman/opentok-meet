@@ -1,5 +1,6 @@
+// eslint-disable-next-line
 window.$ = window.jQuery = require('jquery');
-var angular = require('angular');
+const angular = require('angular');
 
 require('opentok-angular');
 
