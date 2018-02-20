@@ -1,8 +1,8 @@
 module.exports = function (app, config) {
-  app.get('/:room/whiteboard', function(req, res) {
+  app.get('/:room/whiteboard', (req, res) => {
     res.render('whiteboard', {
       opentokJs: config.opentokJs,
-      room: req.param('room')
+      room: req.param('room'),
     });
   });
 };

@@ -1,9 +1,9 @@
-var getParameterByName = require('./get-parameter-by-name.js');
+const getParameterByName = require('./get-parameter-by-name.js');
 
-var h264 = getParameterByName('h264') !== null;
+const h264 = getParameterByName('h264') !== null;
 
 if (h264) {
-  var origConnectionCreate = OT.Raptor.Message.connections.create;
+  const origConnectionCreate = OT.Raptor.Message.connections.create;
   OT.Raptor.Message.connections.create = function (opts) {
     opts.capabilities.push('regeneration');
     return origConnectionCreate(opts);

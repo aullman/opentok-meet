@@ -26,7 +26,7 @@ const getCanvasStream = () => {
     const res = new Uint8ClampedArray(cameraData.data.length);
     for (let i = 0; i < cameraData.data.length; i += 4) {
       let imgData = cameraData;
-      if (!closeToGreen(filterData.data[i], filterData.data[i+1], filterData.data[i+2])) {
+      if (!closeToGreen(filterData.data[i], filterData.data[i + 1], filterData.data[i + 2])) {
         imgData = filterData;
       }
       res[i] = imgData.data[i];
@@ -55,7 +55,7 @@ const getCanvasStream = () => {
 
   // Get the Camera video
   OT.getUserMedia({
-    audioSource: null
+    audioSource: null,
   }).then((stream) => {
     cameraVideo = document.createElement('video');
     cameraVideo.srcObject = stream;
@@ -89,22 +89,22 @@ const getCanvasStream = () => {
       if (cameraVideo) {
         cameraVideo.pause();
       }
-    }
+    },
   };
 };
 
 angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$rootScope',
-  function(OTSession, $rootScope) {
+  function (OTSession, $rootScope) {
     return {
       restrict: 'E',
       scope: {
-        props: '&'
+        props: '&',
       },
-      link: function(scope, element, attrs) {
-        var props = scope.props() || {};
+      link(scope, element, attrs) {
+        const props = scope.props() || {};
         props.width = props.width ? props.width : angular.element(element).width();
         props.height = props.height ? props.height : angular.element(element).height();
-        var oldChildren = angular.element(element).children();
+        const oldChildren = angular.element(element).children();
 
         if (scope.canvasStream) {
           scope.canvasStream.stop();
@@ -113,7 +113,7 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
         props.videoSource = scope.canvasStream.canvas.captureStream(30).getVideoTracks()[0];
 
         scope.publisher = OT.initPublisher(attrs.apikey || OTSession.session.apiKey,
-          element[0], props, function(err) {
+          element[0], props, (err) => {
             if (err) {
               scope.$emit('otPublisherError', err, scope.publisher);
             }
@@ -121,55 +121,53 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
         // Make transcluding work manually by putting the children back in there
         angular.element(element).append(oldChildren);
         scope.publisher.on({
-          accessDenied: function() {
+          accessDenied() {
             scope.$emit('otAccessDenied');
           },
-          accessDialogOpened: function() {
+          accessDialogOpened() {
             scope.$emit('otAccessDialogOpened');
           },
-          accessDialogClosed: function() {
+          accessDialogClosed() {
             scope.$emit('otAccessDialogClosed');
           },
-          accessAllowed: function() {
+          accessAllowed() {
             angular.element(element).addClass('allowed');
             scope.$emit('otAccessAllowed');
           },
-          loaded: function() {
+          loaded() {
             $rootScope.$broadcast('otLayout');
           },
-          streamCreated: function(event) {
+          streamCreated(event) {
             scope.$emit('otStreamCreated', event);
           },
-          streamDestroyed: function(event) {
+          streamDestroyed(event) {
             scope.$emit('otStreamDestroyed', event);
           },
-          videoElementCreated: function(event) {
-            event.element.addEventListener('resize', function() {
+          videoElementCreated(event) {
+            event.element.addEventListener('resize', () => {
               $rootScope.$broadcast('otLayout');
             });
-          }
+          },
         });
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', () => {
           if (OTSession.session) OTSession.session.unpublish(scope.publisher);
           else scope.publisher.destroy();
           if (scope.canvasStream) {
             scope.canvasStream.stop();
           }
-          OTSession.publishers = OTSession.publishers.filter(function(publisher) {
-            return publisher !== scope.publisher;
-          });
+          OTSession.publishers = OTSession.publishers.filter(publisher => publisher !== scope.publisher);
           scope.publisher = null;
         });
         if (OTSession.session && (OTSession.session.connected ||
           (OTSession.session.isConnected && OTSession.session.isConnected()))) {
-          OTSession.session.publish(scope.publisher, function(err) {
+          OTSession.session.publish(scope.publisher, (err) => {
             if (err) {
               scope.$emit('otPublisherError', err, scope.publisher);
             }
           });
         }
         OTSession.addPublisher(scope.publisher);
-      }
+      },
     };
-  }
+  },
 ]);

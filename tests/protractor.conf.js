@@ -1,38 +1,38 @@
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 // Determine the protocol the app is running on
-var protocol = (function() {
-  var useSSL = fs.existsSync(path.join(__dirname, '..', 'server.key')) &&
+const protocol = (function () {
+  const useSSL = fs.existsSync(path.join(__dirname, '..', 'server.key')) &&
     fs.existsSync(path.join(__dirname, '..', 'server.crt'));
   return process.env.HEROKU || !useSSL ? 'http' : 'https';
-})();
+}());
 
 // Determine the port the app is running on
-var port = (function() {
-  var appConfigFilePath = path.join(__dirname, '..', 'config.json');
-  var port = 5000;
+const port = (function () {
+  const appConfigFilePath = path.join(__dirname, '..', 'config.json');
+  let port = 5000;
   if (process.env.HEROKU || process.env.TRAVIS) {
     port = process.env.PORT;
   } else if (fs.existsSync(appConfigFilePath)) {
     port = require(appConfigFilePath).port;
   }
   return port;
-})();
+}());
 
 // Set the base URL based on the above protocol and port
-var baseUrl = protocol + '://localhost:' + port + '/';
+const baseUrl = `${protocol}://localhost:${port}/`;
 
 function getCapabilitiesFor(browserName, version) {
-  var base = {
-    'tunnel-identifier' : process.env.TRAVIS_JOB_NUMBER,
-    'name': browserName + version + '-' + process.env.TRAVIS_BRANCH + '-' +
-      process.env.TRAVIS_PULL_REQUEST,
-    'build': process.env.TRAVIS_BUILD_NUMBER,
-    'prerun': {
-      'executable': baseUrl + 'SauceLabsInstaller.exe',
-      'background': false
-    }
+  const base = {
+    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
+    name: `${browserName + version}-${process.env.TRAVIS_BRANCH}-${
+      process.env.TRAVIS_PULL_REQUEST}`,
+    build: process.env.TRAVIS_BUILD_NUMBER,
+    prerun: {
+      executable: `${baseUrl}SauceLabsInstaller.exe`,
+      background: false,
+    },
   };
   // Sauce Labs Supports IE 10 on Windows 8 and IE 11 on Windows 8.1
   base.platform = version === '10' ? 'Windows 8' : 'Windows 8.1';
@@ -40,8 +40,8 @@ function getCapabilitiesFor(browserName, version) {
   base.version = version;
   return base;
 }
-var config;
-switch(process.env.BROWSER) {
+let config;
+switch (process.env.BROWSER) {
   case 'ie':
     config = {
       allScriptsTimeout: 30000,
@@ -50,20 +50,20 @@ switch(process.env.BROWSER) {
       sauceKey: process.env.SAUCE_ACCESS_KEY,
 
       specs: [
-        'e2e/ie/iesmoketest.js'
+        'e2e/ie/iesmoketest.js',
       ],
 
       capabilities: getCapabilitiesFor(process.env.BROWSER, process.env.BVER),
 
-      baseUrl: baseUrl,
+      baseUrl,
 
       framework: 'jasmine',
 
       jasmineNodeOpts: {
-        defaultTimeoutInterval: 90000
-      }
+        defaultTimeoutInterval: 90000,
+      },
     };
-  break;
+    break;
   case 'firefox':
     var helper = require('./firefox-helper.js');
 
@@ -71,17 +71,17 @@ switch(process.env.BROWSER) {
       allScriptsTimeout: 11000,
 
       specs: [
-        'e2e/*.js'
+        'e2e/*.js',
       ],
 
       getMultiCapabilities: helper.getFirefoxProfile,
 
-      //seleniumAddress: 'http://hub.browserstack.com/wd/hub',
+      // seleniumAddress: 'http://hub.browserstack.com/wd/hub',
       directConnect: true,
 
       keepAlive: true,
 
-      baseUrl: baseUrl,
+      baseUrl,
 
       firefoxPath: process.env.BROWSERBIN,
 
@@ -89,49 +89,49 @@ switch(process.env.BROWSER) {
 
       params: {
         testScreenSharing: true,
-        phoneNumber: process.env.PHONE_NUMBER || ""
+        phoneNumber: process.env.PHONE_NUMBER || '',
       },
 
       jasmineNodeOpts: {
-        defaultTimeoutInterval: 60000
-      }
+        defaultTimeoutInterval: 60000,
+      },
     };
-  break;
+    break;
   default:
   case 'chrome':
     config = {
       allScriptsTimeout: 11000,
 
       specs: [
-        'e2e/*.js'
+        'e2e/*.js',
       ],
 
       capabilities: {
-        'browserName': 'chrome',
-        'chromeOptions': {
-          'args': ['auto-select-desktop-capture-source="Entire screen"',
+        browserName: 'chrome',
+        chromeOptions: {
+          args: ['auto-select-desktop-capture-source="Entire screen"',
             'use-fake-device-for-media-stream',
             'use-fake-ui-for-media-stream', 'disable-popup-blocking', '--window-size=800,600'],
-          'binary': process.env.BROWSERBIN
-        }
+          binary: process.env.BROWSERBIN,
+        },
       },
 
       directConnect: true,
 
-      baseUrl: baseUrl,
+      baseUrl,
 
       params: {
         testScreenSharing: false,
-        phoneNumber: process.env.PHONE_NUMBER || ""
+        phoneNumber: process.env.PHONE_NUMBER || '',
       },
 
       framework: 'jasmine',
 
       jasmineNodeOpts: {
-        defaultTimeoutInterval: 60000
-      }
+        defaultTimeoutInterval: 60000,
+      },
     };
-  break;
-};
+    break;
+}
 
 exports.config = config;

@@ -5,9 +5,9 @@ function SubscriberReport(subscriber) {
 }
 
 angular.module('opentok-meet').factory('ReportService', [
-  function() {
+  function () {
     return {
-      report: function(subscriber, report) {
+      report(subscriber, report) {
         console.log(subscriber);
         OT.analytics.logEvent({
           action: 'SubscriberQuality',
@@ -16,21 +16,21 @@ angular.module('opentok-meet').factory('ReportService', [
           subscriberId: subscriber.widgetId,
           audioScore: report.audioScore,
           videoScore: report.videoScore,
-          description: report.description
+          description: report.description,
         });
-      }
+      },
     };
-  }
+  },
 ]);
 
 //
 
 angular.module('opentok-meet').directive('subscriberReport', ['OTSession', 'ReportService',
-  '$timeout', function(OTSession, ReportService, $timeout) {
+  '$timeout', function (OTSession, ReportService, $timeout) {
     return {
       restrict: 'E',
       scope: {
-        stream: '='
+        stream: '=',
       },
       template: '<button class="show-report-btn ion-ios7-star-outline" ' +
         'ng-class="{\'show-report\': showReport}"></button>' +
@@ -52,31 +52,32 @@ angular.module('opentok-meet').directive('subscriberReport', ['OTSession', 'Repo
         '<p>Other info: <textarea ng-model="report.description" ></textarea></p>' +
         '<button class="send-report-btn">Send</button>' +
         '</div>',
-      link: function(scope, element) {
-        var subscriber, subscriberId;
-        var timeout = $timeout(function () {
+      link(scope, element) {
+        let subscriber,
+          subscriberId;
+        const timeout = $timeout(() => {
           // subscribe hasn't been called yet so we wait a few milliseconds
           subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
           subscriberId = subscriber.id;
         }, 100);
 
-        angular.element(element).find('button.show-report-btn').on('click', function() {
+        angular.element(element).find('button.show-report-btn').on('click', () => {
           scope.showReport = !scope.showReport;
           subscriber.setStyle({
-            buttonDisplayMode: scope.showReport ? 'on' : 'auto'
+            buttonDisplayMode: scope.showReport ? 'on' : 'auto',
           });
           scope.$apply();
         });
-        angular.element(element).find('button.send-report-btn').on('click', function() {
+        angular.element(element).find('button.send-report-btn').on('click', () => {
           ReportService.report(subscriber, scope.report, scope.report);
           scope.showReport = false;
           subscriber.setStyle({
-            buttonDisplayMode: scope.showReport ? 'on' : 'auto'
+            buttonDisplayMode: scope.showReport ? 'on' : 'auto',
           });
           scope.$apply();
         });
         scope.report = { audioScore: '3', videoScore: '3', description: '' };
-      }
+      },
     };
-  }
+  },
 ]);

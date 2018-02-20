@@ -1,7 +1,8 @@
-var errorReporting = require('../lib/error-reporting.js');
+const errorReporting = require('../lib/error-reporting.js');
+
 errorReporting();
 
-var angular = require('angular');
+const angular = require('angular');
 
 require('./controller.js');
 

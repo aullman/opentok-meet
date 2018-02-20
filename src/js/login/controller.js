@@ -1,29 +1,29 @@
-var isp2p = function (room) {
+const isp2p = function (room) {
   return room && room.toLowerCase().indexOf('p2p') > -1;
 };
 
 angular.module('opentok-meet-login', [])
-  .controller('MainCtrl', ['$scope', '$window', function($scope, $window) {
+  .controller('MainCtrl', ['$scope', '$window', function ($scope, $window) {
     $scope.room = '';
     $scope.roomType = 'normal';
     $scope.advanced = false;
     $scope.h264 = false;
     $scope.dtx = false;
-    $scope.joinRoom = function() {
-      var url = $window.location.href + encodeURIComponent($scope.room);
+    $scope.joinRoom = function () {
+      let url = $window.location.href + encodeURIComponent($scope.room);
       if ($scope.roomType !== 'normal') {
-        url += '/' + $scope.roomType;
+        url += `/${$scope.roomType}`;
       }
       if ($scope.h264) {
         url += '?h264=true';
       }
       if ($scope.dtx) {
-        url += ($scope.h264 ? '&' : '?') + 'dtx=true';
+        url += `${$scope.h264 ? '&' : '?'}dtx=true`;
       }
       $window.location.href = url;
     };
     $scope.p2p = false;
-    $scope.$watch('room', function(room) {
+    $scope.$watch('room', (room) => {
       $scope.p2p = isp2p(room);
     });
     $scope.p2pChanged = function () {

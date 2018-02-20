@@ -1,30 +1,30 @@
-var request = require('request');
-var jwt = require('jwt-simple');
+const request = require('request');
+const jwt = require('jwt-simple');
 
 function Anvil(url) {
-  var createJwtToken = function(props) {
+  const createJwtToken = function (props) {
     props = props || {};
 
-    var claims = {
+    const claims = {
       iat: props.issuedAt || Math.floor((Date.now() / 1000)),
       exp: props.expire || Math.floor((Date.now() / 1000) + 300),
       iss: props.issuer,
       ist: props.issuerType,
       scope: props.scope,
-      nonce: Math.random()
+      nonce: Math.random(),
     };
 
-    var token = jwt.encode(claims, props.secret);
+    const token = jwt.encode(claims, props.secret);
     return token;
   };
 
-  var generateJwtHeader = function(props) {
-    var token = createJwtToken(props);
+  const generateJwtHeader = function (props) {
+    const token = createJwtToken(props);
 
-    return {'X-OPENTOK-AUTH': token};
+    return { 'X-OPENTOK-AUTH': token };
   };
 
-  this.getSubscriberInfo = function(payload, done) {
+  this.getSubscriberInfo = function (payload, done) {
     payload = payload || {};
 
     if (!payload.apiSecret) {
@@ -32,30 +32,30 @@ function Anvil(url) {
       return;
     }
 
-    var endpoint = url + '/v2/project/' + payload.apiKey +
-      '/session/' + payload.sessionId + '/subscriber/all/' + payload.subscriberId;
+    const endpoint = `${url}/v2/project/${payload.apiKey
+      }/session/${payload.sessionId}/subscriber/all/${payload.subscriberId}`;
 
-    var props = {
+    const props = {
       issuer: payload.apiKey,
       secret: payload.apiSecret,
       issuerType: 'project',
-      scope: 'session.read'
+      scope: 'session.read',
     };
 
-    var header = generateJwtHeader(props);
+    const header = generateJwtHeader(props);
 
     request({
       method: 'GET',
       uri: endpoint,
       headers: header,
-      json: true
-    }, function(err, res) {
+      json: true,
+    }, (err, res) => {
       if (err) {
         done(err);
         return;
       } else if (res.statusCode !== 200) {
         console.log('error response ', res.statusCode, res.body);
-        done(new Error('invalid response from anvil ' + res.statusCode));
+        done(new Error(`invalid response from anvil ${res.statusCode}`));
         return;
       }
 

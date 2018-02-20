@@ -1,39 +1,39 @@
-var Anvil = require('./anvil');
+const Anvil = require('./anvil');
 
 module.exports = function (app, config, redis, ot) {
-  var RoomStore = require('../../server/roomstore.js')(redis, ot);
-  var anvil = new Anvil('https://anvil-tbdev.opentok.com');
+  const RoomStore = require('../../server/roomstore.js')(redis, ot);
+  const anvil = new Anvil('https://anvil-tbdev.opentok.com');
 
 
-  app.get('/:room/subscriber/:subscriberId', function(req, res) {
-    var room = req.param('room');
-    var subscriberId = req.param('subscriberId');
+  app.get('/:room/subscriber/:subscriberId', (req, res) => {
+    const room = req.param('room');
+    const subscriberId = req.param('subscriberId');
 
-    RoomStore.getRoom(room, function(err, sessionId, apiKey, secret) {
+    RoomStore.getRoom(room, (err, sessionId, apiKey, secret) => {
       if (err) {
         console.error('Error getting room: ', err);
         res.send({ error: err.message });
         return;
-      } else if(!apiKey || !secret) {
+      } else if (!apiKey || !secret) {
         apiKey = ot.apiKey;
         secret = ot.apiSecret;
       }
 
-      var payload = {
-        apiKey: apiKey,
+      const payload = {
+        apiKey,
         apiSecret: secret,
-        sessionId: sessionId,
-        subscriberId: subscriberId
+        sessionId,
+        subscriberId,
       };
 
-      anvil.getSubscriberInfo(payload, function(err, info) {
+      anvil.getSubscriberInfo(payload, (err, info) => {
         if (err) {
           console.error('Error retrieving subscriber information: ', err);
           res.send({ error: err.message });
           return;
         }
 
-        res.send({info: info});
+        res.send({ info });
       });
     });
   });
