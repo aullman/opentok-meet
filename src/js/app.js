@@ -1,10 +1,11 @@
-/*jshint unused:false*/
 require('./h264/add-regeneration-capability.js');
 
+// eslint-disable-next-line
 window.$ = window.jQuery = require('jquery');
 
-var angular = require('angular');
-var errorReporting = require('./lib/error-reporting.js');
+const angular = require('angular');
+const errorReporting = require('./lib/error-reporting.js');
+
 errorReporting(angular);
 
 require('opentok-angular');

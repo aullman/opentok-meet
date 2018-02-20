@@ -1,5 +1,7 @@
-var Raven = require('raven-js');
-var RavenAngular = require('raven-js/plugins/angular');
+/* global VERSION COMMITHASH */
+
+const Raven = require('raven-js');
+const RavenAngular = require('raven-js/plugins/angular');
 
 module.exports = function installErrorReporting(angular) {
   Raven
@@ -8,9 +10,9 @@ module.exports = function installErrorReporting(angular) {
       {
         release: VERSION,
         tags: {
-          commitHash: COMMITHASH
+          commitHash: COMMITHASH,
         },
-        debug: true
+        debug: true,
       }
     )
     .addPlugin(RavenAngular, angular)

@@ -1,9 +1,9 @@
-module.exports = function (app, config) {
-  app.get('/:room/screen', function(req, res) {
+module.exports = (app, config) => {
+  app.get('/:room/screen', (req, res) => {
     res.render('screen', {
       room: req.param('room'),
       chromeExtensionId: config.chromeExtensionId,
-      opentokJs: config.opentokJs
+      opentokJs: config.opentokJs,
     });
   });
 };

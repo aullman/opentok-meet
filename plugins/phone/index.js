@@ -1,18 +1,20 @@
-module.exports = function (app, config, redis, ot) {
-  var RoomStore = require('../../server/roomstore.js')(redis, ot);
+const roomstore = require('../../server/roomstore.js');
+
+module.exports = (app, config, redis, ot) => {
+  const RoomStore = roomstore(redis, ot);
 
   function createPinCode(room, callback) {
-    var max = 99999;
-    var min = 0;
-    var pinCode = Math.floor(Math.random() * (max - min + 1)) + min;
+    const max = 99999;
+    const min = 0;
+    const pinCode = Math.floor(Math.random() * ((max - min) + 1)) + min;
 
-    redis.hset('phone_rooms', room, pinCode, function(err) {
+    redis.hset('phone_rooms', room, pinCode, (err) => {
       if (err) {
         callback(err);
       }
-      redis.hset('phone_pinCodes', pinCode, room, function(err) {
-        if (err) {
-          callback(err);
+      redis.hset('phone_pinCodes', pinCode, room, (setErr) => {
+        if (setErr) {
+          callback(setErr);
         }
         callback(null, pinCode);
       });
@@ -20,10 +22,10 @@ module.exports = function (app, config, redis, ot) {
   }
 
   function getPinCode(room, callback) {
-    redis.hget('phone_rooms', room, function(err, pinCode) {
+    redis.hget('phone_rooms', room, (err, pinCode) => {
       if (err || !pinCode) {
-        createPinCode(room, function(err, pinCode) {
-          callback(err, pinCode);
+        createPinCode(room, (createErr, newPinCode) => {
+          callback(createErr, newPinCode);
         });
       } else {
         callback(null, pinCode);
@@ -32,7 +34,7 @@ module.exports = function (app, config, redis, ot) {
   }
 
   function findRoomByPinCode(pinCode, callback) {
-    redis.hget('phone_pinCodes', pinCode, function(err, room) {
+    redis.hget('phone_pinCodes', pinCode, (err, room) => {
       if (err || !room) {
         callback(new Error('Not Found'));
         return;
@@ -41,31 +43,31 @@ module.exports = function (app, config, redis, ot) {
     });
   }
 
-  app.get('/:room/phone', function(req, res) {
-    var room = req.param('room');
+  app.get('/:room/phone', (req, res) => {
+    const room = req.param('room');
 
-    getPinCode(room, function(err, pinCode) {
+    getPinCode(room, (err, pinCode) => {
       res.render('phone', {
         room: req.param('room'),
         phoneNumber: config.phoneNumber || process.env.PHONE_NUMBER,
-        pinCode: pinCode,
+        pinCode,
       });
     });
   });
 
-  app.get('/phone/find', function(req, res) {
-    var pinCode = req.param('pinCode');
-    findRoomByPinCode(pinCode, function(err, sessionId, apiKey, secret) {
+  app.get('/phone/find', (req, res) => {
+    const pinCode = req.param('pinCode');
+    findRoomByPinCode(pinCode, (err, sessionId, apiKey, secret) => {
       if (err) {
         res.send(404);
         return;
       }
       res.json({
-        sessionId: sessionId,
+        sessionId,
         apiKey: (apiKey && secret) ? apiKey : config.apiKey,
         token: ot.generateToken(sessionId, {
-          role: 'publisher'
-        })
+          role: 'publisher',
+        }),
       });
     });
   });

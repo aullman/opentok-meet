@@ -1,11 +1,15 @@
-var angular = require('angular');
+const angular = require('angular');
 require('angular-mocks');
 require('../../src/js/app.js');
 
-describe('audioAcquisitionProblem', function () {
-  var scope, element, mockPublisher, OTSession, $window;
+describe('audioAcquisitionProblem', () => {
+  let scope;
+  let element;
+  let mockPublisher;
+  let OTSession;
+  let $window;
   beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(function ($rootScope, $compile, _OTSession_, _$window_) {
+  beforeEach(inject(($rootScope, $compile, _OTSession_, _$window_) => {
     scope = $rootScope.$new();
     OTSession = _OTSession_;
     $window = _$window_;
@@ -20,13 +24,14 @@ describe('audioAcquisitionProblem', function () {
     scope.$digest();
   }));
 
-  it('shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
-    function (done) {
+  it(
+    'shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
+    (done) => {
       expect(scope.showAlert).toBe(false);
       OTSession.addPublisher(mockPublisher);
-      setTimeout(function() {
+      setTimeout(() => {
         mockPublisher.trigger('audioAcquisitionProblem', { method: 'mock' });
-        setTimeout(function() {
+        setTimeout(() => {
           expect(scope.showAlert).toBe(true);
           done();
         });

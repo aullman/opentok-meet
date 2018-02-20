@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '6'
+- '8'
 before_install:
 - export DISPLAY=:99.0
 - if [ -f /etc/init.d/xvfb ];then sh -e /etc/init.d/xvfb start; fi
@@ -20,6 +20,8 @@ matrix:
   fast_finish: true
 
   include:
+    - os: linux
+      env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=chrome  BVER=stable
     - os: linux
