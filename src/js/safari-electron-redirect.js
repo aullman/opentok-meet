@@ -5,7 +5,7 @@ if (
   navigator.userAgent.indexOf('Safari') !== -1 &&
   navigator.userAgent.indexOf('Chrome') === -1
 ) {
-  const origin = location.origin;
+  const origin = window.location.origin;
 
   const loadedPromise = new Promise((resolve) => {
     if (document.readyState === 'complete') {
@@ -23,11 +23,11 @@ if (
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
       document.body.appendChild(iframe);
-      iframe.src = `meet://home${location.pathname}`;
+      iframe.src = `meet://home${window.location.pathname}`;
     })
     .then(() => {
       // Need this not to happen synchronously with the iframe above so that the app launch attempt
       // occurs before going to the new page.
-      location.href = `${origin}/electron/download`;
+      window.location.href = `${origin}/electron/download`;
     });
 }

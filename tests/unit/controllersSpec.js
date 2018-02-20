@@ -34,7 +34,7 @@ describe('OpenTok Meet controllers', () => {
       SimulcastServiceMock = jasmine.createSpyObj('SimulcastService', ['init']);
       windowMock = jasmine.createSpyObj('$window', ['addEventListener', 'open']);
       windowMock.location = {};
-      OT.$.eventing(windowMock);  // Add event handling to my mock window
+      OT.$.eventing(windowMock); // Add event handling to my mock window
       documentMock = {
         context: {
           body: OT.$.eventing({}),
@@ -241,8 +241,7 @@ describe('OpenTok Meet controllers', () => {
         expect(scope.shareURL).toBe('testRoom');
       });
       it('calls OTSession.init', () => {
-        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId', 'mockToken',
-          jasmine.any(Function));
+        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId', 'mockToken', jasmine.any(Function));
       });
 
       describe('OTSession.init', () => {
@@ -278,8 +277,7 @@ describe('OpenTok Meet controllers', () => {
           it('listens for events on the session', () => {
             expect(mockSession.on).toHaveBeenCalledWith('sessionConnected', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
-            expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped',
-              jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
           });
@@ -402,7 +400,8 @@ describe('OpenTok Meet controllers', () => {
     });
 
     describe('changeRoom', () => {
-      it('calls session.disconnect then waits for sessionDisconnected and then calls changeRoom',
+      it(
+        'calls session.disconnect then waits for sessionDisconnected and then calls changeRoom',
         (done) => {
           scope.changeRoom();
           expect(scope.session.disconnect).toHaveBeenCalled();
@@ -413,7 +412,8 @@ describe('OpenTok Meet controllers', () => {
             expect(RoomServiceMock.changeRoom).toHaveBeenCalled();
             done();
           }, 100);
-        });
+        }
+      );
     });
 
     describe('zoom', () => {

@@ -115,12 +115,14 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
         scope.canvasStream = getCanvasStream();
         props.videoSource = scope.canvasStream.canvas.captureStream(30).getVideoTracks()[0];
 
-        scope.publisher = OT.initPublisher(attrs.apikey || OTSession.session.apiKey,
+        scope.publisher = OT.initPublisher(
+          attrs.apikey || OTSession.session.apiKey,
           element[0], props, (err) => {
             if (err) {
               scope.$emit('otPublisherError', err, scope.publisher);
             }
-          });
+          }
+        );
         // Make transcluding work manually by putting the children back in there
         angular.element(element).append(oldChildren);
         scope.publisher.on({

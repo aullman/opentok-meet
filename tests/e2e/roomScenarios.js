@@ -49,10 +49,8 @@ describe('Room', () => {
       browser.wait(() => element(by.css('.OT_publisher:not(.OT_loading)')).isPresent(), 10000);
       const publisherVideo = publisher.element(by.css('video'));
       expect(publisherVideo).toBeDefined();
-      expect(publisherVideo.getAttribute('videoWidth')).toBe(
-        browser.browserName === 'chrome' ? '1280' : '640');
-      expect(publisherVideo.getAttribute('videoHeight')).toBe(
-        browser.browserName === 'chrome' ? '720' : '480');
+      expect(publisherVideo.getAttribute('videoWidth')).toBe(browser.browserName === 'chrome' ? '1280' : '640');
+      expect(publisherVideo.getAttribute('videoHeight')).toBe(browser.browserName === 'chrome' ? '720' : '480');
     });
 
     it('moves when it is dragged', () => {
@@ -132,8 +130,7 @@ describe('Room', () => {
 
         const verifyMuted = (muted) => {
           expect(muteMicButton.getAttribute('class')).toContain(muted ? 'green' : 'red');
-          expect(muteMicButton.getAttribute('class')).toContain(
-            muted ? 'ion-ios7-mic-off' : 'ion-ios7-mic');
+          expect(muteMicButton.getAttribute('class')).toContain(muted ? 'ion-ios7-mic-off' : 'ion-ios7-mic');
           if (muted) {
             expect(publisherMuteBtn.getAttribute('class')).toContain('OT_active');
           } else {
@@ -157,9 +154,9 @@ describe('Room', () => {
       const audioAcquisitionProblem = element(by.css('#facePublisher audio-acquisition-problem'));
       expect(audioAcquisitionProblem.isDisplayed()).toBe(false);
       browser.driver.executeScript('OT.publishers.find().trigger(\'audioAcquisitionProblem\', { method: \'mock\' });')
-      .then(() => {
-        expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
-      });
+        .then(() => {
+          expect(audioAcquisitionProblem.isDisplayed()).toBe(true);
+        });
     });
 
     it('displays an error if there is a publish error', () => {
@@ -168,9 +165,9 @@ describe('Room', () => {
       expect(publisher.isPresent()).toBe(true);
       browser.driver.executeScript('angular.element("ot-publisher").scope().$emit' +
         '("otPublisherError", {message:"whatever"}, {id:"facePublisher"})').then(() => {
-          expect(publishErrors.isDisplayed()).toBe(true);
-          expect(publisher.isPresent()).toBe(false);
-        });
+        expect(publishErrors.isDisplayed()).toBe(true);
+        expect(publisher.isPresent()).toBe(false);
+      });
     });
   });
 
@@ -229,10 +226,8 @@ describe('Room', () => {
         browser.wait(() => element(by.css('.OT_publisher:not(.OT_loading)')).isPresent(), 10000);
         if (browser.browserName !== 'internet explorer') {
           const publisherVideo = publisher.element(by.css('video'));
-          expect(publisherVideo.getAttribute('videoWidth')).toBe(
-            browser.browserName === 'chrome' ? '1280' : '640');
-          expect(publisherVideo.getAttribute('videoHeight')).toBe(
-            browser.browserName === 'chrome' ? '720' : '480');
+          expect(publisherVideo.getAttribute('videoWidth')).toBe(browser.browserName === 'chrome' ? '1280' : '640');
+          expect(publisherVideo.getAttribute('videoHeight')).toBe(browser.browserName === 'chrome' ? '720' : '480');
         }
       });
 
@@ -270,19 +265,21 @@ describe('Room', () => {
         expect(showWhiteboardBtn.getAttribute('class')).toContain('green');
       });
 
-      it('toggles the whiteboard when you click it and the button goes between green and red',
-          () => {
-            browser.wait(() => element(by.css('ot-whiteboard')).isPresent(), 10000);
-            const whiteboard = element(by.css('ot-whiteboard'));
-            expect(whiteboard.isPresent()).toBe(true);
-            expect(whiteboard.isDisplayed()).toBe(false);
-            showWhiteboardBtn.click();
-            expect(showWhiteboardBtn.getAttribute('class')).toContain('red');
-            expect(whiteboard.isDisplayed()).toBe(true);
-            showWhiteboardBtn.click();
-            expect(showWhiteboardBtn.getAttribute('class')).toContain('green');
-            expect(whiteboard.isDisplayed()).toBe(false);
-          });
+      it(
+        'toggles the whiteboard when you click it and the button goes between green and red',
+        () => {
+          browser.wait(() => element(by.css('ot-whiteboard')).isPresent(), 10000);
+          const whiteboard = element(by.css('ot-whiteboard'));
+          expect(whiteboard.isPresent()).toBe(true);
+          expect(whiteboard.isDisplayed()).toBe(false);
+          showWhiteboardBtn.click();
+          expect(showWhiteboardBtn.getAttribute('class')).toContain('red');
+          expect(whiteboard.isDisplayed()).toBe(true);
+          showWhiteboardBtn.click();
+          expect(showWhiteboardBtn.getAttribute('class')).toContain('green');
+          expect(whiteboard.isDisplayed()).toBe(false);
+        }
+      );
     });
 
     describe('showEditorBtn', () => {
@@ -293,19 +290,21 @@ describe('Room', () => {
         expect(showEditorBtn.getAttribute('class')).toContain('green');
       });
 
-      it('toggles the editor when you click it and the button goes between green and red',
-          () => {
-            browser.wait(() => element(by.css('ot-editor')).isPresent(), 10000);
-            const editor = element(by.css('ot-editor'));
-            expect(editor.isPresent()).toBe(true);
-            expect(editor.isDisplayed()).toBe(false);
-            showEditorBtn.click();
-            expect(editor.isDisplayed()).toBe(true);
-            expect(showEditorBtn.getAttribute('class')).toContain('red');
-            showEditorBtn.click();
-            expect(editor.isDisplayed()).toBe(false);
-            expect(showEditorBtn.getAttribute('class')).toContain('green');
-          });
+      it(
+        'toggles the editor when you click it and the button goes between green and red',
+        () => {
+          browser.wait(() => element(by.css('ot-editor')).isPresent(), 10000);
+          const editor = element(by.css('ot-editor'));
+          expect(editor.isPresent()).toBe(true);
+          expect(editor.isDisplayed()).toBe(false);
+          showEditorBtn.click();
+          expect(editor.isDisplayed()).toBe(true);
+          expect(showEditorBtn.getAttribute('class')).toContain('red');
+          showEditorBtn.click();
+          expect(editor.isDisplayed()).toBe(false);
+          expect(showEditorBtn.getAttribute('class')).toContain('green');
+        }
+      );
     });
 
     describe('startArchiveBtn', () => {
@@ -358,22 +357,24 @@ describe('Room', () => {
             expect(newLocation).not.toEqual(oldLocation);
           });
         });
-        it('shows an install prompt when you click it and the extension is not installed',
-            (done) => {
-              if (browser.browserName === 'chrome') {
-                browser.driver.executeScript(
-              'OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(() => {
-                expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
-                expect(screenShareBtn.getAttribute('class')).toContain('green');
-                screenShareBtn.click();
-                expect(screenShareBtn.getAttribute('disabled')).toBe('true');
-                browser.wait(() => element(by.css('#installScreenshareExtension')).isPresent(), 10000);
-                done();
-              });
-              } else {
-                done();
-              }
-            });
+        it(
+          'shows an install prompt when you click it and the extension is not installed',
+          (done) => {
+            if (browser.browserName === 'chrome') {
+              browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+                .then(() => {
+                  expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+                  expect(screenShareBtn.getAttribute('class')).toContain('green');
+                  screenShareBtn.click();
+                  expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+                  browser.wait(() => element(by.css('#installScreenshareExtension')).isPresent(), 10000);
+                  done();
+                });
+            } else {
+              done();
+            }
+          }
+        );
       });
     }
 

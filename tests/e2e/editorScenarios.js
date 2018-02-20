@@ -44,8 +44,7 @@ describe('using the collaborative editor', () => {
 
       secondBrowser = browser.forkNewDriverInstance(true);
       // Wait for flashing red dot indicator
-      secondBrowser.wait(() => secondBrowser.element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn'))
-          .isPresent(), 10000);
+      secondBrowser.wait(() => secondBrowser.element(by.css('body.mouse-move .unread-indicator.unread #showEditorBtn')).isPresent(), 10000);
       secondBrowser.element(by.css('button#showEditorBtn')).click();
 
       secondBrowser.wait(() => secondBrowser.element(by.css('ot-layout ot-editor .opentok-editor')).isDisplayed(), 5000);
@@ -68,8 +67,9 @@ describe('using the collaborative editor', () => {
       secondBrowser.sleep(2000).then(() => {
         // wait for text to show up in the first browser
         browser.wait(
-          () => firstBrowserText.getInnerHtml().then(innerHTML => innerHTML === secondInnerHTML)
-        , 10000);
+          () => firstBrowserText.getInnerHtml().then(innerHTML => innerHTML === secondInnerHTML),
+          10000
+        );
         done();
       });
     });

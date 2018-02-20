@@ -53,16 +53,16 @@ if (browser.params.testScreenSharing) {
             secondBrowser.quit();
           });
           it('subscribes to the screen and it is big', () => {
-            const subscriberVideo = secondBrowser.element(by.css(
-              'ot-subscriber.OT_big:not(.OT_loading) video'));
+            const subscriberVideo = secondBrowser.element(by.css('ot-subscriber.OT_big:not(.OT_loading) video'));
             secondBrowser.wait(() => subscriberVideo.isPresent(), 10000);
           });
         });
       });
-      it('shows an install prompt when you click it and the extension is not installed',
-          (done) => {
-            if (browser.browserName === 'chrome') {
-              browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
+      it(
+        'shows an install prompt when you click it and the extension is not installed',
+        (done) => {
+          if (browser.browserName === 'chrome') {
+            browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
               .then(() => {
                 expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
                 expect(screenShareBtn.getAttribute('class')).toContain('green');
@@ -71,10 +71,11 @@ if (browser.params.testScreenSharing) {
                 browser.wait(() => element(by.css('#installScreenshareExtension')).isPresent(), 10000);
                 done();
               });
-            } else {
-              done();
-            }
-          });
+          } else {
+            done();
+          }
+        }
+      );
     });
   });
 }

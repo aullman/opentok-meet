@@ -59,8 +59,7 @@ describe('OpenTok Meet Screenshare Only Page', () => {
         callback = MockOTSession.init.calls.mostRecent().args[3];
       });
       it('calls OTSession.init', () => {
-        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId',
-          'mockToken', jasmine.any(Function));
+        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId', 'mockToken', jasmine.any(Function));
       });
       it('sets connected when the session is connected', () => {
         expect(scope.connected).toBe(false);

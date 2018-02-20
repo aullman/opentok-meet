@@ -24,8 +24,7 @@ if (process.env.HEROKU || process.env.TRAVIS) {
   try {
     config = JSON.parse(fs.readFileSync('./config.json'));
   } catch (err) {
-    console.log('Error reading config.json - have you copied config.json.sample to config.json? ',
-      err);
+    console.log('Error reading config.json - have you copied config.json.sample to config.json?', err);
     process.exit();
   }
 }

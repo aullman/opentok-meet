@@ -24,7 +24,8 @@ describe('audioAcquisitionProblem', () => {
     scope.$digest();
   }));
 
-  it('shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
+  it(
+    'shows the warning icon and and alert when the publisher triggers audioAcquisitionProblem',
     (done) => {
       expect(scope.showAlert).toBe(false);
       OTSession.addPublisher(mockPublisher);
@@ -35,6 +36,6 @@ describe('audioAcquisitionProblem', () => {
           done();
         });
       });
-    },
+    }
   );
 });

@@ -88,7 +88,7 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
           console.log('successfully installed');
         }, (err) => {
           console.error('failed to install', err);
-        } // eslint-disable-line
+        }
       );
     };
   }],

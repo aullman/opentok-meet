@@ -16,7 +16,7 @@ module.exports = (app, config, redis, ot) => {
         res.send({ error: err.message });
         return;
       } else if (!apiKey || !secret) {
-        apiKey = ot.apiKey;
+        ({ apiKey } = ot);
         secret = ot.apiSecret;
       }
 

@@ -35,7 +35,7 @@ module.exports = (h264, dtx) => {
     newPeerConnection.prototype = OrigPeerConnection.prototype;
 
     ['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection'].forEach((obj) => {
-        // Override objects if they exist in the window object
+      // Override objects if they exist in the window object
       if (window.hasOwnProperty(obj)) { // eslint-disable-line
         window[obj] = newPeerConnection;
       }

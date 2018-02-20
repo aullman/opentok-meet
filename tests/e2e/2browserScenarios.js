@@ -72,7 +72,7 @@ describe('2 browsers in the same room', () => {
         secondBrowser.driver.executeScript('$(\'#facePublisher\').css({top:200, left:0});')
           .then(() => {
             secondBrowser.actions().mouseDown(secondSubscriber).mouseUp().perform();
-          // Have to wait for the buttons to show up
+            // Have to wait for the buttons to show up
             secondBrowser.sleep(1000).then(() => {
               done();
             });
@@ -199,8 +199,7 @@ describe('2 browsers in the same room', () => {
         });
         // This has started failing for some reason in Firefox
         xit('subscribes to the screen and it is big', () => {
-          const subscriberVideo = element(by.css(
-            'ot-subscriber.OT_big:not(.OT_loading) video'));
+          const subscriberVideo = element(by.css('ot-subscriber.OT_big:not(.OT_loading) video'));
           browser.wait(() => subscriberVideo.isPresent(), 10000);
         });
       });

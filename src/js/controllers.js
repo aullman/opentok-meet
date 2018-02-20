@@ -1,7 +1,9 @@
 angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$window', '$document',
   '$timeout', 'OTSession', 'RoomService', 'baseURL', 'SimulcastService', 'NotificationService',
-  function RoomCtrl($scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL,
-    SimulcastService, NotificationService) {
+  function RoomCtrl(
+    $scope, $http, $window, $document, $timeout, OTSession, RoomService, baseURL, SimulcastService,
+    NotificationService
+  ) {
     $scope.streams = OTSession.streams;
     $scope.connections = OTSession.connections;
     $scope.publishing = false;
@@ -95,13 +97,10 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     };
 
     $scope.reportIssue = () => {
-      let url = `${'mailto:broken@tokbox.com?subject=Meet%20Issue%20Report&body=' +
-      'room: '}${$scope.room
-      } p2p: ${$scope.p2p
-      }${$scope.session ?
-      ` sessionId: ${$scope.session.sessionId
-      } connectionId: ${$scope.session.connection ? $scope.session.connection.connectionId : 'none'}`
-      : ''}`;
+      let url = `mailto:broken@tokbox.com?subject=Meet%20Issue%20Report&body=room: ${$scope.room}  p2p: ${$scope.p2p}`;
+      if ($scope.session) {
+        url += ` sessionId: ${$scope.session.sessionId} connectionId: ${($scope.session.connection ? $scope.session.connection.connectionId : 'none')}`;
+      }
       OT.publishers.forEach((publisher) => {
         if (publisher.stream) {
           url += ` publisher streamId: ${publisher.stream.streamId
@@ -151,7 +150,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
 
     NotificationService.init();
 
-  // Fetch the room info
+    // Fetch the room info
     RoomService.getRoom().then((roomData) => {
       if ($scope.session) {
         $scope.session.disconnect();

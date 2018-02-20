@@ -1,6 +1,7 @@
 require('../css/audio-acquisition-problem.css');
 
-angular.module('opentok-meet').directive('audioAcquisitionProblem',
+angular.module('opentok-meet').directive(
+  'audioAcquisitionProblem',
   ['OTSession', OTSession => ({
     restrict: 'E',
     template: `<i class="ion-alert-circled" title="Warning: audio acquisition problem
@@ -25,4 +26,5 @@ angular.module('opentok-meet').directive('audioAcquisitionProblem',
       };
       listenForIssue();
     },
-  })]);
+  })]
+);

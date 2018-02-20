@@ -34,9 +34,9 @@ const config = {
   devtool: 'source-map',
   module: {
     loaders: [
-            { test: /\.css$/, loader: 'style!css' },
-            { test: /\.html$/, loader: 'raw' },
-            // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
+      { test: /\.css$/, loader: 'style!css' },
+      { test: /\.html$/, loader: 'raw' },
+      // { test: /codemirror\/mode(?!.*(javascript|markdown)).*/, loader: 'null' }
     ],
   },
   resolveLoader: {

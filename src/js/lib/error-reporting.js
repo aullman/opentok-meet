@@ -13,7 +13,7 @@ module.exports = function installErrorReporting(angular) {
           commitHash: COMMITHASH,
         },
         debug: true,
-      } // eslint-disable-line
+      }
     )
     .addPlugin(RavenAngular, angular)
     .install();

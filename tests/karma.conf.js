@@ -74,8 +74,8 @@ module.exports = (config) => {
     webpack: {
       module: {
         loaders: [
-              { test: /\.css$/, loader: 'style!css' },
-              { test: /\.html$/, loader: 'raw' },
+          { test: /\.css$/, loader: 'style!css' },
+          { test: /\.html$/, loader: 'raw' },
           {
             test: /\.js$/,
             loader: 'babel-loader',

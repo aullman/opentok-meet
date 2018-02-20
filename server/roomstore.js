@@ -43,19 +43,20 @@ module.exports = (redis, ot) => {
                   console.error('Failed to set room', setErr);
                   goToRoom(setErr);
                 } else if (apiKey && secret) {
-                    // If there's a custom apiKey and secret store that
-                  redis.hset('apiKeys', room, JSON.stringify({
-                    apiKey,
-                    secret,
-                  }),
-                      (apiKeyErr) => {
-                        if (apiKeyErr) {
-                          console.error('Failed to set apiKey', apiKeyErr);
-                          goToRoom(apiKeyErr);
-                        } else {
-                          goToRoom(null, sessionId, apiKey, secret);
-                        }
-                      });
+                  // If there's a custom apiKey and secret store that
+                  redis.hset(
+                    'apiKeys',
+                    room,
+                    JSON.stringify({ apiKey, secret }),
+                    (apiKeyErr) => {
+                      if (apiKeyErr) {
+                        console.error('Failed to set apiKey', apiKeyErr);
+                        goToRoom(apiKeyErr);
+                      } else {
+                        goToRoom(null, sessionId, apiKey, secret);
+                      }
+                    }
+                  );
                 } else {
                   goToRoom(null, sessionId);
                 }

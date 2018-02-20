@@ -1,5 +1,6 @@
 // Controller for the standalone screen application /:room/screen
-angular.module('opentok-meet').controller('ScreenCtrl',
+angular.module('opentok-meet').controller(
+  'ScreenCtrl',
   ['$scope', 'RoomService', 'OTSession',
     function ScreenCtrl($scope, RoomService, OTSession) {
       $scope.connected = false;
@@ -28,4 +29,5 @@ angular.module('opentok-meet').controller('ScreenCtrl',
         videoSource: 'screen',
       };
     },
-  ]);
+  ]
+);

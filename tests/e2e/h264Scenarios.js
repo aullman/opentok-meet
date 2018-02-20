@@ -78,7 +78,7 @@ xdescribe('H264', () => {
       secondBrowser.wait(() => showStatsInfo.getInnerHtml().then((innerHTML) => {
         const statsRegexp = new RegExp('Video Codec: H264 <br>', 'gi');
         return statsRegexp.test(innerHTML);
-      }), 30000);  // Wait 30 seconds because that's how long QOS takes
+      }), 30000); // Wait 30 seconds because that's how long QOS takes
     });
   });
 });

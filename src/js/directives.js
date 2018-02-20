@@ -46,8 +46,8 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       const mouseUpHandler = function mouseUpHandler() {
         $document.unbind('mousemove touchmove', mouseMoveHandler);
         $document.unbind('mouseup touchend', mouseUpHandler);
-      // We only want to add this event once so we remove it in case we already
-      // added it previously
+        // We only want to add this event once so we remove it in case we already
+        // added it previously
         angular.element($window).unbind('resize', resizeHandler);
         angular.element($window).on('resize', resizeHandler);
       };

@@ -32,8 +32,7 @@ function Anvil(url) {
       return;
     }
 
-    const endpoint = `${url}/v2/project/${payload.apiKey
-      }/session/${payload.sessionId}/subscriber/all/${payload.subscriberId}`;
+    const endpoint = `${url}/v2/project/${payload.apiKey}/session/${payload.sessionId}/subscriber/all/${payload.subscriberId}`;
 
     const props = {
       issuer: payload.apiKey,
