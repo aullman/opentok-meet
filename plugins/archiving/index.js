@@ -67,6 +67,7 @@ module.exports = (app, config, redis, ot) => {
       }
       otSDK.startArchive(sessionId, {
         name: room,
+        resolution: '1280x720'
       }, (startErr, archive) => {
         if (startErr) {
           console.error('Error starting archive: ', startErr);
