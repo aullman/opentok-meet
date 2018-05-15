@@ -5,15 +5,18 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "~1.6.3",
-    "compression": "^1.6.2",
+    "angular": "^1.6.10",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^6.4.0",
+    "babel-preset-env": "^1.7.0",
+    "compression": "^1.7.2",
     "css-loader": "^0.23.1",
-    "ejs": ">= 0.0.1",
+    "ejs": "^2.6.1",
     "express": "3.1.x",
     "glob": "^5.0.15",
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
-    "opentok": "^2.2.3",
+    "opentok": "^2.6.2",
     "opentok-angular": "^2.1.0",
     "opentok-editor": "^0.3.3",
     "opentok-textchat": "^1.2.0",
@@ -23,10 +26,7 @@
     "raw-loader": "^0.5.1",
     "redis": "~0.10.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.0",
-    "babel-core": "^6.23.1",
-    "babel-loader": "^6.4.0",
-    "babel-preset-env": "^1.2.1"
+    "webpack": "^1.13.0"
   },
   "engines": {
     "node": "8.x",
@@ -48,11 +48,11 @@
   "devDependencies": {
     "angular-mocks": "1.6.0",
     "codeclimate-test-reporter": "0.0.4",
-    "eslint": "^4.18.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.11.0",
     "firefox-profile": "^0.3.9",
-    "jasmine-core": "^2.2.0",
+    "jasmine-core": "^2.99.1",
     "karma": "^0.13.3",
     "karma-chrome-launcher": "^0.1.7",
     "karma-coverage": "^0.2.7",
@@ -63,11 +63,11 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "null-loader": "^0.1.1",
-    "opentok-test-scripts": "^3.6.0",
+    "opentok-test-scripts": "^3.7.0",
     "protractor": "^4.0.9",
     "protractor-flake": "^2.1.2",
     "q": "^1.2.0",
-    "travis-multirunner": "^4.2.0",
+    "travis-multirunner": "^4.5.0",
     "uuid": "^2.0.1"
   }
 }
