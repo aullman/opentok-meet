@@ -6,6 +6,9 @@
   "private": true,
   "dependencies": {
     "angular": "~1.6.3",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.4.0",
+    "babel-preset-env": "^1.2.1",
     "compression": "^1.6.2",
     "css-loader": "^0.23.1",
     "ejs": ">= 0.0.1",
@@ -13,7 +16,7 @@
     "glob": "^5.0.15",
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
-    "opentok": "^2.2.3",
+    "opentok": "^2.6.2",
     "opentok-angular": "^2.1.0",
     "opentok-editor": "^0.3.3",
     "opentok-textchat": "^1.2.0",
@@ -23,10 +26,7 @@
     "raw-loader": "^0.5.1",
     "redis": "~0.10.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.0",
-    "babel-core": "^6.23.1",
-    "babel-loader": "^6.4.0",
-    "babel-preset-env": "^1.2.1"
+    "webpack": "^1.13.0"
   },
   "engines": {
     "node": "8.x",
