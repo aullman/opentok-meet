@@ -71,10 +71,8 @@ describe('Room', () => {
     it('stays on the screen if you resize too small', () => {
       expect(publisher.isDisplayed()).toBe(true);
       browser.manage().window().setSize(800, 800);
-      browser.actions()
-        .mouseDown(publisher)
-        .mouseMove({ x: 700, y: 700 })
-        .mouseUp()
+      browser.actions().mouseDown(publisher)
+        .mouseMove({ x: 700, y: 700 }).mouseUp()
         .perform();
       browser.manage().window().setSize(500, 500);
       expect(publisher.isDisplayed()).toBe(true);
@@ -361,19 +359,18 @@ describe('Room', () => {
           'shows an install prompt when you click it and the extension is not installed',
           (done) => {
             if (browser.browserName === 'chrome') {
-              browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');')
-                .then(() => {
-                  expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
-                  expect(screenShareBtn.getAttribute('class')).toContain('green');
-                  screenShareBtn.click();
-                  expect(screenShareBtn.getAttribute('disabled')).toBe('true');
-                  browser.wait(() => element(by.css('#installScreenshareExtension')).isPresent(), 10000);
-                  done();
-                });
+              browser.driver.executeScript('OT.registerScreenSharingExtension(\'chrome\', \'foo\');').then(() => {
+                expect(element(by.css('#installScreenshareExtension')).isPresent()).toBe(false);
+                expect(screenShareBtn.getAttribute('class')).toContain('green');
+                screenShareBtn.click();
+                expect(screenShareBtn.getAttribute('disabled')).toBe('true');
+                browser.wait(() => element(by.css('#installScreenshareExtension')).isPresent(), 10000);
+                done();
+              });
             } else {
               done();
             }
-          }
+          },
         );
       });
     }

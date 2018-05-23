@@ -2,7 +2,7 @@ const errorReporting = require('../lib/error-reporting.js');
 
 errorReporting();
 
-// eslint-disable-next-line
+/* eslint-disable no-multi-assign */
 window.$ = window.jQuery = require('jquery');
 const angular = require('angular');
 

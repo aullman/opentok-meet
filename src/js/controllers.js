@@ -46,7 +46,6 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       style: {
         nameDisplayMode: 'off',
       },
-      resolution: '640x480',
     };
     $scope.facePublisherProps = facePublisherPropsHD;
 
