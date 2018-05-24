@@ -4,6 +4,7 @@ node_js:
 before_install:
 - export DISPLAY=:99.0
 - if [ -f /etc/init.d/xvfb ];then sh -e /etc/init.d/xvfb start; fi
+- npm i -g npm@6
 before_script:
 - npm start > /dev/null &
 - if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh https://tbdev.tokbox.com/v2;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
