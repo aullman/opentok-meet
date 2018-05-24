@@ -34,8 +34,7 @@ describe('2 browsers in the same room', () => {
   describe('subscribing to one another', () => {
     beforeEach(() => {
       browser.wait(() => element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent(), 20000);
-      secondBrowser.wait(() => secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element'))
-        .isPresent(), 20000);
+      secondBrowser.wait(() => secondBrowser.element(by.css('ot-subscriber:not(.OT_loading) .OT_video-element')).isPresent(), 20000);
     });
 
     xit('should display a video element with the right videoWidth and videoHeight', () => {
@@ -50,6 +49,8 @@ describe('2 browsers in the same room', () => {
           expect(subscriberVideo.getAttribute('videoWidth')).toBe('640');
           expect(subscriberVideo.getAttribute('videoHeight')).toBe('480');
         }
+        const connCount = browser.element(by.css('#connCount'));
+        expect(connCount.getInnerHtml()).toContain('2');
       };
       checkVideo(browser);
       checkVideo(secondBrowser);
@@ -81,7 +82,6 @@ describe('2 browsers in the same room', () => {
 
       it('zoom button should work', () => {
         const subscriber = secondBrowser.element(by.css('ot-subscriber'));
-
         const checkZoomed = (zoomed) => {
           // Check whether the aspect ratio matches the videoWidth and videoHeight
           if (browser.browserName === 'chrome') {
@@ -226,7 +226,6 @@ describe('2 browsers in the same room', () => {
         // Disconnect the second browser
         secondBrowser.element(by.css('#changeRoom')).click();
       });
-
       it('by closing the browser window', () => {
         secondBrowser.quit();
         secondBrowser = null;

@@ -126,7 +126,6 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           updateSubscriberStats(stats);
         }
       },
-
       removeSubscriber(subscriberId) {
         delete subscribers[subscriberId];
         if (Object.keys(subscribers).length === 0) {
@@ -151,7 +150,7 @@ angular.module('opentok-meet').directive('subscriberStats', ['OTSession', 'Stats
         let subscriberId;
         const timeout = $timeout(() => {
           // subscribe hasn't been called yet so we wait a few milliseconds
-          subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+          [subscriber] = OTSession.session.getSubscribersForStream(scope.stream);
           subscriber.on('connected', () => {
             subscriberId = subscriber.id;
 

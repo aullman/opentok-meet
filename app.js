@@ -3,10 +3,11 @@ const fs = require('fs');
 const OpenTok = require('opentok');
 const https = require('https');
 const compression = require('compression');
-const url = require('url');
 const redis = require('redis');
+const url = require('url');
 const glob = require('glob');
 const path = require('path');
+
 
 const app = express();
 let config;
@@ -24,7 +25,7 @@ if (process.env.HEROKU || process.env.TRAVIS) {
   try {
     config = JSON.parse(fs.readFileSync('./config.json'));
   } catch (err) {
-    console.log('Error reading config.json - have you copied config.json.sample to config.json?', err);
+    console.log('Error reading config.json - have you copied config.json.sample to config.json? ', err);
     process.exit();
   }
 }
@@ -56,6 +57,7 @@ const useSSL = fs.existsSync(`${__dirname}/server.key`) &&
   fs.existsSync(`${__dirname}/server.crt`);
 
 require('./server/routes.js')(app, config, redisClient, ot, useSSL || process.env.HEROKU);
+
 
 glob.sync('./plugins/**/*.js').forEach((file) => {
   // eslint-disable-next-line

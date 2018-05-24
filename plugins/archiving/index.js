@@ -27,8 +27,8 @@ module.exports = (app, config, redis, ot) => {
       } else {
         let otSDK = ot;
         if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret, 'https://anvil-tbdev.opentok.com');
+          const parsedApiKeySecret = JSON.parse(apiKeySecret);
+          otSDK = new OpenTok(parsedApiKeySecret.apiKey, parsedApiKeySecret.secret, 'https://anvil-tbdev.opentok.com');
         }
         otSDK.getArchive(req.param('archiveId'), (archiveErr, archive) => {
           if (archiveErr) {
@@ -67,6 +67,7 @@ module.exports = (app, config, redis, ot) => {
       }
       otSDK.startArchive(sessionId, {
         name: room,
+        resolution: '1280x720',
       }, (startErr, archive) => {
         if (startErr) {
           console.error('Error starting archive: ', startErr);
@@ -97,8 +98,8 @@ module.exports = (app, config, redis, ot) => {
       } else {
         let otSDK = ot;
         if (apiKeySecret) {
-          apiKeySecret = JSON.parse(apiKeySecret);
-          otSDK = new OpenTok(apiKeySecret.apiKey, apiKeySecret.secret, 'https://anvil-tbdev.opentok.com');
+          const parsedApiKeySecret = JSON.parse(apiKeySecret);
+          otSDK = new OpenTok(parsedApiKeySecret.apiKey, parsedApiKeySecret.secret, 'https://anvil-tbdev.opentok.com');
         }
 
         otSDK.stopArchive(archiveId, (stopErr, archive) => {

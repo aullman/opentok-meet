@@ -14,7 +14,7 @@ module.exports = (redis, ot) => {
       redis.del('rooms', callback);
     },
     getRoom(room, apiKey, secret) {
-      console.log(`getRoom: ${room}`);
+      console.log(`getRoom: ${room} ${apiKey} ${secret}`);
       const goToRoom = arguments[arguments.length - 1]; // eslint-disable-line
       // Lookup the mapping of rooms to sessionIds
       redis.hget('rooms', room, (err, sid) => {
@@ -45,9 +45,10 @@ module.exports = (redis, ot) => {
                 } else if (apiKey && secret) {
                   // If there's a custom apiKey and secret store that
                   redis.hset(
-                    'apiKeys',
-                    room,
-                    JSON.stringify({ apiKey, secret }),
+                    'apiKeys', room, JSON.stringify({
+                      apiKey,
+                      secret,
+                    }),
                     (apiKeyErr) => {
                       if (apiKeyErr) {
                         console.error('Failed to set apiKey', apiKeyErr);
@@ -55,7 +56,7 @@ module.exports = (redis, ot) => {
                       } else {
                         goToRoom(null, sessionId, apiKey, secret);
                       }
-                    }
+                    },
                   );
                 } else {
                   goToRoom(null, sessionId);
@@ -69,8 +70,8 @@ module.exports = (redis, ot) => {
             if (getErr || !apiKeySecret) {
               goToRoom(null, sessionId);
             } else {
-              apiKeySecret = JSON.parse(apiKeySecret);
-              goToRoom(null, sessionId, apiKeySecret.apiKey, apiKeySecret.secret);
+              const parsedApiKeySecret = JSON.parse(apiKeySecret);
+              goToRoom(null, sessionId, parsedApiKeySecret.apiKey, parsedApiKeySecret.secret);
             }
           });
         }

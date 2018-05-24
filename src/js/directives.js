@@ -100,7 +100,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         scope.mutedVideo = false;
         angular.element(element).on('click', () => {
           if (!subscriber) {
-            subscriber = OTSession.session.getSubscribersForStream(scope.stream)[0];
+            [subscriber] = OTSession.session.getSubscribersForStream(scope.stream);
           }
           if (subscriber) {
             subscriber.subscribeToVideo(scope.mutedVideo);

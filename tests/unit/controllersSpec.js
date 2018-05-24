@@ -107,7 +107,7 @@ describe('OpenTok Meet controllers', () => {
       it('publishes with SD properties', () => {
         scope.togglePublish(false);
         expect(scope.publishing).toBe(true);
-        expect(scope.facePublisherProps.resolution).toBe('640x480');
+        expect(scope.facePublisherProps.resolution).toBe(undefined);
       });
     });
 
@@ -241,7 +241,10 @@ describe('OpenTok Meet controllers', () => {
         expect(scope.shareURL).toBe('testRoom');
       });
       it('calls OTSession.init', () => {
-        expect(MockOTSession.init).toHaveBeenCalledWith('mockAPIKey', 'mockSessionId', 'mockToken', jasmine.any(Function));
+        expect(MockOTSession.init).toHaveBeenCalledWith(
+          'mockAPIKey', 'mockSessionId', 'mockToken',
+          jasmine.any(Function),
+        );
       });
 
       describe('OTSession.init', () => {
@@ -249,7 +252,7 @@ describe('OpenTok Meet controllers', () => {
         let mockSession;
 
         it('handles errors', (done) => {
-          callback = MockOTSession.init.calls.mostRecent().args[3];
+          [,,, callback] = MockOTSession.init.calls.mostRecent().args;
           const fakeError = { message: 'fakeMessage' };
           scope.$on('otError', (event, err) => {
             expect(err.message).toEqual('fakeMessage');
@@ -260,7 +263,7 @@ describe('OpenTok Meet controllers', () => {
 
         describe('success', () => {
           beforeEach(() => {
-            callback = MockOTSession.init.calls.mostRecent().args[3];
+            [,,, callback] = MockOTSession.init.calls.mostRecent().args;
 
             mockSession = OT.initSession('mockSessionId');
             spyOn(mockSession, 'on').and.callThrough();
@@ -277,7 +280,10 @@ describe('OpenTok Meet controllers', () => {
           it('listens for events on the session', () => {
             expect(mockSession.on).toHaveBeenCalledWith('sessionConnected', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
-            expect(mockSession.on).toHaveBeenCalledWith('archiveStarted archiveStopped', jasmine.any(Function));
+            expect(mockSession.on).toHaveBeenCalledWith(
+              'archiveStarted archiveStopped',
+              jasmine.any(Function),
+            );
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
           });
@@ -487,7 +493,7 @@ describe('OpenTok Meet controllers', () => {
       it('cleans up', () => {
         scope.connected = true;
         expect(scope.session).toBeDefined();
-        const session = scope.session;
+        const { session } = scope;
         scope.$emit('$destroy');
         expect(scope.session).toBe(null);
         expect(scope.connected).toBe(false);
