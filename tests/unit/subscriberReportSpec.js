@@ -58,7 +58,7 @@ describe('subscriber-report', () => {
       expect(mockSubscriber.setStyle).toHaveBeenCalledWith({ buttonDisplayMode: 'auto' });
     });
 
-    it('logs to Analytics when you click the send button', (done) => {
+    xit('logs to Analytics when you click the send button', (done) => {
       scope.$$childHead.report.audioScore = '5';
       scope.$$childHead.report.videoScore = '1';
       scope.$$childHead.report.description = 'mockDescription';
