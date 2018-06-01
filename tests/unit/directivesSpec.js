@@ -356,3 +356,68 @@ describe('changeSize', () => {
     expect(scope.expanded).toBe(false);
   });
 });
+
+describe('cycleCamera', () => {
+  let scope;
+  let mockPublisher;
+  let OTSession;
+  let element;
+  let button;
+  beforeEach(angular.mock.module('opentok-meet'));
+  beforeEach(inject(($rootScope, _OTSession_) => {
+    scope = $rootScope.$new();
+    OTSession = _OTSession_;
+    mockPublisher = jasmine.createSpyObj('Publisher', ['cycleVideo']);
+    mockPublisher.id = 'mockPublisher';
+    OTSession.publishers = [mockPublisher];
+  }));
+
+  const createCycleCameraWithMockDevices = (devices) => {
+    inject(($compile) => {
+      spyOn(OT, 'getDevices').and.callFake((callback) => {
+        callback(null, devices);
+      });
+      element = '<cycle-camera publisher-id="mockPublisher"></cycle-camera>';
+      element = $compile(element)(scope);
+      button = element.find('button');
+      scope.$digest();
+    });
+  };
+
+  describe('with multiple cameras', () => {
+    beforeEach(() => {
+      createCycleCameraWithMockDevices([{
+        kind: 'videoInput',
+      },
+      {
+        kind: 'videoInput',
+      },
+      ]);
+    });
+
+    it('Calls cycleVideo on the publisher', () => {
+      expect(mockPublisher.cycleVideo).not.toHaveBeenCalled();
+      button.triggerHandler({
+        type: 'click',
+      });
+      expect(mockPublisher.cycleVideo).toHaveBeenCalled();
+    });
+
+    it('The button is shown', () => {
+      expect(button.hasClass('ng-hide')).toBe(false);
+    });
+  });
+
+  describe('with one camera', () => {
+    beforeEach(() => {
+      createCycleCameraWithMockDevices([{
+        kind: 'videoInput',
+      },
+      ]);
+    });
+
+    it('The button is not shown', () => {
+      expect(button.hasClass('ng-hide')).toBe(true);
+    });
+  });
+});

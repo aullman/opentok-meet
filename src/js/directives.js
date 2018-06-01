@@ -236,6 +236,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
 
         OT.getDevices((err, devices) => {
           scope.hasMultipleCameras = devices.filter(device => device.kind === 'videoInput').length > 1;
+          scope.$apply();
         });
         scope.cycleCamera = () => {
           const publisher = getPublisher();
