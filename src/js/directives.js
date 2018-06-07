@@ -1,3 +1,5 @@
+require('../css/cycle-camera.css');
+
 angular.module('opentok-meet').directive('draggable', ['$document', '$window',
   function draggable($document, $window) {
     const getEventProp = (event, prop) => {
@@ -85,12 +87,12 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
   }])
   .directive('muteVideo', () => ({
     restrict: 'E',
-    template: '<i class="video-icon ion-ios7-videocam" ' +
+    template: '<div><i class="video-icon ion-ios7-videocam" ' +
       'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"></i>' +
       '<i class="cross-icon" ng-class="' +
       '{\'ion-ios7-checkmark\': mutedVideo, \'ion-ios7-close\': !mutedVideo}" ' +
       'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"' +
-      '</i>',
+      '</i></div>',
   }))
   .directive('muteSubscriber', ['OTSession', function muteSubscriber(OTSession) {
     return {
@@ -150,10 +152,10 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       },
     };
   }])
-  .directive('restrictFramerate', ['OTSession', function restrictFramerate(OTSession) {
+  .directive('restrictFramerate', ['OTSession', function restrictFrameRate(OTSession) {
     return {
       restrict: 'E',
-      template: '<button class="restrict-framerate-btn" title="Toggle Framerate">' +
+      template: '<button class="restrict-framerate-btn" title="Toggle Framerate" ng-click="restrictFrameRate()">' +
         '<span class="restrict-framerate-btn-text" ng-if="frameRate != null">' +
           '{{ frameRate }}fps</span>' +
         '<i class="restrict-framerate-btn-icon" ng-class="' +
@@ -190,11 +192,10 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
           }
         }
 
-        angular.element(element).on('click', () => {
+        scope.restrictFrameRate = () => {
           scope.frameRate = nextFrameRate(scope.frameRate);
           updateSubscriberFrameRate(scope.stream, scope.frameRate);
-          scope.$apply();
-        });
+        };
       },
     };
   }])
@@ -222,20 +223,19 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
   .directive('expandButton', ['$rootScope', function expandButton($rootScope) {
     return {
       restrict: 'E',
-      template: '<button class="resize-btn ion-arrow-expand" ng-click="$emit(\'changeSize\');"' +
+      template: '<button class="resize-btn ion-arrow-expand" ng-click="toggleExpand()"' +
         ' title="{{expanded ? \'Shrink\' : \'Enlarge\'}}"></button>',
       link(scope, element) {
         if (scope.expanded === undefined) {
           // If we're a screen we default to large otherwise we default to small
           scope.expanded = scope.stream.name === 'screen';
         }
-        const toggleExpand = () => {
+        scope.toggleExpand = () => {
           scope.expanded = !scope.expanded;
-          scope.$apply();
           $rootScope.$broadcast('otLayout');
+          scope.$emit('changeSize');
         };
-        angular.element(element).on('click', toggleExpand);
-        angular.element(element).parent().on('dblclick', toggleExpand);
+        angular.element(element).parent().on('dblclick', scope.toggleExpand);
       },
     };
   }])
@@ -248,5 +248,27 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       template: '<button class="zoom-btn" ng-class="{\'ion-plus-circled\': !zoomed,' +
         ' \'ion-minus-circled\': zoomed}" ' +
         'title="{{zoomed ? \'Zoom Out\' : \'Zoom In\'}}"></button>',
+    };
+  }])
+  .directive('cycleCamera', ['OTSession', function cycleCamera(OTSession) {
+    return {
+      restrict: 'E',
+      template: '<button class="icon-left ion ion-ios7-reverse-camera" ng-show="hasMultipleCameras" ng-click="cycleCamera()"></button>',
+      link(scope, element, attrs) {
+        scope.hasMultipleCameras = false;
+        const getPublisher = () =>
+          OTSession.publishers.filter(el => el.id === attrs.publisherId)[0];
+
+        OT.getDevices((err, devices) => {
+          scope.hasMultipleCameras = devices.filter(device => device.kind === 'videoInput').length > 1;
+          scope.$apply();
+        });
+        scope.cycleCamera = () => {
+          const publisher = getPublisher();
+          if (publisher) {
+            publisher.cycleVideo();
+          }
+        };
+      },
     };
   }]);
