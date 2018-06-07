@@ -162,7 +162,7 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         '{\'ion-ios7-speedometer-outline\': frameRate != null, ' +
         '\'ion-ios7-speedometer\': frameRate == null}"></i>' +
       '</button>',
-      link(scope, element) {
+      link(scope) {
         let cancelRestrict;
         const frameRateOptions = [15, 7, 1, null];
         scope.frameRate = null;
