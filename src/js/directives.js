@@ -207,8 +207,11 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         }
         scope.toggleExpand = () => {
           scope.expanded = !scope.expanded;
-          $rootScope.$broadcast('otLayout');
-          scope.$emit('changeSize');
+          setTimeout(() => {
+            // Need to do this async so there's enough time for the view to update
+            $rootScope.$broadcast('otLayout');
+            scope.$emit('changeSize');
+          }, 10);
         };
         angular.element(element).parent().on('dblclick', scope.toggleExpand);
       },
