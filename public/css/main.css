@@ -74,6 +74,19 @@ ot-layout ot-subscriber {
     background-color: #262422;
     display: inline-block;
 }
+
+ot-layout > * {
+    transition-property: all;
+    transition-duration: 1s;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+ot-layout > *.ot-layout {
+    opacity: 1;
+}
+
 ot-layout {
     display: block;
     width: 100%;

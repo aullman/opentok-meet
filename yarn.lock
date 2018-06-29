@@ -3946,12 +3946,12 @@ opentok-angular@^1.0.0:
     angular "^1.4.8"
     opentok-layout-js "^1.0.0"
 
-opentok-angular@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/opentok-angular/-/opentok-angular-2.1.1.tgz#9002f1cb45abe8f4a9a9cab65659ba74eb2ff53d"
+opentok-angular@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/opentok-angular/-/opentok-angular-2.1.2.tgz#cf7789ba5995d414ea84eaef05213d037656a541"
   dependencies:
     angular "^1.4.8"
-    opentok-layout-js "^2.0.2"
+    opentok-layout-js "^2.1.0"
 
 opentok-editor@^0.3.3:
   version "0.3.3"
@@ -3965,9 +3965,9 @@ opentok-layout-js@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-1.0.0.tgz#2898b149862a5e14d361d9527fec6593e3ac34b5"
 
-opentok-layout-js@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-2.0.2.tgz#f83823cbc63cfc3d85cda8fcf4f78a42d3a8254b"
+opentok-layout-js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/opentok-layout-js/-/opentok-layout-js-2.1.0.tgz#9345b32852c7a2cfb23d00337d6e79f05a4b7a38"
 
 opentok-test-scripts@^3.6.0:
   version "3.6.1"
