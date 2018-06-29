@@ -23,7 +23,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
     $scope.zoomed = true;
     $scope.bigZoomed = false;
     $scope.layoutProps = {
-      animate: true,
+      animate: false,
       bigFixedRatio: !$scope.bigZoomed,
       fixedRatio: !$scope.zoomed,
     };
@@ -232,7 +232,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
         $scope.zoomed = !$scope.zoomed;
       }
       $scope.layoutProps = {
-        animate: true,
+        animate: false,
         bigFixedRatio: !$scope.bigZoomed,
         fixedRatio: !$scope.zoomed,
       };
