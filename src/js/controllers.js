@@ -37,6 +37,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       },
       usePreviousDeviceSelection: true,
       resolution: '1280x720',
+      enableStereo: true,
       frameRate: 30,
     };
     const facePublisherPropsSD = {
