@@ -9,3 +9,4 @@ require('./audioAcquisitionProblemSpec.js');
 require('./notificationsSpec.js');
 require('./otErrorsSpec.js');
 require('./subscriberReportSpec.js');
+require('./microphonePickerSpec.js');

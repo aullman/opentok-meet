@@ -33,5 +33,6 @@ require('./audio-acquisition-problem.js');
 require('./notifications.js');
 require('./ot-errors.js');
 require('./filtered-publisher.js');
+require('./microphone-picker.js');
 
 require('./safari-electron-redirect.js');

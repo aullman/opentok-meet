@@ -1,0 +1,5 @@
+<button class="microphone icon-left ion ion-ios7-mic" ng-click="toggleSelect()" ng-show="devices.length > 1"></button>
+<button class="arrow icon-left ion ion-arrow-down-b" ng-click="toggleSelect()" ng-show="devices.length > 1"></button>
+<ul ng-show="showDeviceList">
+  <li ng-repeat="device in devices" ng-class="{ selected: device.label === selectedLabel }" ng-click="setAudioSource(device.deviceId)">{{device.label}}</li>
+</ul>
