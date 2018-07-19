@@ -7,3 +7,4 @@ require('./servicesSpec.js');
 require('./subscriberStatsSpec.js');
 require('./notificationsSpec.js');
 require('./otErrorsSpec.js');
+require('./microphonePickerSpec.js');
