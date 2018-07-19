@@ -10,7 +10,9 @@ describe('microphonePicker', () => {
     mockPublisher.getAudioSource = () => ({
       label: 'Device2',
     });
-    mockPublisher.setAudioSource = jasmine.createSpy('setAudioSource').and.callFake(() => Promise.resolve());
+    mockPublisher.setAudioSource = jasmine.createSpy('setAudioSource').and.callFake(() => ({
+      then: (callback) => { setTimeout(callback); },
+    }));
     mockPublisher.id = 'mockPublisher';
   }));
 
