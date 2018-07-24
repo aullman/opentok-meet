@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "angular": "~1.6.3",
+    "angular-sanitize": "^1.6.9",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.4.0",
     "babel-preset-env": "^1.2.1",
