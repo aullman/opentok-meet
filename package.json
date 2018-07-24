@@ -19,7 +19,7 @@
     "opentok": "^2.6.2",
     "opentok-angular": "^2.1.2",
     "opentok-editor": "^0.3.3",
-    "opentok-textchat": "1.2.3",
+    "opentok-textchat": "^1.2.3",
     "opentok-whiteboard": "^1.1.2",
     "path": "^0.12.7",
     "push.js": "0.0.11",
