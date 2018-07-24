@@ -3975,7 +3975,7 @@ opentok-test-scripts@^3.6.0:
   dependencies:
     travis-multirunner "^4.2.0"
 
-opentok-textchat@1.2.3:
+opentok-textchat@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/opentok-textchat/-/opentok-textchat-1.2.3.tgz#c103817076fcbb97aba0aafd64f28328ce8cd2e3"
   dependencies:
