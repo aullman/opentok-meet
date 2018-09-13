@@ -37,7 +37,8 @@
   },
   "engines": {
     "node": "8.x",
-    "npm": "5.x"
+    "npm": "5.x",
+    "yarn": "1.7"
   },
   "scripts": {
     "postinstall": "./build.sh",

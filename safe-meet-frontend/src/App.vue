@@ -3,6 +3,13 @@
 </template>
 
 <style lang="stylus">
+  body {
+    font-family: 'Open Sans', sans-serif;
+  }
+  input {
+    font-size: 26px;
+    padding: 0.5em;
+  }
   .dropdown {
     background: white;
   }

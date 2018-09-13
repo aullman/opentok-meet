@@ -3,7 +3,6 @@
     <img class="background" src="../assets/background.jpg" />
     <div class="welcome">
       <h1>Safe spaces</h1>
-
       <div v-if="!loggedIn">
         <p>
           Meet, socialise, and hangout (but keep it in your pants) with others in the worlds safest and funnest video service.
@@ -12,24 +11,28 @@
         <p>
           We value your safety online, and have eployed the most sophisticated deep-learning artificially intelligent algorithms that exist into protecting you and your loved one's innocence.
         </p>
-
         <login-buttons @signin="signin"></login-buttons>
       </div>
       <div v-else>
         <p>We need to verify your mobile number before you can use this service.</p>
+
         <div v-if="!userCreated">
-          <vue-tel-input v-model="phone" :preferredCountries="['us', 'au']">
-          </vue-tel-input>
-          <button @click="create">Verify</button>
+          <form>
+            <vue-tel-input ref="phone" v-model="phone" :preferredCountries="['us', 'au']">
+            </vue-tel-input>
+            <br />
+            <button type="submit" @click.stop.prevent="create">Continue</button>
+          </form>
         </div>
         <div v-else>
-          <div v-if="invalidCode">
+          <p v-if="invalidCode" class="invalid">
             That code was invalid. Please try again.
-          </div>
-          Enter the code sent to: {{ user.phone }}
-          <input v-model="code" type="text" />
+          </p>
+          <p>
+            Enter the code sent to {{ user.phone }}. <a style="font-size: 18px;" href="#" @click.prevent.stop="resend">Resend</a>
+          </p>
+          <input ref="code" @keyup.enter="verify" v-model="code" type="text" />
           <button @click="verify">Verify</button>
-          <a href="#" @click.prevent.stop="resend">Resend</a>
         </div>
       </div>
     </div>
@@ -41,6 +44,34 @@
 </template>
 
 <style lang="stylus" scoped>
+  p.invalid {
+    color: #F44336 !important;
+  }
+  button {
+      box-sizing: border-box;
+      margin: 0.2em;
+      padding: 5px 30px;
+      border: none;
+      text-align: left;
+      line-height: 34px;
+      white-space: nowrap;
+      border-radius: 0.2em;
+      font-size: 20px;
+      color: #FFF;
+      display: inline-block;
+      cursor: pointer;
+      background: #2196F3;
+      text-shadow: 1px 1px 1px #000;
+      font-size: 26px;
+      padding: 0.5em 1em;
+
+      &:focus {
+        outline: none;
+      }
+      &:active {
+        box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+      }
+  }
   .main {
     display: flex;
     justify-content: center;
@@ -49,11 +80,6 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
-  }
-
-  body {
-    padding: 0;
-    margin: 0;
   }
 
   img.background {
@@ -66,17 +92,23 @@
     filter: blur(10px) contrast(100%) sepia(80%) brightness(50%);
     z-index: -1;
   }
-
+  a {
+    color: #ccc;
+  }
+  a:hover {
+    color: white;
+  }
   .welcome {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 60%;
+    width: 50%;
 
     p {
+      color: #ccc;
+      font-size: 24px;
       text-shadow: 0px 0px 10px #000;
-      font-size: 36px;
     }
 
     align-self: center;
@@ -84,14 +116,11 @@
     padding: 3em;
     text-align: center;
     border-radius: 1em;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #ddd;
 
     h1 {
       margin-top: 1rem;
-      font-size: 100px;
-      font-family: Arial, Helvetica, sans-serif;
+      margin-bottom: 0;
+      font-size: 64px;
       font-weight: normal;
       color: white;
       text-shadow: 0px 0px 10px #000;
@@ -106,6 +135,7 @@
 <script>
   import LoginButtons from "@/components/LoginButtons.vue";
   import axios from "axios";
+  import Vue from 'vue';
 
   export default {
     data() {
@@ -132,7 +162,23 @@
             this.user = remoteUser;
             this.userCreated = true;
             this.phoneVerified = remoteUser.phoneVerified;
+
+            if (!this.userCreated) {
+              Vue.nextTick(() => {
+                this.$refs.phone.$refs.input.focus();
+              });
+            }
+            if (!this.phoneVerified) {
+              debugger;
+              Vue.nextTick(() => {
+                debugger;
+                this.$refs.code.focus();
+              });
+            }
           } catch (err) {
+            Vue.nextTick(() => {
+              this.$refs.phone.$refs.input.focus();
+            });
             // ignore these for now
           }
         } catch (err) {
