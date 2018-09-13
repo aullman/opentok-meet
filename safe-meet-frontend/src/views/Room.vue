@@ -1,5 +1,7 @@
 <template>
-  <iframe frameBorder="0" :src="`/v1/${room}`"></iframe>
+  <control-login>
+    <iframe frameBorder="0" :src="`/v1/${room}`"></iframe>
+  </control-login>
 </template>
 
 <style lang="stylus">
@@ -15,11 +17,15 @@
 </style>
 
 <script>
+  import ControlLogin from '@/components/ControlLogin.vue';
   export default {
     computed: {
       room() {
         return this.$route.params.name;
       }
+    },
+    components: {
+      ControlLogin
     }
   }
 </script>

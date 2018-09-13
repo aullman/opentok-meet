@@ -49,7 +49,7 @@ app.use(morgan());
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
-app.use(bodyParser());
+app.use(bodyParser.json());
 app.use(methodOverride());
 
 const ot = new OpenTok(config.apiKey, config.apiSecret);

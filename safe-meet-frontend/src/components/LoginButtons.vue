@@ -50,7 +50,7 @@
         FB.api('/me', (user) => {
           user.profilePic = `http://graph.facebook.com/${user.id}/picture?type=square`;
           localStorage.setItem('safeSpacesUser', JSON.stringify(user));
-          this.$emit('signin');
+          this.$emit('signin', user);
         });
       },
       onSignInError() {
