@@ -7,7 +7,9 @@ before_install:
 - if [ -f /etc/init.d/xvfb ];then sh -e /etc/init.d/xvfb start; fi
 before_script:
 - npm start > /dev/null &
-- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
+- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh;mv
+  ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/;
+  fi
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
@@ -19,39 +21,36 @@ sudo: required
 dist: trusty
 matrix:
   fast_finish: true
-
   include:
-    - os: linux
-      env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
-    - os: linux
-      env: BROWSER=chrome  BVER=64.0.3282.140
-    - os: linux
-      env: BROWSER=firefox BVER=45.0.2
-    - os: linux
-      env: BROWSER=ie BVER=11 SAUCELABS=true
-    - os: linux
-      env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
-    - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
-    - os: linux
-      env: BROWSER=chrome  BVER=beta
-    - os: osx
-      osx_image: xcode9.2
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
-
+  - os: linux
+    env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
+  - os: linux
+    env: BROWSER=chrome  BVER=64.0.3282.140
+  - os: linux
+    env: BROWSER=firefox BVER=45.0.2
+  - os: linux
+    env: BROWSER=ie BVER=11 SAUCELABS=true
+  - os: linux
+    env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
+  - os: linux
+    env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+  - os: linux
+    env: BROWSER=chrome  BVER=beta
+  - os: osx
+    osx_image: xcode9.2
+    sudo: required
+    env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
   allow_failures:
-    - os: linux
-      env: BROWSER=firefox BVER=45.0.2
-    - os: linux
-      env: BROWSER=chrome  BVER=beta
-    - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
-    - os: osx
-      osx_image: xcode9.2
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
-
+  - os: linux
+    env: BROWSER=firefox BVER=45.0.2
+  - os: linux
+    env: BROWSER=chrome  BVER=beta
+  - os: linux
+    env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+  - os: osx
+    osx_image: xcode9.2
+    sudo: required
+    env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
 env:
   global:
   - TRAVIS=true
@@ -65,3 +64,6 @@ env:
   - secure: gXLtG+aBTQCJ4ovSwexMF38V5f56jBgxhyJaUC/lAzdQuyK5VFWCTubohOohFx4GokfN5A4JETVRiFfn4heRVmBxi5ZAlWwZpbWD6yBBu4l5SN7ST1umwzGEc+1zjZ0LyvaC8LK7GI7gdCVY+XWP1SryS1n9JEytiR1S93giflQ=
   - secure: UTGPkvGdlise2HWGIDGQvQAItv4zw2PZFOeIHOSvKBn2vuzhN8pX8OVR44n3Ddr28aW7YQkCLWKEsHsBgdsxUmWoFBnUrVX12dPKAjTq3gMeHuPAxkg6nBQJ4/y9r57wenAjGCd79H9n04jQtvDZkfe1+hpTLCMnMPkceIZdxO0=
   - secure: H8AA0IvOE8HpZgsQdHXUq110NtvheQEy76ZNGZU7mF4bNAfQ0PVWVpJ+HL/1itJFBVlGiu+MqzKJ2MtdhrlrBxYBcyM1yHdfCkoM6Uh2ff4hEGbZsZ65ClzgvnhabUQrzFGn3Qidba9ICKspdl0jXrhRnpbnN22kPGM9w/Izvv0=
+  - secure: ANXkheQbr85LYowAxvO2LbCWtm5NK8qatv+plCpoxIjnaYnKhymvPOSZuZdd8rokde9p4jKVRREWUpDaJSn2vN8ZnLfQzfCf8BNs7eBLR/n2DgOGj1AoclUMX6Uz/Zpw+yFDx0nsAS2I3aaLakWaoHpTej+pfALLztPP0V2QQUU=
+  - secure: Jpz4yf5C8r/6W8U3q+7TRyr60x9BW/Z+jQ5ai7VdAhxTF2ItzFu6a3NBrNWTdghiCOHJ0FwtBRVU9MJ/7kj85E/keuHqv4mCH5CSfUioFIU0Cnck3BxSCd4VpZ76BRnznLFV9fHk40Pa9jaMCNveb8M7NZFSf2uzhELKLlu6/n4=
+  - secure: aGAo5A33VOxwgzvGnjTQQnKvMDtC83X9Tm1JNwDxuwC2qYiv//eh/4r8y9d1ztEiOelpDCQDCX2Pk2xV9a/lzu6hhtVEtxO5byLrHpm7oNiZqfeNzLdeJZ1keBKMh2wDXTdi+gwZYqseMOaNqx95VVVfhccDlgJpjpSNkin/7sQ=

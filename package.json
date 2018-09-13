@@ -19,6 +19,7 @@
     "jquery": "^2.2.3",
     "method-override": "^3.0.0",
     "morgan": "^1.9.1",
+    "nexmo": "^2.3.2",
     "opentok": "^2.6.2",
     "opentok-angular": "^2.1.2",
     "opentok-editor": "^0.3.3",

@@ -22,6 +22,9 @@ if (process.env.HEROKU || process.env.TRAVIS) {
     apiKey: process.env.OT_API_KEY,
     apiSecret: process.env.OT_API_SECRET,
     chromeExtensionId: process.env.CHROME_EXTENSION_ID,
+    nexmoKey: process.env.NEXMO_KEY,
+    nexmoSecret: process.env.NEXMO_SECRET,
+    nexmoAppId: process.env.NEXMO_APP_ID,
   };
 } else {
   try {
