@@ -3,6 +3,9 @@
 </template>
 
 <style lang="stylus">
+  .dropdown {
+    background: white;
+  }
   .text-page {
     &.main {
       width: 100%;
@@ -69,3 +72,13 @@
     }
   }
 </style>
+
+<script>
+  import Vue from 'vue';
+  import VueTelInput from 'vue-tel-input';
+  import 'vue-tel-input/dist/vue-tel-input.css';
+
+  Vue.use(VueTelInput);
+
+  export default {};
+</script>

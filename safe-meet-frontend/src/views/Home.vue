@@ -4,19 +4,10 @@
     <div class="welcome">
       <h1>Safe spaces</h1>
 
-      <p>
-        Meet, socialise, and hangout (but keep it in your pants) with others in the worlds safest and funnest video service.
-      </p>
+      <control-login>
+        <h1>Success</h1>
+      </control-login>
 
-      <p>
-        We value your safety online, and have eployed the most sophisticated
-        deep-learning artificially intelligent algorithms that exist into protecting
-        you and your loved one's innocence.
-      </p>
-
-      <p>
-        Login to begin!
-      </p>
     </div>
   </div>
 </template>
@@ -53,6 +44,7 @@
     width: 60%;
     p {
       text-shadow: 0px 0px 10px #000;
+      font-size: 36px;
     }
     align-self: center;
     z-index: 1;
@@ -60,7 +52,6 @@
     text-align: center;
     border-radius: 1em;
     color: white;
-    font-size: 36px;
     font-family: Arial, Helvetica, sans-serif;
     color: #ddd;
 
@@ -80,13 +71,13 @@
 </style>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+
+import ControlLogin from '@/components/ControlLogin.vue';
 
 export default {
   name: "home",
   components: {
-    HelloWorld
+    ControlLogin
   }
 };
 </script>
