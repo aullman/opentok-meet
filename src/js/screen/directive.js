@@ -31,7 +31,9 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
       videoSource: 'screen',
     };
 
-    OT.registerScreenSharingExtension('chrome', chromeExtensionId);
+    if (chromeExtensionId) {
+      OT.registerScreenSharingExtension('chrome', chromeExtensionId);
+    }
 
     OT.checkScreenSharingCapability((response) => {
       const supported = response.supported && response.extensionRegistered !== false;
