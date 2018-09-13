@@ -12,6 +12,7 @@
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
+    "@vue/cli": "^3.0.3",
     "@vue/cli-plugin-babel": "^3.0.3",
     "@vue/cli-plugin-eslint": "^3.0.3",
     "@vue/cli-service": "^3.0.3",
