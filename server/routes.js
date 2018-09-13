@@ -4,11 +4,11 @@ const roomstore = require('./roomstore.js');
 module.exports = (app, config, redis, ot, redirectSSL) => {
   const RoomStore = roomstore(redis, ot);
   app.get('*', (req, res, next) => {
-    if (req.host === 'hangout.tokbox.com') {
+    if (req.hostname === 'hangout.tokbox.com') {
       res.redirect(`https://meet.tokbox.com${req.url}`);
     } else if (redirectSSL && req.protocol !== 'https' &&
       req.headers['x-forwarded-proto'] !== 'https') {
-      res.redirect(`https://${req.host}${req.url}`);
+      res.redirect(`https://${req.hostname}${req.url}`);
     } else {
       next();
     }
