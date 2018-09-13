@@ -7,6 +7,7 @@ const redis = require('redis');
 const url = require('url');
 const glob = require('glob');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 const serveStatic = require('serve-static');
 const methodOverride = require('method-override');
@@ -25,6 +26,8 @@ if (process.env.HEROKU || process.env.TRAVIS) {
     nexmoKey: process.env.NEXMO_KEY,
     nexmoSecret: process.env.NEXMO_SECRET,
     nexmoAppId: process.env.NEXMO_APP_ID,
+    sightengineApiKey: process.env.SIGHTENGINE_API_KEY,
+    sightengineApiSecret: process.env.SIGHTENGINE_API_SECRET,
   };
 } else {
   try {
@@ -51,6 +54,7 @@ app.set('views', `${__dirname}/views`);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.use(fileUpload());
 
 const ot = new OpenTok(config.apiKey, config.apiSecret);
 const useSSL = fs.existsSync(`${__dirname}/server.key`) &&
