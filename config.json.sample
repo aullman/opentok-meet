@@ -5,5 +5,7 @@
     "chromeExtensionId": "Get this from https://github.com/opentok/screensharing-extensions",
     "nexmoKey": "",
     "nexmoSecret": "",
-    "nexmoAppId": ""
+    "nexmoAppId": "",
+    "sightengineApiKey": "Get this and the corresponding secret by registering for sightengine.com",
+    "sightengineApiSecret": ""
 }
