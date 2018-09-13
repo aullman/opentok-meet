@@ -68,6 +68,19 @@ module.exports = (app, config, redis) => {
     return false;
   });
 
+  const verifyMobileOrLandline = user => new Promise((resolve, reject) => {
+    nexmo.numberInsight.get({
+      level: 'standard',
+      number: user.phone,
+    }, (err, response) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response.current_carrier.network_type === 'mobile' || response.current_carrier.network_type === 'landline');
+      }
+    });
+  });
+
   app.get('/user/:id', async (req, res) => {
     try {
       const userId = req.params.id;
@@ -123,6 +136,10 @@ module.exports = (app, config, redis) => {
           user,
         });
       } else {
+        const isMobileOrLandline = await verifyMobileOrLandline(user);
+        if (!isMobileOrLandline) {
+          throw 'Cannot use a virtual number'; // eslint-disable-line
+        }
         const request = await verifyRequest(user);
         if (request.status !== '0') {
           throw request.error_text;
