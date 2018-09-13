@@ -38,7 +38,7 @@
     "yarn": "1.7"
   },
   "scripts": {
-    "postinstall": "build.sh",
+    "postinstall": "./build.sh",
     "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
