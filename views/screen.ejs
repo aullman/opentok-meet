@@ -5,16 +5,16 @@
         <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/<%=chromeExtensionId%>">
         <title><%=room%>: Screenshare</title>
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="/css/screen.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/v1/css/main.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/v1/css/screen.css" media="screen" title="no title" charset="utf-8">
         <script src="//static.opentok.com/v2/js/opentok.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/screen.bundle.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/v1/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/v1/js/screen.bundle.min.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript">
           angular.module('opentok-meet').value({
               room: '<%=room%>',
               chromeExtensionId: '<%=chromeExtensionId%>',
-              baseURL: '/'
+              baseURL: '/v1/'
           });
         </script>
     </head>

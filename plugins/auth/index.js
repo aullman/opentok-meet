@@ -47,10 +47,12 @@ module.exports = (app, config, redis) => {
 
   const verifyCheck = (userId, code) => Promise.all(userRequests[userId].map(requestId =>
     new Promise((resolve, reject) => {
+      console.log('check code', userId, code, requestId);
       nexmo.verify.check({
         request_id: requestId,
         code,
       }, (err, status) => {
+        console.log(err, status);
         if (err) {
           reject(err);
         } else {
@@ -81,7 +83,7 @@ module.exports = (app, config, redis) => {
 
   app.get('/user/:id', async (req, res) => {
     try {
-      const userId = req.param('id');
+      const userId = req.params.id;
       const user = await getUser(userId);
       if (user) {
         res.send(user);
@@ -95,9 +97,9 @@ module.exports = (app, config, redis) => {
     }
   });
 
-  app.post('/user/:id', async (req, res) => {
+  app.post('/user', async (req, res) => {
     try {
-      const userId = req.param('id');
+      const userId = req.params.id;
       let user = await getUser(userId);
       if (user) {
         res.send(409, {
@@ -105,10 +107,10 @@ module.exports = (app, config, redis) => {
         });
       } else {
         user = {
-          id: userId,
-          name: req.param('name'),
-          profilePic: req.param('profilePic'),
-          phone: req.param('phone'),
+          id: req.body.id,
+          name: req.body.name,
+          profilePic: req.body.profilePic,
+          phone: req.body.phone,
           phoneVerified: false,
         };
 
@@ -122,7 +124,7 @@ module.exports = (app, config, redis) => {
 
   app.post('/user/:id/code', async (req, res) => {
     try {
-      const userId = req.param('id');
+      const userId = req.params.id;
       const user = await getUser(userId);
       if (!user) {
         res.send(404, {
@@ -152,12 +154,13 @@ module.exports = (app, config, redis) => {
 
   app.post('/user/:id/code/verify', async (req, res) => {
     try {
-      const userId = req.param('id');
+      const userId = req.params.id;
       const user = await getUser(userId);
       if (user.phoneVerified) {
         res.send(user);
       } else {
-        const code = req.param('code');
+        const code = req.body.code;
+
         const verified = await verifyCheck(userId, code);
         if (verified) {
           user.phoneVerified = true;
@@ -171,7 +174,8 @@ module.exports = (app, config, redis) => {
         }
       }
     } catch (err) {
-      res.send(400, { err });
+      console.error(err);
+      res.status(400).send({ err });
     }
   });
 };

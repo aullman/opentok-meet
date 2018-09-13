@@ -8,6 +8,10 @@ const url = require('url');
 const glob = require('glob');
 const path = require('path');
 
+const serveStatic = require('serve-static');
+const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
 
 const app = express();
 let config;
@@ -40,29 +44,35 @@ if (process.env.REDISTOGO_URL) {
   redisClient = redis.createClient();
 }
 
-
 app.use(compression());
-app.use(express.logger());
+app.use(morgan());
 
-app.configure(() => {
-  app.set('views', `${__dirname}/views`);
-  app.set('view engine', 'ejs');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.static(`${__dirname}/public`));
-  app.use(app.router);
-});
+app.set('views', `${__dirname}/views`);
+app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(methodOverride());
 
 const ot = new OpenTok(config.apiKey, config.apiSecret);
 const useSSL = fs.existsSync(`${__dirname}/server.key`) &&
   fs.existsSync(`${__dirname}/server.crt`);
 
-require('./server/routes.js')(app, config, redisClient, ot, useSSL || process.env.HEROKU);
+const router = new express.Router();
 
+router.use(serveStatic(`${__dirname}/public`));
+require('./server/routes.js')(router, config, redisClient, ot, useSSL || process.env.HEROKU);
+
+app.use('/v1', router);
 
 glob.sync('./plugins/**/*.js').forEach((file) => {
   // eslint-disable-next-line
-  require(path.resolve(file))(app, config, redisClient, ot);
+  require(path.resolve(file))(router, config, redisClient, ot);
+});
+
+app.use(serveStatic(`${__dirname}/safe-meet-frontend/dist`));
+// default handler...
+const defaultContent = fs.readFileSync('./safe-meet-frontend/dist/index.html', 'utf8');
+app.use((req, res) => {
+  res.send(defaultContent);
 });
 
 if (process.env.HEROKU || !useSSL) {

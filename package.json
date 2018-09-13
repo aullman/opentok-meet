@@ -9,13 +9,16 @@
     "babel-core": "^6.23.1",
     "babel-loader": "^6.4.0",
     "babel-preset-env": "^1.2.1",
+    "body-parser": "^1.18.3",
     "compression": "^1.6.2",
     "css-loader": "^0.23.1",
     "ejs": ">= 0.0.1",
-    "express": "3.1.x",
+    "express": "4",
     "glob": "^5.0.15",
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
+    "method-override": "^3.0.0",
+    "morgan": "^1.9.1",
     "nexmo": "^2.3.2",
     "opentok": "^2.6.2",
     "opentok-angular": "^2.1.2",
@@ -26,15 +29,17 @@
     "push.js": "0.0.11",
     "raw-loader": "^0.5.1",
     "redis": "~0.10.1",
+    "serve-static": "^1.13.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"
   },
   "engines": {
     "node": "8.x",
-    "npm": "5.x"
+    "npm": "5.x",
+    "yarn": "1.7"
   },
   "scripts": {
-    "postinstall": "webpack",
+    "postinstall": "./build.sh",
     "test": "./node_modules/.bin/run-tests",
     "tdd": "node node_modules/karma/bin/karma start tests/karma-debug.conf.js",
     "start": "node app.js",
@@ -69,6 +74,7 @@
     "protractor-flake": "^2.1.2",
     "q": "^1.2.0",
     "travis-multirunner": "^4.2.0",
-    "uuid": "^2.0.1"
+    "uuid": "^2.0.1",
+    "webpack-bundle-analyzer": "^3.0.2"
   }
 }

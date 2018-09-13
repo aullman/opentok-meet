@@ -6,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
         <link rel="icon" sizes="128x128" href="icon.png">
         <link href='//fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="/css/index.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/v1/css/main.css" media="screen" title="no title" charset="utf-8">
+        <link rel="stylesheet" href="/v1/css/index.css" media="screen" title="no title" charset="utf-8">
         <title>OpenTok Meet</title>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -22,7 +22,7 @@
     </head>
     <body ng-controller="MainCtrl">
         <div id="wrapper">
-            <img src="images/opentok-meet-logo.png" alt="Logo" class="logo">
+            <img src="/v1/images/opentok-meet-logo.png" alt="Logo" class="logo">
             <form id="joinRoom" ng-submit="joinRoom()">
                 <div id="inputs">
                   <input type="text" name="room" value="" ng-model="room" id="room" placeholder="room name">
@@ -48,7 +48,7 @@
                 <input type="submit" name="joinRoom" value="Join" id="joinRoomBtn">
             </form>
         </div>
-        <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/login.bundle.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/v1/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/v1/js/login.bundle.min.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>

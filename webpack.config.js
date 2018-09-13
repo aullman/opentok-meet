@@ -1,3 +1,4 @@
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
 const path = require('path');
 

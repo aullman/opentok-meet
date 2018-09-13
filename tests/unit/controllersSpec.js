@@ -52,7 +52,7 @@ describe('OpenTok Meet controllers', () => {
         $timeout,
         OTSession: MockOTSession,
         RoomService: RoomServiceMock,
-        baseURL: '',
+        baseURL: '/v1',
       });
     }));
 
