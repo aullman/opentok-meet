@@ -94,9 +94,15 @@
             ng-cloak>
             <p>Waiting for someone to join: <a href="{{shareURL}}">{{shareURL}}</a></p>
             <p>
-            <strong>Disclaimer</strong>: This application is running on a Nightly version of the OpenTok infrastructure and is unstable.
-            You may also use <a href="https://opentok-meet.herokuapp.com/<%=room%>">opentok-meet.herokuapp.com</a> for the production version of this app.
+            <strong>Disclaimer</strong>: This application is running on an unstable version of the OpenTok infrastructure.
+            Use <a href="https://opentok-meet.herokuapp.com/<%=room%>">opentok-meet.herokuapp.com</a> for the production version.
             </p>
+            <div id="nativeLink">
+            <a href="https://mobile-meet.tokbox.com" target="_blank">
+                <img src="/images/white-phone.png">
+                Remember to try the mobile app for iOS or Android or Desktop app for Mac OS!
+            </a>
+            </div>
         </div>
         <reconnecting-overlay id="reconnectingOverlay"
             ng-if="reconnecting"

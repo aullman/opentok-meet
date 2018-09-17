@@ -351,6 +351,20 @@ button:disabled {
     z-index: 97;
 }
 
+#nativeLink {
+    width: 250px;
+    margin-left: calc(50% - 125px);
+    background-color: #262422;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#nativeLink img {
+    width: 25px;
+    float: left;
+    padding: 10px;
+}
+
 #loader {
     width: 32px;
     height: 32px;
