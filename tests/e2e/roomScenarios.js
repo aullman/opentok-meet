@@ -169,28 +169,6 @@ describe('Room', () => {
     });
   });
 
-  it('stats button works', () => {
-    const showStatsInfo = element(by.css('.show-stats-info'));
-    const statsButton = element(by.css('.statsBtn'));
-    expect(showStatsInfo.isDisplayed()).toBe(false);
-    statsButton.click();
-    browser.wait(() => showStatsInfo.isDisplayed(), 2000);
-
-    expect(showStatsInfo.isDisplayed()).toBe(true);
-
-    const resolutionRegex = /^\d+x\d+$/;
-    const packetLossRegex = /^(\d{1,3}[.,])+\d{2}%$/;
-    const bitrateRegex = /^(\d{1,3}[.,])+\d{2} kbps$/;
-    const framerateRegex = /^(\d{1,3}[.,])+\d{2} fps$/;
-
-    expect(element(by.css('[data-for="resolution"]')).getText()).toMatch(resolutionRegex);
-    expect(element(by.css('[data-for="audioPacketLoss"]')).getText()).toMatch(packetLossRegex);
-    expect(element(by.css('[data-for="audioBitrate"]')).getText()).toMatch(bitrateRegex);
-    expect(element(by.css('[data-for="videoPacketLoss"]')).getText()).toMatch(packetLossRegex);
-    expect(element(by.css('[data-for="videoBitrate"]')).getText()).toMatch(bitrateRegex);
-    expect(element(by.css('[data-for="videoFramerate"]')).getText()).toMatch(framerateRegex);
-  });
-
   describe('footer', () => {
     it('Github link and report issue link is present', () => {
       const githubLink = element(by.css('#footer a [title="View source on GitHub"]'));

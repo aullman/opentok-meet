@@ -65,6 +65,30 @@ describe('2 browsers in the same room', () => {
       expect(subscriber.getAttribute('class')).not.toContain('OT_big');
     });
 
+    describe('publisher buttons', () => {
+      it('stats button works', () => {
+        const showStatsInfo = element(by.css('publisher-stats .show-stats-info'));
+        const statsButton = element(by.css('publisher-stats .statsBtn'));
+        expect(showStatsInfo.isDisplayed()).toBe(false);
+        statsButton.click();
+        browser.wait(() => showStatsInfo.isDisplayed(), 2000);
+
+        expect(showStatsInfo.isDisplayed()).toBe(true);
+
+        const resolutionRegex = /^\d+x\d+$/;
+        const packetLossRegex = /^(\d{1,3}[.,])+\d{2}%$/;
+        const bitrateRegex = /^(\d{1,3}[.,])+\d{2} kbps$/;
+        const framerateRegex = /^(\d{1,3}[.,])+\d{2} fps$/;
+
+        expect(element(by.css('publisher-stats [data-for="resolution"]')).getText()).toMatch(resolutionRegex);
+        expect(element(by.css('publisher-stats [data-for="audioPacketLoss"]')).getText()).toMatch(packetLossRegex);
+        expect(element(by.css('publisher-stats [data-for="audioBitrate"]')).getText()).toMatch(bitrateRegex);
+        expect(element(by.css('publisher-stats [data-for="videoPacketLoss"]')).getText()).toMatch(packetLossRegex);
+        expect(element(by.css('publisher-stats [data-for="videoBitrate"]')).getText()).toMatch(bitrateRegex);
+        expect(element(by.css('publisher-stats [data-for="videoFramerate"]')).getText()).toMatch(framerateRegex);
+      });
+    });
+
     describe('subscriber buttons', () => {
       let secondSubscriber;
       beforeEach((done) => {
@@ -168,7 +192,6 @@ describe('2 browsers in the same room', () => {
         const packetLossRegex = /^(\d{1,3}[.,])+\d{2}%$/;
         const bitrateRegex = /^(\d{1,3}[.,])+\d{2} kbps$/;
         const framerateRegex = /^(\d{1,3}[.,])+\d{2} fps$/;
-        const serverRegex = /^[\w.-]+\.tokbox\.com$/;
 
         expect(secondBrowser.element(by.css('[data-for="resolution"]')).getText()).toMatch(resolutionRegex);
         expect(secondBrowser.element(by.css('[data-for="audioPacketLoss"]')).getText()).toMatch(packetLossRegex);
@@ -176,8 +199,6 @@ describe('2 browsers in the same room', () => {
         expect(secondBrowser.element(by.css('[data-for="videoPacketLoss"]')).getText()).toMatch(packetLossRegex);
         expect(secondBrowser.element(by.css('[data-for="videoBitrate"]')).getText()).toMatch(bitrateRegex);
         expect(secondBrowser.element(by.css('[data-for="videoFramerate"]')).getText()).toMatch(framerateRegex);
-        expect(secondBrowser.element(by.css('[data-for="originServer"]')).getText()).toMatch(serverRegex);
-        expect(secondBrowser.element(by.css('[data-for="edgeServer"]')).getText()).toMatch(serverRegex);
       });
 
       it('report button works', () => {
