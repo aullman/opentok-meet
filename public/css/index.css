@@ -77,3 +77,17 @@ img.logo {
     height: 90px;
     margin-bottom: 30px;
 }
+
+#nativeLink {
+    width: 300px;
+    height: 200px;
+    margin-top: 100px;
+    margin-left: calc(50% - 150px);
+    text-align: left;
+}
+
+#nativeLink img {
+    width: 25px;
+    float: left;
+    padding: 10px;
+}
