@@ -29,7 +29,7 @@ describe('subscriber-stats', () => {
     $timeout = _$timeout_;
     StatsService = _StatsService_;
     spyOn(StatsService, 'addSubscriber');
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on']);
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on', 'off']);
     mockSubscriber.id = 'mockId';
     spyOn(OTSession.session, 'getSubscribersForStream').and.callFake(() => [mockSubscriber]);
     scope = $rootScope.$new();
@@ -138,7 +138,7 @@ describe('StatsService', () => {
     $httpBackend.expectGET(`${baseURL + room}/subscriber/${mockWidgetId}`);
 
     onStats = jasmine.createSpy('onStats');
-    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on']);
+    mockSubscriber = jasmine.createSpyObj('Subscriber', ['getStats', 'setStyle', 'on', 'off']);
     mockSubscriber.id = 'mockId';
     mockSubscriber.widgetId = mockWidgetId;
     mockSubscriber.videoWidth = () => 200;
@@ -362,5 +362,39 @@ describe('StatsService', () => {
       $httpBackend.verifyNoOutstandingRequest();
       done();
     }, 500);
+  });
+
+  it('should add audio and video codecs', () => {
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    const onQoS = mockSubscriber.on.calls.first().args[1];
+    onQoS({
+      videoCodec: 'VP8',
+      audioCodec: 'opus',
+    });
+    expect(mockSubscriber.off).not.toHaveBeenCalledWith('qos', jasmine.any(Function));
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    expect(onStats.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({
+      videoCodec: 'VP8',
+      audioCodec: 'opus',
+    }));
+
+    // Should update when the codec changes
+    onQoS({
+      videoCodec: 'H264',
+    });
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    expect(onStats.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({
+      videoCodec: 'H264',
+      audioCodec: 'opus',
+    }));
+
+    onQoS({
+      audioCodec: 'G711',
+    });
+    mockSubscriber.getStats.calls.mostRecent().args[0](null, mockStats);
+    expect(onStats.calls.mostRecent().args[0]).toEqual(jasmine.objectContaining({
+      videoCodec: 'H264',
+      audioCodec: 'G711',
+    }));
   });
 });

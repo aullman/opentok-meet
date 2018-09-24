@@ -86,6 +86,8 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           return;
         }
 
+        // The below is only executed on the first call to getStats
+
         const widgetId = subscriberStats.subscriber.widgetId;
         $http.get(`${baseURL + room}/subscriber/${widgetId}`)
           .then((res) => {
@@ -101,10 +103,11 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
 
         // Listen to internal qos events to figure out the audio and video codecs
         const qosHandler = (qos) => {
-          if (qos.videoCodec && qos.audioCodec) {
+          if (qos.videoCodec) {
             subscriberStats.videoCodec = qos.videoCodec;
+          }
+          if (qos.audioCodec) {
             subscriberStats.audioCodec = qos.audioCodec;
-            subscriber.off('qos', qosHandler);
           }
         };
         subscriber.on('qos', qosHandler);
