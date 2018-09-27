@@ -559,3 +559,32 @@ ot-subscriber mute-video .cross-icon {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */
+  @media only screen and (orientation: portrait) {
+    #session {
+      top: 35px;
+      bottom: -150px;
+    }
+    #footer,
+    #connCount {
+      bottom: -135px;
+    }
+    #bottomBar {
+      bottom: -110px;
+    }
+  }
+  @media only screen and (orientation: landscape) {
+    #session {
+      top: 50px;
+      bottom: -50px;
+    }
+    #footer, #connCount {
+      bottom: -35px;
+    }
+    #bottomBar {
+        bottom: -10px;
+    }
+  }
+}
