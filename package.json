@@ -76,7 +76,7 @@
     "protractor": "^4.0.9",
     "protractor-flake": "^2.1.2",
     "q": "^1.2.0",
-    "travis-multirunner": "^4.2.0",
+    "travis-multirunner": "^4.5.0",
     "uuid": "^2.0.1"
   },
   "optionalDependencies": {
