@@ -5,18 +5,14 @@ angular.module('opentok-meet-login', [])
     $scope.room = '';
     $scope.roomType = 'normal';
     $scope.advanced = false;
-    $scope.h264 = false;
     $scope.dtx = false;
     $scope.joinRoom = () => {
       let url = $window.location.href + encodeURIComponent($scope.room);
       if ($scope.roomType !== 'normal') {
         url += `/${$scope.roomType}`;
       }
-      if ($scope.h264) {
-        url += '?h264=true';
-      }
       if ($scope.dtx) {
-        url += `${$scope.h264 ? '&' : '?'}dtx=true`;
+        url += '?dtx=true';
       }
       $window.location.href = url;
     };
