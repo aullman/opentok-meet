@@ -75,10 +75,10 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           };
         }
 
-        if (subscriberStats.audioCodec && subscriberStats.videoCodec) {
-          currStats.videoCodec = subscriberStats.videoCodec;
-          currStats.audioCodec = subscriberStats.audioCodec;
-        }
+        ['audio', 'video'].forEach((type) => {
+          const key = `${type}Codec`;
+          if (subscriberStats[key]) { currStats[key] = subscriberStats[key]; }
+        });
 
         subscriberStats.onStats(currStats);
 
