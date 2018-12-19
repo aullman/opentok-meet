@@ -5451,6 +5451,14 @@ travis-multirunner@^4.2.0:
     formatter "^0.4.1"
     normalize-package-data "^2.3.8"
 
+travis-multirunner@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/travis-multirunner/-/travis-multirunner-4.5.0.tgz#99c34cbc39175f5b91854ef3a2a09ee3dcea8677"
+  dependencies:
+    djo-shell "^1.0.0"
+    formatter "^0.4.1"
+    normalize-package-data "^2.3.8"
+
 trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
