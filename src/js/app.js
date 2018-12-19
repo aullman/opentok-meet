@@ -22,3 +22,5 @@ require('./services.js');
 require('./screen/directive.js');
 require('./notifications.js');
 require('./ot-errors.js');
+require('./microphone-picker.js');
+
