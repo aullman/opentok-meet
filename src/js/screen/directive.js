@@ -5,22 +5,23 @@
 // somewhere else in your application using the screenPublisherProps and the id 'screenPublisher'
 angular.module('opentok-meet').directive('screenShareDialogs', () => ({
   restrict: 'E',
-  template: '<div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">' +
-    'Screen Share Failed {{screenShareFailed}}</div>' +
-    '<div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">' +
-    'You need a Chrome extension to share your screen. ' +
-    '<a href="" sync-click="installScreenshareExtension()">Install Screensharing Extension</a>.' +
-    ' Once you have installed refresh your browser and click the share screen button again.' +
-    '</div>' +
-    '<div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">' +
-        'Screen Sharing currently requires Google Chrome or Firefox on Desktop.' +
-    '</div>',
+  template: `<div id="screenShareFailed" class="statusMessage" ng-if="screenShareFailed">
+    Screen Share Failed {{screenShareFailed}}</div>
+    <div id="installScreenshareExtension" class="statusMessage" ng-if="promptToInstall">
+    You need a Chrome extension to share your screen. 
+    <a href="{{ 'https://chrome.google.com/webstore/detail/' + chromeExtensionId }}" target="_blank">Install Screensharing Extension</a>.
+     Once you have installed refresh your browser and click the share screen button again.
+    </div>
+    <div id="screenShareUnsupported" class="statusMessage" ng-if="!screenShareSupported">
+        Screen Sharing currently requires Google Chrome or Firefox on Desktop.
+    </div>`,
   controller: ['$scope', 'chromeExtensionId', function controller($scope, chromeExtensionId) {
     $scope.promptToInstall = false;
     $scope.selectingScreenSource = false;
     $scope.sharingMyScreen = false;
     $scope.screenShareSupported = true;
     $scope.screenShareFailed = null;
+    $scope.chromeExtensionId = chromeExtensionId;
 
     $scope.screenPublisherProps = {
       name: 'screen',
@@ -79,17 +80,6 @@ angular.module('opentok-meet').directive('screenShareDialogs', () => ({
       } else if ($scope.sharingMyScreen) {
         $scope.sharingMyScreen = false;
       }
-    };
-
-    $scope.installScreenshareExtension = () => {
-      chrome.webstore.install(
-        `https://chrome.google.com/webstore/detail/${chromeExtensionId}`,
-        () => {
-          console.log('successfully installed');
-        }, (err) => {
-          console.error('failed to install', err);
-        }
-      );
     };
   }],
 }));

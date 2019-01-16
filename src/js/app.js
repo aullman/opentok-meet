@@ -21,7 +21,6 @@ angular.module('opentok-meet', ['ngRaven', 'opentok', 'opentok-whiteboard',
   'opentok-editor', 'opentok-textchat', 'debounce']);
 
 require('./directives.js');
-require('./sync-click.js');
 require('./subscriber-stats.js');
 require('./subscriber-report.js');
 require('./publisher-stats.js');
