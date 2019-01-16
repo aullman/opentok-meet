@@ -106,24 +106,6 @@ describe('draggable', () => {
   });
 });
 
-describe('syncClick', () => {
-  let scope;
-  let element;
-  beforeEach(angular.mock.module('opentok-meet'));
-  beforeEach(inject(($rootScope, $compile) => {
-    scope = $rootScope.$new();
-    scope.syncClick = jasmine.createSpy('syncClick');
-    element = '<div sync-click="syncClick()"></div>';
-    element = $compile(element)(scope);
-    scope.$digest();
-  }));
-
-  it('calls syncClick on click event', () => {
-    element.triggerHandler('click');
-    expect(scope.syncClick).toHaveBeenCalled();
-  });
-});
-
 describe('muteVideo', () => {
   let scope;
   let element;
