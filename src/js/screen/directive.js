@@ -1,4 +1,3 @@
-/* global chrome */
 // Shared directive between room.ejs and screen.ejs
 // This handles OpenTok screensharing and sets `$scope.sharingMyScreen` to true
 // when you are ready to share your screen. Then you need to include an ot-publisher
