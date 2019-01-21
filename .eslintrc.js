@@ -3,6 +3,9 @@ module.exports = {
     "rules": {
       "no-console": 0,
       "no-param-reassign": 0, // In angular you do a lot of scope.something = something
+      "comma-dangle": ["error", {
+        "functions": "ignore",
+      }],
     },
     "env": {
       "browser": true,

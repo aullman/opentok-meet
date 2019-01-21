@@ -10,7 +10,7 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
       restrict: 'E',
       scope: {
         props: '&',
-        filter: '=',
+        filter: '='
       },
       link(scope, element, attrs) {
         const props = angular.copy(scope.props() || {});
@@ -26,7 +26,7 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
         }
         getFilter(props, scope.filter).then((filterRunner) => {
           scope.filterRunner = filterRunner;
-          props.videoSource = scope.filterRunner.canvas.captureStream(30).getVideoTracks()[0];
+          [props.videoSource] = scope.filterRunner.canvas.captureStream(30).getVideoTracks();
 
           scope.publisher = OT.initPublisher(
             attrs.apikey || OTSession.session.apiKey,
@@ -65,7 +65,7 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
               event.element.addEventListener('resize', () => {
                 $rootScope.$broadcast('otLayout');
               });
-            },
+            }
           });
           scope.$watch('filter', (newValue) => {
             if (newValue === undefined || newValue === 'none') {
@@ -95,7 +95,7 @@ angular.module('opentok-meet').directive('filteredPublisher', ['OTSession', '$ro
           }
           OTSession.addPublisher(scope.publisher);
         });
-      },
+      }
     };
-  },
+  }
 ]);
