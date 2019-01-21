@@ -18,6 +18,7 @@
     "jquery": "^2.2.3",
     "opentok": "^2.6.2",
     "opentok-angular": "^2.1.2",
+    "opentok-camera-filters": "^2.0.1",
     "opentok-editor": "^0.3.3",
     "opentok-textchat": "^1.2.3",
     "opentok-whiteboard": "^1.2.1",
