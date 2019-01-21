@@ -348,7 +348,7 @@ describe('Room', () => {
             } else {
               done();
             }
-          },
+          }
         );
       });
     }

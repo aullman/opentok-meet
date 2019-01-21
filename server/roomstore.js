@@ -56,7 +56,7 @@ module.exports = (redis, ot) => {
                       } else {
                         goToRoom(null, sessionId, apiKey, secret);
                       }
-                    },
+                    }
                   );
                 } else {
                   goToRoom(null, sessionId);
