@@ -74,7 +74,7 @@ if (browser.params.testScreenSharing) {
           } else {
             done();
           }
-        },
+        }
       );
     });
   });
