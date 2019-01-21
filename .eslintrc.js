@@ -6,11 +6,11 @@ module.exports = {
       "comma-dangle": ["error", {
         "arrays": "always-multiline",
         "objects": "always-multiline",
-        "imports": "always-multiline",
-        "exports": "always-multiline",
-        // this is disabled as we run our codebase through node
-        "functions": "never"
+        "imports": "ignore",
+        "exports": "ignore",
+        "functions": "ignore"
       }],
+      "prefer-destructuring": 0,  // It doesn't work with IE11 without babel-polyfill
     },
     "env": {
       "browser": true,
