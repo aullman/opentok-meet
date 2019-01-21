@@ -79,7 +79,7 @@ module.exports = (config) => {
           {
             test: /\.js$/,
             loader: 'babel-loader',
-            exclude: /node_modules(?!\/opentok-textchat)/,
+            exclude: /node_modules(?!\/(opentok-textchat|opentok-camera-filters))/,
             query: {
               presets: ['babel-preset-env'].map(require.resolve),
             },
