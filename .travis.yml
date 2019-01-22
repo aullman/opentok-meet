@@ -13,12 +13,6 @@ after_success:
 addons:
   code_climate:
     repo_token: 664b3bd95bef5ad8f8126fad7db731a0c9aaedbbc42223a1c3f668c550ab22a9
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libcairo2-dev
-      - libpango1.0-dev
 services:
 - redis-server
 sudo: required
