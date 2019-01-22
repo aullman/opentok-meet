@@ -1,5 +1,14 @@
-const filters = require('opentok-camera-filters/src/filters.js');
 const filterFn = require('opentok-camera-filters');
+const filterTask = require('opentok-camera-filters/src/filterTask');
+const filterous = require('filterous/lib/instaFilters');
+
+const filters = {};
+// Add all of the filterous filters
+Object.keys(filterous).forEach((filter) => {
+  if (typeof filterous[filter] === 'function') {
+    filters[filter] = (videoElement, canvas) => filterTask(videoElement, canvas, filterous[filter]);
+  }
+});
 
 const getFilter = (props, filter) =>
   OT.getUserMedia(props).then(stream => filterFn(stream, filters[filter]));

@@ -73,7 +73,7 @@
                 <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
                 <audio-acquisition-problem publisher-id="facePublisher"></audio-acquisition-problem>
                 <microphone-picker publisher="getPublisher('facePublisher')"></microphone-picker>
-                <filter-picker filter="filter"></filter-picker>
+                <filter-picker filter="filter" publisher="getPublisher('facePublisher')"></filter-picker>
                 <cycle-camera publisher-id="facePublisher"></cycle-camera>
             </div>
             <div class="publisher-container left" draggable="true" ng-if="sharingMyScreen">
