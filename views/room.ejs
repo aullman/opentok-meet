@@ -57,11 +57,18 @@
                 ng-if="publishing"
                 draggable="true">
                 <ot-publisher id="facePublisher"
+                    ng-if="filter == 'none'"
                     props="facePublisherProps">
                 </ot-publisher>
+                <filtered-publisher id="facePublisher"
+                    filter="filter"
+                    ng-if="filter !== 'none'"
+                    props="facePublisherProps">
+                </filtered-publisher>
                 <publisher-stats publisher="getPublisher('facePublisher')"></publisher-stats>
                 <mute-video publisher-id="facePublisher" mute-publisher></mute-video>
                 <microphone-picker publisher="getPublisher('facePublisher')"></microphone-picker>
+                <filter-picker filter="filter" publisher="getPublisher('facePublisher')"></filter-picker>
                 <cycle-camera publisher-id="facePublisher"></cycle-camera>
             </div>
             <div class="publisher-container left" draggable="true" ng-if="sharingMyScreen">

@@ -25,6 +25,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       bigFixedRatio: !$scope.bigZoomed,
       fixedRatio: !$scope.zoomed,
     };
+    $scope.filter = 'none';
 
     const facePublisherPropsHD = {
       name: 'face',

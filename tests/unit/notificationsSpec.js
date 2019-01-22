@@ -86,7 +86,7 @@ describe('NotificationService', () => {
             done();
           });
           mockSession.trigger('connectionCreated', { connection: { connectionId: 'mock' } });
-        },
+        }
       );
 
       it('does not trigger a notification for your own connectionCreated', (done) => {

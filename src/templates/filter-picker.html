@@ -1,0 +1,9 @@
+<button class="filter icon-left ion ion-wand" ng-click="toggleFilterList()"></button>
+<button class="arrow icon-left ion ion-arrow-down-b" ng-click="toggleFilterList()"></button>
+<ul ng-show="showFilterList">
+  <li ng-repeat="f in filters" ng-class="{ selected: filter === f }" ng-click="selectFilter(f)">
+    <img ng-if="filterImages && filterImages[f]" ng-src="{{filterImages && filterImages[f]}}" alt="{{f}}" />
+    <i ng-if="!(filterImages && filterImages[f])" class="loader ion-loading-c"></i>
+    <span class="filter-name">{{f}}</span>
+  </li>
+</ul>

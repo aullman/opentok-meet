@@ -58,7 +58,7 @@ describe('OpenTok Meet Screenshare Only Page', () => {
       it('calls OTSession.init', () => {
         expect(MockOTSession.init).toHaveBeenCalledWith(
           'mockAPIKey', 'mockSessionId',
-          'mockToken',
+          'mockToken'
         );
       });
     });

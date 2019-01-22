@@ -269,7 +269,7 @@ describe('Room', () => {
           showWhiteboardBtn.click();
           expect(showWhiteboardBtn.getAttribute('class')).toContain('green');
           expect(whiteboard.isDisplayed()).toBe(false);
-        },
+        }
       );
     });
 
@@ -294,7 +294,7 @@ describe('Room', () => {
           showEditorBtn.click();
           expect(editor.isDisplayed()).toBe(false);
           expect(showEditorBtn.getAttribute('class')).toContain('green');
-        },
+        }
       );
     });
 
@@ -362,7 +362,7 @@ describe('Room', () => {
             } else {
               done();
             }
-          },
+          }
         );
       });
     }
