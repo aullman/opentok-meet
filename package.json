@@ -13,7 +13,7 @@
     "css-loader": "^0.23.1",
     "ejs": ">= 0.0.1",
     "express": "3.1.x",
-    "filterous": "^2.0.2-beta",
+    "filterous": "aullman/filterous-2",
     "glob": "^5.0.15",
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
