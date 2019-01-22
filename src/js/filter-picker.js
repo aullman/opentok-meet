@@ -6,7 +6,7 @@ function FilterPickerDirective() {
   function link(scope, element) {
     let currentPublisher;
     scope.showFilterList = false;
-    scope.filters = ['none', 'brannan', 'xpro2', 'moon', 'nashville', 'lofi', 'helena'];
+    scope.filters = ['none', 'brannan', 'xpro2', 'moon', 'nashville', 'lofi', 'helena', '1977'];
     scope.filterImages = null;
 
     scope.toggleFilterList = () => {
@@ -19,8 +19,8 @@ function FilterPickerDirective() {
           if (videoElement) {
             scope.filterImages = {};
             const canvas = document.createElement('canvas');
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
+            canvas.width = videoElement.videoWidth / 4;
+            canvas.height = videoElement.videoHeight / 4;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
             const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -34,8 +34,8 @@ function FilterPickerDirective() {
                   );
                   const filteredImgData = filterous[filter](imgDataCopy);
                   const tmpCanvas = document.createElement('canvas');
-                  tmpCanvas.width = videoElement.videoWidth;
-                  tmpCanvas.height = videoElement.videoHeight;
+                  tmpCanvas.width = canvas.width;
+                  tmpCanvas.height = canvas.height;
                   const tmpCtx = tmpCanvas.getContext('2d');
                   tmpCtx.putImageData(filteredImgData, 0, 0);
                   scope.filterImages[filter] = `${tmpCanvas.toDataURL('image/png')}`;

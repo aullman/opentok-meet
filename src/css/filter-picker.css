@@ -40,21 +40,40 @@ filter-picker ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  width: 250px;
+  width: 202px;
 }
 
 filter-picker li {
   cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 5px;
+  border: 1px solid #ddd;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  position: relative;
+}
+
+filter-picker li .loader {
+  position: absolute;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
 }
 
 filter-picker li img {
   object-fit: cover;
-  width: 30px;
-  height: 30px;
   border-radius: 5px;
   margin-right: 5px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+filter-picker li .filter-name {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
 }
 
 filter-picker li.selected {
