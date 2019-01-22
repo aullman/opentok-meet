@@ -13,6 +13,13 @@ after_success:
 addons:
   code_climate:
     repo_token: 4abde268e416aa3752bccf1311ecfe7cd3d6a445ff4849ee4632bc7f9bbde251
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libcairo2-dev
+      - libpango1.0-dev
+      - libgif-dev
 services:
 - redis-server
 sudo: required

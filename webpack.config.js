@@ -64,7 +64,7 @@ if (production) {
     {
       test: /\.js$/,
       loader: 'babel-loader',
-      exclude: /node_modules(?!\/(opentok-textchat|opentok-camera-filters))/,
+      exclude: /node_modules(?!\/(opentok-textchat|opentok-camera-filters|filterous))/,
       query: {
         presets: ['babel-preset-env'].map(require.resolve),
       },
