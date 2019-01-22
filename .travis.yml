@@ -19,6 +19,7 @@ addons:
     packages:
       - libcairo2-dev
       - libpango1.0-dev
+      - libgif-dev
 services:
 - redis-server
 sudo: required
