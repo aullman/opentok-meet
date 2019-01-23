@@ -33,5 +33,7 @@ require('./notifications.js');
 require('./ot-errors.js');
 require('./filtered-publisher.js');
 require('./microphone-picker.js');
+require('./filtered-publisher.js');
+require('./filter-picker.js');
 
 require('./safari-electron-redirect.js');

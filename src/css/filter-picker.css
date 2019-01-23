@@ -1,0 +1,99 @@
+filter-picker > * {
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+#facePublisher:hover filter-picker>* {
+  opacity: 1;
+}
+
+filter-picker button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  color: white;
+  padding: 0;
+  margin: 0;
+}
+
+filter-picker button.filter {
+  font-size: 20px;
+  bottom: 3px;
+  right: 0px;
+}
+
+filter-picker button.arrow {
+  font-size: 10px;
+  bottom: 3px;
+  right: 0px;
+}
+
+filter-picker ul {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  background: rgba(0, 0, 0, .4);
+  color: #ddd;
+  border: 1px solid #ddd;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 202px;
+}
+
+filter-picker li {
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid #ddd;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  position: relative;
+}
+
+filter-picker li .loader {
+  position: absolute;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+}
+
+filter-picker li img {
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 5px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+filter-picker li .filter-name {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+}
+
+filter-picker li.selected {
+  background-color: rgba(86, 158, 83, 0.9);
+}
+
+@media screen and (max-width: 650px) {
+  filter-picker ul {
+    top: 50px;
+  }
+}
+
+@media only screen and (orientation: portrait) {
+  filter-picker ul {
+    top: 150px;
+  }
+}
+
+@media only screen and (orientation: portrait) and (max-width: 650px) {
+  filter-picker ul {
+    top: 75px;
+  }
+}
