@@ -13,7 +13,7 @@ exports.getFirefoxProfile = () => {
   firefoxProfile.setPreference('media.navigator.streams.fake', true);
   firefoxProfile.setPreference(
     'media.getusermedia.screensharing.allowed_domains',
-    'localhost,adam.local',
+    'localhost,adam.local'
   );
   firefoxProfile.encoded((encodedProfile) => {
     const multiCapabilities = [{

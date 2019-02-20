@@ -244,7 +244,7 @@ describe('OpenTok Meet controllers', () => {
       it('calls OTSession.init', () => {
         expect(MockOTSession.init).toHaveBeenCalledWith(
           'mockAPIKey', 'mockSessionId', 'mockToken',
-          jasmine.any(Function),
+          jasmine.any(Function)
         );
       });
 
@@ -283,7 +283,7 @@ describe('OpenTok Meet controllers', () => {
             expect(mockSession.on).toHaveBeenCalledWith('sessionDisconnected', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith(
               'archiveStarted archiveStopped',
-              jasmine.any(Function),
+              jasmine.any(Function)
             );
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnecting', jasmine.any(Function));
             expect(mockSession.on).toHaveBeenCalledWith('sessionReconnected', jasmine.any(Function));
