@@ -40,6 +40,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       resolution: '1280x720',
       enableStereo: true,
       frameRate: 30,
+      _allowSafariSimulcast: true,
     };
     const facePublisherPropsSD = {
       name: 'face',
@@ -48,6 +49,7 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       style: {
         nameDisplayMode: 'off',
       },
+      _allowSafariSimulcast: true,
     };
     $scope.facePublisherProps = facePublisherPropsHD;
 
