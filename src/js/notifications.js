@@ -19,7 +19,8 @@ angular.module('opentok-meet').factory('NotificationService', ['$window', 'OTSes
         OTSession.on('init', notifyOnConnectionCreated);
       } else {
         OTSession.session.on('connectionCreated', (event) => {
-          if (!focused &&
+          const visible = $window.document.visibilityState === 'visible';
+          if ((!focused || !visible) &&
               event.connection.connectionId !== OTSession.session.connection.connectionId) {
             Push.create('New Participant', {
               body: 'Someone joined your meeting',

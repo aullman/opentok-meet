@@ -18,6 +18,7 @@ describe('NotificationService', () => {
     OT.$.eventing(mockSession);
     spyOn(mockSession, 'on').and.callThrough();
     windowMock = jasmine.createSpyObj('window', ['addEventListener', 'focus']);
+    windowMock.document = { visibilityState: 'visible' };
     angular.mock.module(($provide) => {
       $provide.value('$window', windowMock);
     });
@@ -62,6 +63,37 @@ describe('NotificationService', () => {
       });
     });
 
+    const checkNotification = (done) => {
+      spyOn(Push, 'create').and.callFake((title, opts) => {
+        expect(title).toEqual('New Participant');
+        expect(opts).toEqual(jasmine.objectContaining({
+          body: 'Someone joined your meeting',
+          icon: '/icon.png',
+          timeout: 5000,
+          tag: jasmine.any(String),
+        }));
+        done();
+      });
+      mockSession.trigger('connectionCreated', {
+        connection: {
+          connectionId: 'mock',
+        },
+      });
+    };
+
+    describe('when the window is not visible', () => {
+      beforeEach(() => {
+        OTSession.session = mockSession;
+        NotificationService.init();
+        windowMock.document.visibilityState = 'hidden';
+      });
+
+      it(
+        'triggers a notification when you get a connectionCreated and the window is not visible',
+        checkNotification
+      );
+    });
+
     describe('when the window is not focused', () => {
       beforeEach(() => {
         OTSession.session = mockSession;
@@ -74,19 +106,7 @@ describe('NotificationService', () => {
 
       it(
         'triggers a notification when you get a connectionCreated and the window is not focused',
-        (done) => {
-          spyOn(Push, 'create').and.callFake((title, opts) => {
-            expect(title).toEqual('New Participant');
-            expect(opts).toEqual(jasmine.objectContaining({
-              body: 'Someone joined your meeting',
-              icon: '/icon.png',
-              timeout: 5000,
-              tag: jasmine.any(String),
-            }));
-            done();
-          });
-          mockSession.trigger('connectionCreated', { connection: { connectionId: 'mock' } });
-        }
+        checkNotification
       );
 
       it('does not trigger a notification for your own connectionCreated', (done) => {
