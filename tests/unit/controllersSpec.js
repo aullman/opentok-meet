@@ -68,7 +68,7 @@ describe('OpenTok Meet controllers', () => {
     });
 
     it('should define facePublisherProps', () => {
-      expect(scope.facePublisherProps).toEqual({
+      expect(scope.facePublisherProps).toEqual(jasmine.objectContaining({
         name: 'face',
         width: '100%',
         height: '100%',
@@ -79,7 +79,7 @@ describe('OpenTok Meet controllers', () => {
         resolution: '1280x720',
         enableStereo: true,
         frameRate: 30,
-      });
+      }));
     });
 
     it('should have a notMine method that works', () => {
