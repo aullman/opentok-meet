@@ -18,7 +18,6 @@
           window.OTProperties = { enableErrorReporting: true };
         </script>
         <script src="/js/commons.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/js/h264.bundle.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="<%=opentokJs%>"></script>
         <link rel="stylesheet" href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.14.2/codemirror.css" media="screen" title="no title" charset="utf-8">
@@ -130,7 +129,7 @@
             <button type="button" name="archive" id="startArchiveBtn"
                 ng-if="!p2p && connected" ng-class="{green: !archiving, red: archiving}" class="icon-left ion-ios7-recording"
                 ng-click="toggleArchiving()" title="Record">Record</button>
-            
+
             <button type="button" name="muteCamera" mute-publisher ng-if="publishing" ng-class="{green: mutedVideo, red: !mutedVideo}" publisher-id="facePublisher" class="icon-left ion ion-person">Camera</button>
 
             <button type="button" name="muteMicrophone" muted-type="Audio" ng-if="publishing" mute-publisher ng-class="{green: mutedAudio, red: !mutedAudio, 'ion-ios7-mic-off': mutedAudio, 'ion-ios7-mic': !mutedAudio}" publisher-id="facePublisher" class="icon-left ion">Mic</button>
