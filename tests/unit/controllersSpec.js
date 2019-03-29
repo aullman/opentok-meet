@@ -77,7 +77,6 @@ describe('OpenTok Meet controllers', () => {
         },
         usePreviousDeviceSelection: true,
         resolution: '1280x720',
-        enableStereo: true,
         frameRate: 30,
       }));
     });
