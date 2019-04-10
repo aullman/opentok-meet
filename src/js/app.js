@@ -2,7 +2,7 @@
 window.$ = window.jQuery = require('jquery');
 const angular = require('angular');
 
-require('opentok-angular');
+require('./opentok-angular');
 require('opentok-whiteboard');
 require('opentok-whiteboard/opentok-whiteboard.css');
 require('opentok-editor');
@@ -24,4 +24,3 @@ require('./ot-errors.js');
 require('./microphone-picker.js');
 require('./filtered-publisher.js');
 require('./filter-picker.js');
-

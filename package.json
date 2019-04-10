@@ -17,6 +17,7 @@
     "glob": "^5.0.15",
     "hiredis": "~0.4.1",
     "jquery": "^2.2.3",
+    "nexmo-client": "^4.0.1",
     "opentok": "^2.6.2",
     "opentok-angular": "^2.1.2",
     "opentok-camera-filters": "^2.0.1",
