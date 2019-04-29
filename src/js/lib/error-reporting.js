@@ -13,6 +13,11 @@ module.exports = function installErrorReporting(angular) {
           commitHash: COMMITHASH,
         },
         debug: true,
+        inAppInclude: [
+          '~/opentok-',
+          '.',
+          'webpack://OT',
+        ],
       }
     )
     .addPlugin(RavenAngular, angular)
