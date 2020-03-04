@@ -30,12 +30,21 @@ matrix:
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+    - os: osx
+      osx_image: xcode8.3
+      env: BROWSER=safari BVER=stable SPLIT_TEST_SUITE="true"
+    - os: osx
+      osx_image: xcode10.1
+      env: BROWSER=safari BVER=beta SPLIT_TEST_SUITE="true"
 
   allow_failures:
     - os: linux
       env: BROWSER=chrome  BVER=beta
     - os: linux
       env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+    - os: osx
+      osx_image: xcode10.1
+      env: BROWSER=safari BVER=beta SPLIT_TEST_SUITE="true"
 
 env:
   global:
