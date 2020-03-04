@@ -23,7 +23,7 @@ matrix:
     - os: linux
       env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=chrome  BVER=64.0.3282.140
+      env: BROWSER=chrome  BVER=stable
     - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
