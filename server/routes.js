@@ -96,7 +96,7 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
         });
       } else {
         ot.setStreamClassLists(sessionId, classListArray, (error) => {
-          if (err) {
+          if (error) {
             console.log('Error getting room: ', error);
             res.send({
               error: error.message,
