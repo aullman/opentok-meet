@@ -69,9 +69,9 @@ module.exports = (app, config, redis, ot) => {
       otSDK.startArchive(sessionId, {
         name: room,
         resolution: '1280x720',
-        layout : {
-          type: "custom",
-          stylesheet
+        layout: {
+          type: 'custom',
+          stylesheet,
         },
       }, (startErr, archive) => {
         if (startErr) {

@@ -95,11 +95,11 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
           error: err.message,
         });
       } else {
-        ot.setStreamClassLists(sessionId, classListArray, (err) => {
+        ot.setStreamClassLists(sessionId, classListArray, (error) => {
           if (err) {
-            console.log('Error getting room: ', err);
+            console.log('Error getting room: ', error);
             res.send({
-              error: err.message,
+              error: error.message,
             });
           } else {
             res.send(`Stream: ${classListArray[0].id} in session: ${sessionId}, has updated its layout class list to: ${classListArray[0].layoutClassList}`);
