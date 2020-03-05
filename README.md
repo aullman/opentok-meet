@@ -7,7 +7,7 @@ opentok-meet
 
 Opentok app with screen sharing using the WebRTC screen sharing and Archiving features. You can check it out running at [meet.tokbox.com](https://meet.tokbox.com).
 
-## Disclaimers
+## Disclaimer
 
 
 >This is a fork of the [opentok-meet](https://github.com/aullman/opentok-meet) project that deploys to [meet.tokbox.com](https://meet.tokbox.com). It is pointing to the OpenTok nightly environment which is experimental and likely to break. It also includes experimental features.
