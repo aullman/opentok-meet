@@ -7,7 +7,6 @@ before_install:
 - npm i -g npm@6
 before_script:
 - npm start > /dev/null &
-- if [ -n "$SAUCELABS" ]; then sleep 10;./node_modules/opentok-test-scripts/plugin-installer/packageSauceLabsInstaller.sh https://tbdev.tokbox.com/v2;mv ./node_modules/opentok-test-scripts/plugin-installer/SauceLabsInstaller.exe public/; fi
 after_success:
 - cat coverage/*/lcov.info | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
 addons:
@@ -24,29 +23,23 @@ matrix:
     - os: linux
       env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=chrome  BVER=64.0.3282.140
+      env: BROWSER=chrome  BVER=stable INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=ie BVER=11 SAUCELABS=true
+      env: BROWSER=chrome  BVER=beta INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=chrome BVER=unstable INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=chrome  BVER=beta
-    - os: osx
-      osx_image: xcode9.2
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=unstable INTEGRATION_CMD=''
 
   allow_failures:
     - os: linux
-      env: BROWSER=chrome  BVER=beta
+      env: BROWSER=chrome BVER=unstable INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
-    - os: osx
-      osx_image: xcode9.2
-      sudo: required
-      env: BROWSER=safari BVER=unstable INTEGRATION_CMD=''
+      env: BROWSER=firefox BVER=unstable INTEGRATION_CMD=''
 
 env:
   global:
