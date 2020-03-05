@@ -23,7 +23,9 @@ matrix:
     - os: linux
       env: UNIT_CMD='npm run lint' INTEGRATION_CMD=''
     - os: linux
-      env: BROWSER=chrome  BVER=63.0.3239.108
+      env: BROWSER=chrome  BVER=stable INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=chrome  BVER=beta INTEGRATION_CMD=''
     - os: linux
       env: BROWSER=firefox BVER=stable INTEGRATION_CMD=''
     - os: linux
@@ -31,7 +33,9 @@ matrix:
 
   allow_failures:
     - os: linux
-      env: BROWSER=firefox BVER=beta INTEGRATION_CMD=''
+      env: BROWSER=chrome BVER=unstable INTEGRATION_CMD=''
+    - os: linux
+      env: BROWSER=firefox BVER=unstable INTEGRATION_CMD=''
 
 env:
   global:
