@@ -80,4 +80,33 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
   app.get('/', (req, res) => {
     res.render('index.ejs');
   });
+
+  app.get('/:room/:streamId', (req, res) => {
+    let classList = [];
+    if (req.query.layoutClassList) {
+      classList = req.query.layoutClassList.split(',');
+    }
+    const constClassListArray = [{ id: req.params.streamId, layoutClassList: classList }];
+    const setClassList = (err, sessionId) => {
+      const classListArray = constClassListArray;
+      if (err) {
+        console.error('Error getting room: ', err);
+        res.send({
+          error: err.message,
+        });
+      } else {
+        ot.setStreamClassLists(sessionId, classListArray, (error) => {
+          if (error) {
+            console.log('Error getting room: ', error);
+            res.send({
+              error: error.message,
+            });
+          } else {
+            res.send(`Stream: ${classListArray[0].id} in session: ${sessionId}, has updated its layout class list to: ${classListArray[0].layoutClassList}`);
+          }
+        });
+      }
+    };
+    RoomStore.getRoom(req.params.room, null, null, setClassList);
+  });
 };
