@@ -81,7 +81,7 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
     res.render('index.ejs');
   });
 
-  app.get('/:room/:streamId', (req, res) => {
+  app.get('/:room/setStreamClassLists/:streamId', (req, res) => {
     let classList = [];
     if (req.query.layoutClassList) {
       classList = req.query.layoutClassList.split(',');
