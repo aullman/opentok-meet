@@ -72,6 +72,7 @@ angular.module('opentok-meet').factory('StatsService', ['$http', '$interval', 'b
           subscriberStats.lastStats.info = {
             originServer: info.originServer,
             edgeServer: info.edgeServer,
+            streamId: subscriber.streamId
           };
         }
 
