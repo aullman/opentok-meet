@@ -4,7 +4,7 @@ node_js:
 before_install:
 # Work around for chrome installation in trusty
 - if [[ "$BROWSER" = "chrome" ]]; then
-    sudo apt-get update && sudo apt-get upgrade;
+    sudo apt-get update && sudo apt-get install dpkg;
   fi
 - export DISPLAY=:99.0
 - if [ -f /etc/init.d/xvfb ];then sh -e /etc/init.d/xvfb start; fi
