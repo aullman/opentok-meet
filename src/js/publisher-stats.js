@@ -75,6 +75,7 @@ function PublisherStatsDirective(OTSession, $interval) {
         const generalStats = {
           width: currentPublisher.videoWidth(),
           height: currentPublisher.videoHeight(),
+          streamId: currentPublisher.streamId,
           stats: mappedStats,
         };
 
