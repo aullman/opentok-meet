@@ -28,7 +28,7 @@ brew install cairo
 npm install
 ```
 
-During development the electron version can be quickly started by running
+During development, the electron version can be quickly started by running
 
 ```sh
 npm run electron
