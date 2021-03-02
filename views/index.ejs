@@ -41,6 +41,12 @@
                           </label>
                     </div>
                     <br>
+                    <div id="tokenRole">
+                      <label>Moderator<input type="radio" name="tokenRole" ng-model="tokenRole" value="moderator"><br></label>
+                      <label>Publisher<input type="radio" name="tokenRole" ng-model="tokenRole" value="publisher"><br></label>
+                      <label>Subscriber<input type="radio" name="tokenRole" ng-model="tokenRole" value="subscriber"><br></label>
+                    </div>
+                    <br>
                     <div id="roomTypeRadio">
                       <label>Normal<input type="radio" name="roomType" ng-model="roomType" value="normal"><br></label>
                       <label title="just use the whiteboard">Whiteboard only<input type="radio" name="roomType" ng-model="roomType" value="whiteboard"><br></label>

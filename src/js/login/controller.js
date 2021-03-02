@@ -4,6 +4,7 @@ angular.module('opentok-meet-login', [])
   .controller('MainCtrl', ['$scope', '$window', function MainCtrl($scope, $window) {
     $scope.room = '';
     $scope.roomType = 'normal';
+    $scope.tokenRole = 'moderator';
     $scope.advanced = false;
     $scope.dtx = false;
     $scope.joinRoom = () => {
@@ -11,8 +12,12 @@ angular.module('opentok-meet-login', [])
       if ($scope.roomType !== 'normal') {
         url += `/${$scope.roomType}`;
       }
+      if ($scope.tokenRole) {
+        url += `?tokenRole=${$scope.tokenRole}`;
+      }
       if ($scope.dtx) {
-        url += '?dtx=true';
+        const precursor = $scope.tokenRole ? '&' : '?';
+        url += `${precursor}dtx=true`;
       }
       $window.location.href = url;
     };
