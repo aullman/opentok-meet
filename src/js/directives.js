@@ -94,6 +94,11 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
       'title="{{mutedVideo ? \'Unmute Video\' : \'Mute Video\'}}"' +
       '</i></div>',
   }))
+  .directive('muteAudio', () => ({
+    restrict: 'E',
+    template: '<div><i class="audio-icon microphone icon-left ion ion-ios7-mic-off" ' +
+      'title="Mute Audio}}"></i></div>',
+  }))
   .directive('muteSubscriber', ['OTSession', function muteSubscriber(OTSession) {
     return {
       restrict: 'A',
@@ -112,6 +117,24 @@ angular.module('opentok-meet').directive('draggable', ['$document', '$window',
         });
         scope.$on('$destroy', () => {
           subscriber = null;
+        });
+      },
+    };
+  }])
+  .directive('muteSubscriberAudio', ['OTSession', function muteSubscriberAudio(OTSession) {
+    return {
+      restrict: 'A',
+      link(scope, element) {
+        angular.element(element).on('click', () => {
+          const forceMuteStream = OTSession.session.forceMuteStream;
+          if (scope.stream) {
+            const pResponse = forceMuteStream(scope.stream);
+            pResponse.then(() => {
+              console.log('forceMuteStream success. Muted stream id: ', scope.stream.id);
+            }).catch((error) => {
+              console.error('forceMuteStream failed', error);
+            });
+          }
         });
       },
     };
