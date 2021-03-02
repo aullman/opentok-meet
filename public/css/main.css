@@ -325,6 +325,10 @@ button.red {
     background-color: #C04B4B;
 }
 
+button.gray {
+    background-color: #808080;
+}
+
 button.unread {
 
 }
@@ -484,6 +488,39 @@ button:disabled {
 body.mouse-move #bottomBar, body.mouse-move #statusMessages, body.mouse-move #connCount,
   body.mouse-move #footer {
   opacity: 1;
+}
+
+mute-audio {
+    color: white;
+    cursor: pointer;
+    position: absolute;
+}
+
+mute-audio .audio-icon {
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+ot-subscriber mute-audio {
+    position: absolute;
+    transition-property: top,bottom,opacity;
+    transition-duration: .5s;
+    transition-timing-function: ease-in;
+    opacity: 0;
+    top: -25px;
+    right: 152px;
+    margin-top: 2px;
+    z-index: 99;
+}
+
+ot-layout > :hover mute-audio, ot-layout button.OT_mode-on ~ mute-audio {
+    top: 0;
+    opacity: 1;
+}
+
+ot-subscriber mute-audio .audio-icon {
+    font-size: 32px;
 }
 
 /* Mute Video Directive */
