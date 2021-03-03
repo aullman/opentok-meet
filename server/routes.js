@@ -72,6 +72,7 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
         res.render('room', {
           opentokJs: config.opentokJs,
           room,
+          tokenRole,
           chromeExtensionId: config.chromeExtensionId,
         });
       },
