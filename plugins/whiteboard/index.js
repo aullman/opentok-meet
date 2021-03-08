@@ -3,6 +3,7 @@ module.exports = (app, config) => {
     res.render('whiteboard', {
       opentokJs: config.opentokJs,
       room: req.param('room'),
+      tokenRole: req.query.tokenRole,
     });
   });
 };
