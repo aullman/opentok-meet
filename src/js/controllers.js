@@ -66,13 +66,13 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.publishing = !$scope.publishing;
     };
 
-    // $scope.forceMuteAll = () => {
-    //   $scope.session.forceMuteAll().then(() => {
-    //     console.log('forceMuteAll complete');
-    //   }).catch((error) => {
-    //     console.error('forceMuteAll failed', error);
-    //   });
-    // };
+    $scope.forceMuteAll = () => {
+      $scope.session.forceMuteAll().then(() => {
+        console.log('forceMuteAll complete');
+      }).catch((error) => {
+        console.error('forceMuteAll failed', error);
+      });
+    };
 
     $scope.forceMuteAllExcludingPublisherStream = () => {
       const streamId = (OT.publishers.find() || {}).streamId;
