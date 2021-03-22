@@ -8,6 +8,7 @@ describe('RoomService', () => {
   let baseURL;
   let $httpBackend;
   let room;
+  let tokenRole;
 
   beforeEach(angular.mock.module('opentok-meet'));
   beforeEach(() => {
@@ -15,11 +16,13 @@ describe('RoomService', () => {
     windowMock = {
       location: {},
     };
+    tokenRole = 'moderator';
     room = 'mockRoom';
     angular.mock.module(($provide) => {
       $provide.value('baseURL', baseURL);
       $provide.value('room', room);
       $provide.value('$window', windowMock);
+      $provide.value('tokenRole', tokenRole);
     });
     inject((_RoomService_, $injector) => {
       RoomService = _RoomService_;
@@ -48,7 +51,7 @@ describe('RoomService', () => {
     });
 
     it('gets the room info and passes it along', (done) => {
-      $httpBackend.expectGET(baseURL + room)
+      $httpBackend.expectGET(`${baseURL}${room}?tokenRole=${tokenRole}`)
         .respond(200, JSON.stringify(mockRoomData));
       RoomService.getRoom().then((roomData) => {
         expect(roomData).toEqual(mockRoomData);

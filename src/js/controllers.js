@@ -66,6 +66,25 @@ angular.module('opentok-meet').controller('RoomCtrl', ['$scope', '$http', '$wind
       $scope.publishing = !$scope.publishing;
     };
 
+    $scope.forceMuteAll = () => {
+      $scope.session.forceMuteAll().then(() => {
+        console.log('forceMuteAll complete');
+      }).catch((error) => {
+        console.error('forceMuteAll failed', error);
+      });
+    };
+
+    $scope.forceMuteAllExcludingPublisherStream = () => {
+      const streamId = (OT.publishers.find() || {}).streamId;
+      const streams = (OT.sessions.find() || {}).streams;
+      const stream = streams ? streams.get(streamId) : undefined;
+      $scope.session.forceMuteAll([stream]).then(() => {
+        console.log('forceMuteAllExcludingPublisherStream complete');
+      }).catch((error) => {
+        console.error('forceMuteAllExcludingPublisherStream failed', error);
+      });
+    };
+
     const startArchiving = () => {
       $scope.archiving = true;
       $http.post(`${baseURL + $scope.room}/startArchive`).then((response) => {

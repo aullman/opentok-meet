@@ -4,6 +4,7 @@ module.exports = (app, config) => {
       room: req.param('room'),
       chromeExtensionId: config.chromeExtensionId,
       opentokJs: config.opentokJs,
+      tokenRole: req.query.tokenRole,
     });
   });
 };

@@ -38,6 +38,7 @@
                         <expand-button></expand-button>
                         <zoom-button zoomed="expanded ? bigZoomed : zoomed"
                           ng-click="$emit('changeZoom', expanded);"></zoom-button>
+                        <mute-audio mute-subscriber-audio></mute-audio>
                 </ot-subscriber>
                 <ot-whiteboard ng-show="showWhiteboard"
                     ng-if="connected"
@@ -134,6 +135,9 @@
 
             <button type="button" name="muteMicrophone" muted-type="Audio" ng-if="publishing" mute-publisher ng-class="{green: mutedAudio, red: !mutedAudio, 'ion-ios7-mic-off': mutedAudio, 'ion-ios7-mic': !mutedAudio}" publisher-id="facePublisher" class="icon-left ion">Mic</button>
 
+            <button type="button" name="muteAll" id="muteAll" ng-click="forceMuteAll()" class="icon-left ion gray">Mute All</button>
+
+            <button type="button" name="muteAllExcludingPublishingStream" id="muteAllExcludingPublishingStream" ng-click="forceMuteAllExcludingPublisherStream()" class="icon-left ion gray">Mute All Excluding Publishing Stream</button>
 
             <span id="publishUI">
                 <button name="publish" id="publishBtn" ng-click="togglePublish(true)" ng-class="{green: !publishing, red: publishing}" class="publish-btn icon-left ion ion-ios7-videocam" title="WebCam">{{ publishing ? 'Unpublish' : 'Publish HD'}}</button>
@@ -159,6 +163,7 @@
             angular.module('opentok-meet').value({
                 room: '<%=room%>',
                 baseURL: '/',
+                tokenRole: '<%=tokenRole%>',
                 chromeExtensionId: '<%=chromeExtensionId%>'
             });
         </script>
