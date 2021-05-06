@@ -1,4 +1,5 @@
 module.exports = () => `/* use-typed-stream-elements */
+/* grid-do-center */
 
 videostream, screenstream {
  float: left;
