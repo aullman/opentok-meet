@@ -22,7 +22,7 @@
     "jwt-simple": "^0.5.0",
     "ng-debounce": "^1.0.1",
     "opentok": "^2.6.2",
-    "opentok-angular": "^2.1.2",
+    "opentok-angular": "https://github.com/albertoacn/opentok-angular.git#OPENTOK-43696",
     "opentok-camera-filters": "^2.0.1",
     "opentok-editor": "^0.3.3",
     "opentok-textchat": "^1.2.3",
