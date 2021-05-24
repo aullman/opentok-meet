@@ -1,5 +1,6 @@
 const OpenTok = require('opentok');
 const roomstore = require('./roomstore.js');
+const isValidTokenRole = require('../src/js/isValidTokenRole');
 
 module.exports = (app, config, redis, ot, redirectSSL) => {
   const RoomStore = roomstore(redis, ot);
@@ -38,7 +39,10 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
     const room = req.param('room');
     const apiKey = req.param('apiKey');
     const secret = req.param('secret');
-    const tokenRole = req.query.tokenRole;
+    let { tokenRole } = req.query;
+
+    tokenRole = isValidTokenRole(tokenRole) ? tokenRole : 'publisher';
+
     res.format({
       json() {
         const goToRoom = (err, sessionId, pApiKey, pSecret) => {
@@ -61,7 +65,7 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
               apiKey: (pApiKey && pSecret) ? pApiKey : config.apiKey,
               p2p: RoomStore.isP2P(room),
               token: otSDK.generateToken(sessionId, {
-                role: tokenRole || 'publisher',
+                role: tokenRole || 'moderator',
               }),
             });
           }

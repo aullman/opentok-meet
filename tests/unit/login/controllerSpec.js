@@ -84,6 +84,13 @@ describe('OpenTok Login Page', () => {
         scope.joinRoom();
         expect(windowMock.location.href).toEqual('mockURL/foo/screen?tokenRole=subscriber');
       });
+
+      it('defaults the url to moderator for screen roomType, when the tokenRole is invalid', () => {
+        scope.roomType = 'screen';
+        scope.tokenRole = 'boo';
+        scope.joinRoom();
+        expect(windowMock.location.href).toEqual('mockURL/foo/screen?tokenRole=moderator');
+      });
     });
 
     it('watches the room and updates p2p', () => {

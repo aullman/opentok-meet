@@ -10,3 +10,4 @@ require('./notificationsSpec.js');
 require('./otErrorsSpec.js');
 require('./subscriberReportSpec.js');
 require('./microphonePickerSpec.js');
+require('./isValidTokenRoleSpec.js');
