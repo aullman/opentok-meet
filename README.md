@@ -23,7 +23,7 @@ If you push to the master branch of this repo [Travis](https://travis-ci.org/ope
 ## Running meet locally
 
 - Copy the contents of `config.json.sample` into `config.json` and add your credentials.
-  :warning: Note: the default config points to tbdev. If you intend to use a production api key you must change `apiUrl` and `opentokJs` to point to production endpoints.
+  :warning: Note: the default config points to VAPID. If you intend to use a production api key you must change `apiUrl` and `opentokJs` to point to production endpoints.
 
 - Ensure redis is running (e.g. `redis-server` on mac)
 

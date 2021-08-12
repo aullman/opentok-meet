@@ -4,6 +4,6 @@
     "apiSecret": "",
     "phoneNumber": "Number to join a conference by phone",
     "chromeExtensionId": "Get this from https://github.com/opentok/screensharing-extensions",
-    "apiUrl": "https://anvil-tbdev.opentok.com",
-    "opentokJs": "https://www-tbdev.tokbox.com/v2/js/opentok.min.js"
+    "apiUrl": "https://api.dev.opentok.com",
+    "opentokJs": "https://www.dev.tokbox.com/v2/js/opentok.min.js"
 }
