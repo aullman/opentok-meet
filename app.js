@@ -18,8 +18,8 @@ if (process.env.HEROKU || process.env.TRAVIS) {
     apiKey: process.env.OT_API_KEY,
     apiSecret: process.env.OT_API_SECRET,
     chromeExtensionId: process.env.CHROME_EXTENSION_ID,
-    apiUrl: process.env.OT_API_URL || 'https://anvil-tbdev.opentok.com',
-    opentokJs: process.env.OT_JS_URL || 'https://tbdev.tokbox.com/v2/js/opentok.js',
+    apiUrl: process.env.OT_API_URL || 'https://api.dev.opentok.com',
+    opentokJs: process.env.OT_JS_URL || 'https://www.dev.tokbox.com/v2/js/opentok.js',
   };
 } else {
   try {

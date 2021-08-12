@@ -57,7 +57,7 @@ module.exports = (app, config, redis, ot, redirectSSL) => {
             });
             let otSDK = ot;
             if (pApiKey && pSecret) {
-              otSDK = new OpenTok(pApiKey, pSecret, 'https://anvil-tbdev.opentok.com');
+              otSDK = new OpenTok(pApiKey, pSecret, 'https://api.dev.opentok.com');
             }
             res.send({
               room,

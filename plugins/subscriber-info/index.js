@@ -3,7 +3,7 @@ const roomstore = require('../../server/roomstore.js');
 
 module.exports = (app, config, redis, ot) => {
   const RoomStore = roomstore(redis, ot);
-  const anvil = new Anvil('https://anvil-tbdev.opentok.com');
+  const anvil = new Anvil('https://api.dev.opentok.com');
 
 
   app.get('/:room/subscriber/:subscriberId', (req, res) => {
